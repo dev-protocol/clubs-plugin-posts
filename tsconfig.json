@@ -1,0 +1,13 @@
+{
+	"extends": "astro/tsconfigs/strict",
+	"compilerOptions": {
+		"noEmit": false,
+		"outDir": "dist",
+		"declaration": true,
+		"skipLibCheck": true,
+		"resolveJsonModule": true,
+		"importsNotUsedAsValues": "error",
+		"types": ["astro/client"]
+	},
+	"include": ["src", "preview", "config.js", "rollup.config.js"]
+}
