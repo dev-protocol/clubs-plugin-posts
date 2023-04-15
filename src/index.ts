@@ -10,13 +10,12 @@ import Posts from './pages/Posts.astro'
 
 export const getPagePaths: ClubsFunctionGetPagePaths = async (options) => {
 	return [
-				{
-					paths: [''],
-					component: Posts,
-					props: { options }
-				},
-		  ]
-
+		{
+			paths: [''],
+			component: Posts,
+			props: { options },
+		},
+	]
 }
 
 export const getAdminPaths: ClubsFunctionGetAdminPaths = async (options) => {
@@ -24,9 +23,9 @@ export const getAdminPaths: ClubsFunctionGetAdminPaths = async (options) => {
 		{
 			paths: ['posts'],
 			component: Admin,
-			props: { options }
-		}
-		]
+			props: { options },
+		},
+	]
 }
 
 export const meta: ClubsPluginMeta = {
