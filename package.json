@@ -1,5 +1,5 @@
 {
-	"name": "@devprotocol/clubs-plugin-starter-kit",
+	"name": "@devprotocol/clubs-plugin-posts",
 	"version": "0.1.0",
 	"type": "module",
 	"description": "Template repository for using TypeScript",
@@ -34,17 +34,19 @@
 	"author": "",
 	"license": "MPL-2.0",
 	"dependencies": {
-		"@devprotocol/clubs-core": "0.43.1",
+		"@devprotocol/clubs-core": "0.37.1",
 		"@devprotocol/dev-kit": "7.3.4",
 		"@devprotocol/util-ts": "3.0.0",
 		"bignumber.js": "9.1.1",
 		"ethers": "6.3.0",
 		"ramda": "0.29.0",
-		"sass": "1.62.0"
+		"sass": "1.62.0",
+		"svelte": "^3.54.0"
 	},
 	"devDependencies": {
 		"@astrojs/tailwind": "3.1.1",
 		"@astrojs/vue": "2.1.1",
+		"@astrojs/svelte": "^2.1.0",
 		"@ava/typescript": "4.0.0",
 		"@rollup/plugin-typescript": "11.1.0",
 		"@types/dotenv": "8.2.0",
@@ -52,7 +54,7 @@
 		"@types/ramda": "0.29.0",
 		"@typescript-eslint/eslint-plugin": "5.58.0",
 		"@typescript-eslint/parser": "5.58.0",
-		"astro": "2.3.0",
+		"astro": "^2.1.0",
 		"ava": "5.2.0",
 		"dotenv": "16.0.3",
 		"eslint": "8.38.0",

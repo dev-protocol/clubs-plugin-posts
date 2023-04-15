@@ -16,7 +16,7 @@ export default () =>
 				options: [],
 			},
 			{
-				id: 'unique-and-descriptive-name-here',
+				id: 'clubs-plugin-posts',
 				options: [
 					{ key: 'slug', value: 'stokens' },
 					{ key: 'rpc', value: 'https://polygon-rpc.com/' },
