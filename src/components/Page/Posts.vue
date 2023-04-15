@@ -1,7 +1,10 @@
 <script lang="ts" setup>
 const props = defineProps({
 })
+
+const { token } = props
 </script>
+
 <template>
-	<h1 class="text-lg font-bold mb-16">Admin Post</h1>
+	<h1>Plugin Posts</h1>
 </template>
