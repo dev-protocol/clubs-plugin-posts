@@ -1,19 +1,25 @@
 <script lang="ts" setup>
+import type {PropType} from 'vue';
+
 const props = defineProps({
 	images: {
-		type: Array,
+		type: Object as PropType<{
+			value: string[]
+		}>,
 		required: true,
 	},
 })
 </script>
 
 <template>
-  <div v-for="image in images" :key="image" class="mb-5">
-		<img
-	  	class="w-full rounded"
-	  	:src="image"
-	  	alt="Nature"
-		/>
+  <div class="mb-5 flex flex-wrap gap-y-1 gap-x-1">
+		<div v-for="image in images.value" :key="image" class="bg-gray-100 overflow-hidden" style="width: calc(50% - 2px)">
+			<img
+	  		class="w-full rounded"
+	  		:src="image"
+	  		alt="Nature"
+			/>
+		</div>
   </div>
 </template>
 
