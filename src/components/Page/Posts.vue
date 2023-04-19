@@ -15,12 +15,12 @@ const props = defineProps({
 	},
 })
 
-// props.optionsをoptionsとして定義する
-const options = ref<Option[] | undefined>(props.options)
-
+if (props.options === undefined) {
+	throw new Error('props.options is undefined')
+}
 
 // props.optionsのkeyがpostsのvalueを取得する
-const posts = ref<Posts[]>(props.options?.find(({key}) => key === 'posts')?.value || [])
+const posts = ref<Posts[]>(props.options.find((item) => item.key === 'posts')?.value || [])
 </script>
 
 <template>
