@@ -1,5 +1,4 @@
-export type Option =
-	| { readonly key: 'posts'; readonly value: Posts[] }
+export type Option = { readonly key: 'posts'; readonly value: readonly Posts[] }
 
 export type TokenURIWithId = {
 	readonly id: number
@@ -20,7 +19,7 @@ export type Posts = {
 
 export type PostOption = {
 	readonly key: string
-	readonly value: any[]
+	readonly value: readonly any[]
 }
 
 export type Comment = {
@@ -30,4 +29,3 @@ export type Comment = {
 	readonly created_at: string
 	readonly updated_at: string
 }
-

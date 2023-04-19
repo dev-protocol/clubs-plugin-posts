@@ -18,7 +18,9 @@ export default () =>
 			{
 				id: 'clubs-plugin-posts',
 				options: [
-					{ key: 'posts', value: [
+					{
+						key: 'posts',
+						value: [
 							{
 								id: '1',
 								title: 'Hello World',
@@ -32,9 +34,9 @@ export default () =>
 										value: [
 											'https://source.unsplash.com/800x400/?nature',
 											'https://source.unsplash.com/800x400/?water',
-											'https://source.unsplash.com/800x400/?sky'
-										]
-									}
+											'https://source.unsplash.com/800x400/?sky',
+										],
+									},
 								],
 								comments: [
 									{
@@ -43,11 +45,12 @@ export default () =>
 										created_by: '0x00000000',
 										created_at: '2021-01-01T00:00:00Z',
 										updated_at: '2021-01-01T00:00:00Z',
-									}
+									},
 								],
 								reactions: [],
-							}
-						] },
+							},
+						],
+					},
 				],
 			},
 		],
