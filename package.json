@@ -38,15 +38,15 @@
 		"@devprotocol/dev-kit": "7.3.4",
 		"@devprotocol/util-ts": "3.0.0",
 		"bignumber.js": "9.1.1",
-		"ethers": "6.3.0",
+		"ethers": "^5.7.2",
 		"ramda": "0.29.0",
 		"sass": "1.62.1",
 		"svelte": "^3.54.0"
 	},
 	"devDependencies": {
+		"@astrojs/svelte": "^2.1.0",
 		"@astrojs/tailwind": "3.1.1",
 		"@astrojs/vue": "2.1.1",
-		"@astrojs/svelte": "^2.1.0",
 		"@ava/typescript": "4.0.0",
 		"@rollup/plugin-typescript": "11.1.0",
 		"@types/dotenv": "8.2.0",
