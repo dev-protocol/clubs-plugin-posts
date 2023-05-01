@@ -70,11 +70,11 @@
     prismjs "^1.28.0"
 
 "@astrojs/svelte@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@astrojs/svelte/-/svelte-2.1.0.tgz#34a55434473390b0773b145083c425dfce16d624"
-  integrity sha512-upfkscrNuZbQvqVB5EG38FPJCgHCxO/LOJLAap75rO/++c1T7ztbVru4uSYVBRJkzTDuH3TS52T8kFTVgHXx/g==
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@astrojs/svelte/-/svelte-2.1.1.tgz#3638bc8ef618aefaa03b56de981f20b845ec700b"
+  integrity sha512-F4tJqGBAMqLVvkVzaXb2EACFDvFjuxeAI3uhkpI+FHYhrdTwLkk0EnWOZD6JjYLePbY1IlJmDEe22dYNgZrz9A==
   dependencies:
-    "@sveltejs/vite-plugin-svelte" "^2.0.2"
+    "@sveltejs/vite-plugin-svelte" "^2.1.1"
     svelte2tsx "^0.5.11"
 
 "@astrojs/tailwind@3.1.1":
@@ -1124,7 +1124,7 @@
     estree-walker "^2.0.2"
     picomatch "^2.3.1"
 
-"@sveltejs/vite-plugin-svelte@^2.0.2":
+"@sveltejs/vite-plugin-svelte@^2.1.1":
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/@sveltejs/vite-plugin-svelte/-/vite-plugin-svelte-2.1.1.tgz#df08dba9094208a2048968e329237be6893cf66d"
   integrity sha512-7YeBDt4us0FiIMNsVXxyaP4Hwyn2/v9x3oqStkHU3ZdIc5O22pGwUwH33wUqYo+7Itdmo8zxJ45Qvfm3H7UUjQ==
