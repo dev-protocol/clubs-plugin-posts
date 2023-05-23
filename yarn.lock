@@ -1246,9 +1246,9 @@
     "@babel/types" "^7.3.0"
 
 "@types/debug@^4.0.0":
-  version "4.1.7"
-  resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.7.tgz#7cc0ea761509124709b8b2d1090d8f6c17aadb82"
-  integrity sha512-9AonUzyTjXXhEOa0DnqpzZi6VHlqKMswga9EXjpXnnqxwLtdvPPtlO8evrI5D9S6asFRCQ6v+wpiUKbw+vKqyg==
+  version "4.1.8"
+  resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.8.tgz#cef723a5d0a90990313faec2d1e22aee5eecb317"
+  integrity sha512-/vPO1EPOs306Cvhwv7KfVfYvOJqA/S/AXjaHQiJboCZzcNDb+TIJFN9/2C9DZ//ijSKWioNyUxD792QmDJ+HKQ==
   dependencies:
     "@types/ms" "*"
 
@@ -1839,9 +1839,9 @@ arrify@^3.0.0:
   integrity sha512-tLkvA81vQG/XqE2mjDkGQHoOINtMHtysSnemrmoGe6PydDPMRbVugqyk4A6V/WDWEfm3l+0d8anA9r8cv/5Jaw==
 
 astro@^2.1.0:
-  version "2.5.3"
-  resolved "https://registry.yarnpkg.com/astro/-/astro-2.5.3.tgz#0ccd954caddc30eef3b21d42b4daff8602889752"
-  integrity sha512-ZRk599V3f2dAW2+WIEi1eAhHaxqxYsp2VAAhcUp103OEw8UZIeEa7KU1xZ+cKDqaBszSnTs38EdLjwHWWXCqMw==
+  version "2.5.4"
+  resolved "https://registry.yarnpkg.com/astro/-/astro-2.5.4.tgz#74816cd594da0717c3834e40e173d418e14349bf"
+  integrity sha512-mTeXK44fJU3xX0hvwyY+BXjunpzMRcSvVEu2GpduLU4XfoPy+pbvyBphbwYq360hXupfiJbqFpRc7gLlWKSoGg==
   dependencies:
     "@astrojs/compiler" "^1.4.0"
     "@astrojs/language-server" "^1.0.0"
@@ -1879,6 +1879,7 @@ astro@^2.1.0:
     magic-string "^0.27.0"
     mime "^3.0.0"
     ora "^6.1.0"
+    p-limit "^4.0.0"
     path-to-regexp "^6.2.1"
     preferred-pm "^3.0.3"
     prompts "^2.4.2"
@@ -2566,9 +2567,9 @@ eastasianwidth@^0.2.0:
   integrity sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==
 
 electron-to-chromium@^1.4.284:
-  version "1.4.403"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.403.tgz#8b4666d1ea6cf97e03c1ed39ded1f25212865ecc"
-  integrity sha512-evCMqXJWmbQHdlh307peXNguqVIMmcLGrQwXiR+Qc98js8jPDeT9rse1+EF2YRjWgueuzj1r4WWLAe4/U+xjMg==
+  version "1.4.404"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.404.tgz#16baf653a7a2613e221da61480ad02fe84e40231"
+  integrity sha512-te57sWvQdpxmyd1GiswaodKdXdPgn9cN4ht8JlNa04QgtrfnUdWEo1261rY2vaC6TKaiHn0E7QerJWPKFCvMVw==
 
 elliptic@6.5.4:
   version "6.5.4"
