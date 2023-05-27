@@ -8,12 +8,12 @@ import {
 import { default as Admin } from './pages/Admin.astro'
 import Posts from './pages/Posts.astro'
 
-export const getPagePaths: ClubsFunctionGetPagePaths = async (options) => {
+export const getPagePaths: ClubsFunctionGetPagePaths = async (options, config) => {
 	return [
 		{
 			paths: [''],
 			component: Posts,
-			props: { options },
+			props: { options, config },
 		},
 	]
 }

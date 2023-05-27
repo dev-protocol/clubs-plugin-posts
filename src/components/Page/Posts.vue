@@ -14,7 +14,13 @@ const props = defineProps({
 		type: Array as PropType<Option[]>,
 		required: true,
 	},
+	config: {
+		type: Object as PropType<Record<string, unknown>>,
+		required: true,
+	},
 })
+
+console.log('props.config', props.config)
 
 if (props.options === undefined) {
 	throw new Error('props.options is undefined')
