@@ -537,10 +537,10 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
-"@devprotocol/clubs-core@0.45.1":
-  version "0.45.1"
-  resolved "https://registry.yarnpkg.com/@devprotocol/clubs-core/-/clubs-core-0.45.1.tgz#f7a6fd25cebf1f8b8de8c1896d944d0a2889d117"
-  integrity sha512-vyxBg04VI896V6RoY00EdkNAuYX9wpxgzgI5hxvtoqpLZRN807LAWjOlHumw/VCLDM2wCSkoATRkTrNvtZYsVQ==
+"@devprotocol/clubs-core@0.45.2":
+  version "0.45.2"
+  resolved "https://registry.yarnpkg.com/@devprotocol/clubs-core/-/clubs-core-0.45.2.tgz#4215d15cbcd3a53c644681136129bcd2689adeb5"
+  integrity sha512-9stlAc4mpYFsB/mrqOIJnPRQkrrk7k93rDjOecT0w1numjwQ487cB4IuCbu8BRjIICTIr63KDfpuY8ojGI+j1A==
   dependencies:
     "@devprotocol/dev-kit" "7.3.4"
     "@devprotocol/elements" "0.2.2"
