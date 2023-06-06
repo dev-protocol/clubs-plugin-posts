@@ -1,5 +1,5 @@
 import { encode } from '@devprotocol/clubs-core'
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 
 export default () =>
 	encode({
@@ -87,9 +87,7 @@ export default () =>
 								options: [
 									{
 										key: '#images',
-										value: [
-											'https://source.unsplash.com/800x400/?nature',
-										],
+										value: ['https://source.unsplash.com/800x400/?nature'],
 									},
 								],
 								comments: [
