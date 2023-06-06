@@ -1,24 +1,15 @@
 <script lang="ts" setup>
 import Header from './Header.vue';
+import dayjs from 'dayjs';
 
-const props = defineProps({
-	name: {
-		type: String,
-		required: true,
-	},
-	avatar: {
-		type: String,
-		required: true,
-	},
-	date: {
-		type: String,
-		required: true,
-	},
-	contents: {
-		type: String,
-		required: true,
-	},
-})
+type Props = {
+	name: string;
+	avatar: string;
+	date: string;
+	contents: string;
+};
+
+const props = defineProps<Props>()
 </script>
 
 <template>
@@ -31,7 +22,7 @@ const props = defineProps({
 	  	/>
 	  	<p class="text-black text-base font-bold">{{ props.name }}</p>
 		</div>
-		<p class="text-base text-gray-400">{{ props.date }}</p>
+		<p class="text-base text-gray-400">{{ dayjs(props.date).format('d MMM H:mm') }}</p>
   </div>
   <div class="mb-5 text-3xl font-bold text-black">
 		{{ props.contents }}
