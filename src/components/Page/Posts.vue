@@ -9,12 +9,11 @@ import type {Option, Posts} from '../../types';
 import {ref} from 'vue';
 import Line from '../Common/Line.vue';
 
-const props = defineProps({
-	options: {
-		type: Array as PropType<Option[]>,
-		required: true,
-	},
-})
+type Props = {
+	options: Option[];
+}
+
+const props = defineProps<Props>()
 
 if (props.options === undefined) {
 	throw new Error('props.options is undefined')
@@ -29,10 +28,11 @@ const posts = ref<Posts[]>(props.options.find((item) => item.key === 'posts')?.v
 		<section class="mb-5 p-5 rounded bg-white">
 			<Post avatar="https://source.unsplash.com/100x100/?face" name="Aggre" />
 		</section>
-		<article v-for="(post, key) in posts" :key="post.id" class="p-5 rounded bg-white">
+		<article v-for="(post, key) in posts" :key="post.id" class="mb-5 p-5 rounded bg-white">
 	  	<Contents avatar="https://source.unsplash.com/100x100/?face" name="Aggre" :date="post.created_at" :contents="post.content"/>
+	  	<Media :required="true" />
 	  	<Reactions likes="100"/>
-	  	<Media :images="post.options.find((item) =>  item.key === '#images')"/>
+	  	<Media :images="post.options.find((item) => item.key === '#images')"/>
 			<Line class="mb-5" />
 	  	<Comment :comments="[
 				{

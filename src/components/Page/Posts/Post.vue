@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import Line from '../../Common/Line.vue';
+import {ref} from 'vue'
 
 const props = defineProps({
 	name: {
@@ -11,6 +12,27 @@ const props = defineProps({
 		required: true,
 	},
 })
+
+const contents = ref('')
+const onClickPost = async () => {
+	// fetchで /message.jsonをpostしてasync/awaitでレスポンスを取得する
+	const response = await fetch('/api/message.json', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			contents: contents.value,
+		}),
+	})
+
+	// レスポンスをjsonに変換する
+	const json = await response.json()
+
+	// レスポンスのjsonをコンソールに表示する
+	console.log(json)
+}
+
 </script>
 <template>
 	<!-- Avatar -->
@@ -28,6 +50,7 @@ const props = defineProps({
 	<!-- 入力フォーム -->
 	<div class="mb-5 text-3xl font-bold text-black">
 		<textarea
+			v-model="contents"
 			class="px-2 py-2 w-full text-base text-gray-700 border-none focus:outline-none focus:border-indigo-500"
 			rows="3"
 			type="text"
@@ -78,7 +101,10 @@ const props = defineProps({
 	  	</button>
 		</div>
 		<div class="flex items-center">
-			<button class="py-2 px-8 text-base text-white bg-blue-600 border border-transparent rounded-3xl shadow-sm focus:outline-none">
+			<button
+				class="py-2 px-8 text-base text-white bg-blue-600 border border-transparent rounded-3xl shadow-sm focus:outline-none"
+				@click="onClickPost"
+			>
 				Post
 			</button>
 		</div>
