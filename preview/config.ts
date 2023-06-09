@@ -41,7 +41,7 @@ export default () =>
 									{
 										key: 'require-one-of',
 										value: ['post', 'comment', 'reaction'],
-									}
+									},
 								],
 								comments: [
 									{
