@@ -43,15 +43,7 @@ export default () =>
 										value: ['post', 'comment', 'reaction'],
 									},
 								],
-								comments: [
-									{
-										id: '1',
-										content: 'This is a sample comment.',
-										created_by: '0x00000000',
-										created_at: dayjs('2021-01-01').toString(),
-										updated_at: dayjs('2021-01-01').toString(),
-									},
-								],
+								comments: [],
 								reactions: [],
 							},
 							{
@@ -74,10 +66,17 @@ export default () =>
 								comments: [
 									{
 										id: '1',
-										content: 'This is a sample comment.',
+										content: 'This is a sample comment #1.',
 										created_by: '0x00000000',
 										created_at: dayjs('2021-01-01').toString(),
 										updated_at: dayjs('2021-01-01').toString(),
+									},
+									{
+										id: '2',
+										content: 'This is a sample comment #2.',
+										created_by: '0x00000000',
+										created_at: dayjs('2021-01-11').toString(),
+										updated_at: dayjs('2021-01-11').toString(),
 									},
 								],
 								reactions: [],
