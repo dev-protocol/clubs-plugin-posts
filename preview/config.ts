@@ -38,6 +38,10 @@ export default () =>
 											'https://source.unsplash.com/800x400/?sky',
 										],
 									},
+									{
+										key: 'require-one-of',
+										value: ['post', 'comment', 'reaction'],
+									}
 								],
 								comments: [
 									{
@@ -52,6 +56,34 @@ export default () =>
 							},
 							{
 								id: '2',
+								title: 'Hello World',
+								content: 'This is a sample post.',
+								created_by: '0x00000000',
+								created_at: dayjs('2021-01-01').toString(),
+								updated_at: dayjs('2021-01-01').toString(),
+								options: [
+									{
+										key: '#images',
+										value: [
+											'https://source.unsplash.com/800x400/?nature',
+											'https://source.unsplash.com/800x400/?water',
+											'https://source.unsplash.com/800x400/?sky',
+										],
+									},
+								],
+								comments: [
+									{
+										id: '1',
+										content: 'This is a sample comment.',
+										created_by: '0x00000000',
+										created_at: dayjs('2021-01-01').toString(),
+										updated_at: dayjs('2021-01-01').toString(),
+									},
+								],
+								reactions: [],
+							},
+							{
+								id: '3',
 								title: 'Hi there',
 								content: 'Good morning. This is a sample post.',
 								created_by: '0x00000000',
@@ -78,7 +110,7 @@ export default () =>
 								reactions: [],
 							},
 							{
-								id: '1',
+								id: '4',
 								title: 'Hey guys',
 								content: 'Good evening. This is a sample post.',
 								created_by: '0x00000000',

@@ -29,25 +29,31 @@ const posts = ref<Posts[]>(props.options.find((item) => item.key === 'posts')?.v
 			<Post avatar="https://source.unsplash.com/100x100/?face" name="Aggre" />
 		</section>
 		<article v-for="(post, key) in posts" :key="post.id" class="mb-5 p-5 rounded bg-white">
-	  	<Contents avatar="https://source.unsplash.com/100x100/?face" name="Aggre" :date="post.created_at" :contents="post.content"/>
-	  	<Media :required="true" />
-	  	<Reactions likes="100"/>
-	  	<Media :images="post.options.find((item) => item.key === '#images')"/>
-			<Line class="mb-5" />
-	  	<Comment :comments="[
-				{
-					avatar: 'https://source.unsplash.com/100x100/?face',
-					name: 'Roxy',
-					date: '19 Mar. 11:12',
-					comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-				},
-				{
-					avatar: 'https://source.unsplash.com/100x100/?face',
-					name: 'Josh',
-					date: '19 Mar. 11:12',
-					comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-				},
-			]"/>
+			<div v-if="post.options.find((item) => item.key === 'require-one-of') === undefined">
+				<Contents avatar="https://source.unsplash.com/100x100/?face" name="Aggre" :date="post.created_at" :contents="post.content"/>
+				<Reactions likes="100"/>
+				<Media :images="post.options.find((item) => item.key === '#images')"/>
+				<Line class="mb-5" />
+				<Comment :comments="[
+					{
+						avatar: 'https://source.unsplash.com/100x100/?face',
+						name: 'Roxy',
+						date: '19 Mar. 11:12',
+						comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+					},
+					{
+						avatar: 'https://source.unsplash.com/100x100/?face',
+						name: 'Josh',
+						date: '19 Mar. 11:12',
+						comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+					},
+				]"/>
+			</div>
+			<div v-else>
+				<Contents avatar="https://source.unsplash.com/100x100/?face" name="Aggre" :date="post.created_at" :contents="post.content"/>
+				<Media :required="true" />
+				<Reactions likes="100"/>
+			</div>
 		</article>
   </div>
 </template>
