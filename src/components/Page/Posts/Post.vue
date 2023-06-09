@@ -59,7 +59,7 @@ const onClickPost = async () => {
 	</div>
 	<!-- /入力フォーム -->
 	<!-- Limited access button -->
-  <div class="flex items-center mb-5">
+  <div class="relative flex items-center mb-5">
 		<button class="py-2 px-8 text-base text-white bg-blue-600 border border-transparent rounded-3xl shadow-sm focus:outline-none">
 			<!-- icon-plus.svgを表示 -->
 			<svg
@@ -76,6 +76,39 @@ const onClickPost = async () => {
 			</svg>
 	  	Limited access
 		</button>
+		<!-- modal menu -->
+		<ul class="absolute top-14 left-0 flex flex-col gap-3 p-3 bg-white shadow-xl rounded-md">
+			<li>
+				<label for="checked-checkbox-01" class="flex items-center gap-3 text-sm font-medium text-gray-900">
+					<input id="checked-checkbox-01" type="checkbox" value="1" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+					<img class="w-24 h-24" src="../../../assets/images/limited-access/img01.png" alt="img01">
+					<div class="flex flex-col">
+						<p class="text-gray-900">Name of membership</p>
+						<p class="text-gray-500">0.01 ETH</p>
+					</div>
+				</label>
+			</li>
+	  	<li>
+				<label for="checked-checkbox-02" class="flex items-center gap-3 text-sm font-medium text-gray-900">
+		  		<input id="checked-checkbox-02" type="checkbox" value="1" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+		  		<img class="w-24 h-24" src="../../../assets/images/limited-access/img01.png" alt="img01">
+		  		<div class="flex flex-col">
+						<p class="text-gray-900">Name of membership</p>
+						<p class="text-gray-500">0.01 ETH</p>
+		  		</div>
+				</label>
+	  	</li>
+	  	<li>
+				<label for="checked-checkbox-03" class="flex items-center gap-3 text-sm font-medium text-gray-900">
+		  		<input id="checked-checkbox-03" type="checkbox" value="1" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+		  		<img class="w-24 h-24" src="../../../assets/images/limited-access/img01.png" alt="img01">
+		  		<div class="flex flex-col">
+						<p class="text-gray-900">Name of membership</p>
+						<p class="text-gray-500">0.01 ETH</p>
+		  		</div>
+				</label>
+	  	</li>
+		</ul>
   </div>
 	<!-- /Limited access button -->
   <Line class="mb-5" />
