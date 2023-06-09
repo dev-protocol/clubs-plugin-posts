@@ -2,16 +2,13 @@
 import Line from '../../Common/Line.vue';
 import {ref} from 'vue'
 
-const props = defineProps({
-	name: {
-		type: String,
-		required: true,
-	},
-	avatar: {
-		type: String,
-		required: true,
-	},
-})
+type Props = {
+	name: string;
+	avatar: string;
+
+};
+
+const props = defineProps<Props>()
 
 const contents = ref('')
 const onClickPost = async () => {
@@ -31,6 +28,44 @@ const onClickPost = async () => {
 
 	// レスポンスのjsonをコンソールに表示する
 	console.log(json)
+}
+
+// limited access selected
+const selectedLimitedAccess = ref([])
+
+const limitedAccessTypes = [
+	{
+		value: 'limitedAccess01',
+		label: 'Limited access 01',
+	},
+	{
+		value: 'limitedAccess02',
+		label: 'Limited access 02',
+	},
+	{
+		value: 'limitedAccess03',
+		label: 'Limited access 03',
+	},
+]
+
+// selectedLimitedAccessの値を更新する
+const onUpdateLimitedAccess = (value: string) => {
+	// limitedAccessTypesのvalueが、selectedLimitedAccessの配列に含まれているかを確認する
+	const index = selectedLimitedAccess.value.indexOf(value)
+
+	// 含まれていない場合は、selectedLimitedAccessの配列に追加する
+	if (index === -1) {
+		selectedLimitedAccess.value.push(value)
+	} else {
+		// 含まれている場合は、selectedLimitedAccessの配列から削除する
+		selectedLimitedAccess.value.splice(index, 1)
+	}
+}
+
+// Limited access modal
+const openLimitedAccessModal = ref(false)
+const onClickLimitedAccess = async () => {
+	openLimitedAccessModal.value = !openLimitedAccessModal.value
 }
 
 </script>
@@ -60,7 +95,10 @@ const onClickPost = async () => {
 	<!-- /入力フォーム -->
 	<!-- Limited access button -->
   <div class="relative flex items-center mb-5">
-		<button class="py-2 px-8 text-base text-white bg-blue-600 border border-transparent rounded-3xl shadow-sm focus:outline-none">
+		<button
+			class="py-2 px-8 text-base text-white bg-blue-600 border border-transparent rounded-3xl shadow-sm focus:outline-none"
+			@click="onClickLimitedAccess"
+		>
 			<!-- icon-plus.svgを表示 -->
 			<svg
 				class="inline w-5 h-5 mr-3"
@@ -76,38 +114,36 @@ const onClickPost = async () => {
 			</svg>
 	  	Limited access
 		</button>
+		<!-- 選択済みのLimited accessを表示 -->
+		<div class="flex items-center gap-3 ml-3">
+			<span
+				v-for="selectedLimitedAccessType in selectedLimitedAccess"
+				class="inline-flex items-center px-3 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"
+			>
+				{{ selectedLimitedAccessType }}
+			</span>
+		</div>
 		<!-- modal menu -->
-		<ul class="absolute top-14 left-0 flex flex-col gap-3 p-3 bg-white shadow-xl rounded-md">
-			<li>
-				<label for="checked-checkbox-01" class="flex items-center gap-3 text-sm font-medium text-gray-900">
-					<input id="checked-checkbox-01" type="checkbox" value="1" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+		<ul
+			v-if="openLimitedAccessModal"
+			class="absolute top-14 left-0 flex flex-col gap-3 p-3 bg-white shadow-xl rounded-md"
+		>
+			<li v-for="limitedAccessType in limitedAccessTypes">
+				<label :for="limitedAccessType.value" class="flex items-center gap-3 text-sm font-medium text-gray-900">
+					<input
+						:id="limitedAccessType.value"
+						type="checkbox"
+						class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+						:checked="selectedLimitedAccess.includes(limitedAccessType.value)"
+						@change="onUpdateLimitedAccess(limitedAccessType.value)"
+					/>
 					<img class="w-24 h-24" src="../../../assets/images/limited-access/img01.png" alt="img01">
 					<div class="flex flex-col">
-						<p class="text-gray-900">Name of membership</p>
+						<p class="text-gray-900">{{ limitedAccessType.label }}</p>
 						<p class="text-gray-500">0.01 ETH</p>
 					</div>
 				</label>
 			</li>
-	  	<li>
-				<label for="checked-checkbox-02" class="flex items-center gap-3 text-sm font-medium text-gray-900">
-		  		<input id="checked-checkbox-02" type="checkbox" value="1" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-		  		<img class="w-24 h-24" src="../../../assets/images/limited-access/img01.png" alt="img01">
-		  		<div class="flex flex-col">
-						<p class="text-gray-900">Name of membership</p>
-						<p class="text-gray-500">0.01 ETH</p>
-		  		</div>
-				</label>
-	  	</li>
-	  	<li>
-				<label for="checked-checkbox-03" class="flex items-center gap-3 text-sm font-medium text-gray-900">
-		  		<input id="checked-checkbox-03" type="checkbox" value="1" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-		  		<img class="w-24 h-24" src="../../../assets/images/limited-access/img01.png" alt="img01">
-		  		<div class="flex flex-col">
-						<p class="text-gray-900">Name of membership</p>
-						<p class="text-gray-500">0.01 ETH</p>
-		  		</div>
-				</label>
-	  	</li>
 		</ul>
   </div>
 	<!-- /Limited access button -->
