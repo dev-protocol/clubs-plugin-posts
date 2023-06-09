@@ -33,6 +33,7 @@ const onClickPost = async () => {
 // limited access selected
 const selectedLimitedAccess = ref([])
 
+// limited access types
 const limitedAccessTypes = [
 	{
 		value: 'limitedAccess01',
@@ -64,8 +65,15 @@ const onUpdateLimitedAccess = (value: string) => {
 
 // Limited access modal
 const openLimitedAccessModal = ref(false)
+
+// Limited access modal open
 const onClickLimitedAccess = async () => {
 	openLimitedAccessModal.value = !openLimitedAccessModal.value
+}
+
+// Limited access modal close
+const onCloseLimitedAccess = () => {
+	openLimitedAccessModal.value = false
 }
 
 </script>
@@ -126,7 +134,7 @@ const onClickLimitedAccess = async () => {
 		<!-- modal menu -->
 		<ul
 			v-if="openLimitedAccessModal"
-			class="absolute top-14 left-0 flex flex-col gap-3 p-3 bg-white shadow-xl rounded-md"
+			class="absolute z-20 top-14 left-0 flex flex-col gap-3 p-3 bg-white shadow-xl rounded-md"
 		>
 			<li v-for="limitedAccessType in limitedAccessTypes">
 				<label :for="limitedAccessType.value" class="flex items-center gap-3 text-sm font-medium text-gray-900">
@@ -145,6 +153,11 @@ const onClickLimitedAccess = async () => {
 				</label>
 			</li>
 		</ul>
+		<div
+			v-if="openLimitedAccessModal"
+			class="fixed inset-0 z-10"
+			@click="onCloseLimitedAccess"
+		></div>
   </div>
 	<!-- /Limited access button -->
   <Line class="mb-5" />
