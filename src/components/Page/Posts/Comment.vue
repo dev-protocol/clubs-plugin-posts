@@ -1,15 +1,14 @@
 <script lang="ts" setup>
-const props = defineProps({
-	comments: {
-		type: Array<{
-			avatar: string
-			name: string
-			date: string
-			comment: string
-		}>,
-		required: true,
-	},
-})
+import { Comment } from '../../../types';
+import dayjs from 'dayjs';
+
+type Props = {
+	avatar: string
+	name: string
+	comments: Comment[]
+};
+
+const props = defineProps<Props>()
 </script>
 
 <template>
@@ -20,15 +19,15 @@ const props = defineProps({
 				  <div class="flex items-center">
 						<img
 						  class="w-9 h-9 rounded-full mr-3"
-						  :src="comment.avatar"
+						  :src="avatar"
 						  alt="Avatar"
 						/>
-						<p class="text-black text-base font-bold">{{ comment.name }}</p>
+						<p class="text-black text-base font-bold">{{ name }}</p>
 				  </div>
-				  <p class="text-base text-gray-400">{{ comment.date }}</p>
+				  <p class="text-base text-gray-400">{{ dayjs(comment.created_at).format('d MMM H:mm') }}</p>
 				</div>
 				<p class="text-base text-gray-700">
-					{{ comment.comment }}
+					{{ comment.content }}
 				</p>
 		  </div>
 		</div>
