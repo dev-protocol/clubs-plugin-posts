@@ -76,6 +76,41 @@ const onCloseLimitedAccess = () => {
 	openLimitedAccessModal.value = false
 }
 
+const selectedImage = ref<any>(null)
+const imageUrl = ref<string | null>(null)
+const handleFileUpload = (event) => {
+	selectedImage.value = event.target.files[0];
+
+	const formData = new FormData();
+	formData.append('image', selectedImage.value);
+
+	fetch('https://api.imgur.com/3/image', {
+		method: 'POST',
+		headers: {
+			Authorization: 'Client-ID <クライアントID>', // Imgur APIのクライアントIDをここに追加してください
+		},
+		body: formData,
+	})
+		.then((response) => response.json())
+		.then((data) => {
+			imageUrl.value = data.data.link;
+			console.log('imagurのレスポンス', data.data);
+			console.info(imageUrl.value)
+		})
+		.catch((error) => {
+			console.error(error);
+		});
+}
+
+// 画像ボタンを押した時の処理
+const onClickImage = () => {
+	// input要素を取得する
+	const input = document.getElementById('image') as HTMLInputElement
+
+	// input要素をクリックする
+	input.click()
+}
+
 </script>
 <template>
 	<!-- Avatar -->
@@ -175,9 +210,18 @@ const onCloseLimitedAccess = () => {
 					clip-rule="evenodd"
 				/>
 			</svg>
+			<!-- 画像を選択するinput要素 -->
+			<input
+				id="image"
+				type="file"
+				accept="image/*"
+				class="hidden"
+				@change="handleFileUpload"
+			/>
 			<button
 				class="inline-flex items-center justify-center rounded-full shadow-sm cursor-pointer"
 				type="button"
+				@click="onClickImage"
 			>
 				<img class="w-7" src="../../../assets/images/icon-pic.svg" alt="paper-airplane" />
 	  	</button>
