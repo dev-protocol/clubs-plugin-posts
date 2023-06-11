@@ -3,6 +3,35 @@ import {ref} from 'vue';
 
 const contents = ref('')
 const onClickPost = async () => {
+	// 除隊管理はnanostoresを使う
+	// https://docs.astro.build/ja/core-concepts/sharing-state/
+
+	// 画像アップロード
+	/*
+	selectedImage.value = event.target.files[0];
+
+const formData = new FormData();
+formData.append('image', selectedImage.value);
+
+fetch('https://api.imgur.com/3/image', {
+	method: 'POST',
+	headers: {
+		Authorization: `Client-ID ${import.meta.env.PUBLIC_IMGUR_CLIENT_ID}`, // Imgur APIのクライアントIDをここに追加してください
+	},
+	body: formData,
+})
+	.then((response) => response.json())
+	.then((data) => {
+		imageUrl.value = data.data.link;
+		console.log('imagurのレスポンス', data.data);
+		console.info(imageUrl.value)
+	})
+	.catch((error) => {
+		console.error(error);
+	});
+
+ */
+
 	// fetchで /message.jsonをpostしてasync/awaitでレスポンスを取得する
 	const response = await fetch('/api/message.json', {
 		method: 'POST',

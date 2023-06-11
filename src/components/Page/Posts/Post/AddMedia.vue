@@ -1,30 +1,20 @@
 <script setup lang="ts">
-import {ref} from 'vue';
+import {ref} from 'vue'
+import {selectImages} from './PostStore'
 
-const selectedImage = ref<any>(null)
 const imageUrl = ref<string | null>(null)
 const handleFileUpload = (event) => {
-	selectedImage.value = event.target.files[0];
-
-	const formData = new FormData();
-	formData.append('image', selectedImage.value);
-
-	fetch('https://api.imgur.com/3/image', {
-		method: 'POST',
-		headers: {
-			Authorization: `Client-ID ${import.meta.env.PUBLIC_IMGUR_CLIENT_ID}`, // Imgur APIのクライアントIDをここに追加してください
-		},
-		body: formData,
-	})
-		.then((response) => response.json())
-		.then((data) => {
-			imageUrl.value = data.data.link;
-			console.log('imagurのレスポンス', data.data);
-			console.info(imageUrl.value)
-		})
-		.catch((error) => {
-			console.error(error);
-		});
+	const file = event.target.files[0]
+	if (file) {
+		const reader = new FileReader()
+		reader.onload = () => {
+			// selectedImageに読み込んだ画像をセットする
+			const storeSelectImages = selectImages.get()
+			storeSelectImages.value.push(reader.result as string)
+			selectImages.set(storeSelectImages)
+		};
+		reader.readAsDataURL(file)
+	}
 }
 
 // 画像ボタンを押した時の処理

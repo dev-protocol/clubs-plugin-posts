@@ -1,8 +1,11 @@
 <script lang="ts" setup>
-import Line from '../../Common/Line.vue';
 import {ref} from 'vue'
-import AddMedia from './Post/AddMedia.vue';
-import DoPost from './Post/DoPost.vue';
+import { selectImages } from './Post/PostStore'
+import { useStore } from '@nanostores/vue'
+import Line from '../../Common/Line.vue'
+import AddMedia from './Post/AddMedia.vue'
+import DoPost from './Post/DoPost.vue'
+import Images from './Media/Images.vue'
 
 type Props = {
 	name: string;
@@ -58,6 +61,9 @@ const onClickLimitedAccess = async () => {
 const onCloseLimitedAccess = () => {
 	openLimitedAccessModal.value = false
 }
+
+// Media preview
+const $selectImages = useStore(selectImages)
 </script>
 <template>
 	<!-- Avatar -->
@@ -142,6 +148,11 @@ const onCloseLimitedAccess = () => {
 		></div>
   </div>
 	<!-- /Limited access button -->
+	<!-- Media preview -->
+  <div class="mb-5 flex flex-wrap gap-y-1 gap-x-1">
+  	<Images v-if="$selectImages" :images="$selectImages" />
+	</div>
+	<!-- /Media preview -->
   <Line class="mb-5" />
 	<!-- アクションエリア -->
 	<div class="flex justify-between items-center">
