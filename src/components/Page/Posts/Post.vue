@@ -1,34 +1,20 @@
 <script lang="ts" setup>
-import Line from '../../Common/Line.vue';
 import {ref} from 'vue'
+import { selectImages } from './Post/PostStore'
+import { useStore } from '@nanostores/vue'
+import Line from '../../Common/Line.vue'
+import AddMedia from './Post/AddMedia.vue'
+import DoPost from './Post/DoPost.vue'
+import Images from './Media/Images.vue'
 
 type Props = {
 	name: string;
 	avatar: string;
-
 };
 
 const props = defineProps<Props>()
 
 const contents = ref('')
-const onClickPost = async () => {
-	// fetchで /message.jsonをpostしてasync/awaitでレスポンスを取得する
-	const response = await fetch('/api/message.json', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			contents: contents.value,
-		}),
-	})
-
-	// レスポンスをjsonに変換する
-	const json = await response.json()
-
-	// レスポンスのjsonをコンソールに表示する
-	console.log(json)
-}
 
 // limited access selected
 const selectedLimitedAccess = ref([])
@@ -76,41 +62,8 @@ const onCloseLimitedAccess = () => {
 	openLimitedAccessModal.value = false
 }
 
-const selectedImage = ref<any>(null)
-const imageUrl = ref<string | null>(null)
-const handleFileUpload = (event) => {
-	selectedImage.value = event.target.files[0];
-
-	const formData = new FormData();
-	formData.append('image', selectedImage.value);
-
-	fetch('https://api.imgur.com/3/image', {
-		method: 'POST',
-		headers: {
-			Authorization: 'Client-ID <クライアントID>', // Imgur APIのクライアントIDをここに追加してください
-		},
-		body: formData,
-	})
-		.then((response) => response.json())
-		.then((data) => {
-			imageUrl.value = data.data.link;
-			console.log('imagurのレスポンス', data.data);
-			console.info(imageUrl.value)
-		})
-		.catch((error) => {
-			console.error(error);
-		});
-}
-
-// 画像ボタンを押した時の処理
-const onClickImage = () => {
-	// input要素を取得する
-	const input = document.getElementById('image') as HTMLInputElement
-
-	// input要素をクリックする
-	input.click()
-}
-
+// Media preview
+const $selectImages = useStore(selectImages)
 </script>
 <template>
 	<!-- Avatar -->
@@ -195,44 +148,20 @@ const onClickImage = () => {
 		></div>
   </div>
 	<!-- /Limited access button -->
-  <Line class="mb-5" />
-	<div class="flex justify-between items-center">
-		<div class="flex items-center">
-			<svg
-				class="w-5 h-5 mr-3"
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 20 20"
-				fill="currentColor"
-			>
-				<path
-					fill-rule="evenodd"
-					d="M10 3a1 1 0 011 1v4h4a1 1 0 110 2h-4v4a1 1 0 11-2 0v-4H5a1 1 0 110-2h4V4a1 1 0 011-1z"
-					clip-rule="evenodd"
-				/>
-			</svg>
-			<!-- 画像を選択するinput要素 -->
-			<input
-				id="image"
-				type="file"
-				accept="image/*"
-				class="hidden"
-				@change="handleFileUpload"
-			/>
-			<button
-				class="inline-flex items-center justify-center rounded-full shadow-sm cursor-pointer"
-				type="button"
-				@click="onClickImage"
-			>
-				<img class="w-7" src="../../../assets/images/icon-pic.svg" alt="paper-airplane" />
-	  	</button>
-		</div>
-		<div class="flex items-center">
-			<button
-				class="py-2 px-8 text-base text-white bg-blue-600 border border-transparent rounded-3xl shadow-sm focus:outline-none"
-				@click="onClickPost"
-			>
-				Post
-			</button>
-		</div>
+	<!-- Media preview -->
+  <div class="mb-5 flex flex-wrap gap-y-1 gap-x-1">
+  	<Images v-if="$selectImages" :images="$selectImages" />
 	</div>
+	<!-- /Media preview -->
+  <Line class="mb-5" />
+	<!-- アクションエリア -->
+	<div class="flex justify-between items-center">
+		<!-- 画像ボタン -->
+		<AddMedia />
+		<!-- /画像ボタン -->
+		<!-- Postボタン -->
+		<DoPost />
+		<!-- /Postボタン -->
+	</div>
+	<!-- /アクション -->
 </template>

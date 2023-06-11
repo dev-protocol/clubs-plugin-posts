@@ -1260,6 +1260,11 @@
   resolved "https://registry.yarnpkg.com/@metamask/detect-provider/-/detect-provider-2.0.0.tgz#4bc2795e5e6f7d8b84b2e845058d2f222c99917d"
   integrity sha512-sFpN+TX13E9fdBDh9lvQeZdJn4qYoRb/6QF2oZZK/Pn559IhCFacPMU1rMuqyXoFQF3JSJfii2l98B87QDPeCQ==
 
+"@nanostores/vue@^0.9.0":
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/@nanostores/vue/-/vue-0.9.0.tgz#d2dc952dc2d399c897f392a569745bbdbec4806f"
+  integrity sha512-VUD1yYjgU6OtRYPSSgl+KUc0KGbC4luGQJ4FpBhq5d4K0lLokYFFEM1oc03z5rqZsQAZb7M9YExnxYwn09+gVA==
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz#7619c2eb21b25483f6d167548b4cfd5a7488c3d5"
@@ -4456,6 +4461,11 @@ nanoid@^3.3.6:
   version "3.3.6"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.6.tgz#443380c856d6e9f9824267d960b4236ad583ea4c"
   integrity sha512-BGcqMMJuToF7i1rt+2PWSNVnWIkGCU78jBG3RxO/bZlnZPK2Cmi2QaffxGO/2RvWi9sL+FAiRiXMgsyxQ1DIDA==
+
+nanostores@^0.9.1:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/nanostores/-/nanostores-0.9.1.tgz#70cc1672b5f7ca7016ab93a72037759c98b65a0a"
+  integrity sha512-DmAL3oTieICqnl2XVq5wegFE7EXIoPnIv1CNWNGEhXpwrHk7Prctch4/nX5x95i95WHdesI5sPeoNAUFpFsGtg==
 
 natural-compare-lite@^1.4.0:
   version "1.4.0"

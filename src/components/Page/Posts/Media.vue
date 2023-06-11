@@ -2,6 +2,7 @@
 import requireImage01 from '../../../assets/images/required/img01.png'
 import requireImage02 from '../../../assets/images/required/img02.png'
 import requireImage03 from '../../../assets/images/required/img03.png'
+import Images from './Media/Images.vue';
 
 type Props = {
 	images?: {
@@ -27,18 +28,7 @@ const props = defineProps<Props>()
 				</div>
 			</div>
 		</div>
-		<div
-			v-if="images"
-			v-for="image in images.value" :key="image"
-			class="bg-gray-100 overflow-hidden"
-			:style="{ width: images.value.length === 1 ? '100%' : 'calc(50% - 2px)' }"
-		>
-			<img
-	  		class="w-full rounded"
-	  		:src="image"
-	  		alt="Nature"
-			/>
-		</div>
+		<Images v-if="props.images" :images="props.images.value" />
   </div>
 </template>
 
