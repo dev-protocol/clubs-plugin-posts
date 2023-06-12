@@ -1,36 +1,19 @@
 <script setup lang="ts">
 import {ref} from 'vue';
+import {selectImagesFile} from './PostStore';
 
 const contents = ref('')
 const onClickPost = async () => {
-	// 除隊管理はnanostoresを使う
-	// https://docs.astro.build/ja/core-concepts/sharing-state/
-
 	// 画像アップロード
-	/*
-	selectedImage.value = event.target.files[0];
-
-const formData = new FormData();
-formData.append('image', selectedImage.value);
-
-fetch('https://api.imgur.com/3/image', {
-	method: 'POST',
-	headers: {
-		Authorization: `Client-ID ${import.meta.env.PUBLIC_IMGUR_CLIENT_ID}`, // Imgur APIのクライアントIDをここに追加してください
-	},
-	body: formData,
-})
-	.then((response) => response.json())
-	.then((data) => {
-		imageUrl.value = data.data.link;
-		console.log('imagurのレスポンス', data.data);
-		console.info(imageUrl.value)
-	})
-	.catch((error) => {
-		console.error(error);
-	});
-
- */
+	const uploadedImageURLs = []
+	const storeSelectImagesFile = selectImagesFile.get()
+	if (storeSelectImagesFile.value.length > 0) {
+		for (const image of storeSelectImagesFile.value) {
+			const imgurURL = await uploadImageToImgur(image)
+			console.log('imgurURL', imgurURL)
+			uploadedImageURLs.push(imgurURL)
+		}
+	}
 
 	// fetchで /message.jsonをpostしてasync/awaitでレスポンスを取得する
 	const response = await fetch('/api/message.json', {
@@ -48,6 +31,22 @@ fetch('https://api.imgur.com/3/image', {
 
 	// レスポンスのjsonをコンソールに表示する
 	console.log(json)
+}
+
+async function uploadImageToImgur(image: File) {
+	const formData = new FormData();
+	formData.append('image', image);
+
+	const response = await fetch('https://api.imgur.com/3/image', {
+		method: 'POST',
+		headers: {
+			Authorization: `Client-ID ${import.meta.env.PUBLIC_IMGUR_CLIENT_ID}`, // Imgur APIのクライアントIDをここに追加してください
+		},
+		body: formData,
+	})
+
+	const json = await response.json()
+	return json.data.link
 }
 </script>
 <template>
