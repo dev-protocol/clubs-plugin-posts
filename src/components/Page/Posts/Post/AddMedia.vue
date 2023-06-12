@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import {ref} from 'vue'
-import {selectImages} from './PostStore'
+import {selectImages, selectImagesFile} from './PostStore'
 
 const imageUrl = ref<string | null>(null)
 const handleFileUpload = (event) => {
 	const file = event.target.files[0]
 	if (file) {
+		const selectImagesFiles = selectImagesFile.get()
+		selectImagesFiles.value.push(file)
+
 		const reader = new FileReader()
 		reader.onload = () => {
 			// selectedImageに読み込んだ画像をセットする
