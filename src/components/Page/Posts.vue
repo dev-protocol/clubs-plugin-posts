@@ -11,6 +11,15 @@ import Line from '../Common/Line.vue'
 type Props = {
 	options: Option[]
 	propertyAddress: string
+	memberships: {
+		id: string
+		name: string
+		description: string
+		price: 3
+		currency: string
+		imageSrc: string
+		payload: Uint8Array
+	}[]
 }
 
 const props = defineProps<Props>()

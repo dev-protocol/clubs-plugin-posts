@@ -19,13 +19,21 @@ import { getAllPosts, setAllPosts } from './db'
 
 export const getPagePaths: ClubsFunctionGetPagePaths = async (
 	options,
-	{ propertyAddress }
+	{ propertyAddress },
+	{ getPluginConfigById }
 ) => {
+	const [membershipsPlugin] = getPluginConfigById(
+		'devprotocol:clubs:simple-memberships'
+	)
+	const memberships = membershipsPlugin?.options?.find(
+		({ key }) => key === 'memberships'
+	)?.value
+
 	return [
 		{
 			paths: [''],
 			component: Posts,
-			props: { options, propertyAddress },
+			props: { options, propertyAddress, memberships },
 			// `propertyAddress` is required for calling post API, so passed to the FE here.
 		},
 	]
