@@ -1,5 +1,14 @@
 import { encode } from '@devprotocol/clubs-core'
 import dayjs from 'dayjs'
+import { constants, utils } from 'ethers'
+import { v5 as uuidv5 } from 'uuid'
+import type { OptionsDatabase } from '../src/types'
+
+const payloads: readonly Uint8Array[] = [
+	utils.toUtf8Bytes('tier-1'),
+	utils.toUtf8Bytes('tier-2'),
+	utils.toUtf8Bytes('tier-3'),
+]
 
 export default () =>
 	encode({
@@ -7,7 +16,7 @@ export default () =>
 		twitterHandle: '@debug',
 		description: '',
 		url: '',
-		propertyAddress: '',
+		propertyAddress: constants.AddressZero,
 		chainId: 137,
 		rpcUrl: 'https://polygon-rpc.com/',
 		adminRolePoints: 50,
@@ -19,6 +28,16 @@ export default () =>
 			{
 				id: 'clubs-plugin-posts',
 				options: [
+					{
+						key: 'database',
+						value: {
+							type: 'encoded:redis',
+							key: `posts::${uuidv5(
+								utils.toUtf8Bytes('EXAMPLE'),
+								uuidv5('EXAMPLE_NAMESPACE', uuidv5.URL)
+							)}`, // > posts::694666bb-b2ec-542b-a5d6-65b470e5c494
+						},
+					} as OptionsDatabase,
 					{
 						key: 'posts',
 						value: [
@@ -40,7 +59,7 @@ export default () =>
 									},
 									{
 										key: 'require-one-of',
-										value: ['post', 'comment', 'reaction'],
+										value: [payloads[0], payloads[1], payloads[2]],
 									},
 								],
 								comments: [],
@@ -131,6 +150,43 @@ export default () =>
 									},
 								],
 								reactions: [],
+							},
+						],
+					},
+				],
+			},
+			{
+				id: 'devprotocol:clubs:simple-memberships',
+				options: [
+					{
+						key: 'memberships',
+						value: [
+							{
+								id: 'tier-3',
+								name: 'Tier 3',
+								description: 'lorem ipsum',
+								price: 3,
+								currency: 'ETH',
+								imageSrc: 'https://i.imgur.com/wwJ2rBf.png',
+								payload: payloads[2],
+							},
+							{
+								id: 'tier-2',
+								name: 'Tier 2',
+								description: 'lorem ipsum',
+								price: 2,
+								currency: 'ETH',
+								imageSrc: 'https://i.imgur.com/YaNNZ2F.png',
+								payload: payloads[1],
+							},
+							{
+								id: 'tier-1',
+								name: 'Tier 1',
+								description: 'lorem ipsum',
+								price: 1,
+								currency: 'ETH',
+								imageSrc: 'https://i.imgur.com/sznqcmL.png',
+								payload: payloads[0],
 							},
 						],
 					},
