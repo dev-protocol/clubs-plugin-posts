@@ -7,9 +7,9 @@ import type { Posts } from '../types'
 import { examplePosts } from '../constants/example-posts'
 
 const client = createClient({
-	url: process.env.REDIS_URL,
-	username: process.env.REDIS_USERNAME ?? '',
-	password: process.env.REDIS_PASSWORD ?? '',
+	url: import.meta.env.REDIS_URL,
+	username: import.meta.env.REDIS_USERNAME ?? '',
+	password: import.meta.env.REDIS_PASSWORD ?? '',
 	socket: {
 		keepAlive: 1,
 		reconnectStrategy: 1,
