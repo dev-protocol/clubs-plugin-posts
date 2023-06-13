@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {ref} from 'vue'
+import { ref } from 'vue'
 import { selectImages } from './Post/PostStore'
 import { useStore } from '@nanostores/vue'
 import Line from '../../Common/Line.vue'
@@ -8,9 +8,10 @@ import DoPost from './Post/DoPost.vue'
 import Images from './Media/Images.vue'
 
 type Props = {
-	name: string;
-	avatar: string;
-};
+	name: string
+	avatar: string
+	propertyAddress: string
+}
 
 const props = defineProps<Props>()
 
@@ -90,7 +91,7 @@ const $selectImages = useStore(selectImages)
 	</div>
 	<!-- /入力フォーム -->
 	<!-- Limited access button -->
-  <div class="relative flex items-center mb-5">
+	<div class="relative flex items-center mb-5">
 		<button
 			class="py-2 px-8 text-base text-white bg-blue-600 border border-transparent rounded-3xl shadow-sm focus:outline-none"
 			@click="onClickLimitedAccess"
@@ -108,7 +109,7 @@ const $selectImages = useStore(selectImages)
 					clip-rule="evenodd"
 				/>
 			</svg>
-	  	Limited access
+			Limited access
 		</button>
 		<!-- 選択済みのLimited accessを表示 -->
 		<div class="flex items-center gap-3 ml-3">
@@ -125,7 +126,10 @@ const $selectImages = useStore(selectImages)
 			class="absolute z-20 top-14 left-0 flex flex-col gap-3 p-3 bg-white shadow-xl rounded-md"
 		>
 			<li v-for="limitedAccessType in limitedAccessTypes">
-				<label :for="limitedAccessType.value" class="flex items-center gap-3 text-sm font-medium text-gray-900">
+				<label
+					:for="limitedAccessType.value"
+					class="flex items-center gap-3 text-sm font-medium text-gray-900"
+				>
 					<input
 						:id="limitedAccessType.value"
 						type="checkbox"
@@ -133,7 +137,11 @@ const $selectImages = useStore(selectImages)
 						:checked="selectedLimitedAccess.includes(limitedAccessType.value)"
 						@change="onUpdateLimitedAccess(limitedAccessType.value)"
 					/>
-					<img class="w-24 h-24" src="../../../assets/images/limited-access/img01.png" alt="img01">
+					<img
+						class="w-24 h-24"
+						src="../../../assets/images/limited-access/img01.png"
+						alt="img01"
+					/>
 					<div class="flex flex-col">
 						<p class="text-gray-900">{{ limitedAccessType.label }}</p>
 						<p class="text-gray-500">0.01 ETH</p>
@@ -146,21 +154,21 @@ const $selectImages = useStore(selectImages)
 			class="fixed inset-0 z-10"
 			@click="onCloseLimitedAccess"
 		></div>
-  </div>
+	</div>
 	<!-- /Limited access button -->
 	<!-- Media preview -->
-  <div class="mb-5 flex flex-wrap gap-y-1 gap-x-1">
-  	<Images v-if="$selectImages" :images="$selectImages" />
+	<div class="mb-5 flex flex-wrap gap-y-1 gap-x-1">
+		<Images v-if="$selectImages" :images="$selectImages" />
 	</div>
 	<!-- /Media preview -->
-  <Line class="mb-5" />
+	<Line class="mb-5" />
 	<!-- アクションエリア -->
 	<div class="flex justify-between items-center">
 		<!-- 画像ボタン -->
 		<AddMedia />
 		<!-- /画像ボタン -->
 		<!-- Postボタン -->
-		<DoPost />
+		<DoPost :propertyAddress="props.propertyAddress" />
 		<!-- /Postボタン -->
 	</div>
 	<!-- /アクション -->

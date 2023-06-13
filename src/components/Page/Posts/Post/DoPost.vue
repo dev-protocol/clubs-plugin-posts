@@ -1,6 +1,12 @@
 <script setup lang="ts">
-import {ref} from 'vue';
-import {selectImagesFile} from './PostStore';
+import { ref } from 'vue'
+import { selectImagesFile } from './PostStore'
+
+type Props = {
+	propertyAddress: string
+}
+
+const props = defineProps<Props>()
 
 const contents = ref('')
 const onClickPost = async () => {
@@ -16,15 +22,18 @@ const onClickPost = async () => {
 	}
 
 	// fetchで /message.jsonをpostしてasync/awaitでレスポンスを取得する
-	const response = await fetch('/api/message.json', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			contents: contents.value,
-		}),
-	})
+	const response = await fetch(
+		`/api/clubs-plugin-posts/${props.propertyAddress}/message`,
+		{
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				contents: contents.value,
+			}),
+		}
+	)
 
 	// レスポンスをjsonに変換する
 	const json = await response.json()
@@ -34,8 +43,8 @@ const onClickPost = async () => {
 }
 
 async function uploadImageToImgur(image: File) {
-	const formData = new FormData();
-	formData.append('image', image);
+	const formData = new FormData()
+	formData.append('image', image)
 
 	const response = await fetch('https://api.imgur.com/3/image', {
 		method: 'POST',
@@ -50,12 +59,12 @@ async function uploadImageToImgur(image: File) {
 }
 </script>
 <template>
-  <div class="flex items-center">
-	<button
-	  class="py-2 px-8 text-base text-white bg-blue-600 border border-transparent rounded-3xl shadow-sm focus:outline-none"
-	  @click="onClickPost"
-	>
-	  Post
-	</button>
-  </div>
+	<div class="flex items-center">
+		<button
+			class="py-2 px-8 text-base text-white bg-blue-600 border border-transparent rounded-3xl shadow-sm focus:outline-none"
+			@click="onClickPost"
+		>
+			Post
+		</button>
+	</div>
 </template>
