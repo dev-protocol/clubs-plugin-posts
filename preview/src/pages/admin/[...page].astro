@@ -4,21 +4,23 @@ import { adminFactory } from '@devprotocol/clubs-core'
 import config from '../../../config'
 import plugins from '../../../plugins'
 
-export async function getStaticPaths() {
-	const { getStaticPaths } = adminFactory({
-		config,
-		plugins,
-	})
+const { page } = Astro.params
+const { getStaticPaths } = adminFactory({
+	config,
+	plugins,
+})
+const path = (await getStaticPaths()).find(({ params }) => params.page === page)
 
-	return getStaticPaths()
-}
-
-const Content = Astro.props.component
+const Content = path?.props.component
 ---
 
-<Admin {...Astro.props}>
-	<Content {...Astro.props} />
-</Admin>
+{
+	Content && (
+		<Admin {...path.props}>
+			<Content {...path.props} />
+		</Admin>
+	)
+}
 
 <script type="module">
 	import { onSubmitConfig } from '@devprotocol/clubs-core'
