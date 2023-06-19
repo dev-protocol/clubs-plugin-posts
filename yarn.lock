@@ -1261,9 +1261,9 @@
   integrity sha512-sFpN+TX13E9fdBDh9lvQeZdJn4qYoRb/6QF2oZZK/Pn559IhCFacPMU1rMuqyXoFQF3JSJfii2l98B87QDPeCQ==
 
 "@nanostores/vue@^0.9.0":
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/@nanostores/vue/-/vue-0.9.0.tgz#d2dc952dc2d399c897f392a569745bbdbec4806f"
-  integrity sha512-VUD1yYjgU6OtRYPSSgl+KUc0KGbC4luGQJ4FpBhq5d4K0lLokYFFEM1oc03z5rqZsQAZb7M9YExnxYwn09+gVA==
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/@nanostores/vue/-/vue-0.9.1.tgz#81cff5a388e59097e248608ee906d224920a300d"
+  integrity sha512-Yv9datKSdDcfLz20NgS7jIX/vsYffic3nymHgujj3KFBtmtgVPC6LyJora669wtj7BwmK3qGfFY5Ylby72NIXg==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
