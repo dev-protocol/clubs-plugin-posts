@@ -43,7 +43,7 @@
 		"ramda": "0.29.0",
 		"redis": "^4.6.7",
 		"sass": "1.63.6",
-		"svelte": "^3.54.0",
+		"svelte": "^4.0.0",
 		"uuid": "^9.0.0"
 	},
 	"devDependencies": {
