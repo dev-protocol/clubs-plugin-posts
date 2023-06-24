@@ -97,15 +97,16 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 
 				const { randomBytes, recoverAddress, hashMessage } = utils
 				const id = uuidv5(randomBytes(32), namespace)
-				const created_by =
-					whenDefinedAll([hash, sig], ([h, s]) =>
-						recoverAddress(hashMessage(h), s)
-					) || constants.AddressZero
+
+				// Todo: このcreated_byを変更している
+				const created_by = constants.AddressZero
+
 				const now = new Date()
 				const created_at = now
 				const updated_at = now
 				const decodedContents = decode<PostPrimitives>(contents)
 				const comments: readonly Comment[] = []
+
 				const composed = {
 					...decodedContents,
 					id,
@@ -114,48 +115,66 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 					updated_at,
 					comments,
 				}
-				const allPosts = await whenDefinedAll([dbType, dbKey], ([type, key]) =>
-					getAllPosts(type, { key })
-				)
-				const merged =
-					allPosts && !(allPosts instanceof Error)
-						? [composed, ...allPosts]
-						: undefined
 
-				const saved =
-					skipAuthentication === true || authenticated === true
-						? await whenDefinedAll(
+				// eslint-disable-next-line functional/no-try-statement
+				try {
+					const allPosts = await whenDefinedAll([dbType, dbKey], ([type, key]) => {
+							return getAllPosts(type, {key})
+						}
+					)
+
+					const merged =
+						allPosts && !(allPosts instanceof Error)
+							? [composed, ...allPosts]
+							: undefined
+
+					// Todo: このsaveは何を保存している？
+					const saved =
+						skipAuthentication === true || authenticated === true
+							? await whenDefinedAll(
 								[dbType, dbKey, merged],
 								([type, key, posts]) => setAllPosts(type, { key, posts })
-						  )
-						: undefined
+							)
+							: undefined
 
-				return saved instanceof Error
-					? new Response(
+					return saved instanceof Error
+						? new Response(
 							JSON.stringify({
 								error: saved,
 							}),
 							{
 								status: 500,
 							}
-					  )
-					: saved
-					? new Response(
-							JSON.stringify({
-								message: saved,
-							}),
-							{
-								status: 200,
-							}
-					  )
-					: new Response(
-							JSON.stringify({
-								error: 'Some data is missing',
-							}),
-							{
-								status: 400,
-							}
-					  )
+						)
+						: saved
+							? new Response(
+								JSON.stringify({
+									message: saved,
+								}),
+								{
+									status: 200,
+								}
+							)
+							: new Response(
+								JSON.stringify({
+									error: 'Some data is missing',
+								}),
+								{
+									status: 400,
+								}
+							)
+
+
+				} catch (e: any) {
+					return new Response(
+						JSON.stringify({
+							error: e.memssage,
+						}),
+						{
+							status: 500,
+						}
+					)
+				}
 			},
 		},
 		{

@@ -7,6 +7,7 @@ import Comment from './Posts/Comment.vue'
 import type { Option, Posts } from '../../types'
 import { ref } from 'vue'
 import Line from '../Common/Line.vue'
+import {decode, encode} from '@devprotocol/clubs-core'
 
 type Props = {
 	options: Option[]
@@ -30,9 +31,28 @@ if (props.options === undefined) {
 
 // props.optionsのkeyがpostsのvalueを取得する
 // TODO: [GET] `/api/clubs-plugin-posts/${props.propertyAddress}/message` に差し替え
-const posts = ref<Posts[]>(
-	props.options.find((item) => item.key === 'posts')?.value || []
-)
+const posts = await fetch(`http://localhost:3000/api/clubs-plugin-posts/${props.propertyAddress}/message`,{
+	method: 'POST',
+	headers: {
+		'Content-Type': 'application/json',
+	},
+	body: JSON.stringify({
+		posts: 'posts-xxxxx',
+		contents: encode( {
+			AddressZero: '0x0000000000000000000000000000000000000000',
+		}),
+		hash: 'hash-xxxxx',
+		sig: 'sig-xxxxx',
+	})
+	})
+	.then(async (res) => {
+		console.error(await res.status)
+		if (res.status === 500) {
+			return []
+		}
+		return []
+	})
+	.catch((err) => console.error(err))
 </script>
 
 <template>
@@ -44,6 +64,10 @@ const posts = ref<Posts[]>(
 				:propertyAddress="props.propertyAddress"
 			/>
 		</section>
+		<!-- article empty -->
+		<div v-if="posts.length === 0" class="mb-5 p-5 rounded bg-white">
+			<p class="text-center">No posts</p>
+		</div>
 		<article
 			v-for="(post, key) in posts"
 			:key="post.id"
