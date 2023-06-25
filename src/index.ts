@@ -118,8 +118,10 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 
 				// eslint-disable-next-line functional/no-try-statement
 				try {
-					const allPosts = await whenDefinedAll([dbType, dbKey], ([type, key]) => {
-							return getAllPosts(type, {key})
+					const allPosts = await whenDefinedAll(
+						[dbType, dbKey],
+						([type, key]) => {
+							return getAllPosts(type, { key })
 						}
 					)
 
@@ -132,39 +134,37 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 					const saved =
 						skipAuthentication === true || authenticated === true
 							? await whenDefinedAll(
-								[dbType, dbKey, merged],
-								([type, key, posts]) => setAllPosts(type, { key, posts })
-							)
+									[dbType, dbKey, merged],
+									([type, key, posts]) => setAllPosts(type, { key, posts })
+							  )
 							: undefined
 
 					return saved instanceof Error
 						? new Response(
-							JSON.stringify({
-								error: saved,
-							}),
-							{
-								status: 500,
-							}
-						)
+								JSON.stringify({
+									error: saved,
+								}),
+								{
+									status: 500,
+								}
+						  )
 						: saved
-							? new Response(
+						? new Response(
 								JSON.stringify({
 									message: saved,
 								}),
 								{
 									status: 200,
 								}
-							)
-							: new Response(
+						  )
+						: new Response(
 								JSON.stringify({
 									error: 'Some data is missing',
 								}),
 								{
 									status: 400,
 								}
-							)
-
-
+						  )
 				} catch (e: any) {
 					return new Response(
 						JSON.stringify({
@@ -202,13 +202,13 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 				 */
 
 				// eslint-disable-next-line functional/no-let
-				let allPosts;
+				let allPosts
 				// eslint-disable-next-line
 				try {
 					// eslint-disable-next-line
 					allPosts = await whenDefinedAll([dbType, dbKey], ([type, key]) =>
 						getAllPosts(type, { key })
-					);
+					)
 				} catch (error) {
 					return new Response(
 						JSON.stringify({
@@ -222,31 +222,31 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 
 				return allPosts instanceof Error
 					? new Response(
-						JSON.stringify({
-							error: allPosts,
-						}),
-						{
-							status: 500,
-						}
-					)
+							JSON.stringify({
+								error: allPosts,
+							}),
+							{
+								status: 500,
+							}
+					  )
 					: allPosts
-						? new Response(
+					? new Response(
 							JSON.stringify({
 								contents: encode(allPosts),
 							}),
 							{
 								status: 200,
 							}
-						)
-						: new Response(
+					  )
+					: new Response(
 							JSON.stringify({
 								error: 'Some data is missing',
 							}),
 							{
 								status: 400,
 							}
-						);
-			}
+					  )
+			},
 		},
 	]
 }
