@@ -31,6 +31,25 @@ if (props.options === undefined) {
 
 // props.optionsのkeyがpostsのvalueを取得する
 // TODO: [GET] `/api/clubs-plugin-posts/${props.propertyAddress}/message` に差し替え
+const params = {
+	hash: "0x100000",
+	sig: "0x200000"
+};
+const query = new URLSearchParams(params);
+
+let posts = ref<Posts[]>([])
+fetch(`http://localhost:3000/api/clubs-plugin-posts/${props.propertyAddress}/message?${query}`)
+	.then((res) => {
+		if (res.status !== 200) {
+			posts.value = []
+		}
+	})
+	.catch((err) => {
+			console.log('error', err)
+		}
+	)
+
+/*
 const posts = await fetch(`http://localhost:3000/api/clubs-plugin-posts/${props.propertyAddress}/message`,{
 	method: 'POST',
 	headers: {
@@ -53,6 +72,8 @@ const posts = await fetch(`http://localhost:3000/api/clubs-plugin-posts/${props.
 		return []
 	})
 	.catch((err) => console.error(err))
+
+ */
 </script>
 
 <template>
@@ -64,11 +85,15 @@ const posts = await fetch(`http://localhost:3000/api/clubs-plugin-posts/${props.
 				:propertyAddress="props.propertyAddress"
 			/>
 		</section>
-		<!-- article empty -->
+
+		<!-- Timeline empty -->
 		<div v-if="posts.length === 0" class="mb-5 p-5 rounded bg-white">
-			<p class="text-center">No posts</p>
+			<p class="text-center">Sorry, but there are no posts on this timeline yet</p>
 		</div>
+
+		<!-- Timeline -->
 		<article
+			v-if="posts.length > 0"
 			v-for="(post, key) in posts"
 			:key="post.id"
 			class="mb-5 p-5 rounded bg-white"

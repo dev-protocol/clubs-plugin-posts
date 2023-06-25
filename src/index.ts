@@ -181,11 +181,16 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 			paths: [config.propertyAddress, 'message'],
 			method: 'GET',
 			handler: async ({ request }) => {
+				// hashとsigは使っていないので、コメントアウト
+				/*
 				const { hash, sig } = (await request.json()) as {
 					readonly hash?: string
 					readonly sig?: string
 				}
+				 */
 
+				// authenticaticatedは使っていないので、コメントアウト
+				/*
 				const authenticated = await whenDefinedAll([hash, sig], ([h, s]) =>
 					authenticate({
 						message: h,
@@ -194,38 +199,54 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 						provider: providers.getDefaultProvider(config.rpcUrl),
 					})
 				)
+				 */
 
-				const allPosts = await whenDefinedAll([dbType, dbKey], ([type, key]) =>
-					getAllPosts(type, { key })
-				)
+				// eslint-disable-next-line functional/no-let
+				let allPosts;
+				// eslint-disable-next-line
+				try {
+					// eslint-disable-next-line
+					allPosts = await whenDefinedAll([dbType, dbKey], ([type, key]) =>
+						getAllPosts(type, { key })
+					);
+				} catch (error) {
+					return new Response(
+						JSON.stringify({
+							error,
+						}),
+						{
+							status: 500,
+						}
+					)
+				}
 
 				return allPosts instanceof Error
 					? new Response(
-							JSON.stringify({
-								error: allPosts,
-							}),
-							{
-								status: 500,
-							}
-					  )
+						JSON.stringify({
+							error: allPosts,
+						}),
+						{
+							status: 500,
+						}
+					)
 					: allPosts
-					? new Response(
+						? new Response(
 							JSON.stringify({
-								contens: encode(allPosts),
+								contents: encode(allPosts),
 							}),
 							{
 								status: 200,
 							}
-					  )
-					: new Response(
+						)
+						: new Response(
 							JSON.stringify({
 								error: 'Some data is missing',
 							}),
 							{
 								status: 400,
 							}
-					  )
-			},
+						);
+			}
 		},
 	]
 }
