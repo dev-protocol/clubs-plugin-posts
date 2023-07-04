@@ -181,16 +181,13 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 			paths: [config.propertyAddress, 'message'],
 			method: 'GET',
 			handler: async ({ request }) => {
-				// hashとsigは使っていないので、コメントアウト
+				// Todo 現在はコメントアウトしているが、GET の場合でも認証必要で、ポストアイテムの読み取り可否を判断するために使います。
 				/*
 				const { hash, sig } = (await request.json()) as {
 					readonly hash?: string
 					readonly sig?: string
 				}
-				 */
 
-				// authenticaticatedは使っていないので、コメントアウト
-				/*
 				const authenticated = await whenDefinedAll([hash, sig], ([h, s]) =>
 					authenticate({
 						message: h,

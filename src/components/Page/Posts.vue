@@ -5,7 +5,7 @@ import Contents from './Posts/Contents.vue'
 import Media from './Posts/Media.vue'
 import Comment from './Posts/Comment.vue'
 import type { Option, Posts } from '../../types'
-import { ref } from 'vue'
+import {onMounted, ref} from 'vue'
 import Line from '../Common/Line.vue'
 import {decode, encode} from '@devprotocol/clubs-core'
 
@@ -29,6 +29,30 @@ if (props.options === undefined) {
 	throw new Error('props.options is undefined')
 }
 
+let isLoading = ref<boolean>(true)
+let error = ref<string>('')
+let posts = ref<Posts[]>([])
+
+onMounted(() => {
+	const url = new URL(`/api/clubs-plugin-posts/${props.propertyAddress}/message?${query}`, window.location.origin)
+
+	fetch(url.toString())
+		.then(async (res) => {
+			if (res.status === 200) {
+				const json = await res.json()
+				posts.value = decode(json.contents)
+			}
+		})
+		.catch((err) => {
+				console.error(err)
+				error.value = 'Sorry, but there was an error loading the timeline. Please try again later.'
+			}
+		)
+		.finally(() => {
+			isLoading.value = false
+		})
+})
+
 // props.optionsのkeyがpostsのvalueを取得する
 // TODO: [GET] `/api/clubs-plugin-posts/${props.propertyAddress}/message` に差し替え
 const params = {
@@ -36,44 +60,6 @@ const params = {
 	sig: "0x200000"
 };
 const query = new URLSearchParams(params);
-
-let posts = ref<Posts[]>([])
-fetch(`http://localhost:3000/api/clubs-plugin-posts/${props.propertyAddress}/message?${query}`)
-	.then((res) => {
-		if (res.status !== 200) {
-			posts.value = []
-		}
-	})
-	.catch((err) => {
-			console.log('error', err)
-		}
-	)
-
-/*
-const posts = await fetch(`http://localhost:3000/api/clubs-plugin-posts/${props.propertyAddress}/message`,{
-	method: 'POST',
-	headers: {
-		'Content-Type': 'application/json',
-	},
-	body: JSON.stringify({
-		posts: 'posts-xxxxx',
-		contents: encode( {
-			AddressZero: '0x0000000000000000000000000000000000000000',
-		}),
-		hash: 'hash-xxxxx',
-		sig: 'sig-xxxxx',
-	})
-	})
-	.then(async (res) => {
-		console.error(await res.status)
-		if (res.status === 500) {
-			return []
-		}
-		return []
-	})
-	.catch((err) => console.error(err))
-
- */
 </script>
 
 <template>
@@ -86,8 +72,18 @@ const posts = await fetch(`http://localhost:3000/api/clubs-plugin-posts/${props.
 			/>
 		</section>
 
+		<!-- Loading -->
+		<div v-if="isLoading" class="flex justify-center mb-5 p-5 rounded bg-white">
+	  	<div class="animate-spin h-10 w-10 border-4 border-blue-500 rounded-full border-t-transparent"></div>
+		</div>
+
+		<!-- Error -->
+		<div v-if="!isLoading && error" class="mb-5 p-5 rounded bg-white">
+			<p class="text-center">{{ error }}</p>
+		</div>
+
 		<!-- Timeline empty -->
-		<div v-if="posts.length === 0" class="mb-5 p-5 rounded bg-white">
+		<div v-if="!isLoading && posts.length === 0" class="mb-5 p-5 rounded bg-white">
 			<p class="text-center">Sorry, but there are no posts on this timeline yet</p>
 		</div>
 
