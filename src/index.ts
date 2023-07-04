@@ -97,15 +97,16 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 
 				const { randomBytes, recoverAddress, hashMessage } = utils
 				const id = uuidv5(randomBytes(32), namespace)
-				const created_by =
-					whenDefinedAll([hash, sig], ([h, s]) =>
-						recoverAddress(hashMessage(h), s)
-					) || constants.AddressZero
+
+				// Todo: このcreated_byを変更している
+				const created_by = constants.AddressZero
+
 				const now = new Date()
 				const created_at = now
 				const updated_at = now
 				const decodedContents = decode<PostPrimitives>(contents)
 				const comments: readonly Comment[] = []
+
 				const composed = {
 					...decodedContents,
 					id,
@@ -114,54 +115,74 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 					updated_at,
 					comments,
 				}
-				const allPosts = await whenDefinedAll([dbType, dbKey], ([type, key]) =>
-					getAllPosts(type, { key })
-				)
-				const merged =
-					allPosts && !(allPosts instanceof Error)
-						? [composed, ...allPosts]
-						: undefined
 
-				const saved =
-					skipAuthentication === true || authenticated === true
-						? await whenDefinedAll(
-								[dbType, dbKey, merged],
-								([type, key, posts]) => setAllPosts(type, { key, posts })
+				// eslint-disable-next-line functional/no-try-statement
+				try {
+					const allPosts = await whenDefinedAll(
+						[dbType, dbKey],
+						([type, key]) => {
+							return getAllPosts(type, { key })
+						}
+					)
+
+					const merged =
+						allPosts && !(allPosts instanceof Error)
+							? [composed, ...allPosts]
+							: undefined
+
+					// Todo: このsaveは何を保存している？
+					const saved =
+						skipAuthentication === true || authenticated === true
+							? await whenDefinedAll(
+									[dbType, dbKey, merged],
+									([type, key, posts]) => setAllPosts(type, { key, posts })
+							  )
+							: undefined
+
+					return saved instanceof Error
+						? new Response(
+								JSON.stringify({
+									error: saved,
+								}),
+								{
+									status: 500,
+								}
 						  )
-						: undefined
-
-				return saved instanceof Error
-					? new Response(
-							JSON.stringify({
-								error: saved,
-							}),
-							{
-								status: 500,
-							}
-					  )
-					: saved
-					? new Response(
-							JSON.stringify({
-								message: saved,
-							}),
-							{
-								status: 200,
-							}
-					  )
-					: new Response(
-							JSON.stringify({
-								error: 'Some data is missing',
-							}),
-							{
-								status: 400,
-							}
-					  )
+						: saved
+						? new Response(
+								JSON.stringify({
+									message: saved,
+								}),
+								{
+									status: 200,
+								}
+						  )
+						: new Response(
+								JSON.stringify({
+									error: 'Some data is missing',
+								}),
+								{
+									status: 400,
+								}
+						  )
+				} catch (e: any) {
+					return new Response(
+						JSON.stringify({
+							error: e.memssage,
+						}),
+						{
+							status: 500,
+						}
+					)
+				}
 			},
 		},
 		{
 			paths: [config.propertyAddress, 'message'],
 			method: 'GET',
 			handler: async ({ request }) => {
+				// Todo 現在はコメントアウトしているが、GET の場合でも認証必要で、ポストアイテムの読み取り可否を判断するために使います。
+				/*
 				const { hash, sig } = (await request.json()) as {
 					readonly hash?: string
 					readonly sig?: string
@@ -175,10 +196,26 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 						provider: providers.getDefaultProvider(config.rpcUrl),
 					})
 				)
+				 */
 
-				const allPosts = await whenDefinedAll([dbType, dbKey], ([type, key]) =>
-					getAllPosts(type, { key })
-				)
+				// eslint-disable-next-line functional/no-let
+				let allPosts
+				// eslint-disable-next-line
+				try {
+					// eslint-disable-next-line
+					allPosts = await whenDefinedAll([dbType, dbKey], ([type, key]) =>
+						getAllPosts(type, { key })
+					)
+				} catch (error) {
+					return new Response(
+						JSON.stringify({
+							error,
+						}),
+						{
+							status: 500,
+						}
+					)
+				}
 
 				return allPosts instanceof Error
 					? new Response(
@@ -192,7 +229,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 					: allPosts
 					? new Response(
 							JSON.stringify({
-								contens: encode(allPosts),
+								contents: encode(allPosts),
 							}),
 							{
 								status: 200,
