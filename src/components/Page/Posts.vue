@@ -34,6 +34,12 @@ let error = ref<string>('')
 let posts = ref<Posts[]>([])
 
 onMounted(() => {
+	// Postsの取得
+	const params = {
+		hash: "0x100000",
+		sig: "0x200000"
+	};
+	const query = new URLSearchParams(params);
 	const url = new URL(`/api/clubs-plugin-posts/${props.propertyAddress}/message?${query}`, window.location.origin)
 
 	fetch(url.toString())
@@ -52,14 +58,6 @@ onMounted(() => {
 			isLoading.value = false
 		})
 })
-
-// props.optionsのkeyがpostsのvalueを取得する
-// TODO: [GET] `/api/clubs-plugin-posts/${props.propertyAddress}/message` に差し替え
-const params = {
-	hash: "0x100000",
-	sig: "0x200000"
-};
-const query = new URLSearchParams(params);
 </script>
 
 <template>
