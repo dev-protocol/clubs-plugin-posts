@@ -1,5 +1,6 @@
 ---
 import '@devprotocol/clubs-core/styles'
+import Connect from './Connect.vue'
 ---
 
 <!DOCTYPE html>
@@ -10,6 +11,7 @@ import '@devprotocol/clubs-core/styles'
 	</head>
 
 	<body>
+		<Connect client:only />
 		<main>
 			<slot />
 		</main>
