@@ -1,27 +1,23 @@
 <script setup lang="ts">
+import type { Ref } from 'vue'
+
 type Props = {
-	images: any
+	images: Ref<string[]>
 }
 
 const { images } = defineProps<Props>()
-
 </script>
 
 <template>
-  <div
-	v-if="images"
-	v-for="image in images" :key="image"
-	class="bg-gray-100 overflow-hidden"
-	:style="{ width: images.length === 1 ? '100%' : 'calc(50% - 2px)' }"
-  >
-		<img
-	  	class="w-full rounded"
-	  	:src="image"
-	  	alt="Nature"
-		/>
-  </div>
+	<div
+		v-if="images"
+		v-for="image in images"
+		:key="image"
+		class="bg-gray-100 overflow-hidden"
+		:style="{ width: images.length === 1 ? '100%' : 'calc(50% - 2px)' }"
+	>
+		<img class="w-full rounded" :src="image" alt="Nature" />
+	</div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

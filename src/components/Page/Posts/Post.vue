@@ -1,7 +1,5 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { selectImages } from './Post/PostStore'
-import { useStore } from '@nanostores/vue'
 import Line from '../../Common/Line.vue'
 import AddMedia from './Post/AddMedia.vue'
 import DoPost from './Post/DoPost.vue'
@@ -64,7 +62,10 @@ const onCloseLimitedAccess = () => {
 }
 
 // Media preview
-const $selectImages = useStore(selectImages)
+const uploadImages = ref<string[]>([])
+const handleUploadImages = (files: string) => {
+	uploadImages.value.push(files)
+}
 </script>
 <template>
 	<!-- Avatar -->
@@ -158,17 +159,17 @@ const $selectImages = useStore(selectImages)
 	<!-- /Limited access button -->
 	<!-- Media preview -->
 	<div class="mb-5 flex flex-wrap gap-y-1 gap-x-1">
-		<Images v-if="$selectImages" :images="$selectImages" />
+		<Images v-if="uploadImages" :images="uploadImages" />
 	</div>
 	<!-- /Media preview -->
 	<Line class="mb-5" />
 	<!-- アクションエリア -->
 	<div class="flex justify-between items-center">
 		<!-- 画像ボタン -->
-		<AddMedia />
+		<AddMedia @upload:image="handleUploadImages" />
 		<!-- /画像ボタン -->
 		<!-- Postボタン -->
-		<DoPost :propertyAddress="props.propertyAddress" />
+		<DoPost :propertyAddress="props.propertyAddress" :images="uploadImages" />
 		<!-- /Postボタン -->
 	</div>
 	<!-- /アクション -->
