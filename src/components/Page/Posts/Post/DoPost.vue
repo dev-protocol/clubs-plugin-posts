@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { selectImagesFile } from './PostStore'
+import { Ref, ref } from 'vue'
 
 type Props = {
 	propertyAddress: string
+	images: string[]
 }
 
 const props = defineProps<Props>()
@@ -12,9 +12,10 @@ const contents = ref('')
 const onClickPost = async () => {
 	// 画像アップロード
 	const uploadedImageURLs = []
-	const storeSelectImagesFile = selectImagesFile.get()
-	if (storeSelectImagesFile.value.length > 0) {
-		for (const image of storeSelectImagesFile.value) {
+	const storeSelectImagesFile = props.images
+	if (storeSelectImagesFile.length > 0) {
+		for (const image of storeSelectImagesFile) {
+			console.log('image', image)
 			const imgurURL = await uploadImageToImgur(image)
 			console.log('imgurURL', imgurURL)
 			uploadedImageURLs.push(imgurURL)
