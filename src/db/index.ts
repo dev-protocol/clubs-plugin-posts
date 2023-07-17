@@ -17,7 +17,7 @@ export const getAllPosts = async (
 	type: 'encoded:redis',
 	opts: {
 		readonly key: string
-	}
+	},
 ): ReturnType<GetAllPosts> => {
 	// eslint-disable-next-line functional/no-conditional-statement
 	switch (type) {
@@ -33,7 +33,7 @@ export const setAllPosts = async (
 	opts: {
 		readonly key: string
 		readonly posts: readonly Posts[]
-	}
+	},
 ): ReturnType<SetAllPosts> => {
 	// eslint-disable-next-line functional/no-conditional-statement
 	switch (type) {

@@ -20,13 +20,13 @@ import { getAllPosts, setAllPosts } from './db'
 export const getPagePaths: ClubsFunctionGetPagePaths = async (
 	options,
 	{ propertyAddress },
-	{ getPluginConfigById }
+	{ getPluginConfigById },
 ) => {
 	const [membershipsPlugin] = getPluginConfigById(
-		'devprotocol:clubs:simple-memberships'
+		'devprotocol:clubs:simple-memberships',
 	)
 	const memberships = membershipsPlugin?.options?.find(
-		({ key }) => key === 'memberships'
+		({ key }) => key === 'memberships',
 	)?.value
 
 	return [
@@ -57,13 +57,13 @@ export const meta: ClubsPluginMeta = {
 
 export const getApiPaths: ClubsFunctionGetApiPaths = async (
 	options,
-	config
+	config,
 ) => {
 	const namespace = uuidv5(config.url, uuidv5.URL)
 	const previousConfiguration = encode(config)
 	const db = (
 		options.find(
-			({ key }) => key === 'database'
+			({ key }) => key === 'database',
 		) as UndefinedOr<OptionsDatabase>
 	)?.value
 	const dbType = db?.type
@@ -92,7 +92,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 							signature: s,
 							previousConfiguration,
 							provider: providers.getDefaultProvider(config.rpcUrl),
-						})
+						}),
 					))
 
 				const { randomBytes, recoverAddress, hashMessage } = utils
@@ -122,7 +122,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 						[dbType, dbKey],
 						([type, key]) => {
 							return getAllPosts(type, { key })
-						}
+						},
 					)
 
 					const merged =
@@ -135,7 +135,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 						skipAuthentication === true || authenticated === true
 							? await whenDefinedAll(
 									[dbType, dbKey, merged],
-									([type, key, posts]) => setAllPosts(type, { key, posts })
+									([type, key, posts]) => setAllPosts(type, { key, posts }),
 							  )
 							: undefined
 
@@ -146,7 +146,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 								}),
 								{
 									status: 500,
-								}
+								},
 						  )
 						: saved
 						? new Response(
@@ -155,7 +155,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 								}),
 								{
 									status: 200,
-								}
+								},
 						  )
 						: new Response(
 								JSON.stringify({
@@ -163,7 +163,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 								}),
 								{
 									status: 400,
-								}
+								},
 						  )
 				} catch (e: any) {
 					return new Response(
@@ -172,7 +172,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 						}),
 						{
 							status: 500,
-						}
+						},
 					)
 				}
 			},
@@ -204,7 +204,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 				try {
 					// eslint-disable-next-line
 					allPosts = await whenDefinedAll([dbType, dbKey], ([type, key]) =>
-						getAllPosts(type, { key })
+						getAllPosts(type, { key }),
 					)
 				} catch (error) {
 					return new Response(
@@ -213,7 +213,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 						}),
 						{
 							status: 500,
-						}
+						},
 					)
 				}
 
@@ -224,7 +224,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 							}),
 							{
 								status: 500,
-							}
+							},
 					  )
 					: allPosts
 					? new Response(
@@ -233,7 +233,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 							}),
 							{
 								status: 200,
-							}
+							},
 					  )
 					: new Response(
 							JSON.stringify({
@@ -241,7 +241,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 							}),
 							{
 								status: 400,
-							}
+							},
 					  )
 			},
 		},
