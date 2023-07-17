@@ -34,7 +34,7 @@ export default () =>
 							type: 'encoded:redis',
 							key: `posts::${uuidv5(
 								utils.toUtf8Bytes('EXAMPLE'),
-								uuidv5('EXAMPLE_NAMESPACE', uuidv5.URL)
+								uuidv5('EXAMPLE_NAMESPACE', uuidv5.URL),
 							)}`, // > posts::694666bb-b2ec-542b-a5d6-65b470e5c494
 						},
 					} as OptionsDatabase,

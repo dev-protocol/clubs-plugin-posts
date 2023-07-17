@@ -21,7 +21,7 @@ export const getAllPosts: GetAllPosts = async ({ key }) => {
 
 	const encodedData = await client.get(key)
 	const decodedData = whenDefined(encodedData, (d) =>
-		decode<readonly Posts[]>(d)
+		decode<readonly Posts[]>(d),
 	)
 
 	await client.quit()
