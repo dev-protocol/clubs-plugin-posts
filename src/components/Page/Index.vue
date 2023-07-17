@@ -7,7 +7,8 @@ import Comment from './Posts/Comment.vue'
 import type { Option, Posts } from '../../types'
 import { onMounted, ref } from 'vue'
 import Line from '../Common/Line.vue'
-import { decode, encode } from '@devprotocol/clubs-core'
+import { decode } from '@devprotocol/clubs-core'
+import Connect from '../../../preview/src/theme/Connect.vue'
 
 type Props = {
 	options: Option[]
@@ -32,6 +33,11 @@ if (props.options === undefined) {
 let isLoading = ref<boolean>(true)
 let error = ref<string>('')
 let posts = ref<Posts[]>([])
+
+const walletAddress = ref<string | undefined>('')
+const handleWalletAddress = (address: string) => {
+	walletAddress.value = address
+}
 
 onMounted(() => {
 	// Postsの取得
@@ -65,7 +71,13 @@ onMounted(() => {
 
 <template>
 	<div class="mx-auto w-full max-w-2xl">
-		<section class="mb-5 p-5 rounded bg-white">
+		<section
+			v-if="!walletAddress"
+			class="flex justify-end p-5 rounded bg-white"
+		>
+			<Connect @connect:wallet="handleWalletAddress" />
+		</section>
+		<section v-else class="mb-5 p-5 rounded bg-white">
 			<Post
 				avatar="https://source.unsplash.com/100x100/?face"
 				name="Aggre"
