@@ -1,4 +1,4 @@
-import { constants, utils } from 'ethers'
+import { ZeroAddress, toUtf8Bytes } from 'ethers'
 import type { Posts } from '../types'
 
 export const examplePosts: readonly Posts[] = [
@@ -6,7 +6,7 @@ export const examplePosts: readonly Posts[] = [
 		id: '1',
 		title: 'Hello World',
 		content: 'This is a sample post.',
-		created_by: constants.AddressZero,
+		created_by: ZeroAddress,
 		created_at: new Date('2021-01-01T01:34:56Z'),
 		updated_at: new Date('2021-01-01T01:34:56Z'),
 		options: [
@@ -21,11 +21,7 @@ export const examplePosts: readonly Posts[] = [
 			{
 				key: 'require-one-of',
 				value: [
-					[
-						utils.toUtf8Bytes('tier-1'),
-						utils.toUtf8Bytes('tier-2'),
-						utils.toUtf8Bytes('tier-3'),
-					],
+					[toUtf8Bytes('tier-1'), toUtf8Bytes('tier-2'), toUtf8Bytes('tier-3')],
 				],
 			},
 		],
@@ -35,7 +31,7 @@ export const examplePosts: readonly Posts[] = [
 		id: '2',
 		title: 'Hello World',
 		content: 'This is a sample post.',
-		created_by: constants.AddressZero,
+		created_by: ZeroAddress,
 		created_at: new Date('2021-01-01T01:34:56Z'),
 		updated_at: new Date('2021-01-01T01:34:56Z'),
 		options: [
@@ -52,14 +48,14 @@ export const examplePosts: readonly Posts[] = [
 			{
 				id: '1',
 				content: 'This is a sample comment #1.',
-				created_by: constants.AddressZero,
+				created_by: ZeroAddress,
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			},
 			{
 				id: '2',
 				content: 'This is a sample comment #2.',
-				created_by: constants.AddressZero,
+				created_by: ZeroAddress,
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			},
@@ -69,7 +65,7 @@ export const examplePosts: readonly Posts[] = [
 		id: '3',
 		title: 'Hi there',
 		content: 'Good morning. This is a sample post.',
-		created_by: constants.AddressZero,
+		created_by: ZeroAddress,
 		created_at: new Date('2021-01-01T01:34:56Z'),
 		updated_at: new Date('2021-01-01T01:34:56Z'),
 		options: [
@@ -85,7 +81,7 @@ export const examplePosts: readonly Posts[] = [
 			{
 				id: '1',
 				content: 'This is a sample comment.',
-				created_by: constants.AddressZero,
+				created_by: ZeroAddress,
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			},
@@ -95,7 +91,7 @@ export const examplePosts: readonly Posts[] = [
 		id: '4',
 		title: 'Hey guys',
 		content: 'Good evening. This is a sample post.',
-		created_by: constants.AddressZero,
+		created_by: ZeroAddress,
 		created_at: new Date('2021-01-01T01:34:56Z'),
 		updated_at: new Date('2021-01-01T01:34:56Z'),
 		options: [
@@ -108,7 +104,7 @@ export const examplePosts: readonly Posts[] = [
 			{
 				id: '1',
 				content: 'This is a sample comment.',
-				created_by: constants.AddressZero,
+				created_by: ZeroAddress,
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			},
@@ -118,18 +114,14 @@ export const examplePosts: readonly Posts[] = [
 		id: '5',
 		title: 'Secret',
 		content: 'Good evening. This is a sample secret pos...',
-		created_by: constants.AddressZero,
+		created_by: ZeroAddress,
 		created_at: new Date('2021-01-01T01:34:56Z'),
 		updated_at: new Date('2021-01-01T01:34:56Z'),
 		options: [
 			{
 				key: 'require-one-of',
 				value: [
-					[
-						utils.toUtf8Bytes('tier-1'),
-						utils.toUtf8Bytes('tier-2'),
-						utils.toUtf8Bytes('tier-3'),
-					],
+					[toUtf8Bytes('tier-1'), toUtf8Bytes('tier-2'), toUtf8Bytes('tier-3')],
 				],
 			},
 		],
@@ -137,7 +129,7 @@ export const examplePosts: readonly Posts[] = [
 			{
 				id: '1',
 				content: '',
-				created_by: constants.AddressZero,
+				created_by: ZeroAddress,
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			},

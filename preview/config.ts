@@ -1,13 +1,13 @@
 import { encode } from '@devprotocol/clubs-core'
 import dayjs from 'dayjs'
-import { constants, utils } from 'ethers'
+import { ZeroAddress, toUtf8Bytes } from 'ethers'
 import { v5 as uuidv5 } from 'uuid'
 import type { OptionsDatabase } from '../src/types'
 
 const payloads: readonly Uint8Array[] = [
-	utils.toUtf8Bytes('tier-1'),
-	utils.toUtf8Bytes('tier-2'),
-	utils.toUtf8Bytes('tier-3'),
+	toUtf8Bytes('tier-1'),
+	toUtf8Bytes('tier-2'),
+	toUtf8Bytes('tier-3'),
 ]
 
 export default () =>
@@ -16,7 +16,7 @@ export default () =>
 		twitterHandle: '@debug',
 		description: '',
 		url: '',
-		propertyAddress: constants.AddressZero,
+		propertyAddress: ZeroAddress,
 		chainId: 137,
 		rpcUrl: 'https://polygon-rpc.com/',
 		adminRolePoints: 50,
@@ -33,7 +33,7 @@ export default () =>
 						value: {
 							type: 'encoded:redis',
 							key: `posts::${uuidv5(
-								utils.toUtf8Bytes('EXAMPLE'),
+								toUtf8Bytes('EXAMPLE'),
 								uuidv5('EXAMPLE_NAMESPACE', uuidv5.URL),
 							)}`, // > posts::694666bb-b2ec-542b-a5d6-65b470e5c494
 						},
