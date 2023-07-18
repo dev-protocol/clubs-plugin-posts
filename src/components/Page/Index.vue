@@ -9,6 +9,7 @@ import { onMounted, ref } from 'vue'
 import Line from '../Common/Line.vue'
 import { decode } from '@devprotocol/clubs-core'
 import Connect from '../../../preview/src/theme/Connect.vue'
+import { connection } from '@devprotocol/clubs-core/connection'
 
 type Props = {
 	options: Option[]
@@ -35,7 +36,7 @@ let error = ref<string>('')
 let posts = ref<Posts[]>([])
 
 const walletAddress = ref<string | undefined>('')
-const handleWalletAddress = (address: string) => {
+const handleWalletAddress = (address?: string) => {
 	walletAddress.value = address
 }
 
@@ -66,6 +67,8 @@ onMounted(() => {
 		.finally(() => {
 			isLoading.value = false
 		})
+
+	connection().account.subscribe(handleWalletAddress)
 })
 </script>
 
@@ -75,7 +78,7 @@ onMounted(() => {
 			v-if="!walletAddress"
 			class="flex justify-end p-5 rounded bg-white"
 		>
-			<Connect @connect:wallet="handleWalletAddress" />
+			<Connect />
 		</section>
 		<section v-else class="mb-5 p-5 rounded bg-white">
 			<Post

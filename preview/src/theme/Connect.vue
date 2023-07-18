@@ -1,22 +1,14 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { providers } from 'ethers'
+import { BrowserProvider } from 'ethers'
 import { connection } from '@devprotocol/clubs-core/connection'
-interface Emits {
-	(e: 'connect:wallet', address: string): void
-}
 const address = ref<string | undefined>('')
-
-const emit = defineEmits<Emits>()
 
 const onClick = async () => {
 	try {
 		const eth = (window as any).ethereum
 		await eth.send('eth_requestAccounts')
-		const prov = new providers.Web3Provider(eth)
-		connection().signer.next(prov.getSigner())
-
-		emit('connect:wallet', await prov.getSigner().getAddress())
+		connection().setEip1193Provider(eth, BrowserProvider)
 	} catch (error) {
 		console.error(error)
 	}

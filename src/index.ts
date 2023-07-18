@@ -13,7 +13,7 @@ import { default as Admin } from './pages/Admin.astro'
 import Posts from './pages/Posts.astro'
 import type { OptionsDatabase, PostPrimitives, Comment } from './types'
 import { v5 as uuidv5 } from 'uuid'
-import { constants, providers, utils } from 'ethers'
+import { ZeroAddress, getDefaultProvider, randomBytes } from 'ethers'
 import { whenDefinedAll, type UndefinedOr } from '@devprotocol/util-ts'
 import { getAllPosts, setAllPosts } from './db'
 
@@ -81,8 +81,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 					readonly sig?: string
 				}
 
-				const skipAuthentication =
-					config.propertyAddress === constants.AddressZero
+				const skipAuthentication = config.propertyAddress === ZeroAddress
 
 				const authenticated =
 					!skipAuthentication &&
@@ -91,15 +90,15 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 							message: h,
 							signature: s,
 							previousConfiguration,
-							provider: providers.getDefaultProvider(config.rpcUrl),
+							provider: getDefaultProvider(config.rpcUrl),
 						}),
 					))
 
-				const { randomBytes, recoverAddress, hashMessage } = utils
+				// const { randomBytes, recoverAddress, hashMessage } = utils
 				const id = uuidv5(randomBytes(32), namespace)
 
 				// Todo: このcreated_byを変更している
-				const created_by = constants.AddressZero
+				const created_by = ZeroAddress
 
 				const now = new Date()
 				const created_at = now
