@@ -4,6 +4,7 @@ import { connection } from '@devprotocol/clubs-core/connection'
 import { keccak256 } from 'ethers';
 import Spinner from '../../../Spinner/Spinner.vue'
 
+
 type Props = {
 	propertyAddress: string
 	images: string[]
@@ -18,16 +19,16 @@ const isPosting = ref(false)
 const onClickPost = async () => {
 	isPosting.value = true
 
-
 	const signer = connection().signer.value
 	if (!signer) {
 		isPosting.value = false
 		return
 	};
+
 	const signerAddress = await signer.getAddress()
 
 	const hash = await keccak256(signerAddress)
-  const sig = await signer.signMessage(hash)
+	const sig = await signer.signMessage(hash)
 
 	// 画像アップロード
 	const uploadedImageURLs = []
@@ -50,11 +51,14 @@ const onClickPost = async () => {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
+				/**
+				 * TODO: `contents.value` is empty!! The value shuld be the encoded `{title: '…', content: '…', options: […]}`
+				 */
 				contents: contents.value,
 				hash,
-				sig
+				sig,
 			}),
-		}
+		},
 	)
 
 	// レスポンスをjsonに変換する

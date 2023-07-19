@@ -28,10 +28,11 @@ export type PostOption = {
 
 export type Comment = {
 	readonly id: string
-	readonly content: string
+	readonly content?: string
 	readonly created_by: string
 	readonly created_at: Date
 	readonly updated_at: Date
+	readonly options?: readonly PostOption[]
 }
 
 export type OptionsDatabase = {
