@@ -25,11 +25,10 @@ export const examplePosts: readonly Posts[] = [
 				],
 			},
 		],
-		comments: [],
-		reactions: [
+		comments: [
 			...new Array(100).fill('').map((_, i) => ({
 				id: `i-${i}`,
-				content: '👍',
+				options: [{ key: 'reaction', value: '👍' }],
 				created_by: ZeroAddress,
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
@@ -68,11 +67,9 @@ export const examplePosts: readonly Posts[] = [
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			},
-		],
-		reactions: [
 			...new Array(20).fill('').map((_, i) => ({
 				id: `i-${i}`,
-				content: '👍',
+				options: [{ key: 'reaction', value: '👍' }],
 				created_by: ZeroAddress,
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
@@ -103,11 +100,9 @@ export const examplePosts: readonly Posts[] = [
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			},
-		],
-		reactions: [
 			...new Array(10).fill('').map((_, i) => ({
 				id: `i-${i}`,
-				content: '👍',
+				options: [{ key: 'reaction', value: '👍' }],
 				created_by: ZeroAddress,
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
@@ -135,11 +130,9 @@ export const examplePosts: readonly Posts[] = [
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			},
-		],
-		reactions: [
 			...new Array(80).fill('').map((_, i) => ({
 				id: `i-${i}`,
-				content: '👍',
+				options: [{ key: 'reaction', value: '👍' }],
 				created_by: ZeroAddress,
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
@@ -170,6 +163,5 @@ export const examplePosts: readonly Posts[] = [
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			},
 		],
-		reactions: [],
 	},
 ]

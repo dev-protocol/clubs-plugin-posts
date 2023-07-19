@@ -19,7 +19,6 @@ export type Posts = PostPrimitives & {
 	readonly created_at: Date
 	readonly updated_at: Date
 	readonly comments: readonly Comment[]
-	readonly reactions: readonly Reaction[]
 }
 
 export type PostOption = {
@@ -27,17 +26,14 @@ export type PostOption = {
 	readonly value: ClubsGeneralUnit
 }
 
-export type ChildContent = {
+export type Comment = {
 	readonly id: string
-	readonly content: string
+	readonly content?: string
 	readonly created_by: string
 	readonly created_at: Date
 	readonly updated_at: Date
+	readonly options?: readonly PostOption[]
 }
-
-export type Comment = ChildContent
-
-export type Reaction = ChildContent
 
 export type OptionsDatabase = {
 	readonly key: 'database'
