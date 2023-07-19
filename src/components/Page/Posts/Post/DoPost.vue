@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Ref, ref } from 'vue'
 import { connection } from '@devprotocol/clubs-core/connection'
-import { keccak256 } from 'ethers';
+import { keccak256 } from 'ethers'
 
 type Props = {
 	propertyAddress: string
@@ -14,13 +14,12 @@ const props = defineProps<Props>()
 const contents = ref('')
 
 const onClickPost = async () => {
-
 	const signer = connection().signer.value
-	if (!signer) return;
+	if (!signer) return
 	const signerAddress = await signer.getAddress()
 
 	const hash = await keccak256(signerAddress)
-  const sig = await signer.signMessage(hash)
+	const sig = await signer.signMessage(hash)
 
 	// 画像アップロード
 	const uploadedImageURLs = []
@@ -45,9 +44,9 @@ const onClickPost = async () => {
 			body: JSON.stringify({
 				contents: contents.value,
 				hash,
-				sig
+				sig,
 			}),
-		}
+		},
 	)
 
 	// レスポンスをjsonに変換する
