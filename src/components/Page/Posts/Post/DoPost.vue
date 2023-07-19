@@ -1,15 +1,27 @@
 <script setup lang="ts">
 import { Ref, ref } from 'vue'
+import { connection } from '@devprotocol/clubs-core/connection'
+import { keccak256 } from 'ethers';
 
 type Props = {
 	propertyAddress: string
 	images: string[]
+	text: string
 }
 
 const props = defineProps<Props>()
 
 const contents = ref('')
+
 const onClickPost = async () => {
+
+	const signer = connection().signer.value
+	if (!signer) return;
+	const signerAddress = await signer.getAddress()
+
+	const hash = await keccak256(signerAddress)
+  const sig = await signer.signMessage(hash)
+
 	// 画像アップロード
 	const uploadedImageURLs = []
 	const storeSelectImagesFile = props.images
@@ -32,6 +44,8 @@ const onClickPost = async () => {
 			},
 			body: JSON.stringify({
 				contents: contents.value,
+				hash,
+				sig
 			}),
 		}
 	)

@@ -13,7 +13,12 @@ import { default as Admin } from './pages/Admin.astro'
 import Posts from './pages/Posts.astro'
 import type { OptionsDatabase, PostPrimitives, Comment } from './types'
 import { v5 as uuidv5 } from 'uuid'
-import { ZeroAddress, getDefaultProvider, randomBytes } from 'ethers'
+import {
+	ZeroAddress,
+	getDefaultProvider,
+	randomBytes,
+	verifyMessage,
+} from 'ethers'
 import { whenDefinedAll, type UndefinedOr } from '@devprotocol/util-ts'
 import { getAllPosts, setAllPosts } from './db'
 
@@ -97,8 +102,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 				// const { randomBytes, recoverAddress, hashMessage } = utils
 				const id = uuidv5(randomBytes(32), namespace)
 
-				// Todo: このcreated_byを変更している
-				const created_by = ZeroAddress
+				const created_by = verifyMessage(hash, sig)
 
 				const now = new Date()
 				const created_at = now
