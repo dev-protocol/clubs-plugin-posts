@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { Comment } from '../../../types'
 import dayjs from 'dayjs'
+import { computed } from 'vue'
 
 type Props = {
 	avatar: string
@@ -9,13 +10,18 @@ type Props = {
 }
 
 const props = defineProps<Props>()
+
+// props.commentsの中でcontentが設定されていないものを除外する
+const comments = computed(() => {
+	return props.comments.filter((comment) => comment.hasOwnProperty('content'))
+})
 </script>
 
 <template>
 	<div>
 		<div class="mb-5">
 			<div
-				v-for="(comment, index) in props.comments"
+				v-for="(comment, index) in comments"
 				:key="index"
 				class="mb-5 last:mb-0"
 			>
