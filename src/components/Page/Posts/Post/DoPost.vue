@@ -2,6 +2,7 @@
 import { Ref, ref } from 'vue'
 import { connection } from '@devprotocol/clubs-core/connection'
 import { keccak256 } from 'ethers';
+import Spinner from '../../../Spinner/Spinner.vue'
 
 type Props = {
 	propertyAddress: string
@@ -12,11 +13,17 @@ type Props = {
 const props = defineProps<Props>()
 
 const contents = ref('')
+const isPosting = ref(false)
 
 const onClickPost = async () => {
+	isPosting.value = true
+
 
 	const signer = connection().signer.value
-	if (!signer) return;
+	if (!signer) {
+		isPosting.value = false
+		return
+	};
 	const signerAddress = await signer.getAddress()
 
 	const hash = await keccak256(signerAddress)
@@ -53,6 +60,8 @@ const onClickPost = async () => {
 	// レスポンスをjsonに変換する
 	const json = await response.json()
 
+	isPosting.value = false
+
 	// レスポンスのjsonをコンソールに表示する
 	console.log(json)
 }
@@ -76,10 +85,13 @@ async function uploadImageToImgur(image: File) {
 <template>
 	<div class="flex items-center">
 		<button
-			class="py-2 px-8 text-base text-white bg-blue-600 border border-transparent rounded-3xl shadow-sm focus:outline-none"
+			class="flex items-center py-2 px-8 h-12 w-32 justify-center text-white bg-blue-600 border border-transparent rounded-3xl shadow-sm focus:outline-none"
 			@click="onClickPost"
+			:disabled="isPosting"
 		>
-			Post
+			<Spinner v-if="isPosting" />
+			<span v-if="!isPosting">Post</span>
 		</button>
+
 	</div>
 </template>
