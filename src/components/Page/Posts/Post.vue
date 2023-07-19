@@ -169,7 +169,7 @@ const handleUploadImages = (files: string) => {
 		<AddMedia @upload:image="handleUploadImages" />
 		<!-- /画像ボタン -->
 		<!-- Postボタン -->
-		<DoPost :propertyAddress="props.propertyAddress" :images="uploadImages" />
+		<DoPost :propertyAddress="props.propertyAddress" :images="uploadImages" :text="contents" />
 		<!-- /Postボタン -->
 	</div>
 	<!-- /アクション -->
