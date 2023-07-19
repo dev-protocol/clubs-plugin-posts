@@ -42,6 +42,9 @@ const onClickPost = async () => {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
+				/**
+				 * TODO: `contents.value` is empty!! The value shuld be the encoded `{title: '…', content: '…', options: […]}`
+				 */
 				contents: contents.value,
 				hash,
 				sig,
