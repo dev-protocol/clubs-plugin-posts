@@ -4,11 +4,13 @@ import Line from '../../Common/Line.vue'
 import AddMedia from './Post/AddMedia.vue'
 import DoPost from './Post/DoPost.vue'
 import Images from './Media/Images.vue'
+import type { Membership } from '../../../types'
 
 type Props = {
 	name: string
 	avatar: string
 	propertyAddress: string
+	memberships?: Membership[]
 }
 
 const props = defineProps<Props>()
@@ -16,32 +18,19 @@ const props = defineProps<Props>()
 const contents = ref('')
 
 // limited access selected
-const selectedLimitedAccess = ref([])
+const selectedLimitedAccess = ref<Membership[]>([])
 
 // limited access types
-const limitedAccessTypes = [
-	{
-		value: 'limitedAccess01',
-		label: 'Limited access 01',
-	},
-	{
-		value: 'limitedAccess02',
-		label: 'Limited access 02',
-	},
-	{
-		value: 'limitedAccess03',
-		label: 'Limited access 03',
-	},
-]
+const limitedAccessTypes = props.memberships ?? []
 
 // selectedLimitedAccessの値を更新する
-const onUpdateLimitedAccess = (value: string) => {
+const onUpdateLimitedAccess = (mem: Membership) => {
 	// limitedAccessTypesのvalueが、selectedLimitedAccessの配列に含まれているかを確認する
-	const index = selectedLimitedAccess.value.indexOf(value)
+	const index = selectedLimitedAccess.value.findIndex((x) => x.id === mem.id)
 
 	// 含まれていない場合は、selectedLimitedAccessの配列に追加する
 	if (index === -1) {
-		selectedLimitedAccess.value.push(value)
+		selectedLimitedAccess.value.push(mem)
 	} else {
 		// 含まれている場合は、selectedLimitedAccessの配列から削除する
 		selectedLimitedAccess.value.splice(index, 1)
@@ -118,7 +107,7 @@ const handleUploadImages = (files: string) => {
 				v-for="selectedLimitedAccessType in selectedLimitedAccess"
 				class="inline-flex items-center px-3 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"
 			>
-				{{ selectedLimitedAccessType }}
+				{{ selectedLimitedAccessType.name }}
 			</span>
 		</div>
 		<!-- modal menu -->
@@ -128,24 +117,26 @@ const handleUploadImages = (files: string) => {
 		>
 			<li v-for="limitedAccessType in limitedAccessTypes">
 				<label
-					:for="limitedAccessType.value"
+					:for="limitedAccessType.id"
 					class="flex items-center gap-3 text-sm font-medium text-gray-900"
 				>
 					<input
-						:id="limitedAccessType.value"
+						:id="limitedAccessType.id"
 						type="checkbox"
 						class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-						:checked="selectedLimitedAccess.includes(limitedAccessType.value)"
-						@change="onUpdateLimitedAccess(limitedAccessType.value)"
+						:checked="selectedLimitedAccess.includes(limitedAccessType)"
+						@change="onUpdateLimitedAccess(limitedAccessType)"
 					/>
 					<img
-						class="w-24 h-24"
-						src="../../../assets/images/limited-access/img01.png"
-						alt="img01"
+						class="w-24 h-24 rounded"
+						:src="limitedAccessType.imageSrc"
+						:alt="limitedAccessType.name"
 					/>
 					<div class="flex flex-col">
-						<p class="text-gray-900">{{ limitedAccessType.label }}</p>
-						<p class="text-gray-500">0.01 ETH</p>
+						<p class="text-gray-900">{{ limitedAccessType.name }}</p>
+						<p class="text-gray-500">
+							{{ limitedAccessType.price }} {{ limitedAccessType.currency }}
+						</p>
 					</div>
 				</label>
 			</li>
@@ -169,7 +160,11 @@ const handleUploadImages = (files: string) => {
 		<AddMedia @upload:image="handleUploadImages" />
 		<!-- /画像ボタン -->
 		<!-- Postボタン -->
-		<DoPost :propertyAddress="props.propertyAddress" :images="uploadImages" :text="contents" />
+		<DoPost
+			:propertyAddress="props.propertyAddress"
+			:images="uploadImages"
+			:text="contents"
+		/>
 		<!-- /Postボタン -->
 	</div>
 	<!-- /アクション -->

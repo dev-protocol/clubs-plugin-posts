@@ -42,3 +42,13 @@ export type OptionsDatabase = {
 		readonly key: string
 	}
 }
+
+export type Membership = {
+	readonly id: string
+	readonly name: string
+	readonly description: string
+	readonly price: number
+	readonly currency: string
+	readonly imageSrc: string
+	readonly payload?: Uint8Array
+}
