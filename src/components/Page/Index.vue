@@ -10,19 +10,12 @@ import Line from '../Common/Line.vue'
 import { decode } from '@devprotocol/clubs-core'
 import Connect from '../../../preview/src/theme/Connect.vue'
 import { connection } from '@devprotocol/clubs-core/connection'
+import type { Membership } from '../../types'
 
 type Props = {
 	options: Option[]
 	propertyAddress: string
-	memberships: {
-		id: string
-		name: string
-		description: string
-		price: 3
-		currency: string
-		imageSrc: string
-		payload: Uint8Array
-	}[]
+	memberships?: Membership[]
 }
 
 const props = defineProps<Props>()
@@ -85,6 +78,7 @@ onMounted(() => {
 				avatar="https://source.unsplash.com/100x100/?face"
 				name="Aggre"
 				:propertyAddress="props.propertyAddress"
+				:memberships="props.memberships"
 			/>
 		</section>
 
@@ -129,8 +123,8 @@ onMounted(() => {
 					:date="post.created_at"
 					:contents="post.content"
 				/>
-				<Reactions :likes="100" />
 				<Media :images="post.options.find((item) => item.key === '#images')" />
+				<Reactions :comments="post.comments" />
 				<Line class="mb-5" />
 				<Comment
 					avatar="https://source.unsplash.com/100x100/?face"
@@ -146,7 +140,7 @@ onMounted(() => {
 					:contents="post.content"
 				/>
 				<Media :required="true" />
-				<Reactions :likes="100" />
+				<Reactions :comments="post.comments" />
 			</div>
 		</article>
 	</div>
