@@ -8,12 +8,11 @@ import Spinner from '../../../Spinner/Spinner.vue'
 type Props = {
 	propertyAddress: string
 	images: string[]
-	text: string
+	content: string
+	title: string
 }
 
 const props = defineProps<Props>()
-
-const contents = ref('')
 const isPosting = ref(false)
 
 const onClickPost = async () => {
@@ -31,13 +30,11 @@ const onClickPost = async () => {
 	const sig = await signer.signMessage(hash)
 
 	// 画像アップロード
-	const uploadedImageURLs = []
+	const uploadedImageURLs: string[] = []
 	const storeSelectImagesFile = props.images
 	if (storeSelectImagesFile.length > 0) {
 		for (const image of storeSelectImagesFile) {
-			console.log('image', image)
 			const imgurURL = await uploadImageToImgur(image)
-			console.log('imgurURL', imgurURL)
 			uploadedImageURLs.push(imgurURL)
 		}
 	}
@@ -51,10 +48,14 @@ const onClickPost = async () => {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				/**
-				 * TODO: `contents.value` is empty!! The value shuld be the encoded `{title: '…', content: '…', options: […]}`
-				 */
-				contents: contents.value,
+				contents: {
+					title: props.title,
+					content: props.content,
+					options: [
+						{key: "#images", value: uploadedImageURLs},
+						{key: "#membershipPayloads", value: []}
+					]
+				},
 				hash,
 				sig,
 			}),
@@ -70,7 +71,7 @@ const onClickPost = async () => {
 	console.log(json)
 }
 
-async function uploadImageToImgur(image: File) {
+async function uploadImageToImgur(image: File): Promise<string> {
 	const formData = new FormData()
 	formData.append('image', image)
 

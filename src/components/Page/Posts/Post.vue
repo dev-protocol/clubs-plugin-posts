@@ -13,6 +13,7 @@ type Props = {
 
 const props = defineProps<Props>()
 
+const title = ref('')
 const contents = ref('')
 
 // limited access selected
@@ -169,7 +170,12 @@ const handleUploadImages = (files: string) => {
 		<AddMedia @upload:image="handleUploadImages" />
 		<!-- /画像ボタン -->
 		<!-- Postボタン -->
-		<DoPost :propertyAddress="props.propertyAddress" :images="uploadImages" :text="contents" />
+		<DoPost
+			:propertyAddress="props.propertyAddress"
+			:images="uploadImages"
+			:content="contents"
+			:title="title"
+		/>
 		<!-- /Postボタン -->
 	</div>
 	<!-- /アクション -->
