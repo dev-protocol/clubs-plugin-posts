@@ -3,6 +3,7 @@ import { Ref, ref } from 'vue'
 import { connection } from '@devprotocol/clubs-core/connection'
 import { keccak256 } from 'ethers';
 import Spinner from '../../../Spinner/Spinner.vue'
+import type { Membership } from '../../../../types'
 
 
 type Props = {
@@ -10,6 +11,7 @@ type Props = {
 	images: string[]
 	content: string
 	title: string
+	selectedLimitedAccess: Membership[]
 }
 
 const props = defineProps<Props>()
@@ -53,7 +55,7 @@ const onClickPost = async () => {
 					content: props.content,
 					options: [
 						{key: "#images", value: uploadedImageURLs},
-						{key: "#membershipPayloads", value: []}
+						{key: "#membershipPayloads", value: props.selectedLimitedAccess.map((x) => x.payload)}
 					]
 				},
 				hash,

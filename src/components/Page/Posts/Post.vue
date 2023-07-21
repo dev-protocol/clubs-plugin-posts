@@ -77,7 +77,7 @@ const handleUploadImages = (files: string) => {
 			class="px-2 py-2 w-full text-base text-gray-700 border-none focus:outline-none focus:border-indigo-500"
 			rows="3"
 			type="text"
-			placeholder="What’s happen?"
+			placeholder="What’s happening?"
 		/>
 	</div>
 	<!-- /入力フォーム -->
@@ -166,6 +166,7 @@ const handleUploadImages = (files: string) => {
 			:images="uploadImages"
 			:content="contents"
 			:title="title"
+			:selectedLimitedAccess="selectedLimitedAccess"
 		/>
 		<!-- /Postボタン -->
 	</div>
