@@ -129,8 +129,8 @@ onMounted(() => {
 					:date="post.created_at"
 					:contents="post.content"
 				/>
-				<Reactions :likes="100" />
 				<Media :images="post.options.find((item) => item.key === '#images')" />
+				<Reactions :comments="post.comments" />
 				<Line class="mb-5" />
 				<Comment
 					avatar="https://source.unsplash.com/100x100/?face"
@@ -146,7 +146,7 @@ onMounted(() => {
 					:contents="post.content"
 				/>
 				<Media :required="true" />
-				<Reactions :likes="100" />
+				<Reactions :comments="post.comments" />
 			</div>
 		</article>
 	</div>

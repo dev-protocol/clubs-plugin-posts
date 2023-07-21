@@ -5,7 +5,7 @@ export const examplePosts: readonly Posts[] = [
 	{
 		id: '1',
 		title: 'Hello World',
-		content: 'This is a sample post.',
+		content: '#1 This is a sample post.',
 		created_by: ZeroAddress,
 		created_at: new Date('2021-01-01T01:34:56Z'),
 		updated_at: new Date('2021-01-01T01:34:56Z'),
@@ -38,7 +38,7 @@ export const examplePosts: readonly Posts[] = [
 	{
 		id: '2',
 		title: 'Hello World',
-		content: 'This is a sample post.',
+		content: '#2 This is a sample post.',
 		created_by: ZeroAddress,
 		created_at: new Date('2021-01-01T01:34:56Z'),
 		updated_at: new Date('2021-01-01T01:34:56Z'),
@@ -55,14 +55,14 @@ export const examplePosts: readonly Posts[] = [
 		comments: [
 			{
 				id: '1',
-				content: 'This is a sample comment #1.',
+				content: 'This is a sample comment #2-1.',
 				created_by: ZeroAddress,
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			},
 			{
 				id: '2',
-				content: 'This is a sample comment #2.',
+				content: 'This is a sample comment #2-2.',
 				created_by: ZeroAddress,
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
@@ -79,7 +79,7 @@ export const examplePosts: readonly Posts[] = [
 	{
 		id: '3',
 		title: 'Hi there',
-		content: 'Good morning. This is a sample post.',
+		content: 'Good morning. This is a sample post.#3',
 		created_by: ZeroAddress,
 		created_at: new Date('2021-01-01T01:34:56Z'),
 		updated_at: new Date('2021-01-01T01:34:56Z'),
@@ -95,7 +95,7 @@ export const examplePosts: readonly Posts[] = [
 		comments: [
 			{
 				id: '1',
-				content: 'This is a sample comment.',
+				content: 'This is a sample comment.#3-1',
 				created_by: ZeroAddress,
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
@@ -112,7 +112,7 @@ export const examplePosts: readonly Posts[] = [
 	{
 		id: '4',
 		title: 'Hey guys',
-		content: 'Good evening. This is a sample post.',
+		content: 'Good evening. This is a sample post.#4',
 		created_by: ZeroAddress,
 		created_at: new Date('2021-01-01T01:34:56Z'),
 		updated_at: new Date('2021-01-01T01:34:56Z'),
@@ -125,7 +125,7 @@ export const examplePosts: readonly Posts[] = [
 		comments: [
 			{
 				id: '1',
-				content: 'This is a sample comment.',
+				content: 'This is a sample comment.#4-1',
 				created_by: ZeroAddress,
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
@@ -142,7 +142,7 @@ export const examplePosts: readonly Posts[] = [
 	{
 		id: '5',
 		title: 'Secret',
-		content: 'Good evening. This is a sample secret pos...',
+		content: 'Good evening. This is a sample secret pos... #5',
 		created_by: ZeroAddress,
 		created_at: new Date('2021-01-01T01:34:56Z'),
 		updated_at: new Date('2021-01-01T01:34:56Z'),
