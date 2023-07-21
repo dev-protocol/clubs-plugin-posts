@@ -2,7 +2,7 @@
 import type { Ref } from 'vue'
 
 type Props = {
-	images: Ref<string[]>
+	images: string[]
 }
 
 const { images } = defineProps<Props>()
