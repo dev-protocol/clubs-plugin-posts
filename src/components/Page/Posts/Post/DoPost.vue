@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { Ref, ref } from 'vue'
 import { connection } from '@devprotocol/clubs-core/connection'
-import { keccak256 } from 'ethers';
+import { keccak256 } from 'ethers'
 import Spinner from '../../../Spinner/Spinner.vue'
 import type { Membership } from '../../../../types'
-
+import { encode } from '@devprotocol/clubs-core'
 
 type Props = {
 	propertyAddress: string
@@ -24,7 +24,7 @@ const onClickPost = async () => {
 	if (!signer) {
 		isPosting.value = false
 		return
-	};
+	}
 
 	const signerAddress = await signer.getAddress()
 
@@ -50,14 +50,19 @@ const onClickPost = async () => {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				contents: {
+				contents: encode({
 					title: props.title,
 					content: props.content,
 					options: [
-						{key: "#images", value: uploadedImageURLs},
-						{key: "#membershipPayloads", value: props.selectedLimitedAccess.map((x) => x.payload)}
-					]
-				},
+						{ key: '#images', value: uploadedImageURLs },
+						{
+							key: '#membershipPayloads',
+							value: props.selectedLimitedAccess
+								.filter(({ payload }) => payload !== undefined)
+								.map(({ payload }) => payload as Uint8Array),
+						},
+					],
+				}),
 				hash,
 				sig,
 			}),
@@ -99,6 +104,5 @@ async function uploadImageToImgur(image: File): Promise<string> {
 			<Spinner v-if="isPosting" />
 			<span v-if="!isPosting">Post</span>
 		</button>
-
 	</div>
 </template>
