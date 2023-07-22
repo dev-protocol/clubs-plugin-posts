@@ -11,8 +11,9 @@ const handleFileUpload = (event) => {
 	const file = event.target.files[0]
 	if (file) {
 		const reader = new FileReader()
-		reader.onload = () => {
-			emit('upload:image', reader.result as string)
+		reader.onload = (event) => {
+			const base64Text = event.currentTarget.result
+			emit('upload:image', base64Text)
 		}
 		reader.readAsDataURL(file)
 	}
