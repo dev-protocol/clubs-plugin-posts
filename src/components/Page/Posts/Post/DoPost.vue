@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Ref, ref } from 'vue'
+import { ref } from 'vue'
 import { connection } from '@devprotocol/clubs-core/connection'
 import { keccak256 } from 'ethers'
 import Spinner from '../../../Spinner/Spinner.vue'
@@ -78,9 +78,11 @@ const onClickPost = async () => {
 	console.log(json)
 }
 
-async function uploadImageToImgur(image: File): Promise<string> {
+async function uploadImageToImgur(image: string): Promise<string> {
 	const formData = new FormData()
-	formData.append('image', image)
+
+	formData.append('image', image.replace(new RegExp('data.*base64,'), ''))
+	formData.append('type', 'base64')
 
 	const response = await fetch('https://api.imgur.com/3/image', {
 		method: 'POST',
