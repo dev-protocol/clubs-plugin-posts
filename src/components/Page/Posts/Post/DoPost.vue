@@ -14,8 +14,14 @@ type Props = {
 	selectedLimitedAccess: Membership[]
 }
 
+interface Emits {
+	(e: 'post:success'): boolean
+}
+
 const props = defineProps<Props>()
 const isPosting = ref(false)
+
+const emit = defineEmits<Emits>()
 
 const onClickPost = async () => {
 	isPosting.value = true
@@ -76,6 +82,9 @@ const onClickPost = async () => {
 
 	// レスポンスのjsonをコンソールに表示する
 	console.log(json)
+
+	// 終了のemit
+	emit('post:success')
 }
 
 async function uploadImageToImgur(image: string): Promise<string> {

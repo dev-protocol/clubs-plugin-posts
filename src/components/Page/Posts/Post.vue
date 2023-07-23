@@ -56,6 +56,21 @@ const uploadImages = ref<string[]>([])
 const handleUploadImages = (files: string) => {
 	uploadImages.value.push(files)
 }
+
+// Post Success
+const handlePostSuccess = () => {
+	contents.value = ''
+	handleDeleteImageAll()
+}
+
+// Media delete
+const handleDeletePreviewImage = (index: number) => {
+	uploadImages.value.splice(index, 1)
+}
+
+const handleDeleteImageAll = () => {
+	uploadImages.value = []
+}
 </script>
 <template>
 	<!-- Avatar -->
@@ -151,7 +166,12 @@ const handleUploadImages = (files: string) => {
 	<!-- /Limited access button -->
 	<!-- Media preview -->
 	<div class="mb-5 flex flex-wrap gap-y-1 gap-x-1">
-		<Images v-if="uploadImages" :images="uploadImages" />
+		<Images
+			v-if="uploadImages"
+			:images="uploadImages"
+			is-post="true"
+			@delete:image="handleDeletePreviewImage"
+		/>
 	</div>
 	<!-- /Media preview -->
 	<Line class="mb-5" />
@@ -167,6 +187,7 @@ const handleUploadImages = (files: string) => {
 			:content="contents"
 			:title="title"
 			:selectedLimitedAccess="selectedLimitedAccess"
+			@post:success="handlePostSuccess"
 		/>
 		<!-- /Postボタン -->
 	</div>
