@@ -3,7 +3,10 @@ import type { Ref } from 'vue'
 
 type Props = {
 	images: string[]
-	isPost: Ref<boolean>
+	isPost: {
+		type: BooleanConstructor
+		default: false
+	}
 }
 
 interface Emits {
@@ -30,6 +33,7 @@ const handleDeleteImage = (index: number) => {
 		<!-- /image -->
 		<!-- delete media -->
 		<div
+			v-if="isPost"
 			class="rounded-full absolute top-2 right-2 w-8 h-8 flex items-center justify-center cursor-pointer"
 			aria-label="delete media"
 			role="button"
