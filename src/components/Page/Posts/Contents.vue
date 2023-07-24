@@ -1,5 +1,20 @@
 <script lang="ts" setup>
 import dayjs from 'dayjs'
+import { marked } from 'marked'
+
+const renderer = {
+  link(href: string, text: string) {
+    const url = new URL(href)
+    const youtube = url.host === 'youtube.com' || url.host === 'www.youtube.com'
+    const v = url.searchParams.get('v')
+
+    return youtube
+      ? `<iframe class="youtube aspect-video mx-auto w-full max-w-2xl rounded" src="https://www.youtube.com/embed/${v}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`
+      : `<a href="${href}">${text}</a>`
+  },
+}
+
+marked.use({ renderer })
 
 type Props = {
 	name: string
@@ -9,6 +24,8 @@ type Props = {
 }
 
 const props = defineProps<Props>()
+
+const content = props.contents ? marked.parse(props.contents) : undefined
 </script>
 
 <template>
@@ -26,7 +43,7 @@ const props = defineProps<Props>()
 		</p>
 	</div>
 	<div class="mb-5 text-3xl font-bold text-black">
-		{{ props.contents }}
+		{{ content ?? '' }}
 	</div>
 </template>
 
