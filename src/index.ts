@@ -75,7 +75,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 	const previousConfiguration = encode(config)
 	const db = (
 		options.find(
-			({ key }) => key === 'database',
+			({ key }: Readonly<{ readonly key: string }>) => key === 'database',
 		) as UndefinedOr<OptionsDatabase>
 	)?.value
 	const dbType = db?.type || 'encoded:redis'
