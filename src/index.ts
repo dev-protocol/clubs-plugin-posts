@@ -11,7 +11,13 @@ import {
 } from '@devprotocol/clubs-core'
 import { default as Admin } from './pages/Admin.astro'
 import Posts from './pages/Posts.astro'
-import type { OptionsDatabase, PostPrimitives, Comment } from './types'
+import type {
+	OptionsDatabase,
+	PostPrimitives,
+	Comment,
+	CommentPrimitives,
+	Posts as PostType,
+} from './types'
 import { v5 as uuidv5 } from 'uuid'
 import {
 	ZeroAddress,
@@ -246,6 +252,135 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 								status: 400,
 							},
 					  )
+			},
+		},
+		{
+			paths: ['comment'], // This will be [POST] /api/clubs-plugin-posts/comment
+			method: 'POST',
+			handler: async ({ request }) => {
+				const { contents, hash, sig, postId } = (await request.json()) as {
+					readonly contents: string
+					readonly hash: string
+					readonly sig: string
+					readonly postId: string
+				}
+
+				// === Auth realted ===
+				const authenticated = await whenDefinedAll([hash, sig], ([h, s]) =>
+					authenticate({
+						message: h,
+						signature: s,
+						previousConfiguration,
+						provider: getDefaultProvider(config.rpcUrl),
+					}),
+				)
+
+				// === Db entry related ===
+				const id = uuidv5(randomBytes(32), namespace)
+				const created_by = verifyMessage(hash, sig)
+				const now = new Date()
+				const created_at = now
+				const updated_at = now
+				const decodedContents = decode<CommentPrimitives>(contents)
+				const composed = {
+					...decodedContents,
+					id,
+					created_by,
+					created_at,
+					updated_at,
+				}
+
+				try {
+					const allPosts = await whenDefinedAll(
+						[dbType, dbKey],
+						([type, key]) => {
+							return getAllPosts(type, { key })
+						},
+					)
+
+					// eslint-disable-next-line functional/no-conditional-statement
+					if (!allPosts || typeof allPosts === typeof Error) {
+						return new Response(
+							JSON.stringify({
+								error: 'Could not save comment',
+							}),
+							{
+								status: 500,
+							},
+						)
+					}
+
+					// eslint-disable-next-line functional/prefer-readonly-type
+					const posts = allPosts as unknown as PostType[]
+					const postIndex = posts.findIndex(
+						(post: PostType) => post.id === postId,
+					)
+					// eslint-disable-next-line functional/no-conditional-statement
+					if (!postIndex) {
+						return new Response(
+							JSON.stringify({
+								error: 'Could not save comment',
+							}),
+							{
+								status: 500,
+							},
+						)
+					}
+					const post = posts[postIndex]
+					const newPost = {
+						...post,
+						comments: [...post.comments, composed],
+					}
+					const newPosts = [
+						...posts.slice(1, postIndex),
+						newPost,
+						...posts.slice(postIndex + 1),
+					]
+
+					// Todo: このsaveは何を保存している？
+					const saved = authenticated
+						? await whenDefinedAll(
+								[dbType, dbKey, newPosts],
+								([type, key, posts]) => setAllPosts(type, { key, posts }),
+						  )
+						: undefined
+
+					return saved instanceof Error
+						? new Response(
+								JSON.stringify({
+									error: saved,
+								}),
+								{
+									status: 500,
+								},
+						  )
+						: saved
+						? new Response(
+								JSON.stringify({
+									message: saved,
+								}),
+								{
+									status: 200,
+								},
+						  )
+						: new Response(
+								JSON.stringify({
+									error: 'Some data is missing',
+								}),
+								{
+									status: 400,
+								},
+						  )
+				} catch (e: any) {
+					return new Response(
+						JSON.stringify({
+							error: e.memssage,
+						}),
+						{
+							status: 500,
+						},
+					)
+				}
 			},
 		},
 	]
