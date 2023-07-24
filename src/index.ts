@@ -27,6 +27,7 @@ import {
 } from 'ethers'
 import { whenDefinedAll, type UndefinedOr } from '@devprotocol/util-ts'
 import { getAllPosts, setAllPosts } from './db'
+import { addCommentsHandler } from './apiHandler/comment'
 
 export const getPagePaths: ClubsFunctionGetPagePaths = async (
 	options,
@@ -77,8 +78,8 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 			({ key }) => key === 'database',
 		) as UndefinedOr<OptionsDatabase>
 	)?.value
-	const dbType = db?.type
-	const dbKey = db?.key
+	const dbType = db?.type || 'encoded:redis'
+	const dbKey = db?.key || ''
 
 	return [
 		{
@@ -257,131 +258,13 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 		{
 			paths: ['comment'], // This will be [POST] /api/clubs-plugin-posts/comment
 			method: 'POST',
-			handler: async ({ request }) => {
-				const { contents, hash, sig, postId } = (await request.json()) as {
-					readonly contents: string
-					readonly hash: string
-					readonly sig: string
-					readonly postId: string
-				}
-
-				// === Auth realted ===
-				const authenticated = await whenDefinedAll([hash, sig], ([h, s]) =>
-					authenticate({
-						message: h,
-						signature: s,
-						previousConfiguration,
-						provider: getDefaultProvider(config.rpcUrl),
-					}),
-				)
-
-				// === Db entry related ===
-				const id = uuidv5(randomBytes(32), namespace)
-				const created_by = verifyMessage(hash, sig)
-				const now = new Date()
-				const created_at = now
-				const updated_at = now
-				const decodedContents = decode<CommentPrimitives>(contents)
-				const composed = {
-					...decodedContents,
-					id,
-					created_by,
-					created_at,
-					updated_at,
-				}
-
-				try {
-					const allPosts = await whenDefinedAll(
-						[dbType, dbKey],
-						([type, key]) => {
-							return getAllPosts(type, { key })
-						},
-					)
-
-					// eslint-disable-next-line functional/no-conditional-statement
-					if (!allPosts || typeof allPosts === typeof Error) {
-						return new Response(
-							JSON.stringify({
-								error: 'Could not save comment',
-							}),
-							{
-								status: 500,
-							},
-						)
-					}
-
-					// eslint-disable-next-line functional/prefer-readonly-type
-					const posts = allPosts as unknown as PostType[]
-					const postIndex = posts.findIndex(
-						(post: PostType) => post.id === postId,
-					)
-					// eslint-disable-next-line functional/no-conditional-statement
-					if (!postIndex) {
-						return new Response(
-							JSON.stringify({
-								error: 'Could not save comment',
-							}),
-							{
-								status: 500,
-							},
-						)
-					}
-					const post = posts[postIndex]
-					const newPost = {
-						...post,
-						comments: [...post.comments, composed],
-					}
-					const newPosts = [
-						...posts.slice(1, postIndex),
-						newPost,
-						...posts.slice(postIndex + 1),
-					]
-
-					// Todo: このsaveは何を保存している？
-					const saved = authenticated
-						? await whenDefinedAll(
-								[dbType, dbKey, newPosts],
-								([type, key, posts]) => setAllPosts(type, { key, posts }),
-						  )
-						: undefined
-
-					return saved instanceof Error
-						? new Response(
-								JSON.stringify({
-									error: saved,
-								}),
-								{
-									status: 500,
-								},
-						  )
-						: saved
-						? new Response(
-								JSON.stringify({
-									message: saved,
-								}),
-								{
-									status: 200,
-								},
-						  )
-						: new Response(
-								JSON.stringify({
-									error: 'Some data is missing',
-								}),
-								{
-									status: 400,
-								},
-						  )
-				} catch (e: any) {
-					return new Response(
-						JSON.stringify({
-							error: e.memssage,
-						}),
-						{
-							status: 500,
-						},
-					)
-				}
-			},
+			handler: addCommentsHandler(
+				previousConfiguration,
+				config,
+				dbType,
+				dbKey,
+				options,
+			),
 		},
 	]
 }
