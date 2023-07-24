@@ -258,13 +258,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 		{
 			paths: ['comment'], // This will be [POST] /api/clubs-plugin-posts/comment
 			method: 'POST',
-			handler: addCommentsHandler(
-				previousConfiguration,
-				config,
-				dbType,
-				dbKey,
-				options,
-			),
+			handler: addCommentsHandler(previousConfiguration, config, dbType, dbKey),
 		},
 	]
 }

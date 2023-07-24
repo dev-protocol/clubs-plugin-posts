@@ -4,7 +4,6 @@ import {
 	authenticate,
 	decode,
 	type ClubsConfiguration,
-	type ClubsPluginOption,
 } from '@devprotocol/clubs-core'
 
 import { getAllPosts, setAllPosts } from '../db'
@@ -23,7 +22,6 @@ export const addCommentsHandler =
 		conf: ClubsConfiguration,
 		dbQueryType: 'encoded:redis',
 		dbQueryKey: string,
-		pluginOptions: readonly ClubsPluginOption[],
 	) =>
 	async ({ request }: { readonly request: Request }) => {
 		const { contents, hash, sig, postId } =
