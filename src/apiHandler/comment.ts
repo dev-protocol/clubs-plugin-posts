@@ -16,7 +16,7 @@ export type AddCommentRequestJson = Readonly<{
 	readonly postId: string
 }>
 
-export const addCommentsHandler =
+export const addCommentHandler =
 	(
 		previousEncodedConf: string,
 		conf: ClubsConfiguration,

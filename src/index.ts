@@ -27,7 +27,7 @@ import {
 } from 'ethers'
 import { whenDefinedAll, type UndefinedOr } from '@devprotocol/util-ts'
 import { getAllPosts, setAllPosts } from './db'
-import { addCommentsHandler } from './apiHandler/comment'
+import { addCommentHandler } from './apiHandler/comment'
 
 export const getPagePaths: ClubsFunctionGetPagePaths = async (
 	options,
@@ -258,7 +258,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 		{
 			paths: ['comment'], // This will be [POST] /api/clubs-plugin-posts/comment
 			method: 'POST',
-			handler: addCommentsHandler(previousConfiguration, config, dbType, dbKey),
+			handler: addCommentHandler(previousConfiguration, config, dbType, dbKey),
 		},
 	]
 }
