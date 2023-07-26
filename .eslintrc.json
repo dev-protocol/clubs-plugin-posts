@@ -19,7 +19,9 @@
 		{
 			"files": ["**/*.ts"],
 			"rules": {
-				"functional/functional-parameters": "off"
+				"functional/functional-parameters": "off",
+				"functional/no-try-statement": "off",
+				"functional/no-conditional-statement": "off"
 			}
 		},
 		{

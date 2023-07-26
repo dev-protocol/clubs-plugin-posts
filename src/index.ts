@@ -11,7 +11,13 @@ import {
 } from '@devprotocol/clubs-core'
 import { default as Admin } from './pages/Admin.astro'
 import Posts from './pages/Posts.astro'
-import type { OptionsDatabase, PostPrimitives, Comment } from './types'
+import type {
+	OptionsDatabase,
+	PostPrimitives,
+	Comment,
+	CommentPrimitives,
+	Posts as PostType,
+} from './types'
 import { v5 as uuidv5 } from 'uuid'
 import {
 	ZeroAddress,
@@ -21,6 +27,7 @@ import {
 } from 'ethers'
 import { whenDefinedAll, type UndefinedOr } from '@devprotocol/util-ts'
 import { getAllPosts, setAllPosts } from './db'
+import { addCommentHandler } from './apiHandler/comment'
 
 export const getPagePaths: ClubsFunctionGetPagePaths = async (
 	options,
@@ -68,11 +75,11 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 	const previousConfiguration = encode(config)
 	const db = (
 		options.find(
-			({ key }) => key === 'database',
+			({ key }: Readonly<{ readonly key: string }>) => key === 'database',
 		) as UndefinedOr<OptionsDatabase>
 	)?.value
-	const dbType = db?.type
-	const dbKey = db?.key
+	const dbType = db?.type || 'encoded:redis'
+	const dbKey = db?.key || ''
 
 	return [
 		{
@@ -247,6 +254,11 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 							},
 					  )
 			},
+		},
+		{
+			paths: ['comment'], // This will be [POST] /api/clubs-plugin-posts/comment
+			method: 'POST',
+			handler: addCommentHandler(previousConfiguration, config, dbType, dbKey),
 		},
 	]
 }

@@ -27,6 +27,7 @@ export const examplePosts: readonly Posts[] = [
 		],
 		comments: [
 			...new Array(100).fill('').map((_, i) => ({
+				content: 'abc',
 				id: `i-${i}`,
 				options: [{ key: 'reaction', value: '👍' }],
 				created_by: ZeroAddress,
@@ -55,6 +56,7 @@ export const examplePosts: readonly Posts[] = [
 		comments: [
 			{
 				id: '1',
+				options: [],
 				content: 'This is a sample comment #2-1.',
 				created_by: ZeroAddress,
 				created_at: new Date('2021-01-01T01:34:56Z'),
@@ -62,6 +64,7 @@ export const examplePosts: readonly Posts[] = [
 			},
 			{
 				id: '2',
+				options: [],
 				content: 'This is a sample comment #2-2.',
 				created_by: ZeroAddress,
 				created_at: new Date('2021-01-01T01:34:56Z'),
@@ -69,6 +72,7 @@ export const examplePosts: readonly Posts[] = [
 			},
 			...new Array(20).fill('').map((_, i) => ({
 				id: `i-${i}`,
+				content: 'abc',
 				options: [{ key: 'reaction', value: '👍' }],
 				created_by: ZeroAddress,
 				created_at: new Date('2021-01-01T01:34:56Z'),
@@ -95,6 +99,7 @@ export const examplePosts: readonly Posts[] = [
 		comments: [
 			{
 				id: '1',
+				options: [],
 				content: 'This is a sample comment.#3-1',
 				created_by: ZeroAddress,
 				created_at: new Date('2021-01-01T01:34:56Z'),
@@ -102,6 +107,7 @@ export const examplePosts: readonly Posts[] = [
 			},
 			...new Array(10).fill('').map((_, i) => ({
 				id: `i-${i}`,
+				content: 'abc',
 				options: [{ key: 'reaction', value: '👍' }],
 				created_by: ZeroAddress,
 				created_at: new Date('2021-01-01T01:34:56Z'),
@@ -125,6 +131,7 @@ export const examplePosts: readonly Posts[] = [
 		comments: [
 			{
 				id: '1',
+				options: [],
 				content: 'This is a sample comment.#4-1',
 				created_by: ZeroAddress,
 				created_at: new Date('2021-01-01T01:34:56Z'),
@@ -132,6 +139,7 @@ export const examplePosts: readonly Posts[] = [
 			},
 			...new Array(80).fill('').map((_, i) => ({
 				id: `i-${i}`,
+				content: 'abc',
 				options: [{ key: 'reaction', value: '👍' }],
 				created_by: ZeroAddress,
 				created_at: new Date('2021-01-01T01:34:56Z'),
@@ -158,6 +166,7 @@ export const examplePosts: readonly Posts[] = [
 			{
 				id: '1',
 				content: '',
+				options: [],
 				created_by: ZeroAddress,
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),

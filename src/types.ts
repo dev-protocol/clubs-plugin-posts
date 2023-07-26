@@ -26,13 +26,16 @@ export type PostOption = {
 	readonly value: ClubsGeneralUnit
 }
 
-export type Comment = {
+export type CommentPrimitives = {
+	readonly content: string
+	readonly options: readonly PostOption[]
+}
+
+export type Comment = CommentPrimitives & {
 	readonly id: string
-	readonly content?: string
 	readonly created_by: string
 	readonly created_at: Date
 	readonly updated_at: Date
-	readonly options?: readonly PostOption[]
 }
 
 export type OptionsDatabase = {
