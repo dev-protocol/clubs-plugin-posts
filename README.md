@@ -42,7 +42,7 @@ type Posts = {
 
 ### Naming convention for option keys
 
-Option keys can use any `string`, but for creating private options, a reserved naming convention "starts with `#`" works. If the option key has a leading "#", the plugin's server-side process only returns those values to authenticated users. This is useful for posting token-gated posts.
+Option keys can use any `string`, but for creating private options, a reserved naming convention "starts with `#`" works. If the option key has a leading "#", the plugin's server-side process returns those values to only authenticated users. This is useful for posting token-gated posts.
 
 ```ts
 {
