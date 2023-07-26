@@ -62,7 +62,7 @@ const onClickPost = async () => {
 					options: [
 						{ key: '#images', value: uploadedImageURLs },
 						{
-							key: '#membershipPayloads',
+							key: 'require-one-of',
 							value: props.selectedLimitedAccess
 								.filter(({ payload }) => payload !== undefined)
 								.map(({ payload }) => payload as Uint8Array),

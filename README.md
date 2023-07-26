@@ -1,24 +1,64 @@
-# Clubs Plugin Starter Kit
+# Clubs Plugin Posts
 
-## Files and directories
+## Plugin configuration
 
-## src/
+```ts
+{
+	key: 'database',
+	value: {
+		type: 'encoded:redis', // Will support more DBs in the future
+		key: 'DATABASE_KEY', // i.g., posts::694666bb-b2ec-542b-a5d6-65b470e5c494
+	},
+}
+```
 
-`src` directory manages all source files for this plugin you are developing.
+## Structure of Post item
 
-## preview/
+```ts
+type Posts = {
+	readonly id: string
+	readonly title: string
+	readonly content: string
+	readonly options: readonly {
+		readonly key: string
+		readonly value: ClubsGeneralUnit
+	}[]
+	readonly created_by: string
+	readonly created_at: Date
+	readonly updated_at: Date
+	readonly comments: readonly {
+		readonly content: string
+		readonly options: readonly {
+			readonly key: string
+			readonly value: ClubsGeneralUnit
+		}[]
+		readonly id: string
+		readonly created_by: string
+		readonly created_at: Date
+		readonly updated_at: Date
+	}[]
+}
+```
 
-`preview` directory has a minimal implementation of Clubs and serves locally to debug this plugin you are developing.
+### Naming convention for option keys
 
-The directory contains some boilerplate files that do not need to be edited, and some files whose values can be rewritten to debug the plugin.
+Option keys can use any `string`, but for creating private options, a reserved naming convention "starts with `#`" works. If the option key has a leading "#", the plugin's server-side process only returns those values to authenticated users. This is useful for posting token-gated posts.
 
-The following files are intended to be rewritten for debugging purposes:
-
-- preview/config.ts
-- preview/plugins.ts
-
-The following files are boilerplate and there is no need to rewrite them bacically:
-
-- preview/astro.config.mjs
-- preview/tailwind.config.mjs
-- preview/src/\*
+```ts
+{
+	...
+	options: [
+		{
+			/**
+			 * Unauthenticated users cannot access these values 🤫
+			 */
+			key: "#images",
+			value: [
+				'https://example.image/special1.png',
+				'https://example.image/special2.png',
+				'https://example.image/special3.png'
+			]
+		}
+	]
+}
+```
