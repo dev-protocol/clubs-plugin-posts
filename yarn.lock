@@ -2181,9 +2181,9 @@ arrify@^3.0.0:
   integrity sha512-tLkvA81vQG/XqE2mjDkGQHoOINtMHtysSnemrmoGe6PydDPMRbVugqyk4A6V/WDWEfm3l+0d8anA9r8cv/5Jaw==
 
 astro@^2.1.0:
-  version "2.9.5"
-  resolved "https://registry.yarnpkg.com/astro/-/astro-2.9.5.tgz#fe33248821fab4eacb578cb7887e1baf2b412068"
-  integrity sha512-F9qi3TzNfnl4wN3ufVRz13lX30krUd6FcEmP5gxFR3pjxk2a6+CghOZP/AgZ077Ws0RSpow29xtMhTSP7J6auQ==
+  version "2.9.6"
+  resolved "https://registry.yarnpkg.com/astro/-/astro-2.9.6.tgz#3f70a11c96ce465f465a41bcd6c6d4c099edc7c9"
+  integrity sha512-yvbZQ6YOWYLejyQ4nAcgZLDYQ34enQJ5/LWlXKtUzXzpsUHB75vJMj+XmEq5Q2eVlZOlQrp0lU+nhSRGaOsOUQ==
   dependencies:
     "@astrojs/compiler" "^1.6.3"
     "@astrojs/internal-helpers" "^0.1.1"
@@ -2961,9 +2961,9 @@ electron-to-chromium@^1.4.284:
   integrity sha512-RRuCvP6ekngVh2SAJaOKT/hxqc9JAsK+Pe0hP5tGQIfonU2Zy9gMGdJ+mBdyl/vNucMG6gkXYtuM4H/1giws5w==
 
 electron-to-chromium@^1.4.431:
-  version "1.4.475"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.475.tgz#2fee0e2a70cc1538b94f7f90aabcc436e4dcc827"
-  integrity sha512-mTye5u5P98kSJO2n7zYALhpJDmoSQejIGya0iR01GpoRady8eK3bw7YHHnjA1Rfi4ZSLdpuzlAC7Zw+1Zu7Z6A==
+  version "1.4.476"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.476.tgz#693df619ce1785ada6d5aec71fd3ce7ace71adc3"
+  integrity sha512-gzWl1m8pNy+5Kj17XcziNcbOhripjTqR2wAQmtdlFUngPYuFy7zUpJScVQAvCvQSFHNk3mS5fetNKW6BSpytFg==
 
 elliptic@6.5.4:
   version "6.5.4"
@@ -5562,17 +5562,10 @@ rimraf@^3.0.2:
   dependencies:
     glob "^7.1.3"
 
-rollup@3.27.0:
+rollup@3.27.0, rollup@^3.25.2:
   version "3.27.0"
   resolved "https://registry.yarnpkg.com/rollup/-/rollup-3.27.0.tgz#15bd07e2e1cbfa9255bf6a3f04a432621c2f3550"
   integrity sha512-aOltLCrYZ0FhJDm7fCqwTjIUEVjWjcydKBV/Zeid6Mn8BWgDCUBBWT5beM5ieForYNo/1ZHuGJdka26kvQ3Gzg==
-  optionalDependencies:
-    fsevents "~2.3.2"
-
-rollup@^3.25.2:
-  version "3.26.3"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-3.26.3.tgz#bbc8818cadd0aebca348dbb3d68d296d220967b8"
-  integrity sha512-7Tin0C8l86TkpcMtXvQu6saWH93nhG3dGQ1/+l5V2TDMceTxO7kDiK6GzbfLWNNxqJXm591PcEZUozZm51ogwQ==
   optionalDependencies:
     fsevents "~2.3.2"
 
