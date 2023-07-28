@@ -47,6 +47,7 @@ const postComment = async () => {
 	}
 
 	if (!sig) {
+		// TODO: add state for failure.
 		isCommenting.value = false
 		return
 	}
