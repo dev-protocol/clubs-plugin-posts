@@ -127,6 +127,7 @@ onMounted(() => {
 				<Reactions :comments="post.comments" />
 				<Line class="mb-5" />
 				<Comment
+					:postId="post.id"
 					avatar="https://source.unsplash.com/100x100/?face"
 					name="Roxy"
 					:comments="post.comments"
