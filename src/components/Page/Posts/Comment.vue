@@ -27,6 +27,7 @@ const postComment = async () => {
 
 	const signer = connection().signer.value
 	if (!signer) {
+		// TODO: add state for failure.
 		isCommenting.value = false
 		return
 	}
@@ -36,13 +37,15 @@ const postComment = async () => {
 		options: []
 	}
 	const hash = encode(comment)
-	let sig: string
+	let sig: string = ''
 	try {
 		sig = await signer.signMessage(hash)
 	} catch(error) {
+		// TODO: add state for failure.
 		isCommenting.value = false
 		return
 	}
+
 	if (!sig) {
 		isCommenting.value = false
 		return
@@ -65,8 +68,9 @@ const postComment = async () => {
 	try {
 		response = await fetch('/api/clubs-plugin-posts/comment', requestInfo)
 		const success = response.ok ? (await response.json())?.message || false : false
+		if (success) window.location.reload()
 	} catch(error) {
-
+		// TODO: add state for failure.
 	} finally {
 		isCommenting.value = false
 	}
