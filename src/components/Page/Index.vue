@@ -33,8 +33,7 @@ const handleWalletAddress = (address?: string) => {
 	walletAddress.value = address
 }
 
-onMounted(() => {
-	// Postsの取得
+const fetchPosts = async () => {
 	const params = {
 		hash: '0x100000',
 		sig: '0x200000',
@@ -60,9 +59,41 @@ onMounted(() => {
 		.finally(() => {
 			isLoading.value = false
 		})
+}
+
+onMounted(() => {
+	// Postsの取得
+	fetchPosts();
 
 	connection().account.subscribe(handleWalletAddress)
 })
+
+	const handlePostSuccess = ({title, contents, uploadImages}: {
+		title: string,
+		contents: string,
+		uploadImages: string[],
+	}) => {
+
+		// add new post to list of posts
+		posts.value = [
+			{
+				title,
+				content: contents,
+				options: [
+				{ key: '#images', value: uploadImages },
+					...props.options
+				]
+				,
+				id: '',
+				created_by: '',
+				created_at: new Date(),
+				updated_at: new Date(),
+				comments: [],
+			},
+			...posts.value,
+		]
+	}
+
 </script>
 
 <template>
@@ -79,6 +110,7 @@ onMounted(() => {
 				name="Aggre"
 				:propertyAddress="props.propertyAddress"
 				:memberships="props.memberships"
+				@post:success="handlePostSuccess"
 			/>
 		</section>
 

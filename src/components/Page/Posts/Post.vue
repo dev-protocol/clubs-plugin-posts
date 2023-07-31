@@ -13,6 +13,16 @@ type Props = {
 	memberships?: Membership[]
 }
 
+interface Emits {
+	(e: 'post:success', post: {
+		title: string,
+		contents: string,
+		uploadImages: string[],
+	}): void
+}
+
+const emit = defineEmits<Emits>()
+
 const props = defineProps<Props>()
 
 const title = ref('')
@@ -59,6 +69,12 @@ const handleUploadImages = (files: string) => {
 
 // Post Success
 const handlePostSuccess = () => {
+	emit('post:success', {
+		title: title.value,
+		contents: contents.value,
+		uploadImages: uploadImages.value,
+	})
+
 	contents.value = ''
 	handleDeleteImageAll()
 }
