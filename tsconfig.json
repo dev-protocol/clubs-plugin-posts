@@ -9,5 +9,11 @@
 		"importsNotUsedAsValues": "error",
 		"types": ["astro/client"]
 	},
-	"include": ["src", "preview", "config.js", "rollup.config.js"]
+	"include": [
+		"src",
+		"preview",
+		"config.js",
+		"rollup.config.js",
+		"tailwind.config.js"
+	]
 }

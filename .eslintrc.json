@@ -6,14 +6,15 @@
 	"env": {
 		"es6": true
 	},
-	"plugins": ["@typescript-eslint", "functional"],
+	"plugins": ["@typescript-eslint", "functional", "tailwind"],
 	"extends": [
 		"eslint:recommended",
 		"plugin:@typescript-eslint/eslint-recommended",
 		"plugin:@typescript-eslint/recommended",
 		"plugin:functional/external-recommended",
 		"plugin:functional/all",
-		"prettier"
+		"prettier",
+		"plugin:tailwind/recommended"
 	],
 	"overrides": [
 		{
