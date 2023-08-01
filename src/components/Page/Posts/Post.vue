@@ -4,7 +4,8 @@ import Line from '../../Common/Line.vue'
 import AddMedia from './Post/AddMedia.vue'
 import DoPost from './Post/DoPost.vue'
 import Images from './Media/Images.vue'
-import type { Membership } from '../../../types'
+import type { Membership, Posts } from '../../../types'
+import { whenDefined } from '@devprotocol/util-ts'
 
 type Props = {
 	name: string
@@ -14,11 +15,7 @@ type Props = {
 }
 
 interface Emits {
-	(e: 'post:success', post: {
-		title: string,
-		contents: string,
-		uploadImages: string[],
-	}): void
+	(e: 'post:success', post: Posts): void
 }
 
 const emit = defineEmits<Emits>()
@@ -68,12 +65,8 @@ const handleUploadImages = (files: string) => {
 }
 
 // Post Success
-const handlePostSuccess = () => {
-	emit('post:success', {
-		title: title.value,
-		contents: contents.value,
-		uploadImages: uploadImages.value,
-	})
+const handlePostSuccess = (data: Posts) => {
+	emit('post:success', data)
 
 	contents.value = ''
 	handleDeleteImageAll()

@@ -3,8 +3,9 @@ import { ref } from 'vue'
 import { connection } from '@devprotocol/clubs-core/connection'
 import { keccak256 } from 'ethers'
 import Spinner from '../../../Spinner/Spinner.vue'
-import type { Membership } from '../../../../types'
-import { encode } from '@devprotocol/clubs-core'
+import type { Membership, Posts } from '../../../../types'
+import { encode, decode } from '@devprotocol/clubs-core'
+import { whenDefined } from '@devprotocol/util-ts'
 
 type Props = {
 	propertyAddress: string
@@ -15,7 +16,7 @@ type Props = {
 }
 
 interface Emits {
-	(e: 'post:success'): boolean
+	(e: 'post:success', post: Posts): void
 }
 
 const props = defineProps<Props>()
@@ -77,6 +78,7 @@ const onClickPost = async () => {
 
 	// レスポンスをjsonに変換する
 	const json = await response.json()
+	const composedPost = whenDefined(json.data, (data) => decode<Posts>(data))
 
 	isPosting.value = false
 
@@ -84,7 +86,7 @@ const onClickPost = async () => {
 	console.log(json)
 
 	// 終了のemit
-	emit('post:success')
+	composedPost && emit('post:success', composedPost)
 }
 
 async function uploadImageToImgur(image: string): Promise<string> {

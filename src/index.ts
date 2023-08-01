@@ -153,6 +153,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 						? new Response(
 								JSON.stringify({
 									error: saved,
+									data: null,
 								}),
 								{
 									status: 500,
@@ -171,6 +172,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 						: new Response(
 								JSON.stringify({
 									error: 'Some data is missing',
+									data: null,
 								}),
 								{
 									status: 400,
@@ -180,6 +182,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 					return new Response(
 						JSON.stringify({
 							error: e.memssage,
+							data: null,
 						}),
 						{
 							status: 500,

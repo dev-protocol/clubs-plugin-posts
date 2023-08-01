@@ -48,7 +48,7 @@ const fetchPosts = async () => {
 		.then(async (res) => {
 			if (res.status === 200) {
 				const json = await res.json()
-				posts.value = decode(json.contents)
+				posts.value = decode<Posts[]>(json.contents)
 			}
 		})
 		.catch((err) => {
@@ -63,37 +63,16 @@ const fetchPosts = async () => {
 
 onMounted(() => {
 	// Postsの取得
-	fetchPosts();
+	fetchPosts()
 
 	connection().account.subscribe(handleWalletAddress)
 })
 
-	const handlePostSuccess = ({title, contents, uploadImages}: {
-		title: string,
-		contents: string,
-		uploadImages: string[],
-	}) => {
-
-		// add new post to list of posts
-		posts.value = [
-			{
-				title,
-				content: contents,
-				options: [
-				{ key: '#images', value: uploadImages },
-					...props.options
-				]
-				,
-				id: '',
-				created_by: '',
-				created_at: new Date(),
-				updated_at: new Date(),
-				comments: [],
-			},
-			...posts.value,
-		]
-	}
-
+const handlePostSuccess = (post: Posts) => {
+	// add new post to list of posts
+	posts.value = [post, ...posts.value]
+	console.log(post)
+}
 </script>
 
 <template>
@@ -145,8 +124,12 @@ onMounted(() => {
 		>
 			<div
 				v-if="
-					post.options.find((item) => item.key === 'require-one-of') ===
-					undefined
+					((requireOneOf) =>
+						requireOneOf === undefined ||
+						(Array.isArray(requireOneOf?.value) &&
+							requireOneOf.value.length === 0))(
+						post.options.find((item) => item.key === 'require-one-of'),
+					)
 				"
 			>
 				<Contents
