@@ -162,6 +162,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 						? new Response(
 								JSON.stringify({
 									message: saved,
+									data: encode(composed),
 								}),
 								{
 									status: 200,
