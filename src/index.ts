@@ -25,9 +25,14 @@ import {
 	randomBytes,
 	verifyMessage,
 } from 'ethers'
-import { whenDefinedAll, type UndefinedOr } from '@devprotocol/util-ts'
+import {
+	whenDefinedAll,
+	type UndefinedOr,
+	whenDefined,
+} from '@devprotocol/util-ts'
 import { getAllPosts, setAllPosts } from './db'
 import { addCommentHandler } from './apiHandler/comment'
+import { maskFactory } from './fixtures/masking'
 
 export const getPagePaths: ClubsFunctionGetPagePaths = async (
 	options,
@@ -194,32 +199,39 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 		{
 			paths: [config.propertyAddress, 'message'],
 			method: 'GET',
-			handler: async ({ request }) => {
-				// Todo 現在はコメントアウトしているが、GET の場合でも認証必要で、ポストアイテムの読み取り可否を判断するために使います。
-				/*
-				const { hash, sig } = (await request.json()) as {
+			handler: async ({ request, url }) => {
+				const { hash, sig } = url.searchParams as {
 					readonly hash?: string
 					readonly sig?: string
 				}
 
-				const authenticated = await whenDefinedAll([hash, sig], ([h, s]) =>
-					authenticate({
-						message: h,
-						signature: s,
-						previousConfiguration,
-						provider: providers.getDefaultProvider(config.rpcUrl),
-					})
-				)
-				 */
+				// eslint-disable-next-line functional/no-let
+				let reader
+
+				try {
+					// eslint-disable-next-line functional/no-expression-statement
+					reader = whenDefinedAll([hash, sig], ([h, s]) => verifyMessage(h, s))
+				} catch (error) {
+					// eslint-disable-next-line functional/no-expression-statement
+					console.log(error)
+				}
 
 				// eslint-disable-next-line functional/no-let
 				let allPosts
 				// eslint-disable-next-line
 				try {
-					// eslint-disable-next-line
-					allPosts = await whenDefinedAll([dbType, dbKey], ([type, key]) =>
-						getAllPosts(type, { key }),
+					const _allPosts = await whenDefinedAll(
+						[dbType, dbKey],
+						([type, key]) => getAllPosts(type, { key }),
 					)
+					const mask = await whenDefined(reader, (user) =>
+						maskFactory(user, config.propertyAddress, config.rpcUrl),
+					)
+					// eslint-disable-next-line
+					allPosts =
+						whenDefinedAll([mask, _allPosts], ([maskFn, posts]) =>
+							posts instanceof Error ? posts : posts.map(maskFn),
+						) ?? _allPosts
 				} catch (error) {
 					return new Response(
 						JSON.stringify({
