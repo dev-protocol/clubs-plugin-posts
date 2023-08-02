@@ -96,3 +96,6 @@ local.settings.json
 package-lock.json
 
 .idea
+
+# ignore generated docs
+docs
