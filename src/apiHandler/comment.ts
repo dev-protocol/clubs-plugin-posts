@@ -16,6 +16,14 @@ export type AddCommentRequestJson = Readonly<{
 	readonly postId: string
 }>
 
+/**
+ *
+ * @param previousEncodedConf
+ * @param conf
+ * @param dbQueryType
+ * @param dbQueryKey
+ * @returns
+ */
 export const addCommentHandler =
 	(
 		previousEncodedConf: string,
