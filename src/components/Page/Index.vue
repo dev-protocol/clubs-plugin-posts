@@ -11,6 +11,8 @@ import { decode } from '@devprotocol/clubs-core'
 import Connect from '../../../preview/src/theme/Connect.vue'
 import { connection } from '@devprotocol/clubs-core/connection'
 import type { Membership } from '../../types'
+import { hashMessage, Signer } from 'ethers'
+import type { UndefinedOr } from '@devprotocol/util-ts'
 
 type Props = {
 	options: Option[]
@@ -29,15 +31,33 @@ let error = ref<string>('')
 let posts = ref<Posts[]>([])
 
 const walletAddress = ref<string | undefined>('')
-const handleWalletAddress = (address?: string) => {
-	walletAddress.value = address
+
+const handleConnection = async (signer: UndefinedOr<Signer>) => {
+
+	if (!signer) {
+		return
+	}
+
+	// get wallet address
+	const connectedAddress = await signer.getAddress();
+	walletAddress.value = connectedAddress;
+
+	// sign message
+	const message = '0x100000'
+	const sig = await signer.signMessage(message)
+
+	// hash message
+	const hash = hashMessage(message)
+
+	fetchPosts({hash, sig})
 }
 
-const fetchPosts = async () => {
+const fetchPosts = async ({hash, sig}: {hash: string; sig: string}) => {
 	const params = {
-		hash: '0x100000',
-		sig: '0x200000',
+		hash,
+		sig,
 	}
+
 	const query = new URLSearchParams(params)
 	const url = new URL(
 		`/api/clubs-plugin-posts/${props.propertyAddress}/message?${query}`,
@@ -62,10 +82,7 @@ const fetchPosts = async () => {
 }
 
 onMounted(() => {
-	// Postsの取得
-	fetchPosts()
-
-	connection().account.subscribe(handleWalletAddress)
+	connection().signer.subscribe((test) => handleConnection(test));
 })
 
 const handlePostSuccess = (post: Posts) => {

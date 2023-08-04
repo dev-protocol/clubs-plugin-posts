@@ -98,6 +98,18 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 					readonly sig?: string
 				}
 
+				if (!hash || !sig) {
+					return new Response(
+						JSON.stringify({
+							error: 'Hash or Signature are missing',
+							data: null,
+						}),
+						{
+							status: 400,
+						},
+					)
+				}
+
 				const skipAuthentication = config.propertyAddress === ZeroAddress
 
 				const authenticated =
