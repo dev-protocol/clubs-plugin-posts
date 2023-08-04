@@ -1,8 +1,24 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { BrowserProvider } from 'ethers'
 import { connection } from '@devprotocol/clubs-core/connection'
-const address = ref<string | undefined>('')
+
+const walletAddress = ref<string | undefined>('')
+
+const handleConnection = async () => {
+	const signer = connection().signer.value
+	if (!signer) {
+		return
+	}
+
+	// get wallet address
+	const connectedAddress = await signer.getAddress();
+	walletAddress.value = connectedAddress;
+}
+
+onMounted(() => {
+	connection().signer.subscribe(handleConnection);
+})
 
 const onClick = async () => {
 	try {
@@ -17,6 +33,7 @@ const onClick = async () => {
 
 <template>
 	<button
+		v-if="!walletAddress"
 		class="py-2 px-8 text-base text-white bg-blue-600 border border-transparent rounded-3xl shadow-sm focus:outline-none"
 		@click="onClick"
 	>

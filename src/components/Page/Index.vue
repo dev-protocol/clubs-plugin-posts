@@ -8,7 +8,6 @@ import type { Option, Posts } from '../../types'
 import { onMounted, ref } from 'vue'
 import Line from '../Common/Line.vue'
 import { decode } from '@devprotocol/clubs-core'
-import Connect from '../../../preview/src/theme/Connect.vue'
 import { connection } from '@devprotocol/clubs-core/connection'
 import type { Membership } from '../../types'
 import { hashMessage, Signer } from 'ethers'
@@ -90,13 +89,13 @@ const handlePostSuccess = (post: Posts) => {
 
 <template>
 	<div class="mx-auto w-full max-w-2xl">
-		<section
+		<!-- <section
 			v-if="!walletAddress"
 			class="flex justify-end p-5 rounded bg-white"
 		>
 			<Connect />
-		</section>
-		<section v-else class="mb-5 p-5 rounded bg-white">
+		</section> -->
+		<section v-if="walletAddress" class="mb-5 p-5 rounded bg-white">
 			<Post
 				avatar="https://source.unsplash.com/100x100/?face"
 				name="Aggre"

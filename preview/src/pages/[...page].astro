@@ -2,6 +2,7 @@
 import { pageFactory } from '@devprotocol/clubs-core'
 import config from '../../config'
 import plugins from '../../plugins'
+import Connect from '../theme/Connect.vue'
 
 const { page } = Astro.params
 const { getStaticPaths } = pageFactory({
@@ -17,6 +18,7 @@ const Layout = path?.props.layout
 {
 	Layout && Content && (
 		<Layout {...path.props}>
+			<Connect />
 			<Content {...path.props} />
 		</Layout>
 	)
