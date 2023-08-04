@@ -43,13 +43,13 @@ const handleConnection = async (signer: UndefinedOr<Signer>) => {
 	walletAddress.value = connectedAddress;
 
 	// sign message
-	const message = '0x100000'
-	const sig = await signer.signMessage(message)
+	const message = connectedAddress;
+	const sig = await signer.signMessage(message);
 
 	// hash message
-	const hash = hashMessage(message)
+	const hash = hashMessage(message);
 
-	fetchPosts({hash, sig})
+	fetchPosts({hash, sig});
 }
 
 const fetchPosts = async ({hash, sig}: {hash: string; sig: string}) => {
