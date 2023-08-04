@@ -52,13 +52,8 @@ const handleConnection = async (signer: UndefinedOr<Signer>) => {
 	fetchPosts({hash, sig});
 }
 
-const fetchPosts = async ({hash, sig}: {hash: string; sig: string}) => {
-	const params = {
-		hash,
-		sig,
-	}
-
-	const query = new URLSearchParams(params)
+const fetchPosts = async ({hash, sig}: {hash?: string; sig?: string}) => {
+	const query = hash && sig ? new URLSearchParams({ hash, sig }) : new URLSearchParams();
 	const url = new URL(
 		`/api/clubs-plugin-posts/${props.propertyAddress}/message?${query}`,
 		window.location.origin,
@@ -82,7 +77,8 @@ const fetchPosts = async ({hash, sig}: {hash: string; sig: string}) => {
 }
 
 onMounted(() => {
-	connection().signer.subscribe((test) => handleConnection(test));
+	fetchPosts({});
+	connection().signer.subscribe(handleConnection);
 })
 
 const handlePostSuccess = (post: Posts) => {
