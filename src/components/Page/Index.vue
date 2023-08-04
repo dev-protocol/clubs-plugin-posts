@@ -89,12 +89,6 @@ const handlePostSuccess = (post: Posts) => {
 
 <template>
 	<div class="mx-auto w-full max-w-2xl">
-		<!-- <section
-			v-if="!walletAddress"
-			class="flex justify-end p-5 rounded bg-white"
-		>
-			<Connect />
-		</section> -->
 		<section v-if="walletAddress" class="mb-5 p-5 rounded bg-white">
 			<Post
 				avatar="https://source.unsplash.com/100x100/?face"
