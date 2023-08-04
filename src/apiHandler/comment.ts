@@ -82,7 +82,7 @@ export const addCommentHandler =
 				)
 			}
 			const postIndex = posts.findIndex((post: Posts) => post.id === postId)
-			if (!postIndex) {
+			if (postIndex === -1) {
 				return new Response(
 					JSON.stringify({
 						error: 'Error fetching post',

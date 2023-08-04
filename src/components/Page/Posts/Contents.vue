@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import dayjs from 'dayjs'
-import { marked } from 'marked'
+import { marked, type Renderer} from 'marked'
 
 const renderer = {
-  link(href: string, text: string) {
+  link(href: string, title: string, text: string) {
     const url = new URL(href)
     const youtube = url.host === 'youtube.com' || url.host === 'www.youtube.com'
     const v = url.searchParams.get('v')
@@ -12,7 +12,7 @@ const renderer = {
       ? `<iframe class="youtube aspect-video mx-auto w-full max-w-2xl rounded" src="https://www.youtube.com/embed/${v}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`
       : `<a href="${href}">${text}</a>`
   },
-}
+} as Renderer
 
 marked.use({ renderer })
 
@@ -42,8 +42,7 @@ const content = props.contents ? marked.parse(props.contents) : undefined
 			{{ dayjs(props.date).format('d MMM H:mm') }}
 		</p>
 	</div>
-	<div class="mb-5 text-3xl font-bold text-black">
-		{{ content ?? '' }}
+	<div class="mb-5 text-3xl font-bold text-black" v-html="content || ''">
 	</div>
 </template>
 
