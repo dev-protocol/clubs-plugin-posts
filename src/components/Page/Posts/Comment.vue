@@ -93,7 +93,7 @@ const postComment = async () => {
 						<p class="text-black text-base font-bold">{{ name }}</p>
 					</div>
 					<p class="text-base text-gray-400">
-						{{ dayjs(comment.created_at).format('d MMM H:mm') }}
+						{{ dayjs(comment.created_at).format('DD MMM HH:mm') }}
 					</p>
 				</div>
 				<p class="text-base text-gray-700">
