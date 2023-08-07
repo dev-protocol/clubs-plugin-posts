@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import dayjs from 'dayjs'
+import DOMPurify from "dompurify";
 import { marked, type Renderer} from 'marked'
 
 const renderer = {
@@ -25,7 +26,7 @@ type Props = {
 
 const props = defineProps<Props>()
 
-const content = props.contents ? marked.parse(props.contents) : undefined
+const content = props.contents ? DOMPurify.sanitize(marked.parse(props.contents)) : undefined
 </script>
 
 <template>
