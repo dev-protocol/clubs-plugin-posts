@@ -40,7 +40,7 @@ const content = props.contents ? DOMPurify.sanitize(marked.parse(props.contents)
 			<p class="text-black text-base font-bold">{{ props.name }}</p>
 		</div>
 		<p class="text-base text-gray-400">
-			{{ dayjs(props.date).format('d MMM H:mm') }}
+			{{ dayjs(props.date).format('DD MMM HH:mm') }}
 		</p>
 	</div>
 	<div class="mb-5 text-3xl font-bold text-black" v-html="content || ''">
