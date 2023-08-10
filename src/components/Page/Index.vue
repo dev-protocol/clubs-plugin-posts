@@ -7,7 +7,7 @@ import Comment from './Posts/Comment.vue'
 import type { Option, Posts } from '../../types'
 import { onMounted, ref } from 'vue'
 import Line from '../Common/Line.vue'
-import { decode } from '@devprotocol/clubs-core'
+import { decode, fetchProfile } from '@devprotocol/clubs-core'
 import { connection } from '@devprotocol/clubs-core/connection'
 import type { Membership } from '../../types'
 import { hashMessage, Signer } from 'ethers'
@@ -25,9 +25,15 @@ if (props.options === undefined) {
 	throw new Error('props.options is undefined')
 }
 
+type Profile = {
+	avatar: string
+	username: string
+}
+
 let isLoading = ref<boolean>(true)
 let error = ref<string>('')
 let posts = ref<Posts[]>([])
+let profile = ref<Profile>()
 
 const walletAddress = ref<string | undefined>('')
 
@@ -40,6 +46,15 @@ const handleConnection = async (signer: UndefinedOr<Signer>) => {
 	// get wallet address
 	const connectedAddress = await signer.getAddress();
 	walletAddress.value = connectedAddress;
+
+	// get profile
+	const res = await fetchProfile(connectedAddress)
+	if (res.error) {
+		console.error(res.error)
+		return
+	}
+
+	profile.value = res.profile;
 
 	// sign message
 	const message = connectedAddress;
@@ -91,8 +106,8 @@ const handlePostSuccess = (post: Posts) => {
 	<div class="mx-auto w-full max-w-2xl">
 		<section v-if="walletAddress" class="mb-5 p-5 rounded bg-white">
 			<Post
-				avatar="https://source.unsplash.com/100x100/?face"
-				name="Aggre"
+				:avatar="profile?.avatar ?? ''"
+				:name="profile?.username ?? walletAddress"
 				:propertyAddress="props.propertyAddress"
 				:memberships="props.memberships"
 				@post:success="handlePostSuccess"
