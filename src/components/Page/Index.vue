@@ -107,7 +107,7 @@ const handlePostSuccess = (post: Posts) => {
 		<section v-if="walletAddress" class="mb-5 p-5 rounded bg-white">
 			<Post
 				:avatar="profile?.avatar ?? ''"
-				:name="profile?.username ?? ''"
+				:name="profile?.username ?? walletAddress"
 				:propertyAddress="props.propertyAddress"
 				:memberships="props.memberships"
 				@post:success="handlePostSuccess"

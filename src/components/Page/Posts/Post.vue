@@ -6,6 +6,7 @@ import DoPost from './Post/DoPost.vue'
 import Images from './Media/Images.vue'
 import type { Membership, Posts } from '../../../types'
 import { whenDefined } from '@devprotocol/util-ts'
+import { Avatar } from "@boringer-avatars/vue3";
 
 type Props = {
 	name: string
@@ -83,13 +84,27 @@ const handleDeleteImageAll = () => {
 </script>
 <template>
 	<!-- Avatar -->
-	<div v-if="avatar.length > 0" class="flex items-center justify-between mb-3">
+	<div class="flex items-center justify-between mb-3">
 		<div class="flex items-center">
-			<img
-				class="w-12 h-12 rounded-full mr-3"
-				:src="props.avatar"
-				alt="Avatar of Aggre"
-			/>
+			<template v-if="props.avatar.length > 0">
+				<img
+
+			class="w-12 h-12 rounded-full mr-3"
+			:src="props.avatar"
+			alt="Avatar of Aggre"
+		/>
+			</template>
+			<template v-else>
+				<div class="mr-3">
+					<Avatar
+            :title="false"
+            :size="48"
+            variant="beam"
+            :square="false"
+
+          />
+				</div>
+			</template>
 			<p class="text-black text-base font-bold">{{ props.name }}</p>
 		</div>
 	</div>
