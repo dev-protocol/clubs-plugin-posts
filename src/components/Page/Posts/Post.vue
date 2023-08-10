@@ -83,7 +83,7 @@ const handleDeleteImageAll = () => {
 </script>
 <template>
 	<!-- Avatar -->
-	<div class="flex items-center justify-between mb-3">
+	<div v-if="avatar.length > 0" class="flex items-center justify-between mb-3">
 		<div class="flex items-center">
 			<img
 				class="w-12 h-12 rounded-full mr-3"
