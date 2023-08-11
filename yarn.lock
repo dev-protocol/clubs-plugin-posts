@@ -2252,9 +2252,9 @@ astral-regex@^1.0.0:
   integrity sha512-+Ryf6g3BKoRc7jfp7ad8tM4TtMiaWvbF/1/sQcZPkkS7ag3D5nMBCe2UfOTONtAkaG0tO0ij3C5Lwmf1EiyjHg==
 
 astro@^2.1.0:
-  version "2.10.5"
-  resolved "https://registry.yarnpkg.com/astro/-/astro-2.10.5.tgz#23be82a8537507d592c09947b30ce746dedd0065"
-  integrity sha512-/GlDb0iHq9smACrCqVu/AaNi5+fqJuPOVTthm5fFNi+OBRprY0DW8juaov8o+M1X6SvIyIbOcd04+ZsYrIF0Sg==
+  version "2.10.7"
+  resolved "https://registry.yarnpkg.com/astro/-/astro-2.10.7.tgz#069368f03e7a00c0bdf75c82aba1fc417f74d768"
+  integrity sha512-R8aF4yphrsbhxW2UxHZ1DslBn8e8vPQ23+Z/OnajNE1Q4HEZCOZ4CAbHJx2PDwq2p+CRWArNalpr3+rTqyOYBQ==
   dependencies:
     "@astrojs/compiler" "^1.8.0"
     "@astrojs/internal-helpers" "^0.1.2"
