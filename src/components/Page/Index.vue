@@ -10,7 +10,7 @@ import Line from '../Common/Line.vue'
 import { decode, fetchProfile } from '@devprotocol/clubs-core'
 import { connection } from '@devprotocol/clubs-core/connection'
 import type { Membership } from '../../types'
-import { hashMessage, Signer } from 'ethers'
+import { hashMessage, Signer, ZeroAddress } from 'ethers'
 import type { UndefinedOr } from '@devprotocol/util-ts'
 
 type Props = {
@@ -38,14 +38,13 @@ let profile = ref<Profile>()
 const walletAddress = ref<string | undefined>('')
 
 const handleConnection = async (signer: UndefinedOr<Signer>) => {
-
 	if (!signer) {
 		return
 	}
 
 	// get wallet address
-	const connectedAddress = await signer.getAddress();
-	walletAddress.value = connectedAddress;
+	const connectedAddress = await signer.getAddress()
+	walletAddress.value = connectedAddress
 
 	// get profile
 	const res = await fetchProfile(connectedAddress)
@@ -54,20 +53,24 @@ const handleConnection = async (signer: UndefinedOr<Signer>) => {
 		return
 	}
 
-	profile.value = res.profile;
+	console.log('connectedAddress', connectedAddress)
+	console.log('profile', res)
+
+	profile.value = res.profile
 
 	// sign message
-	const message = connectedAddress;
-	const sig = await signer.signMessage(message);
+	const message = connectedAddress
+	const sig = await signer.signMessage(message)
 
 	// hash message
-	const hash = hashMessage(message);
+	const hash = hashMessage(message)
 
-	fetchPosts({hash, sig});
+	fetchPosts({ hash, sig })
 }
 
-const fetchPosts = async ({hash, sig}: {hash?: string; sig?: string}) => {
-	const query = hash && sig ? new URLSearchParams({ hash, sig }) : new URLSearchParams();
+const fetchPosts = async ({ hash, sig }: { hash?: string; sig?: string }) => {
+	const query =
+		hash && sig ? new URLSearchParams({ hash, sig }) : new URLSearchParams()
 	const url = new URL(
 		`/api/clubs-plugin-posts/${props.propertyAddress}/message?${query}`,
 		window.location.origin,
@@ -78,6 +81,33 @@ const fetchPosts = async ({hash, sig}: {hash?: string; sig?: string}) => {
 			if (res.status === 200) {
 				const json = await res.json()
 				posts.value = decode<Posts[]>(json.contents)
+
+				console.log('posts', posts.value)
+
+				// postsにprofileを追加
+				/*
+				posts.value = posts.value.map(async (post) => {
+					console.log('post', post.created_by)
+					if (post.created_by === ZeroAddress) {
+						return post
+					}
+
+					console.log('ready to fetch profile')
+					const url = new URL(
+						`/api/clubs-plugin-posts/${post.created_by}/profile`,
+						window.location.origin,
+					)
+					const res = await fetch(url.toString())
+					const profile = await res.json()
+
+					console.log('res', profile)
+
+					return {
+						...post,
+						profile: profile.value,
+					}
+				})
+				 */
 			}
 		})
 		.catch((err) => {
@@ -91,8 +121,8 @@ const fetchPosts = async ({hash, sig}: {hash?: string; sig?: string}) => {
 }
 
 onMounted(() => {
-	fetchPosts({});
-	connection().signer.subscribe(handleConnection);
+	fetchPosts({})
+	connection().signer.subscribe(handleConnection)
 })
 
 const handlePostSuccess = (post: Posts) => {
@@ -154,8 +184,12 @@ const handlePostSuccess = (post: Posts) => {
 				"
 			>
 				<Contents
-					avatar="https://source.unsplash.com/100x100/?face"
-					name="Aggre"
+					:avatar="
+						post.profile.avatar
+							? post.profile.avatar
+							: 'https://source.unsplash.com/100x100/?face'
+					"
+					:name="post.profile ? post.profile.username : 'Anonymous'"
 					:date="post.created_at"
 					:contents="post.content"
 				/>
