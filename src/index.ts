@@ -88,22 +88,6 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 
 	return [
 		{
-			paths: [config.propertyAddress, 'profile'],
-			method: 'GET',
-			handler: async ({ request, url }) => {
-				console.log('profile!!!', url.searchParams)
-
-				return new Response(
-					JSON.stringify({
-						contents: 'profile',
-					}),
-					{
-						status: 200,
-					},
-				)
-			},
-		},
-		{
 			paths: [config.propertyAddress, 'message'],
 			// This will be [POST] /api/clubs-plugin-posts/0x7sgg...6hfd/message
 			method: 'POST',
@@ -228,8 +212,6 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 			paths: [config.propertyAddress, 'message'],
 			method: 'GET',
 			handler: async ({ request, url }) => {
-				console.log('message!!!', url.searchParams)
-
 				const { hash, sig } = url.searchParams as {
 					readonly hash?: string
 					readonly sig?: string
@@ -256,6 +238,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 					)
 
 					// add profile to _allPosts
+					/*
 					if (_allPosts && !(_allPosts instanceof Error)) {
 						_allPosts.forEach(async (post) => {
 							if (post.created_by === ZeroAddress) {
@@ -272,6 +255,8 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 							post.profile = profileJson
 						})
 					}
+
+					 */
 
 					const mask = await whenDefined(reader, (user) =>
 						maskFactory(user, config.propertyAddress, config.rpcUrl),
