@@ -88,6 +88,54 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 
 	return [
 		{
+			paths: [config.propertyAddress, 'profile'],
+			method: 'GET',
+			handler: async ({ url }) => {
+				const address = url.searchParams.get('address')
+
+				if (!address) {
+					return new Response(
+						JSON.stringify({
+							error: 'Address is missing',
+							data: null,
+						}),
+						{
+							status: 400,
+						},
+					)
+				}
+
+				// fetch https://clubs.place/api/profile/
+				const response = await fetch(
+					`https://clubs.place/api/profile/${address}`,
+				)
+
+				const data = await response.json()
+
+				// empty object means the user is not registered
+				if (Object.keys(data).length === 0) {
+					return new Response(
+						JSON.stringify({
+							error: 'User is not registered',
+							data: null,
+						}),
+						{
+							status: 400,
+						},
+					)
+				}
+
+				return new Response(
+					JSON.stringify({
+						profile: data,
+					}),
+					{
+						status: 200,
+					},
+				)
+			},
+		},
+		{
 			paths: [config.propertyAddress, 'message'],
 			// This will be [POST] /api/clubs-plugin-posts/0x7sgg...6hfd/message
 			method: 'POST',
@@ -236,27 +284,6 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 						[dbType, dbKey],
 						([type, key]) => getAllPosts(type, { key }),
 					)
-
-					// add profile to _allPosts
-					/*
-					if (_allPosts && !(_allPosts instanceof Error)) {
-						_allPosts.forEach(async (post) => {
-							if (post.created_by === ZeroAddress) {
-								return
-							}
-
-							const profile = await fetch(
-								`https://clubs.place/api/profile/${post.created_by}`,
-							)
-							const profileJson = await profile.json()
-
-							console.log('profile', profileJson)
-
-							post.profile = profileJson
-						})
-					}
-
-					 */
 
 					const mask = await whenDefined(reader, (user) =>
 						maskFactory(user, config.propertyAddress, config.rpcUrl),
