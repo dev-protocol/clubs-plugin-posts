@@ -53,9 +53,6 @@ const handleConnection = async (signer: UndefinedOr<Signer>) => {
 		return
 	}
 
-	console.log('connectedAddress', connectedAddress)
-	console.log('profile', res)
-
 	profile.value = res.profile
 
 	// sign message
@@ -81,33 +78,6 @@ const fetchPosts = async ({ hash, sig }: { hash?: string; sig?: string }) => {
 			if (res.status === 200) {
 				const json = await res.json()
 				posts.value = decode<Posts[]>(json.contents)
-
-				console.log('posts', posts.value)
-
-				// postsにprofileを追加
-				/*
-				posts.value = posts.value.map(async (post) => {
-					console.log('post', post.created_by)
-					if (post.created_by === ZeroAddress) {
-						return post
-					}
-
-					console.log('ready to fetch profile')
-					const url = new URL(
-						`/api/clubs-plugin-posts/${post.created_by}/profile`,
-						window.location.origin,
-					)
-					const res = await fetch(url.toString())
-					const profile = await res.json()
-
-					console.log('res', profile)
-
-					return {
-						...post,
-						profile: profile.value,
-					}
-				})
-				 */
 			}
 		})
 		.catch((err) => {
@@ -184,12 +154,8 @@ const handlePostSuccess = (post: Posts) => {
 				"
 			>
 				<Contents
-					:avatar="
-						post.profile.avatar
-							? post.profile.avatar
-							: 'https://source.unsplash.com/100x100/?face'
-					"
-					:name="post.profile ? post.profile.username : 'Anonymous'"
+					:propertyAddress="props.propertyAddress"
+					:createdBy="post.created_by"
 					:date="post.created_at"
 					:contents="post.content"
 				/>
@@ -205,8 +171,8 @@ const handlePostSuccess = (post: Posts) => {
 			</div>
 			<div v-else>
 				<Contents
-					avatar="https://source.unsplash.com/100x100/?face"
-					name="Aggre"
+					:propertyAddress="props.propertyAddress"
+					:createdBy="post.created_by"
 					:date="post.created_at"
 					:contents="post.content"
 				/>

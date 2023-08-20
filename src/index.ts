@@ -108,7 +108,17 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 				// fetch https://clubs.place/api/profile/
 				const response = await fetch(
 					`https://clubs.place/api/profile/${address}`,
-				)
+				).catch((e) => {
+					return new Response(
+						JSON.stringify({
+							error: e.message,
+							data: null,
+						}),
+						{
+							status: 500,
+						},
+					)
+				})
 
 				const data = await response.json()
 
