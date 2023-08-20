@@ -99,11 +99,10 @@ const fetchProfile = async (address: string) => {
 <template>
 	<div class="flex items-center justify-between mb-1">
 		<div class="flex items-center">
-			<img
+			<div
 				v-if="avatar"
-				class="w-12 h-12 rounded-full mr-3"
-				:src="avatar"
-				:alt="`Avatar of ${name}`"
+				class="w-12 h-12 rounded-full mr-3 bg-center bg-cover bg-no-repeat"
+				:style="`background-image: url(${avatar})`"
 			/>
 			<p class="text-black text-base font-bold">{{ name }}</p>
 		</div>
