@@ -1,0 +1,16 @@
+GET http://localhost:3000/api/clubs-plugin-posts/0xE59fEDaBB0F79b0EC605737805a9125cd8d87B1f/profile?address=0x57E21bd98612DE0Bd1723F4bf81A944eF7BfF526
+Accept: application/json
+
+###
+
+GET http://localhost:3000/api/clubs-plugin-posts/0xE59fEDaBB0F79b0EC605737805a9125cd8d87B1f/profile?address=0x77E21bd98612DE0Bd1723F4bf81A944eF7BfF528
+Accept: application/json
+
+###
+
+GET http://192.168.10.105:3000/api/clubs-plugin-posts/0xE59fEDaBB0F79b0EC605737805a9125cd8d87B1f/profile?address=0x57E21bd98612DE0Bd1723F4bf81A944eF7BfF526
+Accept: application/json
+
+###
+
+GET http://192.168.10.105:3000/api/clubs-plugin-posts/0xE59fEDaBB0F79b0EC605737805a9125cd8d87B1f/profile?address=0x0000000000000000000000000000000000000000
