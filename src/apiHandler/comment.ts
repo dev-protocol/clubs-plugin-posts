@@ -115,6 +115,7 @@ export const addCommentHandler =
 				: new Response(
 						JSON.stringify({
 							message: isCommentAdded,
+							id: newComment.id,
 						}),
 						{
 							status: 200,

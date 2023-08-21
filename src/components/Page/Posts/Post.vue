@@ -101,7 +101,6 @@ const handleDeleteImageAll = () => {
             :size="48"
             variant="beam"
             :square="false"
-
           />
 				</div>
 			</template>

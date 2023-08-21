@@ -1,26 +1,23 @@
 <script lang="ts" setup>
 import dayjs from 'dayjs'
 import { encode } from '@devprotocol/clubs-core';
-import { ComputedRef, computed, onMounted, ref } from 'vue'
+import { ComputedRef, computed, ref } from 'vue'
 import { connection } from '@devprotocol/clubs-core/connection'
 
-import Spinner from '../../Spinner/Spinner.vue';
 import type { Comment, CommentPrimitives } from '../../../types'
 
 type Props = {
 	postId: string
 	avatar: string
 	name: string
-	comments: Comment[]
+	comments: readonly Comment[]
 }
 const props = defineProps<Props>()
 
 const newComment = ref<string>('')
 const isCommenting = ref<boolean>(false)
 
-const comments: ComputedRef<Comment[]> = computed(() => {
-	return props.comments.filter((comment) => comment.hasOwnProperty('content'))
-})
+const comments = ref<readonly Comment[]>(props.comments)
 
 const postComment = async () => {
 	isCommenting.value = true
@@ -68,10 +65,31 @@ const postComment = async () => {
 	let response: Response
 	try {
 		response = await fetch('/api/clubs-plugin-posts/comment', requestInfo)
-		const success = response.ok ? (await response.json())?.message || false : false
-		if (success) window.location.reload()
+
+		const json = await response.json()
+
+		const success = response.ok ? json?.message || false : false
+		if (!success) {
+			console.error('error posting comment: ', response)
+			return;
+		}
+
+		const toPush = Object.freeze({
+				content: comment.content,
+				created_at: Date.now(),
+				updated_at: Date.now(),
+				id: json?.id,
+				created_by: await signer.getAddress(),
+				options: {}
+			})
+
+		// push new comment to comments array.
+		// @ts-ignore
+		comments.value = [...comments.value, toPush]
+
+		newComment.value = ''
 	} catch(error) {
-		// TODO: add state for failure.
+		console.error('error posting comment: ', error);
 	} finally {
 		isCommenting.value = false
 	}
