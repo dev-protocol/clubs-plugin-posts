@@ -12,6 +12,7 @@ import { connection } from '@devprotocol/clubs-core/connection'
 import type { Membership } from '../../types'
 import { hashMessage, Signer } from 'ethers'
 import type { UndefinedOr } from '@devprotocol/util-ts'
+import { emojiAllowList } from '../../constants'
 
 type Props = {
 	options: Option[]
@@ -160,7 +161,7 @@ const handlePostSuccess = (post: Posts) => {
 					:contents="post.content"
 				/>
 				<Media :images="post.options.find((item) => item.key === '#images')" />
-				<Reactions :comments="post.comments" />
+				<Reactions :comments="post.comments" :reactions="post.reactions" :post-id="post.id" :emoji-allow-list="emojiAllowList" />
 				<Line class="mb-5" />
 				<Comment
 					:postId="post.id"
@@ -177,7 +178,7 @@ const handlePostSuccess = (post: Posts) => {
 					:contents="post.content"
 				/>
 				<Media :required="true" />
-				<Reactions :comments="post.comments" />
+				<Reactions :comments="post.comments" :reactions="post.reactions" :post-id="post.id" :emoji-allow-list="emojiAllowList" />
 			</div>
 		</article>
 	</div>

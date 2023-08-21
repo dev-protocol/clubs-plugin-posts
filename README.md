@@ -37,6 +37,9 @@ type Posts = {
 		readonly created_at: Date
 		readonly updated_at: Date
 	}[]
+	readonly reactions: readonly {
+		[emoji: string]: string[] // for example {'🦜': ['0x0', '0x2']}
+	}
 }
 ```
 

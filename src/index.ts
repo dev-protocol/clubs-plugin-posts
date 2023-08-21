@@ -33,6 +33,7 @@ import {
 import { getAllPosts, setAllPosts } from './db'
 import { addCommentHandler } from './apiHandler/comment'
 import { maskFactory } from './fixtures/masking'
+import { addReactionHandler } from './apiHandler/reactions'
 
 export const getPagePaths: ClubsFunctionGetPagePaths = async (
 	options,
@@ -198,7 +199,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 				} catch (e: any) {
 					return new Response(
 						JSON.stringify({
-							error: e.memssage,
+							error: e.message,
 							data: null,
 						}),
 						{
@@ -247,7 +248,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 				} catch (error) {
 					return new Response(
 						JSON.stringify({
-							error,
+							error: error,
 						}),
 						{
 							status: 500,
@@ -287,6 +288,11 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 			paths: ['comment'], // This will be [POST] /api/clubs-plugin-posts/comment
 			method: 'POST',
 			handler: addCommentHandler(previousConfiguration, config, dbType, dbKey),
+		},
+		{
+			paths: ['reactions'], // This will be [POST] /api/clubs-plugin-posts/reactions
+			method: 'POST',
+			handler: addReactionHandler(previousConfiguration, config, dbType, dbKey),
 		},
 	]
 }

@@ -35,6 +35,10 @@ export const examplePosts: readonly Posts[] = [
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			})),
 		],
+		reactions: {
+			'👍': ['0x1', '0x2'],
+			'🦜': ['0x3'],
+		},
 	},
 	{
 		id: '2',
@@ -79,6 +83,9 @@ export const examplePosts: readonly Posts[] = [
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			})),
 		],
+		reactions: {
+			'👍': ['0x1', '0x2'],
+		},
 	},
 	{
 		id: '3',
@@ -114,6 +121,9 @@ export const examplePosts: readonly Posts[] = [
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			})),
 		],
+		reactions: {
+			'🦜': ['0x3'],
+		},
 	},
 	{
 		id: '4',
@@ -146,6 +156,10 @@ export const examplePosts: readonly Posts[] = [
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			})),
 		],
+		reactions: {
+			'👍': ['0x1', '0x2'],
+			'🦜': ['0x3'],
+		},
 	},
 	{
 		id: '5',
@@ -172,5 +186,6 @@ export const examplePosts: readonly Posts[] = [
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			},
 		],
+		reactions: {},
 	},
 ]

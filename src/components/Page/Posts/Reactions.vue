@@ -1,40 +1,115 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { Comment } from '../../../types'
+import type { Reactions } from '../../../types'
+import { connection } from '@devprotocol/clubs-core/connection';
+import { encode } from '@devprotocol/clubs-core';
+import type { UndefinedOr } from '@devprotocol/util-ts';
 
 type Props = {
-	comments: Comment[]
+	postId: string,
+	reactions: Reactions
+	emojiAllowList: string[]
 }
 const props = defineProps<Props>()
 
-const reactions = ref<Comment[]>([])
-const likes = ref<string>('')
+const reactions = ref<Reactions>({})
+const isTogglingReaction = ref<boolean>(false);
 
-// props.commentsからoptionsのkeyが'reaction'のものを取得する
-try {
-	if (props.comments) {
-		const filterReactions = props.comments.filter(
-			(comment) => comment.options && comment.options[0].key === 'reaction',
-		)
+reactions.value = props.reactions;
 
-		if (filterReactions.length > 0) {
-			reactions.value = filterReactions
-			likes.value = reactions.value[0].options[0].value
-		}
+const toggleReaction = async (emoji: string) => {
+
+	if (isTogglingReaction.value) {
+		return
 	}
-} catch (error) {
-	console.error('Error occurred while processing comments:', error)
+
+	isTogglingReaction.value = true;
+
+	const signer = connection().signer.value
+	if (!signer) {
+		// TODO: add state for failure.
+		isTogglingReaction.value = false;
+		return
+	}
+
+	const hash = encode(`${props.postId}-${emoji}`);
+
+	let sig: UndefinedOr<string>;
+	try {
+		sig = await signer.signMessage(hash)
+	} catch(error) {
+		// TODO: add state for failure.
+		console.error('error occurred while signing message:', error);
+		isTogglingReaction.value = false;
+		return
+	}
+
+	const requestInfo = {
+		method: "POST",
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			postId: props.postId,
+			emoji,
+			hash,
+			sig,
+		})
+	}
+
+	const res = await fetch('/api/clubs-plugin-posts/reactions', requestInfo)
+
+	if (res.status === 200) {
+		const emojiReactions = reactions.value[emoji] ?? [];
+		const userAddress = await signer.getAddress()
+		const userAddressExists = emojiReactions.includes(await signer.getAddress());
+
+		// if user address exists, remove it
+		if (userAddressExists) {
+
+			reactions.value = {
+				...reactions.value,
+				[emoji]: emojiReactions.filter((address) => address !== userAddress)
+			}
+
+		} else {
+			// if user address does not exist, add it
+			reactions.value = {
+				...reactions.value,
+				[emoji]: [...emojiReactions, userAddress]
+			}
+		}
+
+
+	} else {
+		console.error('Error occurred while posting reaction:', res)
+	}
+
+	isTogglingReaction.value = false;
+
 }
+
 </script>
 
 <template>
 	<div
-		v-if="reactions && reactions.length > 0"
+		v-if="reactions"
 		class="flex justify-between mb-5"
 	>
 		<div class="flex items-center">
-			<span class="mr-1 text-gray-400 text-4xl">{{ likes }}</span>
-			{{ reactions.length }}
+			<!-- loop through key: value of reactions -->
+			<!-- <div class="mr-4" v-for="(addresses, emoji) in reactions" :key="emoji">
+				<button :on-click="() => toggleReaction(String(emoji))" class="mr-1 text-gray-400 text-xl cursor-pointer">{{ emoji }}</button>
+				<span>{{ addresses.length }}</span>
+			</div> -->
+
+
+			<!-- loop through emoji allow list -->
+			<div class="mr-4" v-for="emoji in emojiAllowList" :key="emoji">
+				<button @click="() => toggleReaction(emoji)" class="mr-1 text-gray-400 text-xl cursor-pointer">{{ emoji }}</button>
+				<span>{{ reactions[emoji]?.length ?? '' }}</span>
+			</div>
+
 		</div>
 	</div>
 </template>
