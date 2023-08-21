@@ -1,6 +1,9 @@
 import type { ClubsGeneralUnit } from '@devprotocol/clubs-core'
 
-export type Option = { readonly key: 'posts'; readonly value: readonly Posts[] }
+export type Option = {
+	readonly key: 'posts'
+	readonly value: readonly Posts[]
+}
 
 export type TokenURIWithId = {
 	readonly id: number
@@ -19,6 +22,7 @@ export type Posts = PostPrimitives & {
 	readonly created_at: Date
 	readonly updated_at: Date
 	readonly comments: readonly Comment[]
+	readonly reactions: Reactions
 }
 
 export type PostOption = {
@@ -54,4 +58,14 @@ export type Membership = {
 	readonly currency: string
 	readonly imageSrc: string
 	readonly payload?: Uint8Array
+}
+
+/**
+ * Reaction is a map of emoji to users who reacted to a post
+ * An emoji as the key, and an array of addresses as the users who reacted to the post
+ * @example
+ * {'🦜': ['0x0', '0x2']}
+ */
+export type Reactions = {
+	readonly [emoji: string]: readonly string[]
 }
