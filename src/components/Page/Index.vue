@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import Post from './Posts/Post.vue'
 import Reactions from './Posts/Reactions.vue'
-import Contents from './Posts/Contents.vue'
+import Contents from './Contents/Contents.vue'
 import Media from './Posts/Media.vue'
 import Comment from './Posts/Comment.vue'
 import type { Option, Posts } from '../../types'
@@ -10,7 +10,7 @@ import Line from '../Common/Line.vue'
 import { decode, fetchProfile } from '@devprotocol/clubs-core'
 import { connection } from '@devprotocol/clubs-core/connection'
 import type { Membership } from '../../types'
-import { hashMessage, Signer, ZeroAddress } from 'ethers'
+import { hashMessage, Signer } from 'ethers'
 import type { UndefinedOr } from '@devprotocol/util-ts'
 import { emojiAllowList } from '../../constants'
 
@@ -144,23 +144,19 @@ const handlePostSuccess = (post: Posts) => {
 			:key="post.id"
 			class="mb-5 p-5 rounded bg-white"
 		>
-			<div
-				v-if="
-					((requireOneOf) =>
-						requireOneOf === undefined ||
-						(Array.isArray(requireOneOf?.value) &&
-							requireOneOf.value.length === 0))(
-						post.options.find((item) => item.key === 'require-one-of'),
-					)
-				"
-			>
+
 				<Contents
 					:propertyAddress="props.propertyAddress"
 					:createdBy="post.created_by"
 					:date="post.created_at"
 					:contents="post.content"
+					:masked="post.masked ?? false"
+					:memberships="props.memberships ?? []"
 				/>
-				<Media :images="post.options.find((item) => item.key === '#images')" />
+				<Media
+					v-if="!post?.masked"
+					:images="post.options.find((item) => item.key === '#images')"
+				/>
 				<Reactions :comments="post.comments" :reactions="post.reactions" :post-id="post.id" :emoji-allow-list="emojiAllowList" />
 				<Line class="mb-5" />
 				<Comment
@@ -169,17 +165,6 @@ const handlePostSuccess = (post: Posts) => {
 					name="Roxy"
 					:comments="post.comments"
 				/>
-			</div>
-			<div v-else>
-				<Contents
-					:propertyAddress="props.propertyAddress"
-					:createdBy="post.created_by"
-					:date="post.created_at"
-					:contents="post.content"
-				/>
-				<Media :required="true" />
-				<Reactions :comments="post.comments" :reactions="post.reactions" :post-id="post.id" :emoji-allow-list="emojiAllowList" />
-			</div>
 		</article>
 	</div>
 </template>

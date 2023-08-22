@@ -1,15 +1,19 @@
 <script lang="ts" setup>
-import dayjs from 'dayjs'
 import DOMPurify from 'dompurify'
 import { marked, type Renderer } from 'marked'
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { ZeroAddress } from 'ethers'
+import ContentsHead from './ContentsHead.vue'
+import Mask from './Mask.vue'
+import type { Membership } from '../../../types'
 
 type Props = {
 	propertyAddress: string
 	createdBy: string
 	date: Date
 	contents: string
+	masked: boolean
+	memberships: Membership[]
 }
 
 const props = defineProps<Props>()
@@ -97,20 +101,11 @@ const fetchProfile = async (address: string) => {
 </script>
 
 <template>
-	<div class="flex items-center justify-between mb-1">
-		<div class="flex items-center">
-			<div
-				v-if="avatar"
-				class="w-12 h-12 rounded-full mr-3 bg-center bg-cover bg-no-repeat"
-				:style="`background-image: url(${avatar})`"
-			/>
-			<p class="text-black text-base font-bold">{{ name }}</p>
-		</div>
-		<p class="text-base text-gray-400">
-			{{ dayjs(props.date).format('DD MMM HH:mm') }}
-		</p>
-	</div>
-	<div class="mb-5 text-3xl font-bold text-black" v-html="content || ''"></div>
+	<ContentsHead :avatar="avatar" :date="props.date" :name="name" />
+
+	<Mask v-if="props.masked" :memberships="props.memberships" />
+
+	<div v-else class="mb-5 text-3xl font-bold text-black" v-html="content || ''"></div>
 </template>
 
 <style scoped></style>

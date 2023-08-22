@@ -39,6 +39,7 @@ export const examplePosts: readonly Posts[] = [
 			'👍': ['0x1', '0x2'],
 			'🦜': ['0x3'],
 		},
+		masked: true,
 	},
 	{
 		id: '2',
@@ -187,5 +188,6 @@ export const examplePosts: readonly Posts[] = [
 			},
 		],
 		reactions: {},
+		masked: true,
 	},
 ]
