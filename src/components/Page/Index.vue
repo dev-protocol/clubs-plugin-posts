@@ -158,8 +158,9 @@ const handlePostSuccess = (post: Posts) => {
 					:images="post.options.find((item) => item.key === '#images')"
 				/>
 				<Reactions :comments="post.comments" :reactions="post.reactions" :post-id="post.id" :emoji-allow-list="emojiAllowList" />
-				<Line class="mb-5" />
+				<Line v-if="!post?.masked" class="mb-5" />
 				<Comment
+					v-if="!post?.masked"
 					:postId="post.id"
 					avatar="https://source.unsplash.com/100x100/?face"
 					name="Roxy"
