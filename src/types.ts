@@ -23,6 +23,7 @@ export type Posts = PostPrimitives & {
 	readonly updated_at: Date
 	readonly comments: readonly Comment[]
 	readonly reactions: Reactions
+	readonly masked?: boolean
 }
 
 export type PostOption = {

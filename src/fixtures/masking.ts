@@ -24,6 +24,7 @@ export const mask = (post: Posts): Posts => {
 			...comment,
 			options: maskOptions(comment.options),
 		})),
+		masked: true,
 	}
 }
 
