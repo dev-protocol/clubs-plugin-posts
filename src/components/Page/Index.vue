@@ -151,8 +151,7 @@ const handlePostSuccess = (post: Posts) => {
 			<Comment
 				v-if="!post?.masked"
 				:postId="post.id"
-				avatar="https://source.unsplash.com/100x100/?face"
-				name="Roxy"
+				:propertyAddress="props.propertyAddress"
 				:comments="post.comments"
 			/>
 		</article>

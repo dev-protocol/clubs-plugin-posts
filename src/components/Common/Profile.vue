@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Avatar } from '@boringer-avatars/vue3'
 import { onMounted, ref } from 'vue'
 import { ZeroAddress } from 'ethers'
 
