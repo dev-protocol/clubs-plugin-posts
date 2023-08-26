@@ -7,7 +7,7 @@ import Comment from './Posts/Comment.vue'
 import type { Option, Posts } from '../../types'
 import { onMounted, ref } from 'vue'
 import Line from '../Common/Line.vue'
-import { decode, fetchProfile } from '@devprotocol/clubs-core'
+import { decode } from '@devprotocol/clubs-core'
 import { connection } from '@devprotocol/clubs-core/connection'
 import type { Membership } from '../../types'
 import { hashMessage, Signer } from 'ethers'
@@ -26,15 +26,9 @@ if (props.options === undefined) {
 	throw new Error('props.options is undefined')
 }
 
-type Profile = {
-	avatar: string
-	username: string
-}
-
 let isLoading = ref<boolean>(true)
 let error = ref<string>('')
 let posts = ref<Posts[]>([])
-let profile = ref<Profile>()
 
 const walletAddress = ref<string | undefined>('')
 
@@ -45,16 +39,8 @@ const handleConnection = async (signer: UndefinedOr<Signer>) => {
 
 	// get wallet address
 	const connectedAddress = await signer.getAddress()
+	// const connectedAddress = '0x57E21bd98612DE0Bd1723F4bf81A944eF7BfF526'
 	walletAddress.value = connectedAddress
-
-	// get profile
-	const res = await fetchProfile(connectedAddress)
-	if (res.error) {
-		console.error(res.error)
-		return
-	}
-
-	profile.value = res.profile
 
 	// sign message
 	const message = connectedAddress
@@ -107,9 +93,8 @@ const handlePostSuccess = (post: Posts) => {
 	<div class="mx-auto w-full max-w-2xl">
 		<section v-if="walletAddress" class="mb-5 p-5 rounded bg-white">
 			<Post
-				:avatar="profile?.avatar ?? ''"
-				:name="profile?.username ?? walletAddress"
 				:propertyAddress="props.propertyAddress"
+				:address="walletAddress"
 				:memberships="props.memberships"
 				@post:success="handlePostSuccess"
 			/>
@@ -144,28 +129,31 @@ const handlePostSuccess = (post: Posts) => {
 			:key="post.id"
 			class="mb-5 p-5 rounded bg-white"
 		>
-
-				<Contents
-					:propertyAddress="props.propertyAddress"
-					:createdBy="post.created_by"
-					:date="post.created_at"
-					:contents="post.content"
-					:masked="post.masked ?? false"
-					:memberships="props.memberships ?? []"
-				/>
-				<Media
-					v-if="!post?.masked"
-					:images="post.options.find((item) => item.key === '#images')"
-				/>
-				<Reactions :comments="post.comments" :reactions="post.reactions" :post-id="post.id" :emoji-allow-list="emojiAllowList" />
-				<Line v-if="!post?.masked" class="mb-5" />
-				<Comment
-					v-if="!post?.masked"
-					:postId="post.id"
-					avatar="https://source.unsplash.com/100x100/?face"
-					name="Roxy"
-					:comments="post.comments"
-				/>
+			<Contents
+				:propertyAddress="props.propertyAddress"
+				:createdBy="post.created_by"
+				:date="post.created_at"
+				:contents="post.content"
+				:masked="post.masked ?? false"
+				:memberships="props.memberships ?? []"
+			/>
+			<Media
+				v-if="!post?.masked"
+				:images="post.options.find((item) => item.key === '#images')"
+			/>
+			<Reactions
+				:comments="post.comments"
+				:reactions="post.reactions"
+				:post-id="post.id"
+				:emoji-allow-list="emojiAllowList"
+			/>
+			<Line v-if="!post?.masked" class="mb-5" />
+			<Comment
+				v-if="!post?.masked"
+				:postId="post.id"
+				:propertyAddress="props.propertyAddress"
+				:comments="post.comments"
+			/>
 		</article>
 	</div>
 </template>

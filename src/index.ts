@@ -8,6 +8,7 @@ import {
 	authenticate,
 	decode,
 	encode,
+	fetchProfile,
 } from '@devprotocol/clubs-core'
 import { default as Admin } from './pages/Admin.astro'
 import Posts from './pages/Posts.astro'
@@ -106,44 +107,40 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 					)
 				}
 
-				// fetch https://clubs.place/api/profile/
-				const response = await fetch(
-					`https://clubs.place/api/profile/${address}`,
-				).catch((e) => {
+				//
+				try {
+					const res = await fetchProfile(address)
+					if (res.error) {
+						return new Response(
+							JSON.stringify({
+								error: res.error,
+								data: null,
+							}),
+							{
+								status: 500,
+							},
+						)
+					}
+
 					return new Response(
 						JSON.stringify({
-							error: e.message,
+							profile: res.profile,
+						}),
+						{
+							status: 200,
+						},
+					)
+				} catch (e) {
+					return new Response(
+						JSON.stringify({
+							error: e,
 							data: null,
 						}),
 						{
 							status: 500,
 						},
 					)
-				})
-
-				const data = await response.json()
-
-				// empty object means the user is not registered
-				if (Object.keys(data).length === 0) {
-					return new Response(
-						JSON.stringify({
-							error: 'User is not registered',
-							data: null,
-						}),
-						{
-							status: 400,
-						},
-					)
 				}
-
-				return new Response(
-					JSON.stringify({
-						profile: data,
-					}),
-					{
-						status: 200,
-					},
-				)
 			},
 		},
 		{

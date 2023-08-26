@@ -1,29 +1,21 @@
 <script lang="ts" setup>
-import dayjs from 'dayjs';
-
+import dayjs from 'dayjs'
+import Profile from '../../Common/Profile.vue'
 
 type Props = {
 	date: Date
-	avatar: string
-	name: string
+	address: string
+	propertyAddress: string
 }
 
-const props = defineProps<Props>()
-
+const { date, address, propertyAddress } = defineProps<Props>()
 </script>
 
 <template>
-		<div class="flex items-center justify-between mb-1">
-		<div class="flex items-center">
-			<div
-				v-if="avatar"
-				class="w-12 h-12 rounded-full mr-3 bg-center bg-cover bg-no-repeat"
-				:style="`background-image: url(${avatar})`"
-			/>
-			<p class="text-black text-base font-bold">{{ name }}</p>
-		</div>
+	<div class="flex items-center justify-between mb-3">
+		<Profile :address="address" :property-address="propertyAddress" />
 		<p class="text-base text-gray-400">
-			{{ dayjs(props.date).format('DD MMM HH:mm') }}
+			{{ dayjs(date).format('DD MMM HH:mm') }}
 		</p>
 	</div>
 </template>

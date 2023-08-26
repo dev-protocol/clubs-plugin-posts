@@ -5,13 +5,11 @@ import AddMedia from './Post/AddMedia.vue'
 import DoPost from './Post/DoPost.vue'
 import Images from './Media/Images.vue'
 import type { Membership, Posts } from '../../../types'
-import { whenDefined } from '@devprotocol/util-ts'
-import { Avatar } from "@boringer-avatars/vue3";
+import Profile from '../../Common/Profile.vue'
 
 type Props = {
-	name: string
-	avatar: string
 	propertyAddress: string
+	address: string
 	memberships?: Membership[]
 }
 
@@ -83,31 +81,9 @@ const handleDeleteImageAll = () => {
 }
 </script>
 <template>
-	<!-- Avatar -->
 	<div class="flex items-center justify-between mb-3">
-		<div class="flex items-center">
-			<template v-if="props.avatar.length > 0">
-				<img
-
-			class="w-12 h-12 rounded-full mr-3"
-			:src="props.avatar"
-			alt="Avatar of Aggre"
-		/>
-			</template>
-			<template v-else>
-				<div class="mr-3">
-					<Avatar
-            :title="false"
-            :size="48"
-            variant="beam"
-            :square="false"
-          />
-				</div>
-			</template>
-			<p class="text-black text-base font-bold">{{ props.name }}</p>
-		</div>
+		<Profile :address="props.address" :property-address="propertyAddress" />
 	</div>
-	<!-- /Avatar -->
 	<!-- 入力フォーム -->
 	<div class="mb-5 text-3xl font-bold text-black">
 		<textarea

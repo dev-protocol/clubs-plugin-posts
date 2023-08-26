@@ -1,8 +1,6 @@
 <script lang="ts" setup>
 import DOMPurify from 'dompurify'
 import { marked, type Renderer } from 'marked'
-import { onMounted, ref } from 'vue'
-import { ZeroAddress } from 'ethers'
 import ContentsHead from './ContentsHead.vue'
 import Mask from './Mask.vue'
 import type { Membership } from '../../../types'
@@ -22,32 +20,6 @@ const content = props.contents
 	? DOMPurify.sanitize(marked.parse(props.contents))
 	: undefined
 
-type Profile = {
-	avatar: string
-	name: string
-}
-
-const profile = ref<Profile>({
-	avatar: '',
-	name: '',
-})
-
-const avatar = ref('')
-const name = ref('')
-
-onMounted(async () => {
-	if (!props.createdBy || props.propertyAddress === ZeroAddress) {
-		avatar.value = 'https://source.unsplash.com/100x100/?face'
-		name.value = 'anonymous'
-	} else {
-		// fetch profile
-		const fetchedProfile = await fetchProfile(props.createdBy)
-
-		avatar.value = fetchedProfile.profile.avatar
-		name.value = fetchedProfile.profile.username
-	}
-})
-
 const renderer = {
 	link(href: string, title: string, text: string) {
 		const url = new URL(href)
@@ -61,51 +33,22 @@ const renderer = {
 } as Renderer
 
 marked.use({ renderer })
-
-const fetchProfile = async (address: string) => {
-	if (address === ZeroAddress) {
-		return {
-			profile: {
-				avatar: 'https://source.unsplash.com/100x100/?face',
-				username: 'anonymous',
-			},
-		}
-	}
-
-	const url = new URL(
-		`/api/clubs-plugin-posts/${props.propertyAddress}/profile?address=${address}`,
-		window.location.origin,
-	)
-
-	return fetch(url.toString())
-		.then((res) => {
-			if (res.status === 200) return res.json()
-			return {
-				profile: {
-					avatar: 'https://source.unsplash.com/100x100/?face',
-					username: 'anonymous',
-				},
-			}
-		})
-		.catch((err) => {
-			console.log('found error')
-			console.error(err)
-			return {
-				profile: {
-					avatar: 'https://source.unsplash.com/100x100/?face',
-					username: 'anonymous',
-				},
-			}
-		})
-}
 </script>
 
 <template>
-	<ContentsHead :avatar="avatar" :date="props.date" :name="name" />
+	<ContentsHead
+		:address="props.createdBy"
+		:property-address="props.propertyAddress"
+		:date="props.date"
+	/>
 
 	<Mask v-if="props.masked" :memberships="props.memberships" />
 
-	<div v-else class="mb-5 text-3xl font-bold text-black" v-html="content || ''"></div>
+	<div
+		v-else
+		class="mb-5 text-3xl font-bold text-black"
+		v-html="content || ''"
+	></div>
 </template>
 
 <style scoped></style>
