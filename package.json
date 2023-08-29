@@ -37,7 +37,7 @@
 		"@boringer-avatars/vue3": "^0.2.1",
 		"@devprotocol/clubs-core": "1.0.10",
 		"@devprotocol/dev-kit": "8.2.6",
-		"@devprotocol/util-ts": "3.1.0",
+		"@devprotocol/util-ts": "4.0.0",
 		"bignumber.js": "9.1.2",
 		"dayjs": "^1.11.8",
 		"dompurify": "^3.0.5",
