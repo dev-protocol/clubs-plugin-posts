@@ -113,7 +113,7 @@ export const addReactionHandler =
 				post.id === postId
 					? {
 							...post,
-							reaction: {
+							reactions: {
 								...post.reactions,
 								// check if emoji exists
 								[emoji]: !post.reactions[emoji]
