@@ -26,7 +26,8 @@ export const getAllPosts: GetAllPosts = async ({ key }) => {
 
 	await client.quit()
 
-	return key === 'posts::694666bb-b2ec-542b-a5d6-65b470e5c494'
+	return key === 'posts::694666bb-b2ec-542b-a5d6-65b470e5c494' &&
+		(!decodedData || decodedData.length === 0)
 		? examplePosts
 		: decodedData
 		? decodedData
