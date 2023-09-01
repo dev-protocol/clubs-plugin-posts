@@ -38,7 +38,7 @@ import { addReactionHandler } from './apiHandler/reactions'
 
 export const getPagePaths: ClubsFunctionGetPagePaths = async (
 	options,
-	{ propertyAddress },
+	{ propertyAddress, adminRolePoints },
 	{ getPluginConfigById },
 ) => {
 	const [membershipsPlugin] = getPluginConfigById(
@@ -52,7 +52,7 @@ export const getPagePaths: ClubsFunctionGetPagePaths = async (
 		{
 			paths: [''],
 			component: Posts,
-			props: { options, propertyAddress, memberships },
+			props: { options, propertyAddress, memberships, adminRolePoints },
 			// `propertyAddress` is required for calling post API, so passed to the FE here.
 		},
 	]
