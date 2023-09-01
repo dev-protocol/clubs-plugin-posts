@@ -10,14 +10,16 @@ import Line from '../Common/Line.vue'
 import { decode } from '@devprotocol/clubs-core'
 import { connection } from '@devprotocol/clubs-core/connection'
 import type { Membership } from '../../types'
-import { hashMessage, Signer } from 'ethers'
-import type { UndefinedOr } from '@devprotocol/util-ts'
+import { ContractRunner, hashMessage, Signer } from 'ethers'
+import { whenDefined, type UndefinedOr } from '@devprotocol/util-ts'
 import { emojiAllowList } from '../../constants'
+import { clientsProperty } from '@devprotocol/dev-kit'
 
 type Props = {
 	options: Option[]
 	propertyAddress: string
 	memberships?: Membership[]
+	adminRolePoints: number
 }
 
 const props = defineProps<Props>()
@@ -31,6 +33,24 @@ let error = ref<string>('')
 let posts = ref<Posts[]>([])
 
 const walletAddress = ref<string | undefined>('')
+const hasEditableRole = ref(false)
+
+const MULTIPLY = 1000000n
+const testPermission = async (
+	user: string,
+	provider: ContractRunner,
+): Promise<boolean> => {
+	const [a, b] = await clientsProperty(provider, props.propertyAddress)
+	const [balance, totalSupply] = await Promise.all([
+		whenDefined(a ?? b, (client) => client.balanceOf(user)),
+		whenDefined(a ?? b, (client) => client.totalSupply()),
+	])
+	const share =
+		(BigInt(balance ?? 0) * MULTIPLY) /
+		BigInt(totalSupply ?? '10000000000000000000000000')
+	const expected = (BigInt(props.adminRolePoints) * MULTIPLY) / 100n
+	return share >= expected
+}
 
 const handleConnection = async (signer: UndefinedOr<Signer>) => {
 	if (!signer) {
@@ -50,6 +70,8 @@ const handleConnection = async (signer: UndefinedOr<Signer>) => {
 	const hash = hashMessage(message)
 
 	fetchPosts({ hash, sig })
+
+	hasEditableRole.value = await testPermission(walletAddress.value, signer)
 }
 
 const fetchPosts = async ({ hash, sig }: { hash?: string; sig?: string }) => {
@@ -91,7 +113,10 @@ const handlePostSuccess = (post: Posts) => {
 
 <template>
 	<div class="mx-auto w-full max-w-2xl">
-		<section v-if="walletAddress" class="mb-5 p-5 rounded bg-white">
+		<section
+			v-if="hasEditableRole && walletAddress"
+			class="mb-5 p-5 rounded bg-white"
+		>
 			<Post
 				:propertyAddress="props.propertyAddress"
 				:address="walletAddress"
