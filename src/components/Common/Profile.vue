@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { ZeroAddress } from 'ethers'
+import { Avatar } from '@boringer-avatars/vue3'
 
 type Props = {
 	propertyAddress: string
