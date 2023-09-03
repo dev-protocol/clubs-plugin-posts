@@ -71,13 +71,12 @@ watch(images, () => {
 </script>
 
 <template>
-	<div :id="galleryId" class="flex flex-wrap gap-y-1 gap-x-1">
+	<div :id="galleryId" class="flex flex-wrap gap-y-1 gap-x-1 w-full">
 		<span
 			v-if="galleryImages"
 			v-for="(image, index) in galleryImages"
-			:style="{ width: images.length === 1 ? '100%' : 'calc(50% - 2px)' }"
 			:key="image.src + image.w + image.h"
-			class="relative bg-gray-100 overflow-hidden"
+			class="relative bg-gray-100 overflow-hidden w-[calc(50%_-_2px)] only:w-full"
 		>
 			<a
 				:data-pswp-width="image.w"
@@ -117,6 +116,13 @@ watch(images, () => {
 				</svg>
 			</div>
 			<!-- /delete media -->
+		</span>
+
+		<span
+			v-if="images && !galleryImages"
+			v-for="image in images"
+			class="block animate-pulse rounded bg-gray-500/60 h-48 w-[calc(50%_-_2px)] only:w-full"
+		>
 		</span>
 	</div>
 </template>
