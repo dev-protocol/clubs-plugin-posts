@@ -172,7 +172,7 @@ const handlePostSuccess = (post: Posts) => {
 				:post-id="post.id"
 				:emoji-allow-list="emojiAllowList"
 			/>
-			<Line v-if="!post?.masked" class="mb-5" />
+			<Line v-if="!post?.masked" class="my-5" />
 			<Comment
 				v-if="!post?.masked"
 				:postId="post.id"
