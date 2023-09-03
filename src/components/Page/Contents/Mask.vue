@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Membership } from '../../../types';
+import type { Membership } from '../../../types'
 
 type Props = {
 	memberships?: Membership[]
@@ -7,37 +7,41 @@ type Props = {
 
 const props = defineProps<Props>()
 
-const {memberships} = props
-
+const { memberships } = props
 </script>
 
 <template>
-	<div class="bg-mask rounded-xl pt-8 pb-12 flex justify-center flex-col mb-2">
+	<div class="bg-mask rounded-xl p-4 flex justify-center flex-col mb-2">
+		<p class="text-white text-center mb-4 sm:mb-4">
+			Unlock this post by becoming a member.
+		</p>
 
-		<p class="text-white text-center mb-8">Unlock this post by becoming a member.</p>
+		<div class="flex flex-col sm:flex-row justify-center gap-2 sm:gap-4">
+			<div
+				v-for="membership in memberships"
+				class="flex flex-row sm:flex-col gap-4 sm:gap-2 p-3 sm:p-4 bg-black rounded-xl text-white"
+			>
+				<div
+					class="w-12 sm:w-32 sm-12 sm:h-32 bg-center bg-no-repeat bg-contain rounded-xl"
+					:style="`background-image: url(${membership.imageSrc})`"
+				/>
 
-		<div class="flex justify-center">
-			<div class="bg-black rounded-xl text-white p-4 mx-2" v-for="membership in memberships">
+				<div class="flex flex-col flex-grow justify-between">
+					<p class="text-sm">
+						{{ membership.name }}
+					</p>
 
-				<div class="rounded-xl overflow-hidden">
-					<img :src="membership.imageSrc" class="w-32" alt="Nature" />
+					<p class="w-full">{{ membership.price }} {{ membership.currency }}</p>
 				</div>
-
-				<div class="mb-4 mt-2">
-					<span class="text-sm">{{membership.name}}</span>
-				</div>
-
-				<span>{{ membership.price }} {{ membership.currency }}</span>
 			</div>
 		</div>
-
 	</div>
 </template>
 
 <style lang="scss">
-  .bg-mask {
-    background-image: url('../../../assets/images/mask-post-bg.png');
-		background-repeat: no-repeat;
-		background-size: cover;
-  }
+.bg-mask {
+	background-image: url('../../../assets/images/mask-post-bg.png');
+	background-repeat: no-repeat;
+	background-size: cover;
+}
 </style>
