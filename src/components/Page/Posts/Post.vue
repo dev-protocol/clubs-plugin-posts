@@ -84,6 +84,17 @@ const handleDeleteImageAll = () => {
 	<div class="flex items-center justify-between mb-3">
 		<Profile :address="props.address" :property-address="propertyAddress" />
 	</div>
+
+	<!-- title -->
+	<div class="text-3xl font-bold text-black">
+		<input
+			v-model="title"
+			class="px-2 py-2 w-full text-gray-700 border-none focus:outline-none focus:border-indigo-500"
+			type="text"
+			placeholder="Title"
+		/>
+	</div>
+
 	<!-- 入力フォーム -->
 	<div class="mb-5 text-3xl font-bold text-black">
 		<textarea

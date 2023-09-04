@@ -12,6 +12,7 @@ type Props = {
 	contents: string
 	masked: boolean
 	memberships: Membership[]
+	title: string
 }
 
 const props = defineProps<Props>()
@@ -40,6 +41,7 @@ marked.use({ renderer })
 		:address="props.createdBy"
 		:property-address="props.propertyAddress"
 		:date="props.date"
+		:title="props.title"
 	/>
 
 	<Mask v-if="props.masked" :memberships="props.memberships" />
