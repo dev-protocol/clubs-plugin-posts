@@ -161,6 +161,7 @@ const handlePostSuccess = (post: Posts) => {
 				:contents="post.content"
 				:masked="post.masked ?? false"
 				:memberships="props.memberships ?? []"
+				:title="post.title"
 			/>
 			<Media
 				v-if="!post?.masked"

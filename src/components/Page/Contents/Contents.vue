@@ -4,6 +4,7 @@ import { marked, type Renderer } from 'marked'
 import ContentsHead from './ContentsHead.vue'
 import Mask from './Mask.vue'
 import type { Membership } from '../../../types'
+import { prop } from 'ramda'
 
 type Props = {
 	propertyAddress: string
@@ -12,6 +13,7 @@ type Props = {
 	contents: string
 	masked: boolean
 	memberships: Membership[]
+	title: string
 }
 
 const props = defineProps<Props>()
@@ -40,6 +42,7 @@ marked.use({ renderer })
 		:address="props.createdBy"
 		:property-address="props.propertyAddress"
 		:date="props.date"
+		:title="props.title"
 	/>
 
 	<Mask v-if="props.masked" :memberships="props.memberships" />

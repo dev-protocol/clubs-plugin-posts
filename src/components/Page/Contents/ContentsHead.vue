@@ -6,9 +6,10 @@ type Props = {
 	date: Date
 	address: string
 	propertyAddress: string
+	title?: string
 }
 
-const { date, address, propertyAddress } = defineProps<Props>()
+const { date, address, propertyAddress, title } = defineProps<Props>()
 </script>
 
 <template>
@@ -17,5 +18,8 @@ const { date, address, propertyAddress } = defineProps<Props>()
 		<p class="text-base text-gray-400">
 			{{ dayjs(date).format('DD MMM HH:mm') }}
 		</p>
+	</div>
+	<div v-if="title" class="mb-3 text-3xl font-bold text-black">
+		{{ title }}
 	</div>
 </template>
