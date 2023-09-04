@@ -4,7 +4,6 @@ import { marked, type Renderer } from 'marked'
 import ContentsHead from './ContentsHead.vue'
 import Mask from './Mask.vue'
 import type { Membership } from '../../../types'
-import { prop } from 'ramda'
 
 type Props = {
 	propertyAddress: string
