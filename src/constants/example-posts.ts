@@ -109,7 +109,7 @@ export const examplePosts: readonly Posts[] = [
 				id: '1',
 				options: [],
 				content: 'This is a sample comment.#3-1',
-				created_by: ZeroAddress,
+				created_by: '0x57E21bd98612DE0Bd1723F4bf81A944eF7BfF526',
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			},

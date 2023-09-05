@@ -4,7 +4,6 @@ import { encode } from '@devprotocol/clubs-core'
 import { ref } from 'vue'
 import { connection } from '@devprotocol/clubs-core/connection'
 import Profile from '../../Common/Profile.vue'
-import Line from '../../Common/Line.vue'
 import type { Comment, CommentPrimitives } from '../../../types'
 
 type Props = {
@@ -105,7 +104,7 @@ const postComment = async () => {
 				class="mb-5 last:mb-0"
 			>
 				<div class="flex items-center justify-between mb-1">
-					<Profile :address="comment.created_by" property-address="" />
+					<Profile :address="comment.created_by" :property-address="props.propertyAddress" />
 					<p class="text-base text-gray-400">
 						{{ dayjs(comment.created_at).format('DD MMM HH:mm') }}
 					</p>
