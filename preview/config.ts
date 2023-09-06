@@ -49,15 +49,20 @@ export default () =>
 				id: 'clubs-plugin-posts',
 				options: [
 					{
-						key: 'database',
-						value: {
-							type: 'encoded:redis',
-							key: `posts::${uuidv5(
-								toUtf8Bytes('EXAMPLE'),
-								uuidv5('EXAMPLE_NAMESPACE', uuidv5.URL),
-							)}`, // > posts::694666bb-b2ec-542b-a5d6-65b470e5c494
-						},
-					} as OptionsDatabase,
+						key: 'feeds',
+						value: [
+							{
+								id: 'default',
+								database: {
+									type: 'encoded:redis',
+									key: `posts::${uuidv5(
+										toUtf8Bytes('EXAMPLE'),
+										uuidv5('EXAMPLE_NAMESPACE', uuidv5.URL),
+									)}`, // > posts::694666bb-b2ec-542b-a5d6-65b470e5c494
+								},
+							},
+						] as readonly OptionsDatabase[],
+					},
 				],
 			},
 			{

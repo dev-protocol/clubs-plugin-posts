@@ -80,13 +80,16 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 ) => {
 	const namespace = uuidv5(config.url, uuidv5.URL)
 	const previousConfiguration = encode(config)
-	const db = (
-		options.find(
-			({ key }: Readonly<{ readonly key: string }>) => key === 'database',
-		) as UndefinedOr<OptionsDatabase>
-	)?.value
-	const dbType = db?.type || 'encoded:redis'
-	const dbKey = db?.key || ''
+	const dbs = options.find(
+		({ key }: Readonly<{ readonly key: string }>) => key === 'feeds',
+	)?.value as UndefinedOr<readonly OptionsDatabase[]>
+
+	if (!dbs) {
+		return []
+	}
+
+	const dbType = dbs[0]?.database.type || 'encoded:redis'
+	const dbKey = dbs[0]?.database.key || ''
 
 	return [
 		{
