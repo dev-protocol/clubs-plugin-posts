@@ -1,5 +1,5 @@
-import { verifyMessage } from 'ethers'
-import type { ClubsConfiguration } from '@devprotocol/clubs-core'
+import { verifyMessage, getDefaultProvider } from 'ethers'
+import { authenticate, ClubsConfiguration } from '@devprotocol/clubs-core'
 
 import { getAllPosts, setAllPosts } from '../db'
 import type { Posts, Reactions } from '../types'
@@ -57,13 +57,12 @@ export const addReactionHandler =
 
 		try {
 			// === AUTH ===
-			// @TODO: remove comment from authentication.
-			const authenticated = true // await authenticate({
-			// 	message: hash,
-			// 	signature: sig,
-			// 	previousConfiguration: previousEncodedConf,
-			// 	provider: getDefaultProvider(conf.rpcUrl),
-			// })
+			const authenticated = await authenticate({
+				message: hash,
+				signature: sig,
+				previousConfiguration: previousEncodedConf,
+				provider: getDefaultProvider(conf.rpcUrl),
+			})
 			if (!authenticated) {
 				return new Response(
 					JSON.stringify({
