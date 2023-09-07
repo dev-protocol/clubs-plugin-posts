@@ -71,6 +71,7 @@ export const getAdminPaths: ClubsFunctionGetAdminPaths = async (options) => {
 export const meta: ClubsPluginMeta = {
 	id: 'clubs-plugin-posts',
 	displayName: 'Clubs Posts',
+	description: 'Add an interactive posts feed to your Club',
 	category: ClubsPluginCategory.Uncategorized,
 }
 
