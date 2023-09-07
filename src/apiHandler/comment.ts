@@ -39,13 +39,12 @@ export const addCommentHandler =
 
 		try {
 			// === AUTH ===
-			// @TODO: remove comment from authentication.
-			const authenticated = true // await authenticate({
-			// 	message: hash,
-			// 	signature: sig,
-			// 	previousConfiguration: previousEncodedConf,
-			// 	provider: getDefaultProvider(conf.rpcUrl),
-			// })
+			const authenticated = await authenticate({
+				message: hash,
+				signature: sig,
+				previousConfiguration: previousEncodedConf,
+				provider: getDefaultProvider(conf.rpcUrl),
+			})
 			if (!authenticated) {
 				return new Response(
 					JSON.stringify({
