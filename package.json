@@ -42,7 +42,7 @@
 		"dayjs": "^1.11.8",
 		"dompurify": "^3.0.5",
 		"ethers": "^6.6.4",
-		"marked": "8.0.1",
+		"marked": "9.0.0",
 		"photoswipe": "5.4.0",
 		"ramda": "0.29.0",
 		"redis": "^4.6.7",
