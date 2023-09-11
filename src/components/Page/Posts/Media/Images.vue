@@ -128,7 +128,7 @@ watch(images, () => {
 </template>
 
 <style>
-.pswp__container {
+.pswp__item {
 	background-color: black;
 }
 </style>
