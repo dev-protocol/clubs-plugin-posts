@@ -1,12 +1,15 @@
-import { ZeroAddress, toUtf8Bytes } from 'ethers'
+import { getDefaultProvider, toUtf8Bytes } from 'ethers'
 import type { Posts } from '../types'
+import { Wallet } from 'ethers'
+
+const randomAddress = () => Wallet.createRandom(getDefaultProvider(1)).address
 
 export const examplePosts: readonly Posts[] = [
 	{
 		id: '1',
 		title: 'Hello World',
 		content: '#1 This is a sample post.',
-		created_by: '0x57E21bd98612DE0Bd1723F4bf81A944eF7BfF526',
+		created_by: randomAddress(),
 		created_at: new Date('2021-01-01T01:34:56Z'),
 		updated_at: new Date('2021-01-01T01:34:56Z'),
 		options: [
@@ -26,11 +29,11 @@ export const examplePosts: readonly Posts[] = [
 			},
 		],
 		comments: [
-			...new Array(100).fill('').map((_, i) => ({
+			...new Array(12).fill('').map((_, i) => ({
 				content: 'abc',
 				id: `i-${i}`,
 				options: [{ key: 'reaction', value: '👍' }],
-				created_by: ZeroAddress,
+				created_by: randomAddress(),
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			})),
@@ -45,7 +48,7 @@ export const examplePosts: readonly Posts[] = [
 		id: '2',
 		title: 'Hello World',
 		content: '#2 This is a sample post.',
-		created_by: ZeroAddress,
+		created_by: randomAddress(),
 		created_at: new Date('2021-01-01T01:34:56Z'),
 		updated_at: new Date('2021-01-01T01:34:56Z'),
 		options: [
@@ -63,7 +66,7 @@ export const examplePosts: readonly Posts[] = [
 				id: '1',
 				options: [],
 				content: 'This is a sample comment #2-1.',
-				created_by: ZeroAddress,
+				created_by: randomAddress(),
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			},
@@ -71,7 +74,7 @@ export const examplePosts: readonly Posts[] = [
 				id: '2',
 				options: [],
 				content: 'This is a sample comment #2-2.',
-				created_by: ZeroAddress,
+				created_by: randomAddress(),
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			},
@@ -79,7 +82,7 @@ export const examplePosts: readonly Posts[] = [
 				id: `i-${i}`,
 				content: 'abc',
 				options: [{ key: 'reaction', value: '👍' }],
-				created_by: ZeroAddress,
+				created_by: randomAddress(),
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			})),
@@ -92,7 +95,7 @@ export const examplePosts: readonly Posts[] = [
 		id: '3',
 		title: 'Hi there',
 		content: 'Good morning. This is a sample post.#3',
-		created_by: ZeroAddress,
+		created_by: randomAddress(),
 		created_at: new Date('2021-01-01T01:34:56Z'),
 		updated_at: new Date('2021-01-01T01:34:56Z'),
 		options: [
@@ -117,7 +120,7 @@ export const examplePosts: readonly Posts[] = [
 				id: `i-${i}`,
 				content: 'abc',
 				options: [{ key: 'reaction', value: '👍' }],
-				created_by: ZeroAddress,
+				created_by: randomAddress(),
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			})),
@@ -130,7 +133,7 @@ export const examplePosts: readonly Posts[] = [
 		id: '4',
 		title: 'Hey guys',
 		content: 'Good evening. This is a sample post.#4',
-		created_by: ZeroAddress,
+		created_by: randomAddress(),
 		created_at: new Date('2021-01-01T01:34:56Z'),
 		updated_at: new Date('2021-01-01T01:34:56Z'),
 		options: [
@@ -144,7 +147,7 @@ export const examplePosts: readonly Posts[] = [
 				id: '1',
 				options: [],
 				content: 'This is a sample comment.#4-1',
-				created_by: ZeroAddress,
+				created_by: randomAddress(),
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			},
@@ -152,7 +155,7 @@ export const examplePosts: readonly Posts[] = [
 				id: `i-${i}`,
 				content: 'abc',
 				options: [{ key: 'reaction', value: '👍' }],
-				created_by: ZeroAddress,
+				created_by: randomAddress(),
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			})),
@@ -166,7 +169,7 @@ export const examplePosts: readonly Posts[] = [
 		id: '5',
 		title: 'Secret',
 		content: 'Good evening. This is a sample secret pos... #5',
-		created_by: ZeroAddress,
+		created_by: randomAddress(),
 		created_at: new Date('2021-01-01T01:34:56Z'),
 		updated_at: new Date('2021-01-01T01:34:56Z'),
 		options: [
@@ -182,7 +185,7 @@ export const examplePosts: readonly Posts[] = [
 				id: '1',
 				content: '',
 				options: [],
-				created_by: ZeroAddress,
+				created_by: randomAddress(),
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			},
