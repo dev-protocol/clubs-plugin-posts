@@ -1,5 +1,5 @@
-import { verifyMessage, getDefaultProvider } from 'ethers'
-import { authenticate, ClubsConfiguration } from '@devprotocol/clubs-core'
+import { verifyMessage } from 'ethers'
+import type { ClubsConfiguration } from '@devprotocol/clubs-core'
 
 import { getAllPosts, setAllPosts } from '../db'
 import type { Posts, Reactions } from '../types'

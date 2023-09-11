@@ -9,7 +9,7 @@ import {
 	decode,
 	encode,
 	fetchProfile,
-	ClubsApiPaths,
+	type ClubsApiPaths,
 } from '@devprotocol/clubs-core'
 import { default as Admin } from './pages/Admin.astro'
 import Posts from './pages/Posts.astro'

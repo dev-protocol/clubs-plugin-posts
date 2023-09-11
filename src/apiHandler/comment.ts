@@ -1,10 +1,6 @@
 import { v5 as uuidv5 } from 'uuid'
-import { getDefaultProvider, randomBytes, verifyMessage } from 'ethers'
-import {
-	authenticate,
-	decode,
-	type ClubsConfiguration,
-} from '@devprotocol/clubs-core'
+import { randomBytes, verifyMessage } from 'ethers'
+import { decode, type ClubsConfiguration } from '@devprotocol/clubs-core'
 
 import { getAllPosts, setAllPosts } from '../db'
 import type { CommentPrimitives, Comment, Posts } from '../types'
