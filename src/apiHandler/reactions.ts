@@ -14,7 +14,6 @@ export type AddReactionRequestJson = Readonly<{
 
 export const addReactionHandler =
 	(
-		previousEncodedConf: string,
 		conf: ClubsConfiguration,
 		dbQueryType: 'encoded:redis',
 		dbQueryKey: string,
@@ -56,24 +55,6 @@ export const addReactionHandler =
 		}
 
 		try {
-			// === AUTH ===
-			const authenticated = await authenticate({
-				message: hash,
-				signature: sig,
-				previousConfiguration: previousEncodedConf,
-				provider: getDefaultProvider(conf.rpcUrl),
-			})
-			if (!authenticated) {
-				return new Response(
-					JSON.stringify({
-						error: 'Auth failed',
-					}),
-					{
-						status: 401,
-					},
-				)
-			}
-
 			// get user address
 			const userAddress = verifyMessage(hash, sig)
 

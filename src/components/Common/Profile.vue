@@ -4,7 +4,7 @@ import { ZeroAddress } from 'ethers'
 import { Avatar } from '@boringer-avatars/vue3'
 
 type Props = {
-	propertyAddress: string
+	feedId: string
 	address: string
 }
 
@@ -25,7 +25,7 @@ onMounted(() => {
 
 const fetchProfile = async (address: string) => {
 	const url = new URL(
-		`/api/clubs-plugin-posts/${props.propertyAddress}/profile?address=${address}`,
+		`/api/devprotocol:clubs:plugin:posts/${props.feedId}/profile?address=${address}`,
 		window.location.origin,
 	)
 

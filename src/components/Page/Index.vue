@@ -17,6 +17,7 @@ import { clientsProperty } from '@devprotocol/dev-kit'
 
 type Props = {
 	options: Option[]
+	feedId: string
 	propertyAddress: string
 	memberships?: Membership[]
 	adminRolePoints: number
@@ -78,7 +79,7 @@ const fetchPosts = async ({ hash, sig }: { hash?: string; sig?: string }) => {
 	const query =
 		hash && sig ? new URLSearchParams({ hash, sig }) : new URLSearchParams()
 	const url = new URL(
-		`/api/clubs-plugin-posts/${props.propertyAddress}/message?${query}`,
+		`/api/devprotocol:clubs:plugin:posts/${props.feedId}/message?${query}`,
 		window.location.origin,
 	)
 
@@ -118,7 +119,7 @@ const handlePostSuccess = (post: Posts) => {
 			class="mb-5 p-5 rounded bg-white"
 		>
 			<Post
-				:propertyAddress="props.propertyAddress"
+				:feedId="props.feedId"
 				:address="walletAddress"
 				:memberships="props.memberships"
 				@post:success="handlePostSuccess"
@@ -155,7 +156,7 @@ const handlePostSuccess = (post: Posts) => {
 			class="mb-5 p-5 rounded bg-white"
 		>
 			<Contents
-				:propertyAddress="props.propertyAddress"
+				:feedId="props.feedId"
 				:createdBy="post.created_by"
 				:date="post.created_at"
 				:contents="post.content"
@@ -168,6 +169,7 @@ const handlePostSuccess = (post: Posts) => {
 				:images="post.options.find((item) => item.key === '#images')"
 			/>
 			<Reactions
+				:feedId="props.feedId"
 				:comments="post.comments"
 				:reactions="post.reactions"
 				:post-id="post.id"
@@ -176,8 +178,8 @@ const handlePostSuccess = (post: Posts) => {
 			<Line v-if="!post?.masked" class="my-5" />
 			<Comment
 				v-if="!post?.masked"
+				:feedId="props.feedId"
 				:postId="post.id"
-				:propertyAddress="props.propertyAddress"
 				:comments="post.comments"
 			/>
 		</article>

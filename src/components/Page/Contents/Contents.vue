@@ -6,7 +6,7 @@ import Mask from './Mask.vue'
 import type { Membership } from '../../../types'
 
 type Props = {
-	propertyAddress: string
+	feedId: string
 	createdBy: string
 	date: Date
 	contents: string
@@ -39,7 +39,7 @@ marked.use({ renderer })
 <template>
 	<ContentsHead
 		:address="props.createdBy"
-		:property-address="props.propertyAddress"
+		:feedId="props.feedId"
 		:date="props.date"
 		:title="props.title"
 	/>

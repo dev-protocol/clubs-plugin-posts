@@ -8,7 +8,7 @@ import { encode, decode } from '@devprotocol/clubs-core'
 import { whenDefined } from '@devprotocol/util-ts'
 
 type Props = {
-	propertyAddress: string
+	feedId: string
 	images: string[]
 	content: string
 	title: string
@@ -50,7 +50,7 @@ const onClickPost = async () => {
 
 	// fetchで /message.jsonをpostしてasync/awaitでレスポンスを取得する
 	const response = await fetch(
-		`/api/clubs-plugin-posts/${props.propertyAddress}/message`,
+		`/api/devprotocol:clubs:plugin:posts/${props.feedId}/message`,
 		{
 			method: 'POST',
 			headers: {

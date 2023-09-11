@@ -46,7 +46,7 @@ export default () =>
 				options: [],
 			},
 			{
-				id: 'clubs-plugin-posts',
+				id: 'devprotocol:clubs:plugin:posts',
 				options: [
 					{
 						key: 'feeds',
