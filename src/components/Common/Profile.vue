@@ -58,6 +58,7 @@ const fetchProfile = async (address: string) => {
 				:title="false"
 				:size="48"
 				variant="beam"
+				:name="props.address"
 				:square="false"
 			/>
 		</template>
