@@ -18,7 +18,6 @@ export type AddCommentRequestJson = Readonly<{
 
 export const addCommentHandler =
 	(
-		previousEncodedConf: string,
 		conf: ClubsConfiguration,
 		dbQueryType: 'encoded:redis',
 		dbQueryKey: string,
@@ -38,24 +37,6 @@ export const addCommentHandler =
 		}
 
 		try {
-			// === AUTH ===
-			const authenticated = await authenticate({
-				message: hash,
-				signature: sig,
-				previousConfiguration: previousEncodedConf,
-				provider: getDefaultProvider(conf.rpcUrl),
-			})
-			if (!authenticated) {
-				return new Response(
-					JSON.stringify({
-						error: 'Auth failed',
-					}),
-					{
-						status: 401,
-					},
-				)
-			}
-
 			// === COMMENTS ===
 			const date = new Date()
 			const namespace = uuidv5(conf.url, uuidv5.URL)

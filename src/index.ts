@@ -364,7 +364,6 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 						paths: [db.id, 'comment'], // This will be [POST] /api/clubs-plugin-posts/comment
 						method: 'POST',
 						handler: addCommentHandler(
-							previousConfiguration,
 							config,
 							db.database.type,
 							db.database.key,
@@ -374,7 +373,6 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 						paths: [db.id, 'reactions'], // This will be [POST] /api/clubs-plugin-posts/reactions
 						method: 'POST',
 						handler: addReactionHandler(
-							previousConfiguration,
 							config,
 							db.database.type,
 							db.database.key,
