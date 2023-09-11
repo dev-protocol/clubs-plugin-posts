@@ -50,7 +50,7 @@
 		"uuid": "^9.0.0"
 	},
 	"devDependencies": {
-		"@astrojs/svelte": "^3.0.0",
+		"@astrojs/svelte": "^4.0.0",
 		"@astrojs/tailwind": "5.0.0",
 		"@astrojs/vue": "2.2.1",
 		"@ava/typescript": "4.1.0",
