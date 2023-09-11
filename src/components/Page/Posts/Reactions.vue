@@ -6,6 +6,7 @@ import { encode } from '@devprotocol/clubs-core'
 import type { UndefinedOr } from '@devprotocol/util-ts'
 
 type Props = {
+	feedId: string
 	postId: string
 	reactions: Reactions
 	emojiAllowList: string[]
@@ -56,7 +57,10 @@ const toggleReaction = async (emoji: string) => {
 		}),
 	}
 
-	const res = await fetch('/api/clubs-plugin-posts/reactions', requestInfo)
+	const res = await fetch(
+		`/api/clubs-plugin-posts/${props.feedId}/reactions`,
+		requestInfo,
+	)
 
 	if (res.status === 200) {
 		const emojiReactions = reactions.value[emoji] ?? []

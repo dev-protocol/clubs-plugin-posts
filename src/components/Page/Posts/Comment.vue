@@ -7,7 +7,7 @@ import Profile from '../../Common/Profile.vue'
 import type { Comment, CommentPrimitives } from '../../../types'
 
 type Props = {
-	propertyAddress: string
+	feedId: string
 	postId: string
 	comments: readonly Comment[]
 }
@@ -63,7 +63,10 @@ const postComment = async () => {
 
 	let response: Response
 	try {
-		response = await fetch('/api/clubs-plugin-posts/comment', requestInfo)
+		response = await fetch(
+			`/api/clubs-plugin-posts/${props.feedId}/comment`,
+			requestInfo,
+		)
 
 		const json = await response.json()
 
@@ -104,7 +107,7 @@ const postComment = async () => {
 				class="mb-5 last:mb-0"
 			>
 				<div class="flex items-center justify-between mb-1">
-					<Profile :address="comment.created_by" :property-address="props.propertyAddress" />
+					<Profile :feedId="props.feedId" :address="comment.created_by" />
 					<p class="text-base text-gray-400">
 						{{ dayjs(comment.created_at).format('DD MMM HH:mm') }}
 					</p>

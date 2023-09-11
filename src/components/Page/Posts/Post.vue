@@ -8,7 +8,7 @@ import type { Membership, Posts } from '../../../types'
 import Profile from '../../Common/Profile.vue'
 
 type Props = {
-	propertyAddress: string
+	feedId: string
 	address: string
 	memberships?: Membership[]
 }
@@ -82,7 +82,7 @@ const handleDeleteImageAll = () => {
 </script>
 <template>
 	<div class="flex items-center justify-between mb-3">
-		<Profile :address="props.address" :property-address="propertyAddress" />
+		<Profile :address="props.address" :feedId="props.feedId" />
 	</div>
 
 	<!-- title -->
@@ -192,7 +192,7 @@ const handleDeleteImageAll = () => {
 		<!-- /画像ボタン -->
 		<!-- Postボタン -->
 		<DoPost
-			:propertyAddress="props.propertyAddress"
+			:feedId="props.feedId"
 			:images="uploadImages"
 			:content="contents"
 			:title="title"

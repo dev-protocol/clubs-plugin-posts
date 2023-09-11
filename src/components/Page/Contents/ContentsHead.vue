@@ -5,16 +5,16 @@ import Profile from '../../Common/Profile.vue'
 type Props = {
 	date: Date
 	address: string
-	propertyAddress: string
+	feedId: string
 	title?: string
 }
 
-const { date, address, propertyAddress, title } = defineProps<Props>()
+const { date, address, feedId, title } = defineProps<Props>()
 </script>
 
 <template>
 	<div class="flex items-center justify-between mb-3">
-		<Profile :address="address" :property-address="propertyAddress" />
+		<Profile :address="address" :feedId="feedId" />
 		<p class="text-base text-gray-400">
 			{{ dayjs(date).format('DD MMM HH:mm') }}
 		</p>
