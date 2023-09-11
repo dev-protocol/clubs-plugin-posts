@@ -4,11 +4,23 @@
 
 ```ts
 {
-	key: 'database',
-	value: {
-		type: 'encoded:redis', // Will support more DBs in the future
-		key: 'DATABASE_KEY', // i.g., posts::694666bb-b2ec-542b-a5d6-65b470e5c494
-	},
+	key: 'feeds',
+	value: [
+		{
+			id: 'default',
+			database: {
+				type: 'encoded:redis',
+				key: 'DATABASE_KEY', // i.g., posts::694666bb-b2ec-542b-a5d6-65b470e5c494
+			}
+		},
+		{
+			id: 'my-hobby',
+			database: {
+				type: 'encoded:redis',
+				key: 'DATABASE_KEY', // i.g., posts::694666bb-b2ec-542b-a5d6-65b470e5c494
+			}
+		}
+	]
 }
 ```
 
