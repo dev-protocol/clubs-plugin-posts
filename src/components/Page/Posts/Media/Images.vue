@@ -127,4 +127,8 @@ watch(images, () => {
 	</div>
 </template>
 
-<style scoped></style>
+<style>
+.pswp__container {
+	background-color: black;
+}
+</style>

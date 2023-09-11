@@ -5,6 +5,7 @@ import { ref } from 'vue'
 import { connection } from '@devprotocol/clubs-core/connection'
 import Profile from '../../Common/Profile.vue'
 import type { Comment, CommentPrimitives } from '../../../types'
+import IconSend from '../../../assets/images/icon-send.svg'
 
 type Props = {
 	feedId: string
@@ -123,7 +124,7 @@ const postComment = async () => {
 				class="px-2 py-2 w-11/12 text-base text-gray-700 border border-gray-400 rounded focus:outline-none focus:border-indigo-500"
 				type="text"
 				v-model="newComment"
-				placeholder="Want to comment? Comments will be available soon."
+				placeholder="Add your thoughts..."
 				:disabled="isCommenting"
 			/>
 			<button
@@ -136,12 +137,7 @@ const postComment = async () => {
 					v-if="isCommenting"
 					class="animate-spin h-5 w-5 border-4 border-blue-500 rounded-full border-t-transparent"
 				></div>
-				<img
-					v-else
-					class="w-5 h-5"
-					src="../../../assets/images/icon-send.svg"
-					alt="paper-airplane"
-				/>
+				<img v-else class="w-5 h-5" :src="IconSend.src" alt="paper-airplane" />
 			</button>
 		</div>
 	</div>

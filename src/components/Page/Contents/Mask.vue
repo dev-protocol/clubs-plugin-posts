@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { Membership } from '../../../types'
+import Image from '../../../assets/images/mask-post-bg.png'
 
 type Props = {
 	memberships?: Membership[]
@@ -40,7 +41,7 @@ const { memberships } = props
 
 <style lang="scss">
 .bg-mask {
-	background-image: url('../../../assets/images/mask-post-bg.png');
+	background-image: v-bind("'url(' + Image.src + ')'");
 	background-repeat: no-repeat;
 	background-size: cover;
 }

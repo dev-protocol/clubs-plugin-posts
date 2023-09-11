@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import IconPic from '../../../../assets/images/icon-pic.svg'
 
 interface Emits {
 	(e: 'upload:image', image: string): void
@@ -55,11 +56,7 @@ const onClickImage = () => {
 			type="button"
 			@click="onClickImage"
 		>
-			<img
-				class="w-7"
-				src="../../../../assets/images/icon-pic.svg"
-				alt="paper-airplane"
-			/>
+			<img class="w-7" :src="IconPic.src" alt="paper-airplane" />
 		</button>
 	</div>
 </template>
