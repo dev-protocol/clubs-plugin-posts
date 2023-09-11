@@ -50,7 +50,7 @@ const onClickPost = async () => {
 
 	// fetchで /message.jsonをpostしてasync/awaitでレスポンスを取得する
 	const response = await fetch(
-		`/api/clubs-plugin-posts/${props.feedId}/message`,
+		`/api/devprotocol:clubs:plugin:posts/${props.feedId}/message`,
 		{
 			method: 'POST',
 			headers: {

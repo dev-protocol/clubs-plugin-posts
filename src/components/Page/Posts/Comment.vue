@@ -64,7 +64,7 @@ const postComment = async () => {
 	let response: Response
 	try {
 		response = await fetch(
-			`/api/clubs-plugin-posts/${props.feedId}/comment`,
+			`/api/devprotocol:clubs:plugin:posts/${props.feedId}/comment`,
 			requestInfo,
 		)
 

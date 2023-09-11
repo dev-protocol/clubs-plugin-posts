@@ -81,7 +81,7 @@ export const getAdminPaths: ClubsFunctionGetAdminPaths = async (options) => {
 }
 
 export const meta: ClubsPluginMeta = {
-	id: 'clubs-plugin-posts',
+	id: 'devprotocol:clubs:plugin:posts',
 	displayName: 'Clubs Posts',
 	description: 'Add an interactive posts feed to your Club',
 	category: ClubsPluginCategory.Uncategorized,
@@ -161,7 +161,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 					},
 					{
 						paths: [db.id, 'message'],
-						// This will be [POST] /api/clubs-plugin-posts/0x7sgg...6hfd/message
+						// This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/message
 						method: 'POST',
 						handler: async ({ request }) => {
 							const { contents, hash, sig } = (await request.json()) as {
@@ -361,7 +361,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 						},
 					},
 					{
-						paths: [db.id, 'comment'], // This will be [POST] /api/clubs-plugin-posts/comment
+						paths: [db.id, 'comment'], // This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/comment
 						method: 'POST',
 						handler: addCommentHandler(
 							config,
@@ -370,7 +370,7 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 						),
 					},
 					{
-						paths: [db.id, 'reactions'], // This will be [POST] /api/clubs-plugin-posts/reactions
+						paths: [db.id, 'reactions'], // This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/reactions
 						method: 'POST',
 						handler: addReactionHandler(
 							config,

@@ -25,7 +25,7 @@ onMounted(() => {
 
 const fetchProfile = async (address: string) => {
 	const url = new URL(
-		`/api/clubs-plugin-posts/${props.feedId}/profile?address=${address}`,
+		`/api/devprotocol:clubs:plugin:posts/${props.feedId}/profile?address=${address}`,
 		window.location.origin,
 	)
 

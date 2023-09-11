@@ -58,7 +58,7 @@ const toggleReaction = async (emoji: string) => {
 	}
 
 	const res = await fetch(
-		`/api/clubs-plugin-posts/${props.feedId}/reactions`,
+		`/api/devprotocol:clubs:plugin:posts/${props.feedId}/reactions`,
 		requestInfo,
 	)
 
