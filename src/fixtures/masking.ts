@@ -66,7 +66,7 @@ export const maskFactory: MaskFactory = async ({
 			keccak256(new Uint8Array([...v])),
 		)
 		const verified =
-			requiredPayloads.length > 1
+			requiredPayloads.length > 0
 				? requiredPayloads.some((payload) =>
 						allMembershipPayloadsUserHave.includes(payload),
 				  )
