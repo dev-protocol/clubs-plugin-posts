@@ -1,13 +1,17 @@
 import { JsonRpcProvider, ZeroAddress, keccak256 } from 'ethers'
 import type { PostOption, Posts } from '../types'
-import { whenDefined, type UndefinedOr } from '@devprotocol/util-ts'
+import {
+	type UndefinedOr,
+	whenDefined,
+	whenDefinedAll,
+} from '@devprotocol/util-ts'
 import { clientsSTokens, client } from '@devprotocol/dev-kit'
 
-type MaskFactory = (
-	user: string,
-	propertyAddress: string,
-	rpcUrl: string,
-) => Promise<(post: Posts) => Posts>
+type MaskFactory = (opts: {
+	readonly user?: string
+	readonly propertyAddress: string
+	readonly rpcUrl: string
+}) => Promise<(post: Posts) => Posts>
 
 const maskOptions = (options: readonly PostOption[]): readonly PostOption[] => {
 	return options
@@ -28,18 +32,23 @@ export const mask = (post: Posts): Posts => {
 	}
 }
 
-export const maskFactory: MaskFactory = async (
-	user: string,
-	propertyAddress: string,
-	rpcUrl: string,
-) => {
+export const maskFactory: MaskFactory = async ({
+	user,
+	propertyAddress,
+	rpcUrl,
+}: {
+	readonly user?: string
+	readonly propertyAddress: string
+	readonly rpcUrl: string
+}) => {
 	const provider = new JsonRpcProvider(rpcUrl)
-	const [c1, c2] = await clientsSTokens(provider)
-	const sTokens = c1 ?? c2
+	const sTokens = await whenDefined(user, async () =>
+		(([a, b]) => a ?? b)(await clientsSTokens(provider)),
+	)
 	const isValidProperty = propertyAddress !== ZeroAddress
 	const allSTokenIDsUserHave = isValidProperty
-		? (await whenDefined(sTokens, (contract) =>
-				client.createDetectSTokens(contract)(propertyAddress, user),
+		? (await whenDefinedAll([sTokens, user], ([contract, account]) =>
+				client.createDetectSTokens(contract)(propertyAddress, account),
 		  )) ?? []
 		: []
 	const allMembershipPayloadsUserHave = await Promise.all(
