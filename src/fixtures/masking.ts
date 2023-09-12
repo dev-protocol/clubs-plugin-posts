@@ -62,11 +62,15 @@ export const maskFactory: MaskFactory = async ({
 		const requireOneOf =
 			(post.options.find((opt) => opt.key === 'require-one-of')
 				?.value as UndefinedOr<readonly Uint8Array[]>) ?? []
-		const requiredPayloads = requireOneOf.map(keccak256)
-
-		const verified = requiredPayloads.some((payload) =>
-			allMembershipPayloadsUserHave.includes(payload),
+		const requiredPayloads = requireOneOf.map((v) =>
+			keccak256(new Uint8Array([...v])),
 		)
+		const verified =
+			requiredPayloads.length > 1
+				? requiredPayloads.some((payload) =>
+						allMembershipPayloadsUserHave.includes(payload),
+				  )
+				: true
 
 		return verified ? post : mask(post)
 	}
