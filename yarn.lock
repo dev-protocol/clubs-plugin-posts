@@ -1267,10 +1267,10 @@
   resolved "https://registry.yarnpkg.com/@metamask/detect-provider/-/detect-provider-2.0.0.tgz#4bc2795e5e6f7d8b84b2e845058d2f222c99917d"
   integrity sha512-sFpN+TX13E9fdBDh9lvQeZdJn4qYoRb/6QF2oZZK/Pn559IhCFacPMU1rMuqyXoFQF3JSJfii2l98B87QDPeCQ==
 
-"@nanostores/vue@^0.9.0":
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/@nanostores/vue/-/vue-0.9.1.tgz#81cff5a388e59097e248608ee906d224920a300d"
-  integrity sha512-Yv9datKSdDcfLz20NgS7jIX/vsYffic3nymHgujj3KFBtmtgVPC6LyJora669wtj7BwmK3qGfFY5Ylby72NIXg==
+"@nanostores/vue@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@nanostores/vue/-/vue-0.10.0.tgz#f1638933854c640ca4e91a59fda579cdbab4b8b0"
+  integrity sha512-832RAUbzRfHPs1CdqVEwfvgB2+RD/INji4Zo8bUSEfRO2pQRMMeq479gydnohGpRaa0oNwlfKo7TGFXCghq/1g==
 
 "@noble/hashes@1.1.2":
   version "1.1.2"
