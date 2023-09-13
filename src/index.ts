@@ -313,9 +313,11 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 									([type, key]) => getAllPosts(type, { key }),
 								)
 
-								const mask = await whenDefined(reader, (user) =>
-									maskFactory(user, config.propertyAddress, config.rpcUrl),
-								)
+								const mask = await maskFactory({
+									user: reader,
+									propertyAddress: config.propertyAddress,
+									rpcUrl: config.rpcUrl,
+								})
 								// eslint-disable-next-line
 								allPosts =
 									whenDefinedAll([mask, _allPosts], ([maskFn, posts]) =>
