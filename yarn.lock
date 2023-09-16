@@ -4395,10 +4395,10 @@ markdown-table@^3.0.0:
   resolved "https://registry.yarnpkg.com/markdown-table/-/markdown-table-3.0.3.tgz#e6331d30e493127e031dd385488b5bd326e4a6bd"
   integrity sha512-Z1NL3Tb1M9wH4XESsCDEksWoKTdlUafKc4pt0GRwjUyXaCFZ+dc3g2erqB6zm3szA2IUSi7VnPI+o/9jnxh9hw==
 
-marked@9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-9.0.0.tgz#d812a4a452d219330561f6e0e4b669b784889303"
-  integrity sha512-37yoTpjU+TSXb9OBYY5n78z/CqXh76KiQj9xsKxEdztzU9fRLmbWO5YqKxgCVGKlNdexppnbKTkwB3RipVri8w==
+marked@9.0.1:
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-9.0.1.tgz#1f4090f2d87b15e3da657afcbe39ede2428ed552"
+  integrity sha512-U6DB4r9D40jiszUTAB15mrNDfS7AREySx/ch7OJProHn/NebNKknQHZq7MaubLaUpL/4AkES/Osr0S6efQrtNQ==
 
 matcher@^5.0.0:
   version "5.0.0"
