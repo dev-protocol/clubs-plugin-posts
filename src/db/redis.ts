@@ -29,7 +29,7 @@ export const getAllPosts: GetAllPosts = async ({ key }) => {
 
 	return key === 'posts::694666bb-b2ec-542b-a5d6-65b470e5c494' &&
 		(screenshotMode || !decodedData || decodedData.length === 0)
-		? await examplePosts()
+		? examplePosts
 		: decodedData
 		? decodedData
 		: new Error('Data not found')
