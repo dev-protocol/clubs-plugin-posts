@@ -4,7 +4,7 @@ import { decode, encode } from '@devprotocol/clubs-core'
 import { whenDefined } from '@devprotocol/util-ts'
 import { createClient } from 'redis'
 import type { Posts } from '../types'
-import { examplePosts } from '../constants/example-posts'
+// import { examplePosts } from '../constants/example-posts'
 
 const client = createClient({
 	url: import.meta.env.REDIS_URL,
@@ -15,7 +15,6 @@ const client = createClient({
 		reconnectStrategy: 1,
 	},
 })
-const screenshotMode = import.meta.env.PUBLIC_SCREENSHOT_MODE === '1'
 
 export const getAllPosts: GetAllPosts = async ({ key }) => {
 	await client.connect()
@@ -27,11 +26,8 @@ export const getAllPosts: GetAllPosts = async ({ key }) => {
 
 	await client.quit()
 
-	return key === 'posts::694666bb-b2ec-542b-a5d6-65b470e5c494' &&
-		(screenshotMode || !decodedData || decodedData.length === 0)
-		? examplePosts
-		: decodedData
-		? decodedData
+	return decodedData
+		? decodedData //examplePosts
 		: new Error('Data not found')
 }
 
