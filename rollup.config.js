@@ -30,7 +30,21 @@ export default [
 		],
 		plugins: [
 			typescript(),
-			useSrc({ ext: ['.astro', '.svelte', '.vue', '.scss', '.css'], dir }),
+			useSrc({
+				ext: [
+					'.astro',
+					'.svelte',
+					'.vue',
+					'.scss',
+					'.css',
+					'.jpg',
+					'.png',
+					'.svg',
+					'.md',
+					'.mdx',
+				],
+				dir,
+			}),
 		],
 	},
 ]
