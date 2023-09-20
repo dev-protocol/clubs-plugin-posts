@@ -35,7 +35,7 @@ import Screenshot1 from './assets/images/posts-1.jpg'
 import Screenshot2 from './assets/images/posts-2.jpg'
 import Screenshot3 from './assets/images/posts-3.jpg'
 import Icon from './assets/images/plugin-icon.svg'
-import Readme from './readme.md'
+import Readme from './readme.astro'
 
 export const getPagePaths: ClubsFunctionGetPagePaths = async (
 	options,

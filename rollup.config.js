@@ -40,8 +40,6 @@ export default [
 					'.jpg',
 					'.png',
 					'.svg',
-					'.md',
-					'.mdx',
 				],
 				dir,
 			}),
