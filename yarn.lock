@@ -6613,6 +6613,11 @@ tunnel-agent@^0.6.0:
   dependencies:
     safe-buffer "^5.0.1"
 
+txtgen@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/txtgen/-/txtgen-3.0.6.tgz#67bb56101f488b263942c66fa75adee4a97ef47a"
+  integrity sha512-5beXLv3Z6VYtoefq9tUny0tKx2qB03MXkoSJQhMcvqdt+ZN5XL26o1Wa5TsCUWYLEm9caJK5LvMQu5cJEUUtOw==
+
 type-check@^0.4.0, type-check@~0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/type-check/-/type-check-0.4.0.tgz#07b8203bfa7056c0657050e3ccd2c37730bab8f1"

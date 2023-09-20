@@ -1,14 +1,31 @@
+/* eslint-disable functional/no-expression-statement */
+/* eslint-disable functional/no-loop-statement */
+/* eslint-disable functional/no-let */
 import { getDefaultProvider, toUtf8Bytes } from 'ethers'
 import type { Posts } from '../types'
 import { Wallet } from 'ethers'
+import { sentence as genSentence } from 'txtgen'
 
 const randomAddress = () => Wallet.createRandom(getDefaultProvider(1)).address
+
+let lastSentence = ''
+const sentence = () => {
+	let txt = genSentence()
+	while (
+		txt.split(' ')[0] === lastSentence.split(' ')[0] ||
+		txt.includes('However')
+	) {
+		txt = genSentence()
+	}
+	lastSentence = txt
+	return txt
+}
 
 export const examplePosts: readonly Posts[] = [
 	{
 		id: '1',
 		title: 'Hello World',
-		content: '#1 This is a sample post.',
+		content: sentence(),
 		created_by: randomAddress(),
 		created_at: new Date('2021-01-01T01:34:56Z'),
 		updated_at: new Date('2021-01-01T01:34:56Z'),
@@ -30,7 +47,7 @@ export const examplePosts: readonly Posts[] = [
 		],
 		comments: [
 			...new Array(12).fill('').map((_, i) => ({
-				content: 'abc',
+				content: sentence(),
 				id: `i-${i}`,
 				options: [{ key: 'reaction', value: '👍' }],
 				created_by: randomAddress(),
@@ -46,8 +63,8 @@ export const examplePosts: readonly Posts[] = [
 	},
 	{
 		id: '2',
-		title: 'Hello World',
-		content: '#2 This is a sample post.',
+		title: 'Hey guys!',
+		content: sentence(),
 		created_by: randomAddress(),
 		created_at: new Date('2021-01-01T01:34:56Z'),
 		updated_at: new Date('2021-01-01T01:34:56Z'),
@@ -55,7 +72,7 @@ export const examplePosts: readonly Posts[] = [
 			{
 				key: '#images',
 				value: [
-					'https://source.unsplash.com/800x400/?nature',
+					'https://source.unsplash.com/1200x1024/?nature',
 					'https://source.unsplash.com/800x400/?water',
 					'https://source.unsplash.com/800x400/?sky',
 				],
@@ -65,7 +82,7 @@ export const examplePosts: readonly Posts[] = [
 			{
 				id: '1',
 				options: [],
-				content: 'This is a sample comment #2-1.',
+				content: sentence(),
 				created_by: randomAddress(),
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
@@ -73,14 +90,14 @@ export const examplePosts: readonly Posts[] = [
 			{
 				id: '2',
 				options: [],
-				content: 'This is a sample comment #2-2.',
+				content: sentence(),
 				created_by: randomAddress(),
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			},
 			...new Array(20).fill('').map((_, i) => ({
 				id: `i-${i}`,
-				content: 'abc',
+				content: sentence(),
 				options: [{ key: 'reaction', value: '👍' }],
 				created_by: randomAddress(),
 				created_at: new Date('2021-01-01T01:34:56Z'),
@@ -94,7 +111,7 @@ export const examplePosts: readonly Posts[] = [
 	{
 		id: '3',
 		title: 'Hi there',
-		content: 'Good morning. This is a sample post.#3',
+		content: sentence(),
 		created_by: randomAddress(),
 		created_at: new Date('2021-01-01T01:34:56Z'),
 		updated_at: new Date('2021-01-01T01:34:56Z'),
@@ -111,14 +128,14 @@ export const examplePosts: readonly Posts[] = [
 			{
 				id: '1',
 				options: [],
-				content: 'This is a sample comment.#3-1',
+				content: sentence(),
 				created_by: '0x57E21bd98612DE0Bd1723F4bf81A944eF7BfF526',
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			},
 			...new Array(10).fill('').map((_, i) => ({
 				id: `i-${i}`,
-				content: 'abc',
+				content: sentence(),
 				options: [{ key: 'reaction', value: '👍' }],
 				created_by: randomAddress(),
 				created_at: new Date('2021-01-01T01:34:56Z'),
@@ -132,7 +149,7 @@ export const examplePosts: readonly Posts[] = [
 	{
 		id: '4',
 		title: 'Hey guys',
-		content: 'Good evening. This is a sample post.#4',
+		content: sentence(),
 		created_by: randomAddress(),
 		created_at: new Date('2021-01-01T01:34:56Z'),
 		updated_at: new Date('2021-01-01T01:34:56Z'),
@@ -146,14 +163,14 @@ export const examplePosts: readonly Posts[] = [
 			{
 				id: '1',
 				options: [],
-				content: 'This is a sample comment.#4-1',
+				content: sentence(),
 				created_by: randomAddress(),
 				created_at: new Date('2021-01-01T01:34:56Z'),
 				updated_at: new Date('2021-01-01T01:34:56Z'),
 			},
 			...new Array(80).fill('').map((_, i) => ({
 				id: `i-${i}`,
-				content: 'abc',
+				content: sentence(),
 				options: [{ key: 'reaction', value: '👍' }],
 				created_by: randomAddress(),
 				created_at: new Date('2021-01-01T01:34:56Z'),
@@ -168,7 +185,7 @@ export const examplePosts: readonly Posts[] = [
 	{
 		id: '5',
 		title: 'Secret',
-		content: 'Good evening. This is a sample secret pos... #5',
+		content: sentence(),
 		created_by: randomAddress(),
 		created_at: new Date('2021-01-01T01:34:56Z'),
 		updated_at: new Date('2021-01-01T01:34:56Z'),
