@@ -4097,9 +4097,9 @@ is-promise@^4.0.0:
   integrity sha512-hvpoI6korhJMnej285dSg6nu1+e6uxs7zG3BYAm5byqDsgJNWwxzM6z6iZiAgQR4TJ30JmBTOwqZUw3WlyH3AQ==
 
 is-reference@^3.0.0, is-reference@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/is-reference/-/is-reference-3.0.1.tgz#d400f4260f7e55733955e60d361d827eb4d3b831"
-  integrity sha512-baJJdQLiYaJdvFbJqXrcGv3WU3QCzBlUcI5QhbesIm6/xPsvmO+2CDoi/GMOFBQEQm+PXkwOPrp9KK5ozZsp2w==
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/is-reference/-/is-reference-3.0.2.tgz#154747a01f45cd962404ee89d43837af2cba247c"
+  integrity sha512-v3rht/LgVcsdZa3O2Nqs+NMowLOxeOm7Ay9+/ARQ2F+qEoANRcqrjAZKGN0v8ymUetZGgkp26LTnGT7H0Qo9Pg==
   dependencies:
     "@types/estree" "*"
 
@@ -4369,14 +4369,7 @@ magic-string@^0.25.7:
   dependencies:
     sourcemap-codec "^1.4.8"
 
-magic-string@^0.30.0:
-  version "0.30.2"
-  resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.30.2.tgz#dcf04aad3d0d1314bc743d076c50feb29b3c7aca"
-  integrity sha512-lNZdu7pewtq/ZvWUp9Wpf/x7WzMTsR26TWV03BRZrXFsv+BI6dy8RAiKgm1uM/kyR0rCfUcqvOlXKG66KhIGug==
-  dependencies:
-    "@jridgewell/sourcemap-codec" "^1.4.15"
-
-magic-string@^0.30.2, magic-string@^0.30.3:
+magic-string@^0.30.0, magic-string@^0.30.2, magic-string@^0.30.3:
   version "0.30.3"
   resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.30.3.tgz#403755dfd9d6b398dfa40635d52e96c5ac095b85"
   integrity sha512-B7xGbll2fG/VjP+SWg4sX3JynwIU0mjoTc6MPpKNuIvftk6u6vqhDnk1R80b8C2GBR6ywqy+1DcKBrevBg+bmw==
@@ -6394,9 +6387,9 @@ svelte2tsx@^0.6.20:
     pascal-case "^3.1.1"
 
 svelte@^4.0.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-4.2.0.tgz#0e4304c15524450b22fba02516eb72efbd8847b6"
-  integrity sha512-kVsdPjDbLrv74SmLSUzAsBGquMs4MPgWGkGLpH+PjOYnFOziAvENVzgJmyOCV2gntxE32aNm8/sqNKD6LbIpeQ==
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-4.2.1.tgz#33d603af4da103a5ad988d7fcc992a87421a1e6e"
+  integrity sha512-LpLqY2Jr7cRxkrTc796/AaaoMLF/1ax7cto8Ot76wrvKQhrPmZ0JgajiWPmg9mTSDqO16SSLiD17r9MsvAPTmw==
   dependencies:
     "@ampproject/remapping" "^2.2.1"
     "@jridgewell/sourcemap-codec" "^1.4.15"
