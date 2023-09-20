@@ -17,8 +17,6 @@ import type {
 	OptionsDatabase,
 	PostPrimitives,
 	Comment,
-	CommentPrimitives,
-	Posts as PostType,
 	Reactions,
 } from './types'
 import { v5 as uuidv5 } from 'uuid'
@@ -28,15 +26,16 @@ import {
 	randomBytes,
 	verifyMessage,
 } from 'ethers'
-import {
-	whenDefinedAll,
-	type UndefinedOr,
-	whenDefined,
-} from '@devprotocol/util-ts'
+import { whenDefinedAll, type UndefinedOr } from '@devprotocol/util-ts'
 import { getAllPosts, setAllPosts } from './db'
 import { addCommentHandler } from './apiHandler/comment'
 import { maskFactory } from './fixtures/masking'
 import { addReactionHandler } from './apiHandler/reactions'
+import Screenshot1 from './assets/posts-1.jpg'
+import Screenshot2 from './assets/posts-2.jpg'
+import Screenshot3 from './assets/posts-3.jpg'
+import Icon from './assets/plugin-icon.svg'
+import Readme from './readme.md'
 
 export const getPagePaths: ClubsFunctionGetPagePaths = async (
 	options,
@@ -82,9 +81,12 @@ export const getAdminPaths: ClubsFunctionGetAdminPaths = async (options) => {
 
 export const meta: ClubsPluginMeta = {
 	id: 'devprotocol:clubs:plugin:posts',
-	displayName: 'Clubs Posts',
+	displayName: 'Posts',
 	description: 'Add an interactive posts feed to your Club',
 	category: ClubsPluginCategory.Uncategorized,
+	previewImages: [Screenshot1.src, Screenshot2.src, Screenshot3.src],
+	readme: Readme,
+	icon: Icon.src,
 }
 
 export const getApiPaths: ClubsFunctionGetApiPaths = async (
