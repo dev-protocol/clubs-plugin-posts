@@ -17,18 +17,19 @@ const client = createClient({
 })
 
 export const getAllPosts: GetAllPosts = async ({ key }) => {
-	await client.connect()
-
-	const encodedData = await client.get(key)
-	const decodedData = whenDefined(encodedData, (d) =>
-		decode<readonly Posts[]>(d),
-	)
-
-	await client.quit()
-
-	return decodedData
-		? decodedData //examplePosts
-		: new Error('Data not found')
+	try {
+		await client.connect()
+		const encodedData = await client.get(key)
+		await client.quit()
+		const decodedData = whenDefined(encodedData, (d) =>
+			decode<readonly Posts[]>(d),
+		)
+		return decodedData
+			? decodedData // examplePosts
+			: []
+	} catch (e) {
+		return e as Error
+	}
 }
 
 export const setAllPosts: SetAllPosts = async ({ key, posts }) => {
