@@ -153,7 +153,7 @@ const handlePostSuccess = (post: Posts) => {
 			v-if="posts.length > 0"
 			v-for="(post, key) in posts"
 			:key="post.id"
-			class="mb-5 p-5 rounded bg-white"
+			class="mb-5 p-5 rounded bg-white shadow"
 		>
 			<Contents
 				:feedId="props.feedId"
