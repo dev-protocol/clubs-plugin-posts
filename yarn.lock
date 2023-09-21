@@ -84,10 +84,10 @@
     postcss "^8.4.28"
     postcss-load-config "^4.0.1"
 
-"@astrojs/telemetry@3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@astrojs/telemetry/-/telemetry-3.0.1.tgz#4baee14a7c4271f461e4e080dffa26f09c39afa6"
-  integrity sha512-7zJMuikRDQ0LLLivteu0+y4pqdgznrChFiRrY3qmKlOEkLWD1T3u1a5M970lvpErP7Vgh4P298JBPjv8LTj+sw==
+"@astrojs/telemetry@3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@astrojs/telemetry/-/telemetry-3.0.2.tgz#f0b3a6abae33e9b362924124ea9735c90c155847"
+  integrity sha512-ef+jqCkqopCzjGfsMsr+8p56Nj6F9ZzouWcWZt+dKsqbRccI3c8K3jfkLcdq4AyfFZtKBDB6N4ZuI68g33oiOg==
   dependencies:
     ci-info "^3.8.0"
     debug "^4.3.4"
@@ -2057,14 +2057,14 @@ astral-regex@^1.0.0:
   integrity sha512-+Ryf6g3BKoRc7jfp7ad8tM4TtMiaWvbF/1/sQcZPkkS7ag3D5nMBCe2UfOTONtAkaG0tO0ij3C5Lwmf1EiyjHg==
 
 astro@^3.0.12:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/astro/-/astro-3.1.1.tgz#0a2e401b4fd8ae106bb94b26884084da748650ec"
-  integrity sha512-KLtzCcLiQEsoWHJO0vQ5QZ/9/80P3cUuBeIkl87YezRkzs3Am0kuzfeGLumb6OOcrR2W0AZGlVlS0ub+q/yiaA==
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/astro/-/astro-3.1.2.tgz#d619773ecfa3b688228ef69ed2adf8b74c8fdfa1"
+  integrity sha512-9rlKyk6Qmw50Pc188+ey7JAEYBsJGh5an46AXGPMHIdEkH6YOc4b2z9Rr+TNF8QmM/U+C2ZQFRVQyCKU4i8/pg==
   dependencies:
     "@astrojs/compiler" "^2.1.0"
     "@astrojs/internal-helpers" "0.2.0"
     "@astrojs/markdown-remark" "3.2.0"
-    "@astrojs/telemetry" "3.0.1"
+    "@astrojs/telemetry" "3.0.2"
     "@babel/core" "^7.22.10"
     "@babel/generator" "^7.22.10"
     "@babel/parser" "^7.22.10"
@@ -2908,9 +2908,9 @@ eastasianwidth@^0.2.0:
   integrity sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==
 
 electron-to-chromium@^1.4.477:
-  version "1.4.523"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.523.tgz#f82f99243c827df05c26776d49712cb284972df6"
-  integrity sha512-9AreocSUWnzNtvLcbpng6N+GkXnCcBR80IQkxRC9Dfdyg4gaWNUPBujAHUpKkiUkoSoR9UlhA4zD/IgBklmhzg==
+  version "1.4.526"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.526.tgz#1bcda5f2b8238e497c20fcdb41af5da907a770e2"
+  integrity sha512-tjjTMjmZAx1g6COrintLTa2/jcafYKxKoiEkdQOrVdbLaHh2wCt2nsAF8ZHweezkrP+dl/VG9T5nabcYoo0U5Q==
 
 elliptic@6.5.4:
   version "6.5.4"
@@ -6653,9 +6653,9 @@ typescript@5.2.2:
   integrity sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==
 
 undici@^5.23.0:
-  version "5.24.0"
-  resolved "https://registry.yarnpkg.com/undici/-/undici-5.24.0.tgz#6133630372894cfeb3c3dab13b4c23866bd344b5"
-  integrity sha512-OKlckxBjFl0oXxcj9FU6oB8fDAaiRUq+D8jrFWGmOfI/gIyjk/IeS75LMzgYKUaeHzLUcYvf9bbJGSrUwTfwwQ==
+  version "5.25.1"
+  resolved "https://registry.yarnpkg.com/undici/-/undici-5.25.1.tgz#3fa537eb89a6a0bb576b395f0f7bcdedf7b8336a"
+  integrity sha512-nTw6b2G2OqP6btYPyghCgV4hSwjJlL/78FMJatVLCa3otj6PCOQSt6dVtYt82OtNqFz8XsnJ+vsXLADPXjPhqw==
   dependencies:
     busboy "^1.6.0"
 
@@ -6760,9 +6760,9 @@ unist-util-visit@^5.0.0:
     unist-util-visit-parents "^6.0.0"
 
 update-browserslist-db@^1.0.11:
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/update-browserslist-db/-/update-browserslist-db-1.0.11.tgz#9a2a641ad2907ae7b3616506f4b977851db5b940"
-  integrity sha512-dCwEFf0/oT85M1fHBg4F0jtLwJrutGoHSQXCh7u4o2t1drG+c0a9Flnqww6XUKSfQMPpJBRjU8d4RXB09qtvaA==
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/update-browserslist-db/-/update-browserslist-db-1.0.13.tgz#3c5e4f5c083661bd38ef64b6328c26ed6c8248c4"
+  integrity sha512-xebP81SNcPuNpPP3uzeW1NYXxI3rxyJzF3pD6sH4jE7o/IX+WtSpwnVU+qIsDPyk0d3hmFQ7mjqc6AtV604hbg==
   dependencies:
     escalade "^3.1.1"
     picocolors "^1.0.0"
