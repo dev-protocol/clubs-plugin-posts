@@ -116,7 +116,7 @@ const handlePostSuccess = (post: Posts) => {
 	<div class="mx-auto w-full max-w-2xl">
 		<section
 			v-if="hasEditableRole && walletAddress"
-			class="mb-5 p-5 rounded bg-white"
+			class="mb-5 p-5 rounded-2xl bg-white"
 		>
 			<Post
 				:feedId="props.feedId"
@@ -143,7 +143,7 @@ const handlePostSuccess = (post: Posts) => {
 			v-if="!isLoading && posts.length === 0"
 			class="mb-5 p-5 rounded bg-white"
 		>
-			<p class="text-center">
+			<p class="text-center text-black">
 				Sorry, but there are no posts on this timeline yet
 			</p>
 		</div>
