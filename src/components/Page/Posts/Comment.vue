@@ -109,7 +109,7 @@ const postComment = async () => {
 			>
 				<div class="flex items-center justify-between mb-1">
 					<Profile :feedId="props.feedId" :address="comment.created_by" />
-					<p class="text-base text-gray-400">
+					<p class="text-center text-xs lg:text-base text-gray-400">
 						{{ dayjs(comment.created_at).format('DD MMM HH:mm') }}
 					</p>
 				</div>

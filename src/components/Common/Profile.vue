@@ -62,8 +62,19 @@ const fetchProfile = async (address: string) => {
 				:square="false"
 			/>
 		</template>
-		<p class="text-black text-base font-bold overflow-hidden overflow-ellipsis">
+		<p
+			class="posts-username break-all text-black text-base font-bold overflow-hidden overflow-ellipsis"
+		>
 			{{ name }}
 		</p>
 	</div>
 </template>
+
+<style scoped>
+.posts-username {
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+}
+</style>

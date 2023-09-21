@@ -15,7 +15,7 @@ const { date, address, feedId, title } = defineProps<Props>()
 <template>
 	<div class="flex items-center justify-between mb-3">
 		<Profile :address="address" :feedId="feedId" />
-		<p class="text-base text-gray-400">
+		<p class="text-center text-xs lg:text-base text-gray-400">
 			{{ dayjs(date).format('DD MMM HH:mm') }}
 		</p>
 	</div>

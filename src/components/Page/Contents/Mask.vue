@@ -17,7 +17,9 @@ const { memberships } = props
 			Unlock this post by becoming a member.
 		</p>
 
-		<div class="flex flex-col sm:flex-row justify-center gap-2 sm:gap-4">
+		<div
+			class="flex flex-col flex-wrap sm:flex-row justify-center gap-2 sm:gap-4"
+		>
 			<div
 				v-for="membership in memberships"
 				class="flex flex-row sm:flex-col gap-4 sm:gap-2 p-3 sm:p-4 bg-black rounded-xl text-white"
