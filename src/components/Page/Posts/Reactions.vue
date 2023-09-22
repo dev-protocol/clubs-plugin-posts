@@ -103,7 +103,7 @@ const toggleReaction = async (emoji: string) => {
 				>
 					{{ emoji }}
 				</button>
-				<div class="text-lg">{{ reactions[emoji]?.length ?? '' }}</div>
+				<div class="text-lg text-black">{{ reactions[emoji]?.length ?? '' }}</div>
 			</div>
 		</div>
 	</div>
