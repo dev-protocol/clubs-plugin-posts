@@ -54,7 +54,6 @@ const testPermission = async (
 }
 
 const handleConnection = async (signer: UndefinedOr<Signer>) => {
-	console.log('signer', signer)
 	if (!signer) {
 		return
 	}
