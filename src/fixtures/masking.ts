@@ -59,6 +59,11 @@ export const maskFactory: MaskFactory = async ({
 	)
 
 	return (post: Posts) => {
+		// Do not Mask : post.created_by === user
+		if (post.created_by === user) {
+			return post
+		}
+
 		const requireOneOf =
 			(post.options.find((opt) => opt.key === 'require-one-of')
 				?.value as UndefinedOr<readonly Uint8Array[]>) ?? []

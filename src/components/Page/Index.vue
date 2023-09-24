@@ -54,6 +54,7 @@ const testPermission = async (
 }
 
 const handleConnection = async (signer: UndefinedOr<Signer>) => {
+	console.log('signer', signer)
 	if (!signer) {
 		return
 	}
@@ -104,8 +105,14 @@ onMounted(() => {
 	fetchPosts({})
 })
 
-const handleSubscribe = async () => {
+const isVerified = ref(false)
+
+const handleVerify = async () => {
 	connection().signer.subscribe(handleConnection)
+	//
+	if (connection().signer.value) {
+		isVerified.value = true
+	}
 }
 
 const handlePostSuccess = (post: Posts) => {
@@ -151,12 +158,15 @@ const handlePostSuccess = (post: Posts) => {
 			</p>
 		</div>
 
-		<div v-if="posts.length > 0" class="sticky top-0 py-5 px-5 text-right z-10">
+		<div
+			v-if="posts.length > 0 && isVerified === false"
+			class="sticky top-0 py-5 px-5 text-right z-10"
+		>
 			<button
 				class="py-2 px-8 text-white bg-blue-600 rounded-2xl shadow-[1px_3px_5px_1px_rgba(0,0,0,0.3)] focus:outline-none"
-				@click="handleSubscribe"
+				@click="handleVerify"
 			>
-				Subscribe
+				Account verify
 			</button>
 		</div>
 
