@@ -159,10 +159,10 @@ const handlePostSuccess = (post: Posts) => {
 			class="sticky top-0 py-5 px-5 text-right z-10"
 		>
 			<button
-				class="py-2 px-8 text-white bg-blue-600 rounded-2xl shadow-[1px_3px_5px_1px_rgba(0,0,0,0.3)] focus:outline-none"
+				class="py-2 px-6 text-white bg-blue-600 rounded-full shadow-xl focus:outline-none"
 				@click="handleVerify"
 			>
-				Account verify
+				Sign in
 			</button>
 		</div>
 
