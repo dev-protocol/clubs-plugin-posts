@@ -288,7 +288,10 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 						paths: [db.id, 'message'],
 						method: 'GET',
 						handler: async ({ request, url }) => {
-							const { hash, sig } = url.searchParams as {
+							const { hash, sig } = {
+								hash: url.searchParams.get('hash'),
+								sig: url.searchParams.get('sig'),
+							} as {
 								readonly hash?: string
 								readonly sig?: string
 							}

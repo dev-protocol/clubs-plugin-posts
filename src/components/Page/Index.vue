@@ -64,11 +64,8 @@ const handleConnection = async (signer: UndefinedOr<Signer>) => {
 	walletAddress.value = connectedAddress
 
 	// sign message
-	const message = connectedAddress
-	const sig = await signer.signMessage(message)
-
-	// hash message
-	const hash = hashMessage(message)
+	const hash = hashMessage(connectedAddress)
+	const sig = await signer.signMessage(hash)
 
 	fetchPosts({ hash, sig })
 
