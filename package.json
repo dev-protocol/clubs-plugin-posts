@@ -54,7 +54,7 @@
 		"@astrojs/tailwind": "^5.0.0",
 		"@astrojs/vue": "^3.0.0",
 		"@ava/typescript": "4.1.0",
-		"@devprotocol/clubs-core": "1.4.0",
+		"@devprotocol/clubs-core": "1.5.1",
 		"@nanostores/vue": "^0.10.0",
 		"@redis/json": "^1.0.4",
 		"@rollup/plugin-typescript": "11.1.4",
@@ -86,7 +86,7 @@
 		"vue": "3.3.4"
 	},
 	"peerDependencies": {
-		"@devprotocol/clubs-core": "^1.0.0"
+		"@devprotocol/clubs-core": "^1.5.0"
 	},
 	"ava": {
 		"files": [

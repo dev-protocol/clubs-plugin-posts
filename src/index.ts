@@ -10,6 +10,7 @@ import {
 	encode,
 	fetchProfile,
 	type ClubsApiPaths,
+	type ClubsFunctionGetSlots,
 } from '@devprotocol/clubs-core'
 import { default as Admin } from './pages/Admin.astro'
 import Posts from './pages/Posts.astro'
@@ -36,6 +37,7 @@ import Screenshot2 from './assets/images/posts-2.jpg'
 import Screenshot3 from './assets/images/posts-3.jpg'
 import Icon from './assets/images/plugin-icon.svg'
 import Readme from './readme.astro'
+import { CreateNavigationLink } from '@devprotocol/clubs-core/layouts'
 
 export const getPagePaths: ClubsFunctionGetPagePaths = async (
 	options,
@@ -391,9 +393,35 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 	]
 }
 
+export const getSlots: ClubsFunctionGetSlots = async (
+	_,
+	__,
+	{ paths, factory },
+) => {
+	const [path1] = paths
+	return factory === 'admin' && path1 === 'posts'
+		? [
+				{
+					slot: 'admin:aside:after-built-in-buttons',
+					component: CreateNavigationLink,
+					props: {
+						createNavigation: {
+							label: `Add 'Posts' to the menu`,
+							link: {
+								display: 'Posts',
+								path: '/posts',
+							},
+						},
+					},
+				},
+		  ]
+		: []
+}
+
 export default {
 	getPagePaths,
 	getAdminPaths,
 	getApiPaths,
+	getSlots,
 	meta,
 } as ClubsFunctionPlugin
