@@ -105,6 +105,9 @@ const handleDeleteImageAll = () => {
 			placeholder="What’s happening?"
 		/>
 	</div>
+
+	<slot name="after:content-form"></slot>
+
 	<!-- /入力フォーム -->
 	<!-- Limited access button -->
 	<div class="relative flex items-center mb-5">

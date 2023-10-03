@@ -129,7 +129,9 @@ const handlePostSuccess = (post: Posts) => {
 				:address="walletAddress"
 				:memberships="props.memberships"
 				@post:success="handlePostSuccess"
-			/>
+			>
+				<slot name="edit:after:content-form" slot="after:content-form"></slot>
+			</Post>
 		</section>
 
 		<!-- Loading -->
