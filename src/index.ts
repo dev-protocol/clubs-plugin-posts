@@ -425,3 +425,5 @@ export default {
 	getSlots,
 	meta,
 } as ClubsFunctionPlugin
+
+export * from './types'
