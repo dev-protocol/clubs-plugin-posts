@@ -45,10 +45,10 @@ const fetchProfile = async (address: string) => {
 </script>
 
 <template>
-	<div class="flex items-center w-8/12">
+	<div class="flex w-8/12 items-center">
 		<template v-if="avatar">
 			<div
-				class="w-12 h-12 rounded-full mr-3 bg-center bg-cover bg-no-repeat"
+				class="mr-3 h-12 w-12 rounded-full bg-cover bg-center bg-no-repeat"
 				:style="`background-image: url(${avatar})`"
 			/>
 		</template>
@@ -63,7 +63,7 @@ const fetchProfile = async (address: string) => {
 			/>
 		</template>
 		<p
-			class="posts-username break-all text-black text-base font-bold overflow-hidden overflow-ellipsis"
+			class="posts-username overflow-hidden overflow-ellipsis break-all text-base font-bold text-black"
 		>
 			{{ name }}
 		</p>

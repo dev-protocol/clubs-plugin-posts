@@ -12,12 +12,12 @@ const handleConnection = async () => {
 	}
 
 	// get wallet address
-	const connectedAddress = await signer.getAddress();
-	walletAddress.value = connectedAddress;
+	const connectedAddress = await signer.getAddress()
+	walletAddress.value = connectedAddress
 }
 
 onMounted(() => {
-	connection().signer.subscribe(handleConnection);
+	connection().signer.subscribe(handleConnection)
 })
 
 const onClick = async () => {
@@ -35,12 +35,12 @@ const onClick = async () => {
 	<div class="container mx-auto py-8">
 		<div class="flex justify-end">
 			<button
-		v-if="!walletAddress"
-		class="py-2 px-8 text-base text-white bg-blue-600 border border-transparent rounded-3xl shadow-sm focus:outline-none"
-		@click="onClick"
-	>
-		Wallet connect
-	</button>
+				v-if="!walletAddress"
+				class="rounded-3xl border border-transparent bg-blue-600 px-8 py-2 text-base text-white shadow-sm focus:outline-none"
+				@click="onClick"
+			>
+				Wallet connect
+			</button>
 		</div>
 	</div>
 </template>

@@ -4,10 +4,10 @@ import Icon from '../../assets/images/plugin-icon.svg'
 
 <template>
 	<div class="container mx-auto px-4">
-		<h1 class="text-3xl font-bold mb-4">Posts</h1>
+		<h1 class="mb-4 text-3xl font-bold">Posts</h1>
 
 		<div
-			class="rounded-md justify-items-center w-max mx-auto min-h-2xl p-3 bg-dp-blue-grey-300 grid gap-3"
+			class="min-h-2xl mx-auto grid w-max justify-items-center gap-3 rounded-md bg-dp-blue-grey-300 p-3"
 		>
 			<p>There's nothing here yet, but will be more fun things to come...</p>
 			<img

@@ -90,7 +90,7 @@ const toggleReaction = async (emoji: string) => {
 
 <template>
 	<div v-if="reactions">
-		<div class="flex justify-center items-center flex-wrap gap-2.5">
+		<div class="flex flex-wrap items-center justify-center gap-2.5">
 			<!-- loop through emoji allow list -->
 			<div
 				class="flex items-center gap-2"
@@ -99,11 +99,13 @@ const toggleReaction = async (emoji: string) => {
 			>
 				<button
 					@click="() => toggleReaction(emoji)"
-					class="text-gray-400 text-xl cursor-pointer"
+					class="cursor-pointer text-xl text-gray-400"
 				>
 					{{ emoji }}
 				</button>
-				<div class="text-lg text-black">{{ reactions[emoji]?.length ?? '' }}</div>
+				<div class="text-lg text-black">
+					{{ reactions[emoji]?.length ?? '' }}
+				</div>
 			</div>
 		</div>
 	</div>

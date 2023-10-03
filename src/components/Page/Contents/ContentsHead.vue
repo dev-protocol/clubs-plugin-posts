@@ -13,9 +13,9 @@ const { date, address, feedId, title } = defineProps<Props>()
 </script>
 
 <template>
-	<div class="flex items-center justify-between mb-3">
+	<div class="mb-3 flex items-center justify-between">
 		<Profile :address="address" :feedId="feedId" />
-		<p class="text-center text-xs lg:text-base text-gray-400">
+		<p class="text-center text-xs text-gray-400 lg:text-base">
 			{{ dayjs(date).format('DD MMM HH:mm') }}
 		</p>
 	</div>

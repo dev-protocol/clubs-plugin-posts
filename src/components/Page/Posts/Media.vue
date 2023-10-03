@@ -15,16 +15,16 @@ const props = defineProps<Props>()
 </script>
 
 <template>
-	<div class="mb-5 flex flex-wrap gap-y-1 gap-x-1">
+	<div class="mb-5 flex flex-wrap gap-x-1 gap-y-1">
 		<div
 			v-if="props.required"
-			class="bg-gray-100 overflow-hidden"
+			class="overflow-hidden bg-gray-100"
 			style="width: calc(100% - 2px)"
 		>
 			<div
-				class="pt-10 pb-14 max-h-96 w-full rounded bg-[url('/images/required.png')] bg-center"
+				class="max-h-96 w-full rounded bg-[url('/images/required.png')] bg-center pb-14 pt-10"
 			>
-				<p class="mb-8 w-full text-center text-white text-base">
+				<p class="mb-8 w-full text-center text-base text-white">
 					Unlock this post by becoming a member
 				</p>
 				<div class="flex justify-center gap-x-5">
