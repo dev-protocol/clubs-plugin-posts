@@ -71,12 +71,12 @@ watch(images, () => {
 </script>
 
 <template>
-	<div :id="galleryId" class="flex flex-wrap gap-y-1 gap-x-1 w-full">
+	<div :id="galleryId" class="flex w-full flex-wrap gap-x-1 gap-y-1">
 		<span
 			v-if="galleryImages"
 			v-for="(image, index) in galleryImages"
 			:key="image.src + image.w + image.h"
-			class="relative bg-gray-100 overflow-hidden w-[calc(50%_-_2px)] only:w-full"
+			class="relative w-[calc(50%_-_2px)] overflow-hidden bg-gray-100 only:w-full"
 		>
 			<a
 				:data-pswp-width="image.w"
@@ -87,7 +87,7 @@ watch(images, () => {
 			>
 				<!-- image -->
 				<img
-					class="w-full h-full rounded object-cover"
+					class="h-full w-full rounded object-cover"
 					:src="image.src"
 					:alt="image.alt"
 				/>
@@ -96,7 +96,7 @@ watch(images, () => {
 			<!-- delete media -->
 			<div
 				v-if="isPost"
-				class="rounded-full absolute top-2 right-2 w-8 h-8 flex items-center justify-center cursor-pointer"
+				class="absolute right-2 top-2 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full"
 				aria-label="delete media"
 				role="button"
 				style="background-color: rgba(15, 20, 25, 0.75)"
@@ -105,7 +105,7 @@ watch(images, () => {
 				<svg
 					viewBox="0 0 24 24"
 					aria-hidden="true"
-					class="w-4 h-4 text-white fill-current"
+					class="h-4 w-4 fill-current text-white"
 				>
 					<g>
 						<path
@@ -121,7 +121,7 @@ watch(images, () => {
 		<span
 			v-if="images && !galleryImages"
 			v-for="image in images"
-			class="block animate-pulse rounded bg-gray-500/60 h-48 w-[calc(50%_-_2px)] only:w-full"
+			class="block h-48 w-[calc(50%_-_2px)] animate-pulse rounded bg-gray-500/60 only:w-full"
 		>
 		</span>
 	</div>

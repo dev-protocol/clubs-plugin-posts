@@ -107,9 +107,9 @@ const postComment = async () => {
 				:key="index"
 				class="mb-5 last:mb-0"
 			>
-				<div class="flex items-center justify-between mb-1">
+				<div class="mb-1 flex items-center justify-between">
 					<Profile :feedId="props.feedId" :address="comment.created_by" />
-					<p class="text-center text-xs lg:text-base text-gray-400">
+					<p class="text-center text-xs text-gray-400 lg:text-base">
 						{{ dayjs(comment.created_at).format('DD MMM HH:mm') }}
 					</p>
 				</div>
@@ -119,9 +119,9 @@ const postComment = async () => {
 			</div>
 		</div>
 
-		<div class="flex item-center justify-between">
+		<div class="item-center flex justify-between">
 			<input
-				class="px-2 py-2 w-11/12 text-base text-gray-700 border border-gray-400 rounded focus:outline-none focus:border-indigo-500"
+				class="w-11/12 rounded border border-gray-400 px-2 py-2 text-base text-gray-700 focus:border-indigo-500 focus:outline-none"
 				type="text"
 				v-model="newComment"
 				placeholder="Add your thoughts..."
@@ -130,14 +130,14 @@ const postComment = async () => {
 			<button
 				:disabled="isCommenting"
 				@click="postComment"
-				class="p-2 inline-flex items-center justify-center rounded-full shadow-sm cursor-pointer"
+				class="inline-flex cursor-pointer items-center justify-center rounded-full p-2 shadow-sm"
 				type="button"
 			>
 				<div
 					v-if="isCommenting"
-					class="animate-spin h-5 w-5 border-4 border-blue-500 rounded-full border-t-transparent"
+					class="h-5 w-5 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"
 				></div>
-				<img v-else class="w-5 h-5" :src="IconSend.src" alt="paper-airplane" />
+				<img v-else class="h-5 w-5" :src="IconSend.src" alt="paper-airplane" />
 			</button>
 		</div>
 	</div>

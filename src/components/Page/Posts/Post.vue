@@ -81,7 +81,7 @@ const handleDeleteImageAll = () => {
 }
 </script>
 <template>
-	<div class="flex items-center justify-between mb-3">
+	<div class="mb-3 flex items-center justify-between">
 		<Profile :address="props.address" :feedId="props.feedId" />
 	</div>
 
@@ -89,7 +89,7 @@ const handleDeleteImageAll = () => {
 	<div class="text-3xl font-bold text-black">
 		<input
 			v-model="title"
-			class="px-2 py-2 w-full text-gray-700 border-none focus:outline-none focus:border-indigo-500"
+			class="w-full border-none px-2 py-2 text-gray-700 focus:border-indigo-500 focus:outline-none"
 			type="text"
 			placeholder="Title"
 		/>
@@ -99,7 +99,7 @@ const handleDeleteImageAll = () => {
 	<div class="mb-5 text-3xl font-bold text-black">
 		<textarea
 			v-model="contents"
-			class="px-2 py-2 w-full text-base text-gray-700 border-none focus:outline-none focus:border-indigo-500"
+			class="w-full border-none px-2 py-2 text-base text-gray-700 focus:border-indigo-500 focus:outline-none"
 			rows="3"
 			type="text"
 			placeholder="What’s happening?"
@@ -110,14 +110,14 @@ const handleDeleteImageAll = () => {
 
 	<!-- /入力フォーム -->
 	<!-- Limited access button -->
-	<div class="relative flex items-center mb-5">
+	<div class="relative mb-5 flex items-center">
 		<button
-			class="py-2 px-8 text-base text-white bg-blue-600 border border-transparent rounded-3xl shadow-sm focus:outline-none"
+			class="rounded-3xl border border-transparent bg-blue-600 px-8 py-2 text-base text-white shadow-sm focus:outline-none"
 			@click="onClickLimitedAccess"
 		>
 			<!-- icon-plus.svgを表示 -->
 			<svg
-				class="inline w-5 h-5 mr-3"
+				class="mr-3 inline h-5 w-5"
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 20 20"
 				fill="currentColor"
@@ -131,10 +131,10 @@ const handleDeleteImageAll = () => {
 			Limited access
 		</button>
 		<!-- 選択済みのLimited accessを表示 -->
-		<div class="flex items-center gap-3 ml-3">
+		<div class="ml-3 flex items-center gap-3">
 			<span
 				v-for="selectedLimitedAccessType in selectedLimitedAccess"
-				class="inline-flex items-center px-3 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"
+				class="inline-flex items-center rounded-full bg-yellow-100 px-3 py-0.5 text-xs font-medium text-yellow-800"
 			>
 				{{ selectedLimitedAccessType.name }}
 			</span>
@@ -142,7 +142,7 @@ const handleDeleteImageAll = () => {
 		<!-- modal menu -->
 		<ul
 			v-if="openLimitedAccessModal"
-			class="absolute z-20 top-14 left-0 flex flex-col gap-3 p-3 bg-white shadow-xl rounded-md"
+			class="absolute left-0 top-14 z-20 flex flex-col gap-3 rounded-md bg-white p-3 shadow-xl"
 		>
 			<li v-for="limitedAccessType in limitedAccessTypes">
 				<label
@@ -152,12 +152,12 @@ const handleDeleteImageAll = () => {
 					<input
 						:id="limitedAccessType.id"
 						type="checkbox"
-						class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+						class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-blue-500"
 						:checked="selectedLimitedAccess.includes(limitedAccessType)"
 						@change="onUpdateLimitedAccess(limitedAccessType)"
 					/>
 					<img
-						class="w-24 h-24 rounded"
+						class="h-24 w-24 rounded"
 						:src="limitedAccessType.imageSrc"
 						:alt="limitedAccessType.name"
 					/>
@@ -178,7 +178,7 @@ const handleDeleteImageAll = () => {
 	</div>
 	<!-- /Limited access button -->
 	<!-- Media preview -->
-	<div class="mb-5 flex flex-wrap gap-y-1 gap-x-1">
+	<div class="mb-5 flex flex-wrap gap-x-1 gap-y-1">
 		<Images
 			v-if="uploadImages"
 			:images="uploadImages"
@@ -189,7 +189,7 @@ const handleDeleteImageAll = () => {
 	<!-- /Media preview -->
 	<Line class="mb-5" />
 	<!-- アクションエリア -->
-	<div class="flex justify-between items-center">
+	<div class="flex items-center justify-between">
 		<!-- 画像ボタン -->
 		<AddMedia @upload:image="handleUploadImages" />
 		<!-- /画像ボタン -->

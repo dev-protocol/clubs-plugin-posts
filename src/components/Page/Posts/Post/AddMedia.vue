@@ -32,7 +32,7 @@ const onClickImage = () => {
 <template>
 	<div class="flex items-center">
 		<svg
-			class="w-5 h-5 mr-3"
+			class="mr-3 h-5 w-5"
 			xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 20 20"
 			fill="#C4C4C4"
@@ -52,7 +52,7 @@ const onClickImage = () => {
 			@change="handleFileUpload"
 		/>
 		<button
-			class="inline-flex items-center justify-center rounded-full shadow-sm cursor-pointer"
+			class="inline-flex cursor-pointer items-center justify-center rounded-full shadow-sm"
 			type="button"
 			@click="onClickImage"
 		>

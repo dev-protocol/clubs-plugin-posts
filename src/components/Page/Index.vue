@@ -122,7 +122,7 @@ const handlePostSuccess = (post: Posts) => {
 	<div class="mx-auto w-full max-w-2xl">
 		<section
 			v-if="hasEditableRole && walletAddress"
-			class="mb-5 p-5 rounded-2xl bg-white"
+			class="mb-5 rounded-2xl bg-white p-5"
 		>
 			<Post
 				:feedId="props.feedId"
@@ -135,21 +135,21 @@ const handlePostSuccess = (post: Posts) => {
 		</section>
 
 		<!-- Loading -->
-		<div v-if="isLoading" class="flex justify-center mb-5 p-5 rounded bg-white">
+		<div v-if="isLoading" class="mb-5 flex justify-center rounded bg-white p-5">
 			<div
-				class="animate-spin h-10 w-10 border-4 border-blue-500 rounded-full border-t-transparent"
+				class="h-10 w-10 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"
 			></div>
 		</div>
 
 		<!-- Error -->
-		<div v-if="!isLoading && error" class="mb-5 p-5 rounded bg-white">
+		<div v-if="!isLoading && error" class="mb-5 rounded bg-white p-5">
 			<p class="text-center">{{ error }}</p>
 		</div>
 
 		<!-- Timeline empty -->
 		<div
 			v-if="!isLoading && posts.length === 0"
-			class="mb-5 p-5 rounded bg-white"
+			class="mb-5 rounded bg-white p-5"
 		>
 			<p class="text-center text-black">
 				Sorry, but there are no posts on this timeline yet
@@ -158,10 +158,10 @@ const handlePostSuccess = (post: Posts) => {
 
 		<div
 			v-if="posts.length > 0 && isVerified === false"
-			class="sticky top-0 py-5 px-5 text-right z-10"
+			class="sticky top-0 z-10 px-5 py-5 text-right"
 		>
 			<button
-				class="py-2 px-6 text-white bg-blue-600 rounded-full shadow-xl focus:outline-none"
+				class="rounded-full bg-blue-600 px-6 py-2 text-white shadow-xl focus:outline-none"
 				@click="handleVerify"
 			>
 				Sign in
@@ -173,7 +173,7 @@ const handlePostSuccess = (post: Posts) => {
 			v-if="posts.length > 0"
 			v-for="(post, key) in posts"
 			:key="post.id"
-			class="mb-5 p-5 rounded bg-white shadow"
+			class="mb-5 rounded bg-white p-5 shadow"
 		>
 			<Contents
 				:feedId="props.feedId"

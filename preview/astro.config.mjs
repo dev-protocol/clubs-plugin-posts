@@ -6,7 +6,7 @@ import svelte from '@astrojs/svelte'
 import tailwind from '@astrojs/tailwind'
 
 // eslint-disable-next-line functional/no-expression-statement
-config({ path: './.env'});
+config({ path: './.env' })
 
 export default defineConfig({
 	server: {
