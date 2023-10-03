@@ -46,7 +46,6 @@
 		"ramda": "0.29.0",
 		"redis": "^4.6.7",
 		"sass": "1.68.0",
-		"svelte": "^4.0.0",
 		"uuid": "^9.0.0"
 	},
 	"devDependencies": {
@@ -80,6 +79,7 @@
 		"prettier-plugin-svelte": "^3.0.0",
 		"rimraf": "5.0.5",
 		"rollup": "3.29.4",
+		"svelte": "^4.2.1",
 		"tailwindcss": "3.3.3",
 		"txtgen": "^3.0.6",
 		"typescript": "5.2.2",
