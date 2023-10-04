@@ -1,18 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { connection } from '@devprotocol/clubs-core/connection'
 import { keccak256 } from 'ethers'
 import Spinner from '../../../Spinner/Spinner.vue'
-import type { Membership, Posts } from '../../../../types'
+import type { PostPrimitives, Posts } from '../../../../types'
 import { encode, decode } from '@devprotocol/clubs-core'
 import { whenDefined } from '@devprotocol/util-ts'
+import { update as callUpdate } from '../../../../plugin-helper'
 
 type Props = {
 	feedId: string
 	images: string[]
-	content: string
-	title: string
-	selectedLimitedAccess: Membership[]
+	post: PostPrimitives
 }
 
 interface Emits {
@@ -27,7 +25,9 @@ const emit = defineEmits<Emits>()
 const onClickPost = async () => {
 	isPosting.value = true
 
-	const signer = connection().signer.value
+	const signer = (
+		await import('@devprotocol/clubs-core/connection')
+	).connection().signer.value
 	if (!signer) {
 		isPosting.value = false
 		return
@@ -48,6 +48,19 @@ const onClickPost = async () => {
 		}
 	}
 
+	const IMAGES = '#images'
+	const post = {
+		...props.post,
+		options: [
+			...props.post.options.filter(({ key }) => key !== IMAGES),
+			{
+				key: IMAGES,
+				value: uploadedImageURLs,
+			},
+		],
+	}
+	const newPost = await callUpdate(post)
+
 	// fetchで /message.jsonをpostしてasync/awaitでレスポンスを取得する
 	const response = await fetch(
 		`/api/devprotocol:clubs:plugin:posts/${props.feedId}/message`,
@@ -57,19 +70,7 @@ const onClickPost = async () => {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				contents: encode({
-					title: props.title,
-					content: props.content,
-					options: [
-						{ key: '#images', value: uploadedImageURLs },
-						{
-							key: 'require-one-of',
-							value: props.selectedLimitedAccess
-								.filter(({ payload }) => payload !== undefined)
-								.map(({ payload }) => payload as Uint8Array),
-						},
-					],
-				}),
+				contents: encode(newPost),
 				hash,
 				sig,
 			}),

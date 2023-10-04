@@ -13,13 +13,13 @@ const { date, address, feedId, title } = defineProps<Props>()
 </script>
 
 <template>
-	<div class="mb-3 flex items-center justify-between">
+	<div class="flex items-center justify-between">
 		<Profile :address="address" :feedId="feedId" />
 		<p class="text-center text-xs text-gray-400 lg:text-base">
 			{{ dayjs(date).format('DD MMM HH:mm') }}
 		</p>
 	</div>
-	<div v-if="title" class="mb-3 text-3xl font-bold text-black">
+	<div v-if="title" class="text-3xl font-bold text-black">
 		{{ title }}
 	</div>
 </template>

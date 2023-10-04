@@ -71,3 +71,8 @@ export type Membership = {
 export type Reactions = {
 	readonly [emoji: string]: readonly string[]
 }
+
+export enum SlotName {
+	PostsEditAfterContentForm = 'posts:edit:after:content-form',
+	PostsFeedAfterPostContent = 'posts:feed:after:post-content',
+}

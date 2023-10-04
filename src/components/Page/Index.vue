@@ -8,12 +8,13 @@ import type { Option, Posts } from '../../types'
 import { onMounted, ref } from 'vue'
 import Line from '../Common/Line.vue'
 import { decode } from '@devprotocol/clubs-core'
-import { connection } from '@devprotocol/clubs-core/connection'
+import type { connection as Connection } from '@devprotocol/clubs-core/connection'
 import type { Membership } from '../../types'
 import { type ContractRunner, hashMessage, type Signer } from 'ethers'
 import { whenDefined, type UndefinedOr } from '@devprotocol/util-ts'
 import { emojiAllowList } from '../../constants'
 import { clientsProperty } from '@devprotocol/dev-kit'
+import EncodedPostData from '../../components/Common/EncodedPostData.vue'
 
 type Props = {
 	options: Option[]
@@ -35,6 +36,7 @@ let posts = ref<Posts[]>([])
 
 const walletAddress = ref<string | undefined>('')
 const hasEditableRole = ref(false)
+const connection = ref<typeof Connection>()
 
 const MULTIPLY = 1000000n
 const testPermission = async (
@@ -97,16 +99,20 @@ const fetchPosts = async ({ hash, sig }: { hash?: string; sig?: string }) => {
 		})
 }
 
-onMounted(() => {
+onMounted(async () => {
 	fetchPosts({})
+	const { connection: conct } = await import(
+		'@devprotocol/clubs-core/connection'
+	)
+	connection.value = conct
 })
 
 const isVerified = ref(false)
 
 const handleVerify = async () => {
-	connection().signer.subscribe(handleConnection)
+	connection.value?.().signer.subscribe(handleConnection)
 	//
-	if (connection().signer.value) {
+	if (connection.value?.().signer.value) {
 		isVerified.value = true
 	}
 }
@@ -129,7 +135,11 @@ const handlePostSuccess = (post: Posts) => {
 				:address="walletAddress"
 				:memberships="props.memberships"
 				@post:success="handlePostSuccess"
-			/>
+			>
+				<template v-slot:after-content-form>
+					<slot name="edit:after:content-form" />
+				</template>
+			</Post>
 		</section>
 
 		<!-- Loading -->
@@ -171,7 +181,7 @@ const handlePostSuccess = (post: Posts) => {
 			v-if="posts.length > 0"
 			v-for="(post, key) in posts"
 			:key="post.id"
-			class="mb-5 rounded bg-white p-5 shadow"
+			class="mb-5 grid gap-3 rounded bg-white p-5 shadow"
 		>
 			<Contents
 				:feedId="props.feedId"
@@ -181,7 +191,11 @@ const handlePostSuccess = (post: Posts) => {
 				:masked="post.masked ?? false"
 				:memberships="props.memberships ?? []"
 				:title="post.title"
-			/>
+			>
+				<template v-slot:after-post-content>
+					<slot name="feed:after:post-content" />
+				</template>
+			</Contents>
 			<Media
 				v-if="!post?.masked"
 				:images="post.options.find((item) => item.key === '#images')"
@@ -193,13 +207,15 @@ const handlePostSuccess = (post: Posts) => {
 				:post-id="post.id"
 				:emoji-allow-list="emojiAllowList"
 			/>
-			<Line v-if="!post?.masked" class="my-5" />
+			<Line v-if="!post?.masked" class="my-2" />
 			<Comment
 				v-if="!post?.masked"
 				:feedId="props.feedId"
 				:postId="post.id"
 				:comments="post.comments"
 			/>
+
+			<EncodedPostData :post="post" />
 		</article>
 	</div>
 </template>

@@ -1,9 +1,11 @@
 import theme from './src/theme'
-import sTokensViewer from '../src/index'
+import plugin from './src/plugin'
+import posts from '../src/index'
 import type { ClubsPlugins } from '@devprotocol/clubs-core'
 
 export default [
 	theme,
-	sTokensViewer,
+	plugin,
+	posts,
 	{ meta: { id: 'devprotocol:clubs:simple-memberships' } },
 ] as ClubsPlugins

@@ -12,7 +12,7 @@ const { memberships } = props
 </script>
 
 <template>
-	<div class="bg-mask mb-2 flex flex-col justify-center rounded-xl p-4">
+	<div class="bg-mask flex flex-col justify-center rounded-xl p-4">
 		<p class="mb-4 text-center text-white sm:mb-4">
 			Unlock this post by becoming a member.
 		</p>

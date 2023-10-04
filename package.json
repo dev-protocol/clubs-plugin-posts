@@ -1,20 +1,26 @@
 {
 	"name": "@devprotocol/clubs-plugin-posts",
-	"version": "0.4.1",
+	"version": "0.5.0-alpha.0",
 	"type": "module",
 	"description": "Template repository for using TypeScript",
 	"main": "dist/index.js",
 	"exports": {
 		".": {
-			"default": "./dist/index.js"
+			"default": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		},
+		"./plugin-helper": {
+			"default": "./dist/plugin-helper/index.js",
+			"types": "./dist/plugin-helper/index.d.ts"
 		}
 	},
-	"types": "./dist/src/index.d.ts",
+	"types": "./dist/index.d.ts",
 	"files": [
 		"dist/**/*.d.ts",
 		"dist/**/*.js",
 		"!**/*.test.*",
-		"src"
+		"src",
+		"plugin-helper.d.ts"
 	],
 	"keywords": [
 		"clubs-plugin"
@@ -46,7 +52,6 @@
 		"ramda": "0.29.0",
 		"redis": "^4.6.7",
 		"sass": "1.68.0",
-		"svelte": "^4.0.0",
 		"uuid": "^9.0.0"
 	},
 	"devDependencies": {
@@ -81,6 +86,8 @@
 		"prettier-plugin-tailwindcss": "^0.5.5",
 		"rimraf": "5.0.5",
 		"rollup": "3.29.4",
+		"rollup-plugin-dts": "^6.0.2",
+		"svelte": "^4.2.1",
 		"tailwindcss": "3.3.3",
 		"txtgen": "^3.0.6",
 		"typescript": "5.2.2",

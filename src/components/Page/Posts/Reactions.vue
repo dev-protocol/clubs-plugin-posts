@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import type { Reactions } from '../../../types'
-import { connection } from '@devprotocol/clubs-core/connection'
 import { encode } from '@devprotocol/clubs-core'
 import type { UndefinedOr } from '@devprotocol/util-ts'
 
@@ -25,7 +24,9 @@ const toggleReaction = async (emoji: string) => {
 
 	isTogglingReaction.value = true
 
-	const signer = connection().signer.value
+	const signer = (
+		await import('@devprotocol/clubs-core/connection')
+	).connection().signer.value
 	if (!signer) {
 		// TODO: add state for failure.
 		isTogglingReaction.value = false
