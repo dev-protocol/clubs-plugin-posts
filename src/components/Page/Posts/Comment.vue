@@ -2,7 +2,6 @@
 import dayjs from 'dayjs'
 import { encode } from '@devprotocol/clubs-core'
 import { ref } from 'vue'
-import { connection } from '@devprotocol/clubs-core/connection'
 import Profile from '../../Common/Profile.vue'
 import type { Comment, CommentPrimitives } from '../../../types'
 import IconSend from '../../../assets/images/icon-send.svg'
@@ -22,7 +21,9 @@ const comments = ref<readonly Comment[]>(props.comments)
 const postComment = async () => {
 	isCommenting.value = true
 
-	const signer = connection().signer.value
+	const signer = (
+		await import('@devprotocol/clubs-core/connection')
+	).connection().signer.value
 	if (!signer) {
 		// TODO: add state for failure.
 		isCommenting.value = false

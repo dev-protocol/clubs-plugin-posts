@@ -85,6 +85,7 @@ typings/
 
 # Rollup output
 dist
+plugin-helper.d.ts
 
 # Azure Functions artifacts
 bin

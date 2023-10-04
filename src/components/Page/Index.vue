@@ -8,7 +8,7 @@ import type { Option, Posts } from '../../types'
 import { onMounted, ref } from 'vue'
 import Line from '../Common/Line.vue'
 import { decode } from '@devprotocol/clubs-core'
-import { connection } from '@devprotocol/clubs-core/connection'
+import type { connection as Connection } from '@devprotocol/clubs-core/connection'
 import type { Membership } from '../../types'
 import { type ContractRunner, hashMessage, type Signer } from 'ethers'
 import { whenDefined, type UndefinedOr } from '@devprotocol/util-ts'
@@ -35,6 +35,7 @@ let posts = ref<Posts[]>([])
 
 const walletAddress = ref<string | undefined>('')
 const hasEditableRole = ref(false)
+const connection = ref<typeof Connection>()
 
 const MULTIPLY = 1000000n
 const testPermission = async (
@@ -97,16 +98,20 @@ const fetchPosts = async ({ hash, sig }: { hash?: string; sig?: string }) => {
 		})
 }
 
-onMounted(() => {
+onMounted(async () => {
 	fetchPosts({})
+	const { connection: conct } = await import(
+		'@devprotocol/clubs-core/connection'
+	)
+	connection.value = conct
 })
 
 const isVerified = ref(false)
 
 const handleVerify = async () => {
-	connection().signer.subscribe(handleConnection)
+	connection.value?.().signer.subscribe(handleConnection)
 	//
-	if (connection().signer.value) {
+	if (connection.value?.().signer.value) {
 		isVerified.value = true
 	}
 }
@@ -130,7 +135,9 @@ const handlePostSuccess = (post: Posts) => {
 				:memberships="props.memberships"
 				@post:success="handlePostSuccess"
 			>
-				<slot name="edit:after:content-form" slot="after:content-form"></slot>
+				<template v-slot:after-content-form>
+					<slot name="edit:after:content-form" />
+				</template>
 			</Post>
 		</section>
 

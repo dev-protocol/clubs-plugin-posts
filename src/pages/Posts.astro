@@ -2,7 +2,7 @@
 import type { ClubsPropsPages } from '@devprotocol/clubs-core'
 import Posts_ from '../components/Page/Index.vue'
 import type { Membership, Option } from '../types'
-import  { PostsSlotName } from '../types'
+import { SlotName } from '../types'
 
 interface Props extends ClubsPropsPages {
 	options: Option[]
@@ -12,12 +12,31 @@ interface Props extends ClubsPropsPages {
 	adminRolePoints: number
 }
 
-const {options,feedId,propertyAddress,memberships,adminRolePoints,clubs} = Astro.props
+const {
+	options,
+	feedId,
+	propertyAddress,
+	memberships,
+	adminRolePoints,
+	clubs,
+} = Astro.props
 
-const SlotsPostsEditAfterContentForm=clubs.slots.filter(slot=>slot.slot===PostsSlotName.PostsEditAfterContentForm)
+const SlotsPostsEditAfterContentForm = clubs.slots.filter(
+	(slot) => slot.slot === SlotName.PostsEditAfterContentForm,
+)
 ---
 
-<Posts_ client:only="vue" options={options} feedId={feedId} propertyAddress={propertyAddress} memberships={memberships} adminRolePoints={adminRolePoints}>
-	{SlotsPostsEditAfterContentForm.map(Slot=><Slot.component {...Slot.props} slot="edit:after:content-form"/>)}
+<Posts_
+	client:load
+	options={options}
+	feedId={feedId}
+	propertyAddress={propertyAddress}
+	memberships={memberships}
+	adminRolePoints={adminRolePoints}
+>
+	{
+		SlotsPostsEditAfterContentForm.map((Slot) => (
+			<Slot.component {...Slot.props} slot="edit:after:content-form" />
+		))
+	}
 </Posts_>
-

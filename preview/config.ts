@@ -46,6 +46,10 @@ export default () =>
 				options: [],
 			},
 			{
+				id: 'example-plugin',
+				options: [],
+			},
+			{
 				id: 'devprotocol:clubs:plugin:posts',
 				options: [
 					{

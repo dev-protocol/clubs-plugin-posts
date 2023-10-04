@@ -6,15 +6,21 @@
 	"main": "dist/index.js",
 	"exports": {
 		".": {
-			"default": "./dist/index.js"
+			"default": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		},
+		"./plugin-helper": {
+			"default": "./dist/plugin-helper/index.js",
+			"types": "./dist/plugin-helper/index.d.ts"
 		}
 	},
-	"types": "./dist/src/index.d.ts",
+	"types": "./dist/index.d.ts",
 	"files": [
 		"dist/**/*.d.ts",
 		"dist/**/*.js",
 		"!**/*.test.*",
-		"src"
+		"src",
+		"plugin-helper.d.ts"
 	],
 	"keywords": [
 		"clubs-plugin"
@@ -80,6 +86,7 @@
 		"prettier-plugin-tailwindcss": "^0.5.5",
 		"rimraf": "5.0.5",
 		"rollup": "3.29.4",
+		"rollup-plugin-dts": "^6.0.2",
 		"svelte": "^4.2.1",
 		"tailwindcss": "3.3.3",
 		"txtgen": "^3.0.6",
