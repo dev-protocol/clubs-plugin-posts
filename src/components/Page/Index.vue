@@ -14,6 +14,7 @@ import { type ContractRunner, hashMessage, type Signer } from 'ethers'
 import { whenDefined, type UndefinedOr } from '@devprotocol/util-ts'
 import { emojiAllowList } from '../../constants'
 import { clientsProperty } from '@devprotocol/dev-kit'
+import EncodedPostData from '../../components/Common/EncodedPostData.vue'
 
 type Props = {
 	options: Option[]
@@ -180,7 +181,7 @@ const handlePostSuccess = (post: Posts) => {
 			v-if="posts.length > 0"
 			v-for="(post, key) in posts"
 			:key="post.id"
-			class="mb-5 rounded bg-white p-5 shadow"
+			class="mb-5 grid gap-3 rounded bg-white p-5 shadow"
 		>
 			<Contents
 				:feedId="props.feedId"
@@ -190,7 +191,11 @@ const handlePostSuccess = (post: Posts) => {
 				:masked="post.masked ?? false"
 				:memberships="props.memberships ?? []"
 				:title="post.title"
-			/>
+			>
+				<template v-slot:after-post-content>
+					<slot name="feed:after:post-content" />
+				</template>
+			</Contents>
 			<Media
 				v-if="!post?.masked"
 				:images="post.options.find((item) => item.key === '#images')"
@@ -202,13 +207,15 @@ const handlePostSuccess = (post: Posts) => {
 				:post-id="post.id"
 				:emoji-allow-list="emojiAllowList"
 			/>
-			<Line v-if="!post?.masked" class="my-5" />
+			<Line v-if="!post?.masked" class="my-2" />
 			<Comment
 				v-if="!post?.masked"
 				:feedId="props.feedId"
 				:postId="post.id"
 				:comments="post.comments"
 			/>
+
+			<EncodedPostData :post="post" />
 		</article>
 	</div>
 </template>

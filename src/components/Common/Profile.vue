@@ -45,7 +45,7 @@ const fetchProfile = async (address: string) => {
 </script>
 
 <template>
-	<div class="flex w-8/12 items-center">
+	<div class="mb-2 flex w-8/12 items-center">
 		<template v-if="avatar">
 			<div
 				class="mr-3 h-12 w-12 rounded-full bg-cover bg-center bg-no-repeat"

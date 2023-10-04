@@ -24,6 +24,9 @@ const {
 const SlotsPostsEditAfterContentForm = clubs.slots.filter(
 	(slot) => slot.slot === SlotName.PostsEditAfterContentForm,
 )
+const SlotsPostsFeedAfterPostContent = clubs.slots.filter(
+	(slot) => slot.slot === SlotName.PostsFeedAfterPostContent,
+)
 ---
 
 <Posts_
@@ -37,6 +40,11 @@ const SlotsPostsEditAfterContentForm = clubs.slots.filter(
 	{
 		SlotsPostsEditAfterContentForm.map((Slot) => (
 			<Slot.component {...Slot.props} slot="edit:after:content-form" />
+		))
+	}
+	{
+		SlotsPostsFeedAfterPostContent.map((Slot) => (
+			<Slot.component {...Slot.props} slot="feed:after:post-content" />
 		))
 	}
 </Posts_>

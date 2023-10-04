@@ -15,7 +15,7 @@ const props = defineProps<Props>()
 </script>
 
 <template>
-	<div class="mb-5 flex flex-wrap gap-x-1 gap-y-1">
+	<div class="mb-2 flex flex-wrap gap-x-1 gap-y-1">
 		<div
 			v-if="props.required"
 			class="overflow-hidden bg-gray-100"

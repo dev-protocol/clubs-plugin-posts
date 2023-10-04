@@ -44,13 +44,15 @@ marked.use({ renderer })
 		:title="props.title"
 	/>
 
-	<Mask v-if="props.masked" :memberships="props.memberships" />
-
 	<div
-		v-else
-		class="mb-5 text-3xl font-bold text-black"
+		v-if="!props.masked"
+		class="mb-2 text-3xl font-bold text-black"
 		v-html="content || ''"
 	></div>
+
+	<slot name="after-post-content" />
+
+	<Mask v-if="props.masked" :memberships="props.memberships" />
 </template>
 
 <style scoped></style>

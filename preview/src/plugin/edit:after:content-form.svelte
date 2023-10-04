@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte'
 	import { onUpdate } from '../../../src/plugin-helper'
 
 	onUpdate((post) => {
@@ -11,9 +10,6 @@
 				{ key: 'x', value: 'this option was added by example-plugin.' },
 			],
 		}
-	})
-	onMount(async () => {
-		console.log('MOUNTED')
 	})
 </script>
 
