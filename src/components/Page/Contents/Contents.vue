@@ -4,6 +4,7 @@ import { marked, type Renderer } from 'marked'
 import ContentsHead from './ContentsHead.vue'
 import Mask from './Mask.vue'
 import type { Membership } from '../../../types'
+import { computed } from 'vue'
 
 type Props = {
 	feedId: string
@@ -17,9 +18,9 @@ type Props = {
 
 const props = defineProps<Props>()
 
-const content = props.contents
-	? DOMPurify.sanitize(marked.parse(props.contents))
-	: undefined
+const content = computed<string | undefined>(() =>
+	props.contents ? DOMPurify.sanitize(marked.parse(props.contents)) : undefined,
+)
 
 const renderer = {
 	link(href: string, title: string, text: string) {
@@ -46,7 +47,7 @@ marked.use({ renderer })
 
 	<div
 		v-if="!props.masked"
-		class="mb-2 text-3xl font-bold text-black"
+		class="prose prose-lg mb-2 text-black"
 		v-html="content || ''"
 	></div>
 
