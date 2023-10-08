@@ -165,7 +165,7 @@ const handlePostSuccess = (post: Posts) => {
 		</div>
 
 		<div
-			v-if="posts.length > 0 && isVerified === false"
+			v-if="isVerified === false"
 			class="sticky top-0 z-10 px-5 py-5 text-right"
 		>
 			<button
