@@ -48,7 +48,7 @@ marked.use({ renderer })
 
 	<div
 		v-if="!props.masked"
-		class="prose prose-lg mb-2 text-black"
+		class="prose prose-lg mb-2"
 		:class="ProseTextInherit"
 		v-html="content || ''"
 	></div>
