@@ -5,6 +5,7 @@ import ContentsHead from './ContentsHead.vue'
 import Mask from './Mask.vue'
 import type { Membership } from '../../../types'
 import { computed } from 'vue'
+import { ProseTextInherit } from '@devprotocol/clubs-core'
 
 type Props = {
 	feedId: string
@@ -48,6 +49,7 @@ marked.use({ renderer })
 	<div
 		v-if="!props.masked"
 		class="prose prose-lg mb-2 text-black"
+		:class="ProseTextInherit"
 		v-html="content || ''"
 	></div>
 
