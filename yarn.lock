@@ -76,9 +76,9 @@
     svelte2tsx "^0.6.20"
 
 "@astrojs/tailwind@^5.0.0":
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/@astrojs/tailwind/-/tailwind-5.0.1.tgz#f55f27c4bd58d9b53c0d2a7d8e81b2219fb5bba3"
-  integrity sha512-HzguDH+q1v8NhZIu245UtXfz5tuy4IAd/TND92z5vyftYtGdjDLdBeHhMH4Wd91/0sIPPNRz9NUfToprI636YQ==
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@astrojs/tailwind/-/tailwind-5.0.2.tgz#877c36750bc88b7e18b3ad2aa8f655d4d9769a3c"
+  integrity sha512-oXqeqmBlkQmsltrsU9nEWeXOtrZIAHW8dcmX7BCdrjzPnU6dPwWzAwhddNQ9ihKiWwsLnlbwQZIo2CDigcZlIA==
   dependencies:
     autoprefixer "^10.4.15"
     postcss "^8.4.28"
@@ -2421,9 +2421,9 @@ camelize@^1.0.0:
   integrity sha512-dU+Tx2fsypxTgtLoE36npi3UqcjSSMNYfkqgmoEhtZrraP5VWq0K7FkWVTYa8eMPtnU/G2txVsfdCJTn9uzpuQ==
 
 caniuse-lite@^1.0.30001538, caniuse-lite@^1.0.30001541:
-  version "1.0.30001546"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001546.tgz#10fdad03436cfe3cc632d3af7a99a0fb497407f0"
-  integrity sha512-zvtSJwuQFpewSyRrI3AsftF6rM0X80mZkChIt1spBGEvRglCrjTniXvinc8JKRoqTwXAgvqTImaN9igfSMtUBw==
+  version "1.0.30001547"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001547.tgz#d4f92efc488aab3c7f92c738d3977c2a3180472b"
+  integrity sha512-W7CrtIModMAxobGhz8iXmDfuJiiKg1WADMO/9x7/CLNin5cpSbuBjooyoIUVB5eyCc36QuTVlkVa1iB2S5+/eA==
 
 cbor@^8.1.0:
   version "8.1.0"
@@ -2947,9 +2947,9 @@ eastasianwidth@^0.2.0:
   integrity sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==
 
 electron-to-chromium@^1.4.535:
-  version "1.4.543"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.543.tgz#51116ffc9fba1ee93514d6a40d34676aa6d7d1c4"
-  integrity sha512-t2ZP4AcGE0iKCCQCBx/K2426crYdxD3YU6l0uK2EO3FZH0pbC4pFz/sZm2ruZsND6hQBTcDWWlo/MLpiOdif5g==
+  version "1.4.548"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.548.tgz#e695d769e0e801fa6d438b63f6bc9b80372000d6"
+  integrity sha512-R77KD6mXv37DOyKLN/eW1rGS61N6yHOfapNSX9w+y9DdPG83l9Gkuv7qkCFZ4Ta4JPhrjgQfYbv4Y3TnM1Hi2Q==
 
 elliptic@6.5.4:
   version "6.5.4"
