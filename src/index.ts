@@ -39,7 +39,7 @@ import Icon from './assets/images/plugin-icon.svg'
 import Readme from './readme.astro'
 import { CreateNavigationLink } from '@devprotocol/clubs-core/layouts'
 
-export const getPagePaths: ClubsFunctionGetPagePaths = async (
+export const getPagePaths = (async (
 	options,
 	{ propertyAddress, adminRolePoints },
 	{ getPluginConfigById },
@@ -69,9 +69,9 @@ export const getPagePaths: ClubsFunctionGetPagePaths = async (
 			// `propertyAddress` is required for calling post API, so passed to the FE here.
 		})) ?? []),
 	]
-}
+}) satisfies ClubsFunctionGetPagePaths
 
-export const getAdminPaths: ClubsFunctionGetAdminPaths = async (options) => {
+export const getAdminPaths = (async (options) => {
 	return [
 		{
 			paths: ['posts'],
@@ -79,9 +79,9 @@ export const getAdminPaths: ClubsFunctionGetAdminPaths = async (options) => {
 			props: { options },
 		},
 	]
-}
+}) satisfies ClubsFunctionGetAdminPaths
 
-export const meta: ClubsPluginMeta = {
+export const meta = {
 	id: 'devprotocol:clubs:plugin:posts',
 	displayName: 'Posts',
 	description: 'Add an interactive posts feed to your Club',
@@ -89,12 +89,9 @@ export const meta: ClubsPluginMeta = {
 	previewImages: [Screenshot1.src, Screenshot2.src, Screenshot3.src],
 	readme: Readme,
 	icon: Icon.src,
-}
+} satisfies ClubsPluginMeta
 
-export const getApiPaths: ClubsFunctionGetApiPaths = async (
-	options,
-	config,
-) => {
+export const getApiPaths = (async (options, config) => {
 	const namespace = uuidv5(config.url, uuidv5.URL)
 	const previousConfiguration = encode(config)
 	const dbs = options.find(
@@ -391,13 +388,9 @@ export const getApiPaths: ClubsFunctionGetApiPaths = async (
 			)
 			.flat(),
 	]
-}
+}) satisfies ClubsFunctionGetApiPaths
 
-export const getSlots: ClubsFunctionGetSlots = async (
-	_,
-	__,
-	{ paths, factory },
-) => {
+export const getSlots = (async (_, __, { paths, factory }) => {
 	const [path1] = paths
 	return factory === 'admin' && path1 === 'posts'
 		? [
@@ -416,7 +409,7 @@ export const getSlots: ClubsFunctionGetSlots = async (
 				},
 		  ]
 		: []
-}
+}) satisfies ClubsFunctionGetSlots
 
 export default {
 	getPagePaths,
@@ -424,6 +417,6 @@ export default {
 	getApiPaths,
 	getSlots,
 	meta,
-} as ClubsFunctionPlugin
+} satisfies ClubsFunctionPlugin
 
 export * from './types'

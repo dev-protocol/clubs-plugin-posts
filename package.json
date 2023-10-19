@@ -33,7 +33,7 @@
 		"prebuild": "rimraf dist",
 		"lint": "yarn lint:eslint && yarn lint:format",
 		"lint:eslint": "eslint . --ext .ts,.js --fix",
-		"lint:format": "prettier --write .",
+		"lint:format": "prettier --write '**/*.{ts,js,tsx,jsx,astro,vue,svelte,json,md,yml}'",
 		"prepack": "yarn test && yarn build",
 		"prepare": "husky install"
 	},
@@ -59,7 +59,7 @@
 		"@astrojs/tailwind": "^5.0.0",
 		"@astrojs/vue": "^3.0.0",
 		"@ava/typescript": "4.1.0",
-		"@devprotocol/clubs-core": "1.9.1",
+		"@devprotocol/clubs-core": "2.1.1",
 		"@nanostores/vue": "^0.10.0",
 		"@redis/json": "^1.0.4",
 		"@rollup/plugin-typescript": "11.1.5",
@@ -95,7 +95,7 @@
 		"vue": "3.3.4"
 	},
 	"peerDependencies": {
-		"@devprotocol/clubs-core": "^1.8.0"
+		"@devprotocol/clubs-core": "^2.1.0"
 	},
 	"ava": {
 		"files": [
