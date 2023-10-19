@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import dayjs from 'dayjs'
-import { encode } from '@devprotocol/clubs-core'
+import { ProseTextInherit, encode } from '@devprotocol/clubs-core'
 import { ref } from 'vue'
 import Profile from '../../Common/Profile.vue'
 import type { Comment, CommentPrimitives } from '../../../types'
 import IconSend from '../../../assets/images/icon-send.svg'
+import DOMPurify from 'dompurify'
+import { marked } from 'marked'
 
 type Props = {
 	feedId: string
@@ -17,6 +19,9 @@ const newComment = ref<string>('')
 const isCommenting = ref<boolean>(false)
 
 const comments = ref<readonly Comment[]>(props.comments)
+
+const htmlComment = (content: string) =>
+	DOMPurify.sanitize(marked.parse(content))
 
 const postComment = async () => {
 	isCommenting.value = true
@@ -114,9 +119,11 @@ const postComment = async () => {
 						{{ dayjs(comment.created_at).format('DD MMM HH:mm') }}
 					</p>
 				</div>
-				<p class="text-base text-gray-700">
-					{{ comment.content }}
-				</p>
+				<div
+					class="prose text-gray-700"
+					:class="ProseTextInherit"
+					v-html="htmlComment(comment.content || '')"
+				></div>
 			</div>
 		</div>
 
