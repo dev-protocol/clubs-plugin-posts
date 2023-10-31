@@ -59,7 +59,7 @@
 		"@astrojs/tailwind": "^5.0.0",
 		"@astrojs/vue": "^3.0.0",
 		"@ava/typescript": "4.1.0",
-		"@devprotocol/clubs-core": "2.1.9",
+		"@devprotocol/clubs-core": "2.2.0",
 		"@nanostores/vue": "^0.10.0",
 		"@redis/json": "^1.0.4",
 		"@rollup/plugin-typescript": "11.1.5",
