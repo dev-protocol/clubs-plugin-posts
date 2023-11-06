@@ -70,6 +70,10 @@ export default () =>
 								slug: 'posts-2',
 								database: {
 									type: 'documents:redis',
+									key: `scope::${uuidv5(
+										toUtf8Bytes('EXAMPLE'),
+										uuidv5('EXAMPLE_NAMESPACE', uuidv5.URL),
+									)}`, // > scope::694666bb-b2ec-542b-a5d6-65b470e5c494,
 								},
 							},
 						] satisfies readonly OptionsDatabase[],

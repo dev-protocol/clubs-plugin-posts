@@ -53,6 +53,7 @@ export type OptionsDatabase = {
 		  }
 		| {
 				readonly type: 'documents:redis'
+				readonly key: string
 		  }
 }
 
