@@ -65,7 +65,14 @@ export default () =>
 									)}`, // > posts::694666bb-b2ec-542b-a5d6-65b470e5c494
 								},
 							},
-						] as readonly OptionsDatabase[],
+							{
+								id: 'default-2',
+								slug: 'posts-2',
+								database: {
+									type: 'documents:redis',
+								},
+							},
+						] satisfies readonly OptionsDatabase[],
 					},
 				],
 			},

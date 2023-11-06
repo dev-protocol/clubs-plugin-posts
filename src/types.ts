@@ -46,10 +46,14 @@ export type Comment = CommentPrimitives & {
 export type OptionsDatabase = {
 	readonly id: string
 	readonly slug?: string
-	readonly database: {
-		readonly type: 'encoded:redis'
-		readonly key: string
-	}
+	readonly database:
+		| {
+				readonly type: 'encoded:redis'
+				readonly key: string
+		  }
+		| {
+				readonly type: 'documents:redis'
+		  }
 }
 
 export type Membership = {
