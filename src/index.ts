@@ -5,8 +5,6 @@ import {
 	type ClubsFunctionPlugin,
 	type ClubsPluginMeta,
 	ClubsPluginCategory,
-	authenticate,
-	decode,
 	encode,
 	fetchProfile,
 	type ClubsApiPaths,
@@ -14,24 +12,15 @@ import {
 } from '@devprotocol/clubs-core'
 import { default as Admin } from './pages/Admin.astro'
 import Posts from './pages/Posts.astro'
-import type {
-	OptionsDatabase,
-	PostPrimitives,
-	Comment,
-	Reactions,
-} from './types'
+import type { OptionsDatabase } from './types'
 import { v5 as uuidv5 } from 'uuid'
-import {
-	ZeroAddress,
-	getDefaultProvider,
-	randomBytes,
-	verifyMessage,
-} from 'ethers'
+import { verifyMessage } from 'ethers'
 import { whenDefinedAll, type UndefinedOr } from '@devprotocol/util-ts'
-import { getAllPosts, setAllPosts } from './db'
+import { getAllPosts } from './db'
 import { addCommentHandler } from './apiHandler/comment'
 import { maskFactory } from './fixtures/masking'
 import { addReactionHandler } from './apiHandler/reactions'
+import { addPostHandler } from './apiHandler/posts'
 import Screenshot1 from './assets/images/posts-1.jpg'
 import Screenshot2 from './assets/images/posts-2.jpg'
 import Screenshot3 from './assets/images/posts-3.jpg'
@@ -97,12 +86,21 @@ export const getApiPaths = (async (options, config) => {
 	const dbs = options.find(
 		({ key }: Readonly<{ readonly key: string }>) => key === 'feeds',
 	)?.value as UndefinedOr<readonly OptionsDatabase[]>
+	const { createIndex } = await import('./db/redis-documents')
 
 	if (!dbs) {
 		return []
 	}
 
 	return [
+		{
+			paths: ['index', 'documents:redis'],
+			method: 'POST',
+			handler: async () => {
+				const res = await createIndex()
+				return new Response(JSON.stringify(res))
+			},
+		},
 		...dbs
 			.map(
 				(db): ClubsApiPaths => [
@@ -164,124 +162,7 @@ export const getApiPaths = (async (options, config) => {
 						paths: [db.id, 'message'],
 						// This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/message
 						method: 'POST',
-						handler: async ({ request }) => {
-							const { contents, hash, sig } = (await request.json()) as {
-								readonly contents: string
-								readonly hash?: string
-								readonly sig?: string
-							}
-
-							if (!hash || !sig) {
-								return new Response(
-									JSON.stringify({
-										error: 'Hash or Signature are missing',
-										data: null,
-									}),
-									{
-										status: 400,
-									},
-								)
-							}
-
-							const skipAuthentication = config.propertyAddress === ZeroAddress
-
-							const authenticated =
-								!skipAuthentication &&
-								(await whenDefinedAll([hash, sig], ([h, s]) =>
-									authenticate({
-										message: h,
-										signature: s,
-										previousConfiguration,
-										provider: getDefaultProvider(config.rpcUrl),
-									}),
-								))
-							// const { randomBytes, recoverAddress, hashMessage } = utils
-							const id = uuidv5(randomBytes(32), namespace)
-
-							const created_by = verifyMessage(hash, sig)
-
-							const now = new Date()
-							const created_at = now
-							const updated_at = now
-							const decodedContents = decode<PostPrimitives>(contents)
-							const comments: readonly Comment[] = []
-							const reactions: Reactions = {}
-
-							const composed = {
-								...decodedContents,
-								id,
-								created_by,
-								created_at,
-								updated_at,
-								comments,
-								reactions,
-							}
-
-							// eslint-disable-next-line functional/no-try-statement
-							try {
-								const allPosts = await whenDefinedAll(
-									[db.database.type, db.database.key],
-									([type, key]) => {
-										return getAllPosts(type, { key })
-									},
-								)
-
-								const merged =
-									allPosts && !(allPosts instanceof Error)
-										? [composed, ...allPosts]
-										: undefined
-
-								// Todo: このsaveは何を保存している？
-								const saved =
-									skipAuthentication === true || authenticated === true
-										? await whenDefinedAll(
-												[db.database.type, db.database.key, merged],
-												([type, key, posts]) =>
-													setAllPosts(type, { key, posts }),
-										  )
-										: undefined
-
-								return saved instanceof Error
-									? new Response(
-											JSON.stringify({
-												error: saved,
-												data: null,
-											}),
-											{
-												status: 500,
-											},
-									  )
-									: saved
-									? new Response(
-											JSON.stringify({
-												message: saved,
-												data: encode(composed),
-											}),
-											{
-												status: 200,
-											},
-									  )
-									: new Response(
-											JSON.stringify({
-												error: 'Some data is missing',
-												data: null,
-											}),
-											{
-												status: 400,
-											},
-									  )
-							} catch (e: any) {
-								return new Response(
-									JSON.stringify({
-										error: e.message,
-										data: null,
-									}),
-									{
-										status: 500,
-									},
-								)
-							}
-						},
+						handler: addPostHandler(config, db.database.type, db.database.key),
 					},
 					{
 						paths: [db.id, 'message'],
