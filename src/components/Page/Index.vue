@@ -53,6 +53,12 @@ const testPermission = async (
 	return share >= expected
 }
 
+const handleTest = async () => {
+	const foo = 'foo'
+	const bar = 'bar'
+	const baz = 'baz'
+}
+
 const handleConnection = async (signer: UndefinedOr<Signer>) => {
 	if (!signer) {
 		return
