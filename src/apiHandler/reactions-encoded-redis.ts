@@ -58,12 +58,12 @@ export const addReactionEncodedRedis = async ({
 								? // if emoji doesn't exist, add user address
 								  [userAddress]
 								: // emoji exists, check if emoji includes user address
-								post.reactions[data].includes(userAddress)
-								? // if user address already associated with this emoji, remove user address
-								  // post.reactions[emoji].filter((i) => i !== userAddress)
-								  removeUser(post.reactions)
-								: // if user address not associated with this emoji, add user address
-								  [...post.reactions[data], userAddress],
+								  post.reactions[data].includes(userAddress)
+								  ? // if user address already associated with this emoji, remove user address
+								    // post.reactions[emoji].filter((i) => i !== userAddress)
+								    removeUser(post.reactions)
+								  : // if user address not associated with this emoji, add user address
+								    [...post.reactions[data], userAddress],
 						},
 				  }
 				: post,

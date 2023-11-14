@@ -229,22 +229,22 @@ export const getApiPaths = (async (options, config) => {
 										},
 								  )
 								: allPosts
-								? new Response(
-										JSON.stringify({
-											contents: encode(allPosts),
-										}),
-										{
-											status: 200,
-										},
-								  )
-								: new Response(
-										JSON.stringify({
-											error: 'Some data is missing',
-										}),
-										{
-											status: 400,
-										},
-								  )
+								  ? new Response(
+											JSON.stringify({
+												contents: encode(allPosts),
+											}),
+											{
+												status: 200,
+											},
+								    )
+								  : new Response(
+											JSON.stringify({
+												error: 'Some data is missing',
+											}),
+											{
+												status: 400,
+											},
+								    )
 						},
 					},
 					{
