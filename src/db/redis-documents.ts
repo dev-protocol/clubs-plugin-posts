@@ -16,17 +16,15 @@ const client = createClient({
 	},
 })
 
-const createOrSkip = (name: string) =>
-	tryCatch(
-		(prefix: string, scm: RediSearchSchema) =>
-			client.ft
-				.create(name, scm, {
-					ON: 'JSON',
-					PREFIX: prefix,
-				})
-				.then((result) => ({ result, name })),
-		(result: Error) => ({ result, name }),
-	)
+const createOrSkip = (name: string, prefix: string, scm: RediSearchSchema) =>
+	client.ft
+		.create(name, scm, {
+			ON: 'JSON',
+			PREFIX: prefix,
+		})
+		.then((result) => ({ result, name }))
+		.catch((err: Error) => ({ result: err.message, name }))
+
 export const createIndex = async () => {
 	await client.connect()
 
@@ -65,10 +63,10 @@ export const createIndex = async () => {
 	}
 
 	const res = await Promise.all([
-		createOrSkip(schema.Index.Post)(schema.Prefix.Post, schemaPost),
-		createOrSkip(schema.Index.Comment)(schema.Prefix.Comment, schemaComment),
-		createOrSkip(schema.Index.Reaction)(schema.Prefix.Reaction, schemaReaction),
-		createOrSkip(schema.Index.Option)(schema.Prefix.Option, schemaOption),
+		createOrSkip(schema.Index.Post, schema.Prefix.Post, schemaPost),
+		createOrSkip(schema.Index.Comment, schema.Prefix.Comment, schemaComment),
+		createOrSkip(schema.Index.Reaction, schema.Prefix.Reaction, schemaReaction),
+		createOrSkip(schema.Index.Option, schema.Prefix.Option, schemaOption),
 	])
 	await client.quit()
 
