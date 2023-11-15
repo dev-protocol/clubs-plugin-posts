@@ -198,21 +198,6 @@ export const setPost = async ({
 	readonly url: string
 	readonly client: RedisDefaultClient
 }) => {
-	await implSetPost({ scope, url, post, client })
-	return true
-}
-
-export const implSetPost = async ({
-	scope,
-	post,
-	url,
-	client,
-}: {
-	readonly scope: string
-	readonly post: Posts
-	readonly url: string
-	readonly client: RedisDefaultClient
-}) => {
 	const uuid = uuidFactory(url)
 
 	const _post: PostRawDocument = {
@@ -262,7 +247,7 @@ export const implSetPost = async ({
 	)
 	await Promise.all(
 		post.comments.map((data) =>
-			implSetComment({
+			setComment({
 				scope,
 				url,
 				comment: data,
@@ -294,23 +279,6 @@ export const implSetPost = async ({
 }
 
 export const setComment = async ({
-	scope,
-	comment,
-	postId,
-	url,
-	client,
-}: {
-	readonly scope: string
-	readonly comment: Comment
-	readonly postId: string
-	readonly url: string
-	readonly client: RedisDefaultClient
-}) => {
-	await implSetComment({ scope, url, postId, comment, client })
-	return true
-}
-
-export const implSetComment = async ({
 	scope,
 	comment,
 	postId,
