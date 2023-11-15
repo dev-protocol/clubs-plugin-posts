@@ -27,6 +27,9 @@ import Screenshot3 from './assets/images/posts-3.jpg'
 import Icon from './assets/images/plugin-icon.svg'
 import Readme from './readme.astro'
 import { CreateNavigationLink } from '@devprotocol/clubs-core/layouts'
+import { copyPostFromEncodedRedisToDocumentsRedisHandler } from './apiHandler/copy-encoded-redis_to_documents-redis'
+import { xprod } from 'ramda'
+import { getDefaultClient } from './db/redis'
 
 export const getPagePaths = (async (
 	options,
@@ -94,41 +97,65 @@ export const getApiPaths = (async (options, config) => {
 
 	return [
 		{
-			paths: ['index', 'documents:redis'],
+			paths: ['indexing', 'documents:redis'],
 			method: 'POST',
 			handler: async () => {
-				const res = await createIndex()
+				const client = await getDefaultClient()
+				const res = await createIndex(client)
+				// eslint-disable-next-line functional/no-expression-statement
+				await client.quit()
 				return new Response(JSON.stringify(res))
 			},
 		},
 		...dbs
 			.map(
-				(db): ClubsApiPaths => [
-					{
-						paths: [db.id, 'profile'],
-						method: 'GET',
-						handler: async ({ url }) => {
-							const address = url.searchParams.get('address')
+				(db) =>
+					[
+						{
+							paths: [db.id, 'profile'],
+							method: 'GET',
+							handler: async ({ url }) => {
+								const address = url.searchParams.get('address')
 
-							if (!address) {
-								return new Response(
-									JSON.stringify({
-										error: 'Address is missing',
-										data: null,
-									}),
-									{
-										status: 400,
-									},
-								)
-							}
-
-							//
-							try {
-								const res = await fetchProfile(address)
-								if (res.error) {
+								if (!address) {
 									return new Response(
 										JSON.stringify({
-											error: res.error,
+											error: 'Address is missing',
+											data: null,
+										}),
+										{
+											status: 400,
+										},
+									)
+								}
+
+								//
+								try {
+									const res = await fetchProfile(address)
+									if (res.error) {
+										return new Response(
+											JSON.stringify({
+												error: res.error,
+												data: null,
+											}),
+											{
+												status: 500,
+											},
+										)
+									}
+
+									return new Response(
+										JSON.stringify({
+											profile: res.profile,
+										}),
+										{
+											status: 200,
+										},
+									)
+								} catch (e) {
+									return new Response(
+										JSON.stringify({
+											error: e,
 											data: null,
 										}),
 										{
@@ -136,136 +163,139 @@ export const getApiPaths = (async (options, config) => {
 										},
 									)
 								}
-
-								return new Response(
-									JSON.stringify({
-										profile: res.profile,
-									}),
-									{
-										status: 200,
-									},
-								)
-							} catch (e) {
-								return new Response(
-									JSON.stringify({
-										error: e,
-										data: null,
-									}),
-									{
-										status: 500,
-									},
-								)
-							}
+							},
 						},
-					},
-					{
-						paths: [db.id, 'message'],
-						// This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/message
-						method: 'POST',
-						handler: addPostHandler(config, db.database.type, db.database.key),
-					},
-					{
-						paths: [db.id, 'message'],
-						method: 'GET',
-						handler: async ({ request, url }) => {
-							const { hash, sig } = {
-								hash: url.searchParams.get('hash'),
-								sig: url.searchParams.get('sig'),
-							} as {
-								readonly hash?: string
-								readonly sig?: string
-							}
+						{
+							paths: [db.id, 'message'],
+							// This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/message
+							method: 'POST',
+							handler: addPostHandler(
+								config,
+								db.database.type,
+								db.database.key,
+							),
+						},
+						{
+							paths: [db.id, 'message'],
+							method: 'GET',
+							handler: async ({ request, url }) => {
+								const { hash, sig } = {
+									hash: url.searchParams.get('hash'),
+									sig: url.searchParams.get('sig'),
+								} as {
+									readonly hash?: string
+									readonly sig?: string
+								}
 
-							// eslint-disable-next-line functional/no-let
-							let reader
+								// eslint-disable-next-line functional/no-let
+								let reader
 
-							try {
-								// eslint-disable-next-line functional/no-expression-statement
-								reader = whenDefinedAll([hash, sig], ([h, s]) =>
-									verifyMessage(h, s),
-								)
-							} catch (error) {
-								// eslint-disable-next-line functional/no-expression-statement
-								console.log(error)
-							}
+								try {
+									// eslint-disable-next-line functional/no-expression-statement
+									reader = whenDefinedAll([hash, sig], ([h, s]) =>
+										verifyMessage(h, s),
+									)
+								} catch (error) {
+									// eslint-disable-next-line functional/no-expression-statement
+									console.log(error)
+								}
 
-							// eslint-disable-next-line functional/no-let
-							let allPosts
-							// eslint-disable-next-line
-							try {
-								const _allPosts = await whenDefinedAll(
-									[db.database.type, db.database.key],
-									([type, key]) => getAllPosts(type, { key }),
-								)
-
-								const mask = await maskFactory({
-									user: reader,
-									propertyAddress: config.propertyAddress,
-									rpcUrl: config.rpcUrl,
-								})
+								// eslint-disable-next-line functional/no-let
+								let allPosts
 								// eslint-disable-next-line
-								allPosts =
-									whenDefinedAll([mask, _allPosts], ([maskFn, posts]) =>
-										posts instanceof Error ? posts : posts.map(maskFn),
-									) ?? _allPosts
-							} catch (error) {
-								return new Response(
-									JSON.stringify({
-										error: error,
-									}),
-									{
-										status: 500,
-									},
-								)
-							}
+								try {
+									const _allPosts = await whenDefinedAll(
+										[db.database.type, db.database.key],
+										([type, key]) => getAllPosts(type, { key }),
+									)
 
-							return allPosts instanceof Error
-								? new Response(
+									const mask = await maskFactory({
+										user: reader,
+										propertyAddress: config.propertyAddress,
+										rpcUrl: config.rpcUrl,
+									})
+									// eslint-disable-next-line
+									allPosts =
+										whenDefinedAll([mask, _allPosts], ([maskFn, posts]) =>
+											posts instanceof Error ? posts : posts.map(maskFn),
+										) ?? _allPosts
+								} catch (error) {
+									return new Response(
 										JSON.stringify({
-											error: allPosts,
+											error: error,
 										}),
 										{
 											status: 500,
 										},
-								  )
-								: allPosts
-								  ? new Response(
+									)
+								}
+
+								return allPosts instanceof Error
+									? new Response(
 											JSON.stringify({
-												contents: encode(allPosts),
+												error: allPosts,
 											}),
 											{
-												status: 200,
+												status: 500,
 											},
-								    )
-								  : new Response(
-											JSON.stringify({
-												error: 'Some data is missing',
-											}),
-											{
-												status: 400,
-											},
-								    )
+									  )
+									: allPosts
+									  ? new Response(
+												JSON.stringify({
+													contents: encode(allPosts),
+												}),
+												{
+													status: 200,
+												},
+									    )
+									  : new Response(
+												JSON.stringify({
+													error: 'Some data is missing',
+												}),
+												{
+													status: 400,
+												},
+									    )
+							},
 						},
-					},
-					{
-						paths: [db.id, 'comment'], // This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/comment
-						method: 'POST',
-						handler: addCommentHandler(
-							config,
-							db.database.type,
-							db.database.key,
-						),
-					},
-					{
-						paths: [db.id, 'reactions'], // This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/reactions
-						method: 'POST',
-						handler: addReactionHandler(
-							config,
-							db.database.type,
-							db.database.key,
-						),
-					},
-				],
+						{
+							paths: [db.id, 'comment'], // This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/comment
+							method: 'POST',
+							handler: addCommentHandler(
+								config,
+								db.database.type,
+								db.database.key,
+							),
+						},
+						{
+							paths: [db.id, 'reactions'], // This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/reactions
+							method: 'POST',
+							handler: addReactionHandler(
+								config,
+								db.database.type,
+								db.database.key,
+							),
+						},
+					] satisfies ClubsApiPaths,
+			)
+			.flat(),
+		...xprod(
+			dbs.filter(({ database: { type } }) => type === 'encoded:redis'),
+			dbs.filter(({ database: { type } }) => type === 'documents:redis'),
+		)
+			.map(
+				([encodedRedis, documentsRedis]) =>
+					[
+						{
+							paths: [encodedRedis.id, 'copy', 'to', documentsRedis.id],
+							method: 'POST',
+							handler: copyPostFromEncodedRedisToDocumentsRedisHandler({
+								config,
+								srcDatabaseKey: encodedRedis.database.key,
+								distDatabaseKey: documentsRedis.database.key,
+							}),
+						},
+					] satisfies ClubsApiPaths,
 			)
 			.flat(),
 	]

@@ -1,7 +1,6 @@
 import { encode, type ClubsConfiguration } from '@devprotocol/clubs-core'
 import { getAllPosts, setAllPosts } from '../db'
 import type { Posts } from '../types'
-import { whenDefinedAll } from '@devprotocol/util-ts'
 
 export const addPostEncodedRedis = async ({
 	conf,

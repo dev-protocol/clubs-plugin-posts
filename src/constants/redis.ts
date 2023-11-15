@@ -8,10 +8,10 @@ export enum Index {
 }
 
 export enum Prefix {
-	Post = 'devprotocol:clubs:plugin:posts::post:',
-	Comment = 'devprotocol:clubs:plugin:posts::comment:',
-	Reaction = 'devprotocol:clubs:plugin:posts::reaction:',
-	Option = 'devprotocol:clubs:plugin:posts::option:',
+	Post = 'doc::devprotocol:clubs:plugin:posts::post:',
+	Comment = 'doc::devprotocol:clubs:plugin:posts::comment:',
+	Reaction = 'doc::devprotocol:clubs:plugin:posts::reaction:',
+	Option = 'doc::devprotocol:clubs:plugin:posts::option:',
 }
 
 export const _raw = {

@@ -1,6 +1,7 @@
 import type { Comment, Posts } from '../types'
 import {
 	getAllPosts as getAllPostsRedis,
+	getDefaultClient,
 	setAllPosts as setAllPostsRedis,
 } from './redis'
 import { setComment, setPost } from './redis-documents'
@@ -35,8 +36,13 @@ export const getAllPosts = async (
 ): ReturnType<GetAllPosts> => {
 	// eslint-disable-next-line functional/no-conditional-statement
 	switch (type) {
-		case 'encoded:redis':
-			return getAllPostsRedis(opts)
+		case 'encoded:redis': {
+			const client = await getDefaultClient()
+			const result = await getAllPostsRedis({ ...opts, client })
+			// eslint-disable-next-line functional/no-expression-statement
+			await client.quit()
+			return result
+		}
 		case 'documents:redis':
 			return []
 		default:
@@ -53,8 +59,13 @@ export const setAllPosts = async (
 ): ReturnType<SetAllPosts> => {
 	// eslint-disable-next-line functional/no-conditional-statement
 	switch (type) {
-		case 'encoded:redis':
-			return setAllPostsRedis(opts)
+		case 'encoded:redis': {
+			const client = await getDefaultClient()
+			const result = await setAllPostsRedis({ ...opts, client })
+			// eslint-disable-next-line functional/no-expression-statement
+			await client.quit()
+			return result
+		}
 		default:
 			return new Error('Illegal database type is passed')
 	}
@@ -70,12 +81,18 @@ export const setSinglePost = async (
 ): ReturnType<SetSinglePost> => {
 	// eslint-disable-next-line functional/no-conditional-statement
 	switch (type) {
-		case 'documents:redis':
-			return setPost({
+		case 'documents:redis': {
+			const client = await getDefaultClient()
+			const result = await setPost({
 				scope: opts.key,
 				url: opts.url,
 				post: opts.post,
+				client,
 			})
+			// eslint-disable-next-line functional/no-expression-statement
+			await client.quit()
+			return result
+		}
 		default:
 			return new Error('Illegal database type is passed')
 	}
@@ -92,13 +109,19 @@ export const setSingleComment = async (
 ): ReturnType<SetSingleComment> => {
 	// eslint-disable-next-line functional/no-conditional-statement
 	switch (type) {
-		case 'documents:redis':
-			return setComment({
+		case 'documents:redis': {
+			const client = await getDefaultClient()
+			const result = await setComment({
 				scope: opts.key,
 				url: opts.url,
 				postId: opts.postId,
 				comment: opts.comment,
+				client,
 			})
+			// eslint-disable-next-line functional/no-expression-statement
+			await client.quit()
+			return result
+		}
 		default:
 			return new Error('Illegal database type is passed')
 	}
