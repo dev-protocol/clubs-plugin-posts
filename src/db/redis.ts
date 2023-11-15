@@ -1,12 +1,11 @@
 /* eslint-disable functional/no-expression-statement */
-import type { GetAllPosts, SetAllPosts } from '.'
 import { decode, encode } from '@devprotocol/clubs-core'
 import { whenDefined } from '@devprotocol/util-ts'
 import { createClient } from 'redis'
 import type { Posts } from '../types'
 // import { examplePosts } from '../constants/example-posts'
 
-const client = createClient({
+const defaultClient = createClient({
 	url: import.meta.env.REDIS_URL,
 	username: import.meta.env.REDIS_USERNAME ?? '',
 	password: import.meta.env.REDIS_PASSWORD ?? '',
@@ -16,11 +15,24 @@ const client = createClient({
 	},
 })
 
-export const getAllPosts: GetAllPosts = async ({ key }) => {
+export type RedisDefaultClient = typeof defaultClient
+
+export const getDefaultClient = async () => {
+	if (defaultClient.isOpen === false) {
+		await defaultClient.connect()
+	}
+	return defaultClient
+}
+
+export const getAllPosts = async ({
+	key,
+	client,
+}: {
+	readonly key: string
+	readonly client: RedisDefaultClient
+}) => {
 	try {
-		await client.connect()
 		const encodedData = await client.get(key)
-		await client.quit()
 		const decodedData = whenDefined(encodedData, (d) =>
 			decode<readonly Posts[]>(d),
 		)
@@ -32,12 +44,17 @@ export const getAllPosts: GetAllPosts = async ({ key }) => {
 	}
 }
 
-export const setAllPosts: SetAllPosts = async ({ key, posts }) => {
-	await client.connect()
-
+export const setAllPosts = async ({
+	key,
+	posts,
+	client,
+}: {
+	readonly key: string
+	readonly posts: readonly Posts[]
+	readonly client: RedisDefaultClient
+}) => {
 	const encodedData = encode<readonly Posts[]>(posts)
 	await client.set(key, encodedData)
-	await client.quit()
 
 	return true
 }
