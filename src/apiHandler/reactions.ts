@@ -64,6 +64,15 @@ export const addReactionHandler =
 					postId,
 					dbQueryKey,
 				})
+
+			case 'documents:redis':
+				return addReactionEncodedRedis({
+					conf,
+					data: emoji,
+					userAddress,
+					postId,
+					dbQueryKey,
+				})
 			default:
 				return new Response(JSON.stringify({ message: 'not implemented' }))
 		}
