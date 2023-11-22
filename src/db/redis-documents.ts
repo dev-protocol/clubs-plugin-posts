@@ -293,6 +293,57 @@ export const implSetPost = async ({
 	return true
 }
 
+export const setReaction = async ({
+	scope,
+	reaction,
+	postId,
+	url,
+	client,
+	createdBy,
+}: {
+	readonly scope: string
+	readonly reaction: string
+	readonly postId: string
+	readonly url: string
+	readonly client: RedisDefaultClient
+	readonly createdBy: string
+}) => {
+	await implSetReaction({ scope, reaction, postId, url, client, createdBy })
+	return true
+}
+
+export const implSetReaction = async ({
+	scope,
+	reaction,
+	postId,
+	url,
+	client,
+	createdBy,
+}: {
+	readonly scope: string
+	readonly reaction: string
+	readonly postId: string
+	readonly url: string
+	readonly client: RedisDefaultClient
+	readonly createdBy: string
+}) => {
+	const uuid = uuidFactory(url)
+	const newReactionData = reactionDocument({
+		data: {
+			content: reaction,
+			created_by: createdBy,
+		},
+		scope: scope,
+		postId,
+	})
+
+	await client.json.set(
+		generateKeyOf(schema.Prefix.Reaction, scope, uuid()),
+		'$',
+		newReactionData,
+	)
+}
+
 export const setComment = async ({
 	scope,
 	comment,
