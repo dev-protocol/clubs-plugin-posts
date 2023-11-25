@@ -92,7 +92,7 @@
 		"tailwindcss": "3.3.5",
 		"txtgen": "^3.0.6",
 		"typescript": "5.3.2",
-		"vue": "3.3.8"
+		"vue": "3.3.9"
 	},
 	"peerDependencies": {
 		"@devprotocol/clubs-core": "^2.1.0"
