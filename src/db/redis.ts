@@ -3,6 +3,7 @@ import { decode, encode } from '@devprotocol/clubs-core'
 import { whenDefined } from '@devprotocol/util-ts'
 import { createClient } from 'redis'
 import type { Posts } from '../types'
+import { Prefix } from '../constants/redis'
 // import { examplePosts } from '../constants/example-posts'
 
 const defaultClient = createClient({
@@ -42,6 +43,39 @@ export const getAllPosts = async ({
 	} catch (e) {
 		return e as Error
 	}
+}
+
+/**
+ * Fetches the paginated posts from Redis
+ * @param scope - The scope of the posts
+ * @param client - The Redis client
+ * @param page - The page number
+ * @returns The paginated posts
+ */
+export const getPaginatedPosts = async ({
+	scope,
+	client,
+	page,
+}: {
+	readonly scope: string
+	readonly client: RedisDefaultClient
+	readonly page: number
+}) => {
+	const limit = 10
+
+	const fetchPostKeys = await client.keys(`${Prefix.Post}:${scope}:*`)
+	const slicedPostKeys = fetchPostKeys.slice(page * limit, (page + 1) * limit)
+	const fetchPosts = await client.mGet(slicedPostKeys)
+
+	const posts: readonly Posts[] = fetchPosts
+		// JSON parse each post
+		.map((post) => (post ? (JSON.parse(post) as Posts) : null))
+		// filter out null values from the array
+		.filter((post): post is Posts => post !== null)
+
+	// @TODO: Fetch first 10 comments of each post
+
+	return posts
 }
 
 export const setAllPosts = async ({
