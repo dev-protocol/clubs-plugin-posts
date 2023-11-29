@@ -4,6 +4,7 @@ import { whenDefined } from '@devprotocol/util-ts'
 import { createClient } from 'redis'
 import type { Posts } from '../types'
 import { Prefix } from '../constants/redis'
+import { fetchComments } from './redis-documents'
 // import { examplePosts } from '../constants/example-posts'
 
 const defaultClient = createClient({
@@ -73,9 +74,27 @@ export const getPaginatedPosts = async ({
 		// filter out null values from the array
 		.filter((post): post is Posts => post !== null)
 
-	// @TODO: Fetch first 10 comments of each post
+	/**
+	 * Create fetch promises for each post
+	 */
+	const fetchCommentsPromises = posts.map((post) =>
+		fetchComments({ scope, postId: post.id, client }),
+	)
 
-	return posts
+	/**
+	 * Fetch all comments for each post
+	 */
+	const postsComments = await Promise.all(fetchCommentsPromises)
+
+	/**
+	 * Map the comments to the posts
+	 */
+	const postsWithComments = posts.map((post, index) => ({
+		...post,
+		comments: postsComments[index],
+	}))
+
+	return postsWithComments
 }
 
 export const setAllPosts = async ({
