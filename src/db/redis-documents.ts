@@ -412,3 +412,49 @@ export const implSetComment = async ({
 
 	return true
 }
+
+/**
+ * Fetch paginated comments related to the parent post
+ * @param scope - the associated db scope
+ * @param postId - the parent post id
+ * @param client - the redis client
+ * @param page - the page number
+ * @returns the comments
+ */
+export const fetchComments = async ({
+	scope,
+	postId,
+	client,
+	page,
+}: {
+	readonly scope: string
+	readonly postId: string
+	readonly client: RedisDefaultClient
+	readonly page?: number
+}) => {
+	// eslint-disable-next-line no-param-reassign
+	page = page || 1
+	const limit = 10
+
+	const start = (page - 1) * limit
+
+	/**
+	 * Search comments where parent id is postId
+	 */
+	const result = await client.ft.search(
+		schema.Index.Comment,
+		`@${schema._post_id}:${postId}`,
+		{
+			LIMIT: {
+				from: start,
+				size: limit,
+			},
+		},
+	)
+
+	/**
+	 * Convert the result to CommentDocument[]
+	 */
+	const comments = result.documents.map((doc) => doc.value as CommentDocument)
+	return comments
+}
