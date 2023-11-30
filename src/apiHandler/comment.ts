@@ -3,6 +3,7 @@ import { decode, type ClubsConfiguration } from '@devprotocol/clubs-core'
 import type { CommentPrimitives, Comment } from '../types'
 import { addCommentEncodedRedis } from './comment-encoded-redis'
 import { uuidFactory } from '../db/uuidFactory'
+import { addCommentDocumentsRedis } from './comment-documents-redis'
 
 export type AddCommentRequestJson = Readonly<{
 	readonly contents: string
@@ -45,6 +46,13 @@ export const addCommentHandler =
 		switch (dbQueryType) {
 			case 'encoded:redis':
 				return addCommentEncodedRedis({
+					conf,
+					data: newComment,
+					postId,
+					dbQueryKey,
+				})
+			case 'documents:redis':
+				return addCommentDocumentsRedis({
 					conf,
 					data: newComment,
 					postId,

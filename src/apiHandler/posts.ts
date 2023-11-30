@@ -9,6 +9,8 @@ import type { Comment, PostPrimitives, Reactions } from '../types'
 import { whenDefinedAll } from '@devprotocol/util-ts'
 import { uuidFactory } from '../db/uuidFactory'
 import { addPostEncodedRedis } from './posts-encoded-redis'
+import { setPost } from '../db/redis-documents'
+import { addPostDocumentsRedis } from './posts-documents-redis'
 
 export type AddCommentRequestJson = Readonly<{
 	readonly contents: string
@@ -89,6 +91,14 @@ export const addPostHandler =
 					data: composed,
 					dbQueryKey,
 				})
+			case 'documents:redis': {
+				// return new Response(JSON.stringify({ message: 'not implemented' }))
+				return addPostDocumentsRedis({
+					conf,
+					data: composed,
+					dbQueryKey,
+				})
+			}
 			default:
 				return new Response(JSON.stringify({ message: 'not implemented' }))
 		}
