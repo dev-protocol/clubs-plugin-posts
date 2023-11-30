@@ -6,7 +6,7 @@ import * as schema from '../constants/redis'
 import { uuidFactory } from './uuidFactory'
 import { getDefaultClient, type RedisDefaultClient } from './redis'
 
-type PostRawDocument = {
+export type PostRawDocument = {
 	readonly id: string
 	readonly title: string
 	readonly content: string
@@ -14,36 +14,42 @@ type PostRawDocument = {
 	readonly created_at: Date
 	readonly updated_at: Date
 }
-type PostDocument = Omit<PostRawDocument, 'created_at' | 'updated_at'> & {
+export type PostDocument = Omit<
+	PostRawDocument,
+	'created_at' | 'updated_at'
+> & {
 	readonly created_at: number
 	readonly updated_at: number
 	readonly _raw: string
 	readonly _scope: string
 }
-type CommentRawDocument = {
+export type CommentRawDocument = {
 	readonly id: string
 	readonly content: string
 	readonly created_by: string
 	readonly created_at: Date
 	readonly updated_at: Date
 }
-type CommentDocument = Omit<CommentRawDocument, 'created_at' | 'updated_at'> & {
+export type CommentDocument = Omit<
+	CommentRawDocument,
+	'created_at' | 'updated_at'
+> & {
 	readonly created_at: number
 	readonly updated_at: number
 	readonly _raw: string
 	readonly _scope: string
 	readonly _post_id: string
 }
-type ReactionRawDocument = {
+export type ReactionRawDocument = {
 	readonly content: string
 	readonly created_by: string
 }
-type ReactionDocument = ReactionRawDocument & {
+export type ReactionDocument = ReactionRawDocument & {
 	readonly _scope: string
 	readonly _post_id: string
 }
-type OptionRawDocument = PostOption
-type OptionDocument = Omit<OptionRawDocument, 'value'> & {
+export type OptionRawDocument = PostOption
+export type OptionDocument = Omit<OptionRawDocument, 'value'> & {
 	readonly value: string
 	readonly _raw: string
 	readonly _parent_type: 'post' | 'comment'

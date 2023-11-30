@@ -2,9 +2,9 @@
 import { decode, encode } from '@devprotocol/clubs-core'
 import { whenDefined } from '@devprotocol/util-ts'
 import { createClient } from 'redis'
-import type { Posts } from '../types'
+import type { Comment, Posts } from '../types'
 import { Prefix } from '../constants/redis'
-import { fetchComments } from './redis-documents'
+import { fetchComments, type PostDocument } from './redis-documents'
 // import { examplePosts } from '../constants/example-posts'
 
 const defaultClient = createClient({
@@ -61,7 +61,7 @@ export const getPaginatedPosts = async ({
 	readonly scope: string
 	readonly client: RedisDefaultClient
 	readonly page: number
-}) => {
+}): Promise<readonly Posts[]> => {
 	const limit = 10
 
 	const fetchPostKeys = await client.keys(`${Prefix.Post}:${scope}:*`)
@@ -70,16 +70,20 @@ export const getPaginatedPosts = async ({
 
 	const posts: readonly Posts[] = fetchPosts
 		// JSON parse each post
-		.map((post) => (post ? (JSON.parse(post) as Posts) : null))
+		.map((post) => (post ? (JSON.parse(post) as PostDocument) : null))
 		// filter out null values from the array
-		.filter((post): post is Posts => post !== null)
+		.filter((post): post is PostDocument => post !== null)
+		// decode post data (get post data without document db related keys)
+		.map(({ _raw }) => decode<Posts>(_raw))
 
 	/**
 	 * Create fetch promises for each post
 	 */
-	const fetchCommentsPromises = posts.map((post) =>
-		fetchComments({ scope, postId: post.id, client }),
-	)
+	const fetchCommentsPromises = posts.map(async (post) => {
+		const list = await fetchComments({ scope, postId: post.id, client })
+		// decode each comment data (get comment data without document db related keys)
+		return list.map(({ _raw }) => decode<Comment>(_raw))
+	})
 
 	/**
 	 * Fetch all comments for each post
