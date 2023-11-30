@@ -449,7 +449,7 @@ export const fetchComments = async ({
 	 */
 	const result = await client.ft.search(
 		schema.Index.Comment,
-		`@${schema._post_id}:${postId}`,
+		`@${schema._post_id['$._post_id'].AS}:${postId}`,
 		{
 			LIMIT: {
 				from: start,
@@ -463,4 +463,99 @@ export const fetchComments = async ({
 	 */
 	const comments = result.documents.map((doc) => doc.value as CommentDocument)
 	return comments
+}
+
+/**
+ * Fetch all options related to the parent post/comment
+ * @param scope - the associated db scope
+ * @param parentId - the parent post/comment id
+ * @param parentType - post or comment
+ * @param client - the redis client
+ * @param page - the page number
+ * @returns the comments
+ */
+export const fetchAllOptions = async ({
+	scope,
+	parentId,
+	parentType,
+	client,
+}: {
+	readonly scope: string
+	readonly parentId: OptionDocument['_parent_id']
+	readonly parentType: OptionDocument['_parent_type']
+	readonly client: RedisDefaultClient
+}): Promise<readonly OptionDocument[]> => {
+	const limit = 10
+
+	/**
+	 * Search options where parent id is parentId
+	 */
+	const query = `@${schema._parent_type['$._parent_type'].AS}:${parentType} @${schema._parent_id['$._parent_id'].AS}:${parentId}`
+	const loop = async (
+		start: number,
+		list: readonly OptionDocument[],
+	): Promise<readonly OptionDocument[]> => {
+		const result = await client.ft.search(schema.Index.Option, query, {
+			LIMIT: {
+				from: start,
+				size: limit,
+			},
+		})
+		const docs: readonly OptionDocument[] = [
+			...list,
+			...result.documents.map(({ value }) => value as OptionDocument),
+		]
+		const isAll: boolean = result.total <= start + limit
+
+		return isAll ? docs : await loop(start + limit + 1, docs)
+	}
+	const result = await loop(1, [])
+
+	return result
+}
+
+/**
+ * Fetch all reactions related to the parent post
+ * @param scope - the associated db scope
+ * @param postId - the parent post id
+ * @param client - the redis client
+ * @param page - the page number
+ * @returns the comments
+ */
+export const fetchAllReactions = async ({
+	scope,
+	postId,
+	client,
+}: {
+	readonly scope: string
+	readonly postId: string
+	readonly client: RedisDefaultClient
+}): Promise<readonly ReactionDocument[]> => {
+	const limit = 10
+
+	/**
+	 * Search options where parent id is parentId
+	 */
+	const query = `@${schema._post_id['$._post_id'].AS}:${postId}`
+	const loop = async (
+		start: number,
+		list: readonly ReactionDocument[],
+	): Promise<readonly ReactionDocument[]> => {
+		const result = await client.ft.search(schema.Index.Reaction, query, {
+			LIMIT: {
+				from: start,
+				size: limit,
+			},
+		})
+		const docs: readonly ReactionDocument[] = [
+			...list,
+			...result.documents.map(({ value }) => value as ReactionDocument),
+		]
+		const isAll: boolean = result.total <= start + limit
+
+		return isAll ? docs : await loop(start + limit + 1, docs)
+	}
+	const result = await loop(1, [])
+
+	return result
 }
