@@ -179,13 +179,17 @@ export const getApiPaths = (async (options, config) => {
 							paths: [db.id, 'message'],
 							method: 'GET',
 							handler: async ({ request, url }) => {
-								const { hash, sig } = {
+								const { hash, sig, page } = {
 									hash: url.searchParams.get('hash'),
 									sig: url.searchParams.get('sig'),
+									page: url.searchParams.get('page'),
 								} as {
 									readonly hash?: string
 									readonly sig?: string
+									readonly page?: string
 								}
+
+								const parsedPage = parseInt(page ?? '0')
 
 								// eslint-disable-next-line functional/no-let
 								let reader
@@ -206,7 +210,7 @@ export const getApiPaths = (async (options, config) => {
 								try {
 									const _allPosts = await whenDefinedAll(
 										[db.database.type, db.database.key],
-										([type, key]) => getAllPosts(type, { key }),
+										([type, key]) => getAllPosts(type, { key }, parsedPage),
 									)
 
 									const mask = await maskFactory({

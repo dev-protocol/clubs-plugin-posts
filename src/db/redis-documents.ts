@@ -6,7 +6,7 @@ import * as schema from '../constants/redis'
 import { uuidFactory } from './uuidFactory'
 import { getDefaultClient, type RedisDefaultClient } from './redis'
 
-type PostRawDocument = {
+export type PostRawDocument = {
 	readonly id: string
 	readonly title: string
 	readonly content: string
@@ -14,36 +14,42 @@ type PostRawDocument = {
 	readonly created_at: Date
 	readonly updated_at: Date
 }
-type PostDocument = Omit<PostRawDocument, 'created_at' | 'updated_at'> & {
+export type PostDocument = Omit<
+	PostRawDocument,
+	'created_at' | 'updated_at'
+> & {
 	readonly created_at: number
 	readonly updated_at: number
 	readonly _raw: string
 	readonly _scope: string
 }
-type CommentRawDocument = {
+export type CommentRawDocument = {
 	readonly id: string
 	readonly content: string
 	readonly created_by: string
 	readonly created_at: Date
 	readonly updated_at: Date
 }
-type CommentDocument = Omit<CommentRawDocument, 'created_at' | 'updated_at'> & {
+export type CommentDocument = Omit<
+	CommentRawDocument,
+	'created_at' | 'updated_at'
+> & {
 	readonly created_at: number
 	readonly updated_at: number
 	readonly _raw: string
 	readonly _scope: string
 	readonly _post_id: string
 }
-type ReactionRawDocument = {
+export type ReactionRawDocument = {
 	readonly content: string
 	readonly created_by: string
 }
-type ReactionDocument = ReactionRawDocument & {
+export type ReactionDocument = ReactionRawDocument & {
 	readonly _scope: string
 	readonly _post_id: string
 }
-type OptionRawDocument = PostOption
-type OptionDocument = Omit<OptionRawDocument, 'value'> & {
+export type OptionRawDocument = PostOption
+export type OptionDocument = Omit<OptionRawDocument, 'value'> & {
 	readonly value: string
 	readonly _raw: string
 	readonly _parent_type: 'post' | 'comment'
@@ -411,4 +417,145 @@ export const implSetComment = async ({
 	)
 
 	return true
+}
+
+/**
+ * Fetch paginated comments related to the parent post
+ * @param scope - the associated db scope
+ * @param postId - the parent post id
+ * @param client - the redis client
+ * @param page - the page number
+ * @returns the comments
+ */
+export const fetchComments = async ({
+	scope,
+	postId,
+	client,
+	page,
+}: {
+	readonly scope: string
+	readonly postId: string
+	readonly client: RedisDefaultClient
+	readonly page?: number
+}) => {
+	// eslint-disable-next-line no-param-reassign
+	page = page || 1
+	const limit = 10
+
+	const start = (page - 1) * limit
+
+	/**
+	 * Search comments where parent id is postId
+	 */
+	const result = await client.ft.search(
+		schema.Index.Comment,
+		`@${schema._post_id['$._post_id'].AS}:${postId}`,
+		{
+			LIMIT: {
+				from: start,
+				size: limit,
+			},
+		},
+	)
+
+	/**
+	 * Convert the result to CommentDocument[]
+	 */
+	const comments = result.documents.map((doc) => doc.value as CommentDocument)
+	return comments
+}
+
+/**
+ * Fetch all options related to the parent post/comment
+ * @param scope - the associated db scope
+ * @param parentId - the parent post/comment id
+ * @param parentType - post or comment
+ * @param client - the redis client
+ * @param page - the page number
+ * @returns the comments
+ */
+export const fetchAllOptions = async ({
+	scope,
+	parentId,
+	parentType,
+	client,
+}: {
+	readonly scope: string
+	readonly parentId: OptionDocument['_parent_id']
+	readonly parentType: OptionDocument['_parent_type']
+	readonly client: RedisDefaultClient
+}): Promise<readonly OptionDocument[]> => {
+	const limit = 10
+
+	/**
+	 * Search options where parent id is parentId
+	 */
+	const query = `@${schema._parent_type['$._parent_type'].AS}:${parentType} @${schema._parent_id['$._parent_id'].AS}:${parentId}`
+	const loop = async (
+		start: number,
+		list: readonly OptionDocument[],
+	): Promise<readonly OptionDocument[]> => {
+		const result = await client.ft.search(schema.Index.Option, query, {
+			LIMIT: {
+				from: start,
+				size: limit,
+			},
+		})
+		const docs: readonly OptionDocument[] = [
+			...list,
+			...result.documents.map(({ value }) => value as OptionDocument),
+		]
+		const isAll: boolean = result.total <= start + limit
+
+		return isAll ? docs : await loop(start + limit + 1, docs)
+	}
+	const result = await loop(1, [])
+
+	return result
+}
+
+/**
+ * Fetch all reactions related to the parent post
+ * @param scope - the associated db scope
+ * @param postId - the parent post id
+ * @param client - the redis client
+ * @param page - the page number
+ * @returns the comments
+ */
+export const fetchAllReactions = async ({
+	scope,
+	postId,
+	client,
+}: {
+	readonly scope: string
+	readonly postId: string
+	readonly client: RedisDefaultClient
+}): Promise<readonly ReactionDocument[]> => {
+	const limit = 10
+
+	/**
+	 * Search options where parent id is parentId
+	 */
+	const query = `@${schema._post_id['$._post_id'].AS}:${postId}`
+	const loop = async (
+		start: number,
+		list: readonly ReactionDocument[],
+	): Promise<readonly ReactionDocument[]> => {
+		const result = await client.ft.search(schema.Index.Reaction, query, {
+			LIMIT: {
+				from: start,
+				size: limit,
+			},
+		})
+		const docs: readonly ReactionDocument[] = [
+			...list,
+			...result.documents.map(({ value }) => value as ReactionDocument),
+		]
+		const isAll: boolean = result.total <= start + limit
+
+		return isAll ? docs : await loop(start + limit + 1, docs)
+	}
+	const result = await loop(1, [])
+
+	return result
 }
