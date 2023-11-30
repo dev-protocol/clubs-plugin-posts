@@ -2,6 +2,7 @@ import type { Comment, Posts } from '../types'
 import {
 	getAllPosts as getAllPostsRedis,
 	getDefaultClient,
+	getPaginatedPosts,
 	setAllPosts as setAllPostsRedis,
 } from './redis'
 import { setComment, setPost } from './redis-documents'
@@ -33,6 +34,7 @@ export const getAllPosts = async (
 	opts: {
 		readonly key: string
 	},
+	page?: number,
 ): ReturnType<GetAllPosts> => {
 	// eslint-disable-next-line functional/no-conditional-statement
 	switch (type) {
@@ -44,7 +46,17 @@ export const getAllPosts = async (
 			return result
 		}
 		case 'documents:redis':
-			return []
+			// eslint-disable-next-line no-case-declarations
+			const client = await getDefaultClient()
+			// eslint-disable-next-line no-case-declarations
+			const result = await getPaginatedPosts({
+				scope: opts.key,
+				client,
+				page: page ?? 0,
+			})
+			// eslint-disable-next-line functional/no-expression-statement
+			await client.quit()
+			return result
 		default:
 			return new Error('Illegal database type is passed')
 	}

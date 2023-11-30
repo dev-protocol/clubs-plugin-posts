@@ -29,7 +29,7 @@ export const _scope = {
 } satisfies RediSearchSchema
 
 export const _post_id = {
-	'$.created_by': {
+	'$._post_id': {
 		type: SchemaFieldTypes.TEXT,
 		AS: '_post_id',
 	},
