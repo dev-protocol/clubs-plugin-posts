@@ -72,7 +72,7 @@ export const addCommentHandler =
  * @returns paginated comments
  */
 export const fetchCommentsHandler =
-	async (conf: ClubsConfiguration) =>
+	(conf: ClubsConfiguration) =>
 	async ({
 		request,
 		url,
