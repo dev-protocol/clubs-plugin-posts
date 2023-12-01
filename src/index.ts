@@ -7,8 +7,10 @@ import {
 	ClubsPluginCategory,
 	encode,
 	fetchProfile,
+	regexpToSymbol,
 	type ClubsApiPaths,
 	type ClubsFunctionGetSlots,
+	findPage,
 } from '@devprotocol/clubs-core'
 import { default as Admin } from './pages/Admin.astro'
 import Posts from './pages/Posts.astro'
@@ -30,6 +32,7 @@ import { CreateNavigationLink } from '@devprotocol/clubs-core/layouts'
 import { copyPostFromEncodedRedisToDocumentsRedisHandler } from './apiHandler/copy-encoded-redis_to_documents-redis'
 import { xprod } from 'ramda'
 import { getDefaultClient } from './db/redis'
+import { fetchComments } from './db/redis-documents'
 
 export const getPagePaths = (async (
 	options,
@@ -178,7 +181,7 @@ export const getApiPaths = (async (options, config) => {
 						{
 							paths: [db.id, 'message'],
 							method: 'GET',
-							handler: async ({ request, url }) => {
+							handler: async ({ url }) => {
 								const { hash, sig, page } = {
 									hash: url.searchParams.get('hash'),
 									sig: url.searchParams.get('sig'),
@@ -260,6 +263,64 @@ export const getApiPaths = (async (options, config) => {
 													status: 400,
 												},
 									    )
+							},
+						},
+						/**
+						 * Fetch paginated comments by post id
+						 */
+						{
+							paths: [
+								db.id,
+								'message',
+								regexpToSymbol(/((?!\/).)+/),
+								'comments',
+							],
+							method: 'GET',
+							handler: async ({ url }) => {
+								const splitUrl = url.pathname.split('/')
+								const postId = splitUrl[splitUrl.length - 2]
+								const pageParams = url.searchParams.get('page')
+								const page = pageParams ? parseInt(pageParams) : 0
+
+								if (!postId) {
+									return new Response(
+										JSON.stringify({
+											error: 'Post ID is missing',
+											data: null,
+										}),
+										{
+											status: 400,
+										},
+									)
+								}
+
+								try {
+									const comments = await fetchComments({
+										scope: db.database.key,
+										postId,
+										page,
+										client: await getDefaultClient(),
+									})
+
+									return new Response(
+										JSON.stringify({
+											comments,
+										}),
+										{
+											status: 200,
+										},
+									)
+								} catch (e) {
+									return new Response(
+										JSON.stringify({
+											error: e,
+											data: null,
+										}),
+										{
+											status: 500,
+										},
+									)
+								}
 							},
 						},
 						{
