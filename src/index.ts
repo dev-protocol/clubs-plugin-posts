@@ -7,7 +7,6 @@ import {
 	ClubsPluginCategory,
 	encode,
 	fetchProfile,
-	regexpToSymbol,
 	type ClubsApiPaths,
 	type ClubsFunctionGetSlots,
 	findPage,
@@ -269,12 +268,7 @@ export const getApiPaths = (async (options, config) => {
 						 * Fetch paginated comments by post id
 						 */
 						{
-							paths: [
-								db.id,
-								'message',
-								regexpToSymbol(/((?!\/).)+/),
-								'comments',
-							],
+							paths: [db.id, 'message', /((?!\/).)+/, 'comments'],
 							method: 'GET',
 							handler: fetchCommentsHandler(config),
 						},
