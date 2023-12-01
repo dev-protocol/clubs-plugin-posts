@@ -72,7 +72,7 @@ export const addCommentHandler =
  * @returns paginated comments
  */
 export const fetchCommentsHandler =
-	async (conf: ClubsConfiguration, dbQueryKey: string) =>
+	async (conf: ClubsConfiguration) =>
 	async ({
 		request,
 		url,
@@ -82,18 +82,42 @@ export const fetchCommentsHandler =
 	}) => {
 		const client = await getDefaultClient()
 
+		/** get the parent post id */
+		const splitUrl = url.pathname.split('/')
+		const postId = splitUrl[splitUrl.length - 2]
+
 		/** page page number from query params */
 		const page = url.searchParams.get('page')
 
-		/**
-		 * fetch the comments
-		 */
-		const comments = await fetchComments({
-			scope: conf.url,
-			postId: dbQueryKey,
-			client,
-			page: page ? parseInt(page) : 0,
-		})
+		try {
+			/**
+			 * fetch the comments
+			 */
 
-		return comments
+			const comments = await fetchComments({
+				scope: conf.url,
+				postId,
+				client,
+				page: page ? parseInt(page) : 0,
+			})
+
+			return new Response(
+				JSON.stringify({
+					comments,
+				}),
+				{
+					status: 200,
+				},
+			)
+		} catch (e) {
+			return new Response(
+				JSON.stringify({
+					error: e,
+					data: null,
+				}),
+				{
+					status: 500,
+				},
+			)
+		}
 	}

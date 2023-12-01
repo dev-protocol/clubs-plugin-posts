@@ -19,7 +19,7 @@ import { v5 as uuidv5 } from 'uuid'
 import { verifyMessage } from 'ethers'
 import { whenDefinedAll, type UndefinedOr } from '@devprotocol/util-ts'
 import { getAllPosts } from './db'
-import { addCommentHandler } from './apiHandler/comment'
+import { addCommentHandler, fetchCommentsHandler } from './apiHandler/comment'
 import { maskFactory } from './fixtures/masking'
 import { addReactionHandler } from './apiHandler/reactions'
 import { addPostHandler } from './apiHandler/posts'
@@ -276,52 +276,7 @@ export const getApiPaths = (async (options, config) => {
 								'comments',
 							],
 							method: 'GET',
-							handler: async ({ url }) => {
-								const splitUrl = url.pathname.split('/')
-								const postId = splitUrl[splitUrl.length - 2]
-								const pageParams = url.searchParams.get('page')
-								const page = pageParams ? parseInt(pageParams) : 0
-
-								if (!postId) {
-									return new Response(
-										JSON.stringify({
-											error: 'Post ID is missing',
-											data: null,
-										}),
-										{
-											status: 400,
-										},
-									)
-								}
-
-								try {
-									const comments = await fetchComments({
-										scope: db.database.key,
-										postId,
-										page,
-										client: await getDefaultClient(),
-									})
-
-									return new Response(
-										JSON.stringify({
-											comments,
-										}),
-										{
-											status: 200,
-										},
-									)
-								} catch (e) {
-									return new Response(
-										JSON.stringify({
-											error: e,
-											data: null,
-										}),
-										{
-											status: 500,
-										},
-									)
-								}
-							},
+							handler: fetchCommentsHandler(config),
 						},
 						{
 							paths: [db.id, 'comment'], // This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/comment
