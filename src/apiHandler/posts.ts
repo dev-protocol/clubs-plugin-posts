@@ -9,8 +9,9 @@ import type { Comment, PostPrimitives, Reactions } from '../types'
 import { whenDefinedAll } from '@devprotocol/util-ts'
 import { uuidFactory } from '../db/uuidFactory'
 import { addPostEncodedRedis } from './posts-encoded-redis'
-import { setPost } from '../db/redis-documents'
 import { addPostDocumentsRedis } from './posts-documents-redis'
+import { getDefaultClient } from '../db/redis'
+import { Prefix } from '../constants/redis'
 
 export type AddCommentRequestJson = Readonly<{
 	readonly contents: string
@@ -101,5 +102,65 @@ export const addPostHandler =
 			}
 			default:
 				return new Response(JSON.stringify({ message: 'not implemented' }))
+		}
+	}
+
+/**
+ * This can be used to fetch a single Post by ID
+ * @param dbQueryKey the scope of the query
+ * @returns a single post
+ */
+export const fetchPostHandler =
+	(dbQueryKey: string) =>
+	async ({
+		request,
+		url,
+	}: {
+		readonly request: Request
+		readonly url: URL
+	}) => {
+		const client = await getDefaultClient()
+
+		/** get the parent post id */
+		const splitUrl = url.pathname.split('/')
+		const postId = splitUrl[splitUrl.length - 1]
+
+		try {
+			/**
+			 * fetch the comments
+			 */
+
+			const post = await client.get(`${Prefix.Post}:${dbQueryKey}:${postId}`)
+
+			if (!post) {
+				return new Response(
+					JSON.stringify({
+						error: 'Post not found',
+						data: null,
+					}),
+					{
+						status: 404,
+					},
+				)
+			}
+
+			return new Response(
+				JSON.stringify({
+					post: decode<PostPrimitives>(post),
+				}),
+				{
+					status: 200,
+				},
+			)
+		} catch (e: any) {
+			return new Response(
+				JSON.stringify({
+					error: e.message,
+					data: null,
+				}),
+				{
+					status: 500,
+				},
+			)
 		}
 	}
