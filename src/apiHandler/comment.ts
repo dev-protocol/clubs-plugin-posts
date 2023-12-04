@@ -4,6 +4,8 @@ import type { CommentPrimitives, Comment } from '../types'
 import { addCommentEncodedRedis } from './comment-encoded-redis'
 import { uuidFactory } from '../db/uuidFactory'
 import { addCommentDocumentsRedis } from './comment-documents-redis'
+import { fetchComments } from '../db/redis-documents'
+import { getDefaultClient } from '../db/redis'
 
 export type AddCommentRequestJson = Readonly<{
 	readonly contents: string
@@ -60,5 +62,62 @@ export const addCommentHandler =
 				})
 			default:
 				return new Response(JSON.stringify({ message: 'not implemented' }))
+		}
+	}
+
+/**
+ * This can be used to fetch more paginated post comments by page id
+ * @param conf
+ * @param dbQueryKey
+ * @returns paginated comments
+ */
+export const fetchCommentsHandler =
+	(conf: ClubsConfiguration) =>
+	async ({
+		request,
+		url,
+	}: {
+		readonly request: Request
+		readonly url: URL
+	}) => {
+		const client = await getDefaultClient()
+
+		/** get the parent post id */
+		const splitUrl = url.pathname.split('/')
+		const postId = splitUrl[splitUrl.length - 2]
+
+		/** page page number from query params */
+		const page = url.searchParams.get('page')
+
+		try {
+			/**
+			 * fetch the comments
+			 */
+
+			const comments = await fetchComments({
+				scope: conf.url,
+				postId,
+				client,
+				page: page ? parseInt(page) : 0,
+			})
+
+			return new Response(
+				JSON.stringify({
+					comments,
+				}),
+				{
+					status: 200,
+				},
+			)
+		} catch (e) {
+			return new Response(
+				JSON.stringify({
+					error: e,
+					data: null,
+				}),
+				{
+					status: 500,
+				},
+			)
 		}
 	}

@@ -9,6 +9,7 @@ import {
 	fetchProfile,
 	type ClubsApiPaths,
 	type ClubsFunctionGetSlots,
+	findPage,
 } from '@devprotocol/clubs-core'
 import { default as Admin } from './pages/Admin.astro'
 import Posts from './pages/Posts.astro'
@@ -17,7 +18,7 @@ import { v5 as uuidv5 } from 'uuid'
 import { verifyMessage } from 'ethers'
 import { whenDefinedAll, type UndefinedOr } from '@devprotocol/util-ts'
 import { getAllPosts } from './db'
-import { addCommentHandler } from './apiHandler/comment'
+import { addCommentHandler, fetchCommentsHandler } from './apiHandler/comment'
 import { maskFactory } from './fixtures/masking'
 import { addReactionHandler } from './apiHandler/reactions'
 import { addPostHandler } from './apiHandler/posts'
@@ -30,6 +31,7 @@ import { CreateNavigationLink } from '@devprotocol/clubs-core/layouts'
 import { copyPostFromEncodedRedisToDocumentsRedisHandler } from './apiHandler/copy-encoded-redis_to_documents-redis'
 import { xprod } from 'ramda'
 import { getDefaultClient } from './db/redis'
+import { fetchComments } from './db/redis-documents'
 
 export const getPagePaths = (async (
 	options,
@@ -178,7 +180,7 @@ export const getApiPaths = (async (options, config) => {
 						{
 							paths: [db.id, 'message'],
 							method: 'GET',
-							handler: async ({ request, url }) => {
+							handler: async ({ url }) => {
 								const { hash, sig, page } = {
 									hash: url.searchParams.get('hash'),
 									sig: url.searchParams.get('sig'),
@@ -261,6 +263,14 @@ export const getApiPaths = (async (options, config) => {
 												},
 									    )
 							},
+						},
+						/**
+						 * Fetch paginated comments by post id
+						 */
+						{
+							paths: [db.id, 'message', /((?!\/).)+/, 'comments'],
+							method: 'GET',
+							handler: fetchCommentsHandler(config),
 						},
 						{
 							paths: [db.id, 'comment'], // This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/comment
