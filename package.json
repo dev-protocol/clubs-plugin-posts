@@ -57,7 +57,7 @@
 	"devDependencies": {
 		"@astrojs/svelte": "^5.0.0",
 		"@astrojs/tailwind": "^5.0.0",
-		"@astrojs/vue": "^3.0.0",
+		"@astrojs/vue": "^4.0.0",
 		"@ava/typescript": "4.1.0",
 		"@devprotocol/clubs-core": "^2.4.1-alpha.4",
 		"@nanostores/vue": "^0.10.0",
