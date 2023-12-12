@@ -245,24 +245,24 @@ export const getApiPaths = (async (options, config) => {
 											{
 												status: 500,
 											},
-									  )
+										)
 									: allPosts
-									  ? new Response(
+										? new Response(
 												JSON.stringify({
 													contents: encode(allPosts),
 												}),
 												{
 													status: 200,
 												},
-									    )
-									  : new Response(
+											)
+										: new Response(
 												JSON.stringify({
 													error: 'Some data is missing',
 												}),
 												{
 													status: 400,
 												},
-									    )
+											)
 							},
 						},
 						/**
@@ -341,7 +341,7 @@ export const getSlots = (async (_, __, { paths, factory }) => {
 						},
 					},
 				},
-		  ]
+			]
 		: []
 }) satisfies ClubsFunctionGetSlots
 

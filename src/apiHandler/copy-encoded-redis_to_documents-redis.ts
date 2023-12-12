@@ -72,12 +72,12 @@ export const copyPostFromEncodedRedisToDocumentsRedisHandler =
 						message: 'Success',
 					}),
 					{ status: 200 },
-			  )
+				)
 			: new Response(
 					JSON.stringify({
 						data: result,
 						message: result.message,
 					}),
 					{ status: 400 },
-			  )
+				)
 	}

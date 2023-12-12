@@ -49,7 +49,7 @@ export const maskFactory: MaskFactory = async ({
 	const allSTokenIDsUserHave = isValidProperty
 		? (await whenDefinedAll([sTokens, user], ([contract, account]) =>
 				client.createDetectSTokens(contract)(propertyAddress, account),
-		  )) ?? []
+			)) ?? []
 		: []
 	const allMembershipPayloadsUserHave = await Promise.all(
 		allSTokenIDsUserHave.map(async (id) => {
@@ -74,7 +74,7 @@ export const maskFactory: MaskFactory = async ({
 			requiredPayloads.length > 0
 				? requiredPayloads.some((payload) =>
 						allMembershipPayloadsUserHave.includes(payload),
-				  )
+					)
 				: true
 
 		return verified ? post : mask(post)

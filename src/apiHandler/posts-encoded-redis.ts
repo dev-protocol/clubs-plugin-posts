@@ -31,9 +31,9 @@ export const addPostEncodedRedis = async ({
 					{
 						status: 500,
 					},
-			  )
+				)
 			: saved
-			  ? new Response(
+				? new Response(
 						JSON.stringify({
 							message: saved,
 							data: encode(data),
@@ -41,8 +41,8 @@ export const addPostEncodedRedis = async ({
 						{
 							status: 200,
 						},
-			    )
-			  : new Response(
+					)
+				: new Response(
 						JSON.stringify({
 							error: 'Some data is missing',
 							data: null,
@@ -50,7 +50,7 @@ export const addPostEncodedRedis = async ({
 						{
 							status: 400,
 						},
-			    )
+					)
 	} catch (e: any) {
 		return new Response(
 			JSON.stringify({
