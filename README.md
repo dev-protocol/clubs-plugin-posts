@@ -1,5 +1,22 @@
 # Clubs Plugin Posts
 
+## Local Development
+
+### Setting up your config
+
+This assumes you have created a Club. You'll need your property token address for this.
+Go to `/preview/config.ts`, and enter your property address.
+
+### Creating DB Indexes
+
+If you are using your own Redis instance for local development, you need to create indexes. First, add your REDIS details to the .env file.
+Next, run `yarn run preview` to start the server.
+Finally, in a separate terminal window, run the following:
+
+```sh
+curl -X POST -H "Content-Type: application/json" http://localhost:3000/api/devprotocol:clubs:plugin:posts/indexing/documents:redis
+```
+
 ## Plugin configuration
 
 ```ts

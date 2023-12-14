@@ -45,7 +45,7 @@ export const getAllPosts = async (
 			await client.quit()
 			return result
 		}
-		case 'documents:redis':
+		case 'documents:redis': {
 			// eslint-disable-next-line no-case-declarations
 			const client = await getDefaultClient()
 			// eslint-disable-next-line no-case-declarations
@@ -57,6 +57,7 @@ export const getAllPosts = async (
 			// eslint-disable-next-line functional/no-expression-statement
 			await client.quit()
 			return result
+		}
 		default:
 			return new Error('Illegal database type is passed')
 	}
