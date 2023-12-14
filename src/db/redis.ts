@@ -3,7 +3,7 @@ import { decode, encode } from '@devprotocol/clubs-core'
 import { whenDefined } from '@devprotocol/util-ts'
 import { createClient } from 'redis'
 import type { Comment, PostOption, Posts, Reactions } from '../types'
-import { Prefix } from '../constants/redis'
+import { Prefix, Index } from '../constants/redis'
 import {
 	fetchAllOptions,
 	fetchAllReactions,
@@ -72,13 +72,13 @@ export const getPaginatedPosts = async ({
 }): Promise<readonly Posts[]> => {
 	const limit = 10
 
-	const fetchPostKeys = await client.keys(`${Prefix.Post}:${scope}:*`)
-	const slicedPostKeys = fetchPostKeys.slice(page * limit, (page + 1) * limit)
-	const fetchPosts = await client.mGet(slicedPostKeys)
+	const fetchPosts = await client.ft.search(Index.Post, '*', {
+		LIMIT: { from: page, size: limit },
+	})
 
-	const posts: readonly PostRawDocument[] = fetchPosts
+	const posts: readonly PostRawDocument[] = fetchPosts.documents
 		// JSON parse each post
-		.map((post) => (post ? (JSON.parse(post) as PostDocument) : null))
+		.map((post) => post.value as PostDocument)
 		// filter out null values from the array
 		.filter((post): post is PostDocument => post !== null)
 		// decode post data (get post data without document db related keys)
