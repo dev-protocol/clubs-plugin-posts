@@ -9,7 +9,6 @@ import {
 	fetchProfile,
 	type ClubsApiPaths,
 	type ClubsFunctionGetSlots,
-	findPage,
 } from '@devprotocol/clubs-core'
 import { default as Admin } from './pages/Admin.astro'
 import Posts from './pages/Posts.astro'
@@ -21,7 +20,7 @@ import { getAllPosts } from './db'
 import { addCommentHandler, fetchCommentsHandler } from './apiHandler/comment'
 import { maskFactory } from './fixtures/masking'
 import { addReactionHandler } from './apiHandler/reactions'
-import { addPostHandler } from './apiHandler/posts'
+import { addPostHandler, fetchPostHandler } from './apiHandler/posts'
 import Screenshot1 from './assets/images/posts-1.jpg'
 import Screenshot2 from './assets/images/posts-2.jpg'
 import Screenshot3 from './assets/images/posts-3.jpg'
@@ -31,7 +30,6 @@ import { CreateNavigationLink } from '@devprotocol/clubs-core/layouts'
 import { copyPostFromEncodedRedisToDocumentsRedisHandler } from './apiHandler/copy-encoded-redis_to_documents-redis'
 import { xprod } from 'ramda'
 import { getDefaultClient } from './db/redis'
-import { fetchComments } from './db/redis-documents'
 
 export const getPagePaths = (async (
 	options,
@@ -177,6 +175,9 @@ export const getApiPaths = (async (options, config) => {
 								db.database.key,
 							),
 						},
+						/**
+						 * For fetching paginated posts
+						 */
 						{
 							paths: [db.id, 'message'],
 							method: 'GET',
@@ -244,25 +245,33 @@ export const getApiPaths = (async (options, config) => {
 											{
 												status: 500,
 											},
-									  )
+										)
 									: allPosts
-									  ? new Response(
+										? new Response(
 												JSON.stringify({
 													contents: encode(allPosts),
 												}),
 												{
 													status: 200,
 												},
-									    )
-									  : new Response(
+											)
+										: new Response(
 												JSON.stringify({
 													error: 'Some data is missing',
 												}),
 												{
 													status: 400,
 												},
-									    )
+											)
 							},
+						},
+						/**
+						 * Fetch individual post
+						 */
+						{
+							paths: [db.id, 'message', /((?!\/).)+/],
+							method: 'GET',
+							handler: fetchPostHandler(db.database.key),
 						},
 						/**
 						 * Fetch paginated comments by post id
@@ -332,7 +341,7 @@ export const getSlots = (async (_, __, { paths, factory }) => {
 						},
 					},
 				},
-		  ]
+			]
 		: []
 }) satisfies ClubsFunctionGetSlots
 

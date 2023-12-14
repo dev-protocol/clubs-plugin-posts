@@ -56,7 +56,7 @@ export const addCommentEncodedRedis = async ({
 					{
 						status: 500,
 					},
-			  )
+				)
 			: new Response(
 					JSON.stringify({
 						message: isCommentAdded,
@@ -65,7 +65,7 @@ export const addCommentEncodedRedis = async ({
 					{
 						status: 200,
 					},
-			  )
+				)
 	} catch (err) {
 		return new Response(
 			JSON.stringify({

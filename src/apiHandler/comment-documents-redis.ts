@@ -34,7 +34,7 @@ export const addCommentDocumentsRedis = async ({
 					{
 						status: 200,
 					},
-			  )
+				)
 			: new Response(
 					JSON.stringify({
 						error: 'Some data is missing',
@@ -43,7 +43,7 @@ export const addCommentDocumentsRedis = async ({
 					{
 						status: 400,
 					},
-			  )
+				)
 	} catch (e: any) {
 		return new Response(
 			JSON.stringify({
