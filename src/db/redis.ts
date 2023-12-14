@@ -3,7 +3,7 @@ import { decode, encode } from '@devprotocol/clubs-core'
 import { whenDefined } from '@devprotocol/util-ts'
 import { createClient } from 'redis'
 import type { Comment, PostOption, Posts, Reactions } from '../types'
-import { Index } from '../constants/redis'
+import { Index, _scope } from '../constants/redis'
 import {
 	fetchAllOptions,
 	fetchAllReactions,
@@ -13,6 +13,7 @@ import {
 	type ReactionDocument,
 } from './redis-documents'
 import { reduceBy } from 'ramda'
+import { uuidToQuery } from '../fixtures/search'
 
 const defaultClient = createClient({
 	url: import.meta.env.REDIS_URL,
@@ -71,9 +72,13 @@ export const getPaginatedPosts = async ({
 }): Promise<readonly Posts[]> => {
 	const limit = 10
 
-	const fetchPosts = await client.ft.search(Index.Post, '*', {
-		LIMIT: { from: page, size: limit },
-	})
+	const fetchPosts = await client.ft.search(
+		Index.Post,
+		`@_scope:${uuidToQuery(scope)}`,
+		{
+			LIMIT: { from: page, size: limit },
+		},
+	)
 
 	const posts: readonly PostRawDocument[] = fetchPosts.documents
 		// JSON parse each post
