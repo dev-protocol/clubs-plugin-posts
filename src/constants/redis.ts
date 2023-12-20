@@ -23,14 +23,14 @@ export const _raw = {
 
 export const _scope = {
 	'$._scope': {
-		type: SchemaFieldTypes.TEXT,
+		type: SchemaFieldTypes.TAG,
 		AS: '_scope',
 	},
 } satisfies RediSearchSchema
 
 export const _post_id = {
 	'$._post_id': {
-		type: SchemaFieldTypes.TEXT,
+		type: SchemaFieldTypes.TAG,
 		AS: '_post_id',
 	},
 } satisfies RediSearchSchema
@@ -44,14 +44,14 @@ export const _parent_type = {
 
 export const _parent_id = {
 	'$._parent_id': {
-		type: SchemaFieldTypes.TEXT,
+		type: SchemaFieldTypes.TAG,
 		AS: '_parent_id',
 	},
 } satisfies RediSearchSchema
 
 export const id = {
 	'$.id': {
-		type: SchemaFieldTypes.TEXT,
+		type: SchemaFieldTypes.TAG,
 		AS: 'id',
 	},
 } satisfies RediSearchSchema

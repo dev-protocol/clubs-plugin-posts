@@ -74,7 +74,7 @@ export const getPaginatedPosts = async ({
 
 	const fetchPosts = await client.ft.search(
 		Index.Post,
-		`@_scope:${uuidToQuery(scope)}`,
+		`@_scope:{${uuidToQuery(scope)}}`,
 		{
 			LIMIT: { from: page, size: limit },
 		},

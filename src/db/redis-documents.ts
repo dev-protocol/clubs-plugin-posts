@@ -418,7 +418,7 @@ export const fetchComments = async ({
 	 */
 	const result = await client.ft.search(
 		schema.Index.Comment,
-		`@${schema._post_id['$._post_id'].AS}:${uuidToQuery(postId)}`,
+		`@${schema._post_id['$._post_id'].AS}:{${uuidToQuery(postId)}}`,
 		{
 			LIMIT: {
 				from: start,
@@ -461,7 +461,7 @@ export const fetchAllOptions = async ({
 	 */
 	const query = `@${schema._parent_type['$._parent_type'].AS}:${parentType} @${
 		schema._parent_id['$._parent_id'].AS
-	}:${uuidToQuery(parentId)}`
+	}:{${uuidToQuery(parentId)}}`
 	const loop = async (
 		start: number,
 		list: readonly OptionDocument[],
@@ -507,7 +507,7 @@ export const fetchAllReactions = async ({
 	/**
 	 * Search options where parent id is parentId
 	 */
-	const query = `@${schema._post_id['$._post_id'].AS}:${uuidToQuery(postId)}`
+	const query = `@${schema._post_id['$._post_id'].AS}:{${uuidToQuery(postId)}}`
 	const loop = async (
 		start: number,
 		list: readonly ReactionDocument[],
