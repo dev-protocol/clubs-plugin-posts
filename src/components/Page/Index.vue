@@ -7,7 +7,7 @@ import Comment from './Posts/Comment.vue'
 import type { Option, Posts } from '../../types'
 import { onMounted, ref } from 'vue'
 import Line from '../Common/Line.vue'
-import { decode } from '@devprotocol/clubs-core'
+import { bytes32Hex, decode } from '@devprotocol/clubs-core'
 import type { connection as Connection } from '@devprotocol/clubs-core/connection'
 import type { Membership } from '../../types'
 import { type ContractRunner, hashMessage, type Signer } from 'ethers'
@@ -122,6 +122,20 @@ const handlePostSuccess = (post: Posts) => {
 	posts.value = [post, ...posts.value]
 	console.log(post)
 }
+
+const filterRequiredMemberships = (post: Posts): Membership[] => {
+	const requiredMemberships =
+		(post.options.find(({ key }) => key === 'require-one-of')
+			?.value as UndefinedOr<(string | Uint8Array)[]>) ?? []
+	return requiredMemberships
+		.map(
+			(key) =>
+				props.memberships?.find(
+					(mem) => bytes32Hex(mem.payload ?? []) === bytes32Hex(key),
+				) ?? [],
+		)
+		.flat()
+}
 </script>
 
 <template>
@@ -189,7 +203,7 @@ const handlePostSuccess = (post: Posts) => {
 				:date="post.created_at"
 				:contents="post.content"
 				:masked="post.masked ?? false"
-				:memberships="props.memberships ?? []"
+				:memberships="filterRequiredMemberships(post as Posts)"
 				:title="post.title"
 			>
 				<template v-slot:after-post-content>
