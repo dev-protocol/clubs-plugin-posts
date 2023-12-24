@@ -39,10 +39,12 @@ const onUpdateLimitedAccess = (mem: Membership) => {
 
 	// 含まれていない場合は、selectedLimitedAccessの配列に追加する
 	if (index === -1) {
-		selectedLimitedAccess.value.push(mem)
+		selectedLimitedAccess.value = [...selectedLimitedAccess.value, mem]
 	} else {
 		// 含まれている場合は、selectedLimitedAccessの配列から削除する
-		selectedLimitedAccess.value.splice(index, 1)
+		selectedLimitedAccess.value = selectedLimitedAccess.value.filter(
+			(_, i) => i !== index,
+		)
 	}
 }
 
@@ -180,7 +182,11 @@ const handleDeleteImageAll = () => {
 							:id="limitedAccessType.id"
 							type="checkbox"
 							class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-blue-500"
-							:checked="selectedLimitedAccess.includes(limitedAccessType)"
+							:checked="
+								selectedLimitedAccess.some(
+									(val) => val.id === limitedAccessType.id,
+								)
+							"
 							@change="onUpdateLimitedAccess(limitedAccessType)"
 						/>
 						<img
