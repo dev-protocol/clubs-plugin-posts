@@ -1,4 +1,4 @@
-import { JsonRpcProvider, ZeroAddress, keccak256 } from 'ethers'
+import { JsonRpcProvider, ZeroAddress } from 'ethers'
 import type { PostOption, Posts } from '../types'
 import {
 	type UndefinedOr,
@@ -6,6 +6,7 @@ import {
 	whenDefinedAll,
 } from '@devprotocol/util-ts'
 import { clientsSTokens, client } from '@devprotocol/dev-kit'
+import { bytes32Hex } from '@devprotocol/clubs-core'
 
 type MaskFactory = (opts: {
 	readonly user?: string
@@ -67,9 +68,7 @@ export const maskFactory: MaskFactory = async ({
 		const requireOneOf =
 			(post.options.find((opt) => opt.key === 'require-one-of')
 				?.value as UndefinedOr<readonly Uint8Array[]>) ?? []
-		const requiredPayloads = requireOneOf.map((v) =>
-			keccak256(new Uint8Array([...v])),
-		)
+		const requiredPayloads = requireOneOf.map((v) => bytes32Hex(v))
 		const verified =
 			requiredPayloads.length > 0
 				? requiredPayloads.some((payload) =>
