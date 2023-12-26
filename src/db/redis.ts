@@ -77,6 +77,10 @@ export const getPaginatedPosts = async ({
 		`@_scope:{${uuidToQuery(scope)}}`,
 		{
 			LIMIT: { from: page, size: limit },
+			SORTBY: {
+				BY: 'created_at',
+				DIRECTION: 'DESC',
+			},
 		},
 	)
 
