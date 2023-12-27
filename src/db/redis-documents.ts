@@ -480,7 +480,7 @@ export const fetchAllOptions = async ({
 
 		return isAll ? docs : await loop(start + limit + 1, docs)
 	}
-	const result = await loop(1, [])
+	const result = await loop(0, [])
 
 	return result
 }
@@ -526,7 +526,7 @@ export const fetchAllReactions = async ({
 
 		return isAll ? docs : await loop(start + limit + 1, docs)
 	}
-	const result = await loop(1, [])
+	const result = await loop(0, [])
 
 	return result
 }
