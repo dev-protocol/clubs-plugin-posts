@@ -7,10 +7,7 @@ import { always } from 'ramda'
 
 type Props = {
 	images: string[]
-	isPost?: {
-		type: BooleanConstructor
-		default: false
-	}
+	isPost?: boolean
 }
 type ImageData = {
 	src: string
