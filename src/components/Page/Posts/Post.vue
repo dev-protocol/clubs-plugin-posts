@@ -82,9 +82,7 @@ watch(
 				},
 			],
 		}
-		console.log({ post })
 		const newPost = await callUpdate(post)
-		console.log({ newPost })
 		postItem.value = newPost
 	},
 )
@@ -94,6 +92,7 @@ const handlePostSuccess = (data: Posts) => {
 	emit('post:success', data)
 
 	contents.value = ''
+	title.value = ''
 	handleDeleteImageAll()
 }
 
@@ -214,7 +213,7 @@ const handleDeleteImageAll = () => {
 		<div v-if="uploadImages.length" class="flex flex-wrap gap-x-1 gap-y-1">
 			<Images
 				:images="uploadImages"
-				is-post="true"
+				:is-post="true"
 				@delete:image="handleDeletePreviewImage"
 			/>
 		</div>
