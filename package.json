@@ -95,7 +95,7 @@
 		"vue": "3.3.13"
 	},
 	"peerDependencies": {
-		"@devprotocol/clubs-core": "^2.1.0"
+		"@devprotocol/clubs-core": "^2.1.0 || ^3.0.0"
 	},
 	"ava": {
 		"files": [
