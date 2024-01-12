@@ -285,6 +285,36 @@ export const setPost = async ({
 	return true
 }
 
+export const deletePost = async ({
+	postId,
+	client,
+	scope,
+	userAddress,
+}: {
+	readonly scope: string
+	readonly postId: string
+	readonly client: RedisDefaultClient
+	readonly userAddress: string
+}) => {
+	// first fetch the post
+	// const post = await client.get(`${schema.Prefix.Post}:${scope}:${postId}`)
+	const post = await client.json.get(`${schema.Prefix.Post}:${scope}:${postId}`)
+	console.log(post)
+
+	if (!post) {
+		return false
+	}
+
+	return true
+
+	// ensure post is created by owner
+	// if (post)
+
+	// delete by id
+	// const success = await client.del(postId)
+	// return success
+}
+
 export const setReaction = async ({
 	scope,
 	reaction,

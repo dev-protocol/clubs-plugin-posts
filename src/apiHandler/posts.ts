@@ -127,7 +127,7 @@ export const fetchPostHandler =
 
 		try {
 			/**
-			 * fetch the comments
+			 * fetch the post
 			 */
 
 			const post = await client.get(`${Prefix.Post}:${dbQueryKey}:${postId}`)
