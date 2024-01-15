@@ -15,13 +15,21 @@ const name = ref('')
 
 onMounted(() => {
 	if (!props.address || props.address === ZeroAddress) {
-		name.value = props.address
+		name.value = truncateEthAddress(props.address)
 		return
 	}
 
 	// fetch profile
 	fetchProfile(props.address)
 })
+
+const truncateEthAddress = (address: string) => {
+	const match = address.match(
+		/^(0x[a-zA-Z0-9]{4})[a-zA-Z0-9]+([a-zA-Z0-9]{4})$/,
+	)
+	if (!match) return address
+	return `${match[1]}\u2026${match[2]}`
+}
 
 const fetchProfile = async (address: string) => {
 	const url = new URL(
@@ -36,7 +44,7 @@ const fetchProfile = async (address: string) => {
 			const json = await res.json()
 
 			avatar.value = json.profile.avatar
-			name.value = json.profile.username ?? address
+			name.value = json.profile.username ?? truncateEthAddress(address)
 		})
 		.catch((err) => {
 			console.error(err)
