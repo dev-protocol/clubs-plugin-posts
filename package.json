@@ -67,7 +67,7 @@
 		"@types/dompurify": "^3.0.2",
 		"@types/dotenv": "8.2.0",
 		"@types/marked": "^5.0.0",
-		"@types/node": "20.10.8",
+		"@types/node": "20.11.0",
 		"@types/ramda": "0.29.9",
 		"@types/uuid": "^9.0.2",
 		"@typescript-eslint/eslint-plugin": "5.62.0",
@@ -81,18 +81,18 @@
 		"eslint-plugin-tailwind": "^0.2.1",
 		"husky": "8.0.3",
 		"nanostores": "^0.9.1",
-		"prettier": "3.1.1",
+		"prettier": "3.2.2",
 		"prettier-plugin-astro": "^0.12.0",
 		"prettier-plugin-svelte": "^3.0.0",
 		"prettier-plugin-tailwindcss": "^0.5.5",
 		"rimraf": "5.0.5",
-		"rollup": "4.9.4",
+		"rollup": "4.9.5",
 		"rollup-plugin-dts": "^6.0.2",
 		"svelte": "^4.2.1",
 		"tailwindcss": "3.4.1",
 		"txtgen": "^3.0.6",
 		"typescript": "5.3.3",
-		"vue": "3.4.8"
+		"vue": "3.3.13"
 	},
 	"peerDependencies": {
 		"@devprotocol/clubs-core": "^2.1.0 || ^3.0.0"
