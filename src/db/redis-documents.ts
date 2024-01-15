@@ -402,12 +402,10 @@ export const deleteComment = async ({
 	const query = `@${schema._parent_type['$._parent_type'].AS}:${parentType} @${
 		schema._parent_id['$._parent_id'].AS
 	}:{${uuidToQuery(commentId)}}`
-
 	const commentOptionsDataRecord = await client.ft.search(
 		schema.Index.Option,
 		query,
 	)
-	console.log('Record', commentOptionsDataRecord.documents)
 
 	const commentKey = generateKeyOf(schema.Prefix.Comment, scope, commentId)
 	const comment = await client.get(commentKey)
@@ -417,11 +415,11 @@ export const deleteComment = async ({
 
 	try {
 		await client.del(commentKey) // Delete the comment.
-		// await Promise.all(
-		// 	commentOptionsDataRecord.documents.map((record) =>
-		// 		client.del(generateKeyOf(schema.Prefix.Option, scope, record.id))
-		// 	)
-		// )
+		await Promise.all(
+			commentOptionsDataRecord.documents.map(
+				async (record) => await client.del(record.id),
+			),
+		)
 		return true
 	} catch (err) {
 		return false
