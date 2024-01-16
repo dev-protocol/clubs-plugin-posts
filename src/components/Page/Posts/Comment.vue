@@ -16,8 +16,8 @@ type Props = {
 const props = defineProps<Props>()
 
 const newComment = ref<string>('')
-const isDeleting = ref<boolean>(false)
 const isCommenting = ref<boolean>(false)
+const isDeleting = ref<Readonly<{ [commentId: string]: boolean }>>({})
 
 const comments = ref<readonly Comment[]>(props.comments)
 
@@ -106,14 +106,20 @@ const postComment = async () => {
 }
 
 const deleteComment = async (commentId: string) => {
-	isDeleting.value = true
+	isDeleting.value = {
+		...isDeleting.value,
+		[commentId]: true,
+	}
 
 	const signer = (
 		await import('@devprotocol/clubs-core/connection')
 	).connection().signer.value
 	if (!signer) {
 		// TODO: add state for failure.
-		isCommenting.value = false
+		isDeleting.value = {
+			...isDeleting.value,
+			[commentId]: false,
+		}
 		return
 	}
 
@@ -123,13 +129,19 @@ const deleteComment = async (commentId: string) => {
 		sig = await signer.signMessage(hash)
 	} catch (error) {
 		// TODO: add state for failure.
-		isDeleting.value = false
+		isDeleting.value = {
+			...isDeleting.value,
+			[commentId]: false,
+		}
 		return
 	}
 
 	if (!sig) {
 		// TODO: add state for failure.
-		isDeleting.value = false
+		isDeleting.value = {
+			...isDeleting.value,
+			[commentId]: false,
+		}
 		return
 	}
 
@@ -164,12 +176,16 @@ const deleteComment = async (commentId: string) => {
 		// Delete the element by filtering for commentId to be deleted.
 		// @ts-ignore
 		comments.value = comments.value.filter(
+			// @ts-ignore
 			(comment: Comment) => comment.id !== commentId,
 		)
 	} catch (error) {
 		console.error('error posting comment: ', error)
 	} finally {
-		isDeleting.value = false
+		isDeleting.value = {
+			...isDeleting.value,
+			[commentId]: false,
+		}
 	}
 }
 </script>
@@ -195,13 +211,13 @@ const deleteComment = async (commentId: string) => {
 						v-html="htmlComment(comment.content || '')"
 					></div>
 					<button
-						:disabled="isDeleting"
+						:disabled="isDeleting[comment.id]"
 						@click="deleteComment(comment.id)"
 						class="inline-flex cursor-pointer items-center justify-center rounded-full px-2 py-1 shadow-sm"
 						type="button"
 					>
 						<div
-							v-if="isDeleting"
+							v-if="isDeleting[comment.id]"
 							class="h-5 w-5 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"
 						></div>
 						<img
