@@ -12,6 +12,7 @@ type Props = {
 	feedId: string
 	postId: string
 	comments: readonly Comment[]
+	hashEditableRole: string
 }
 const props = defineProps<Props>()
 
@@ -211,6 +212,7 @@ const deleteComment = async (commentId: string) => {
 						v-html="htmlComment(comment.content || '')"
 					></div>
 					<button
+						v-if="props.hashEditableRole"
 						:disabled="isDeleting[comment.id]"
 						@click="deleteComment(comment.id)"
 						class="inline-flex cursor-pointer items-center justify-center rounded-full px-2 py-1 shadow-sm"

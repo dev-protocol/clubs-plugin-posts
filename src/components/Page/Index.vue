@@ -227,6 +227,7 @@ const filterRequiredMemberships = (post: Posts): Membership[] => {
 				:feedId="props.feedId"
 				:postId="post.id"
 				:comments="post.comments"
+				:hashEditableRole="hasEditableRole"
 			/>
 
 			<EncodedPostData :post="post" />
