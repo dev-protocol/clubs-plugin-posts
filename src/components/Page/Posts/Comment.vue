@@ -14,6 +14,7 @@ type Props = {
 	comments: readonly Comment[]
 	hashEditableRole: string
 	postOwnerAddress: string
+	walletAddress: string
 }
 const props = defineProps<Props>()
 console.log('Props', props)
@@ -215,8 +216,8 @@ const deleteComment = async (commentId: string) => {
 					<button
 						v-if="
 							props.hashEditableRole ||
-							props.postOwnerAddress ||
-							comment.created_by
+							props.postOwnerAddress === props.walletAddress ||
+							comment.created_by === props.walletAddress
 						"
 						:disabled="isDeleting[comment.id]"
 						@click="deleteComment(comment.id)"
