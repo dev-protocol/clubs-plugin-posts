@@ -228,6 +228,7 @@ const filterRequiredMemberships = (post: Posts): Membership[] => {
 				:postId="post.id"
 				:comments="post.comments"
 				:hashEditableRole="hasEditableRole"
+				:postOwnerAddress="post.created_by"
 			/>
 
 			<EncodedPostData :post="post" />
