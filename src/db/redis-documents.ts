@@ -408,11 +408,6 @@ export const deleteComment = async ({
 	)
 
 	const commentKey = generateKeyOf(schema.Prefix.Comment, scope, commentId)
-	const comment = await client.get(commentKey)
-	if (!comment) {
-		return false // Since comment doesn't exist.
-	}
-
 	try {
 		await client.del(commentKey) // Delete the comment.
 		await Promise.all(

@@ -10,8 +10,15 @@ import {
 	addCommentDocumentsRedis,
 	deleteCommentDocumentsRedis,
 } from './comment-documents-redis'
-import { fetchComments } from '../db/redis-documents'
+import {
+	CommentDocument,
+	PostDocument,
+	fetchComments,
+	generateKeyOf,
+} from '../db/redis-documents'
 import { getDefaultClient } from '../db/redis'
+import * as schema from '../constants/redis'
+import { canDeleteComment } from './utils/commentAccessValidation'
 
 export type AddCommentRequestJson = Readonly<{
 	readonly contents: string
@@ -91,6 +98,57 @@ export const deleteCommentHandler =
 			return new Response(
 				JSON.stringify({
 					error: 'Missing data',
+				}),
+				{
+					status: 400,
+				},
+			)
+		}
+
+		const client = await getDefaultClient()
+		const postKey = generateKeyOf(schema.Prefix.Post, dbQueryKey, postId)
+		const post = (await client.json.get(postKey)) as PostDocument
+		const commentKey = generateKeyOf(
+			schema.Prefix.Comment,
+			dbQueryKey,
+			commentId,
+		)
+		const comment = (await client.json.get(commentKey)) as CommentDocument
+		if (!comment || !post) {
+			return new Response( // Comment not found.
+				JSON.stringify({
+					error: 'Missing comment or post',
+					data: null,
+				}),
+				{
+					status: 400,
+				},
+			)
+		}
+		if (comment._post_id !== postId) {
+			return new Response( // CommentId and PostId not linked...
+				JSON.stringify({
+					error: 'Post not linked with comment',
+					data: null,
+				}),
+				{
+					status: 400,
+				},
+			)
+		}
+
+		const validationResult = await canDeleteComment(
+			conf,
+			post.created_by,
+			comment.created_by,
+			hash,
+			sig,
+		)
+		if (!validationResult) {
+			return new Response( // CommentId and PostId not linked...
+				JSON.stringify({
+					error: 'Bad access',
+					data: null,
 				}),
 				{
 					status: 400,
