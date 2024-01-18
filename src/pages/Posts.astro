@@ -39,12 +39,20 @@ const SlotsPostsFeedAfterPostContent = clubs.slots.filter(
 >
 	{
 		SlotsPostsEditAfterContentForm.map((Slot) => (
-			<Slot.component {...Slot.props} slot="edit:after:content-form" />
+			<Slot.component
+				{...Slot.props}
+				feedId={feedId}
+				slot="edit:after:content-form"
+			/>
 		))
 	}
 	{
 		SlotsPostsFeedAfterPostContent.map((Slot) => (
-			<Slot.component {...Slot.props} slot="feed:after:post-content" />
+			<Slot.component
+				{...Slot.props}
+				feedId={feedId}
+				slot="feed:after:post-content"
+			/>
 		))
 	}
 </Posts_>
