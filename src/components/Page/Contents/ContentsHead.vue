@@ -4,17 +4,19 @@ import Profile from '../../Common/Profile.vue'
 import type { connection as Connection } from '@devprotocol/clubs-core/connection'
 import { onMounted, ref } from 'vue'
 import type { UndefinedOr } from '@devprotocol/util-ts'
-import type { Signer } from 'ethers'
+import { keccak256, type Signer } from 'ethers'
 
 type Props = {
+	postId: string
 	date: Date
 	address: string
 	feedId: string
 	title?: string
 }
 
-const { date, address, feedId, title } = defineProps<Props>()
+const { date, address, feedId, title, postId } = defineProps<Props>()
 const connection = ref<typeof Connection>()
+const signer = ref<UndefinedOr<Signer>>()
 const walletAddress = ref<string | undefined>('')
 const managePostDropdownOpen = ref(false)
 
@@ -24,18 +26,53 @@ onMounted(async () => {
 	)
 	connection.value = conct
 
-	connection.value?.().signer.subscribe(async (signer: UndefinedOr<Signer>) => {
-		if (!signer) {
-			return
-		}
+	connection
+		.value?.()
+		.signer.subscribe(async (_signer: UndefinedOr<Signer>) => {
+			if (!_signer) {
+				signer.value = undefined
+				return
+			}
 
-		const _address = await signer.getAddress()
-		walletAddress.value = _address
-	})
+			signer.value = _signer
+			const _address = await _signer.getAddress()
+			walletAddress.value = _address
+		})
 })
 
-const deletePost = () => {
-	console.log('delete post hit!')
+const deletePost = async () => {
+	const signer = (
+		await import('@devprotocol/clubs-core/connection')
+	).connection().signer.value
+	if (!signer) {
+		// isPosting.value = false
+		return
+	}
+
+	const signerAddress = await signer.getAddress()
+
+	const hash = await keccak256(signerAddress)
+	const sig = await signer.signMessage(hash)
+
+	const response = await fetch(
+		`/api/devprotocol:clubs:plugin:posts/${feedId}/message/${postId}/delete`,
+		{
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				hash,
+				sig,
+			}),
+		},
+	)
+
+	if (response.status === 200) {
+		console.log('post deleted!')
+	} else {
+		console.log('post not deleted!')
+	}
 }
 </script>
 

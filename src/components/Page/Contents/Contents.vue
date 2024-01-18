@@ -8,6 +8,7 @@ import { computed } from 'vue'
 import { ProseTextInherit } from '@devprotocol/clubs-core'
 
 type Props = {
+	postId: string
 	feedId: string
 	createdBy: string
 	date: Date
@@ -40,6 +41,7 @@ marked.use({ renderer })
 
 <template>
 	<ContentsHead
+		:postId="props.postId"
 		:address="props.createdBy"
 		:feedId="props.feedId"
 		:date="props.date"

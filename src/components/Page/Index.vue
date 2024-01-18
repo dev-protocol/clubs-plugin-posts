@@ -198,6 +198,7 @@ const filterRequiredMemberships = (post: Posts): Membership[] => {
 			class="mb-5 grid gap-3 rounded bg-white p-5 text-black shadow"
 		>
 			<Contents
+				:postId="post.id"
 				:feedId="props.feedId"
 				:createdBy="post.created_by"
 				:date="post.created_at"

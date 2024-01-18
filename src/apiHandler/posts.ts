@@ -164,3 +164,35 @@ export const fetchPostHandler =
 			)
 		}
 	}
+
+/**
+ * Deletes a single post
+ * @param dbQueryKey the scope of the query
+ * @returns a single post
+ */
+export const deletePostHandler =
+	(dbQueryKey: string) =>
+	async ({
+		request,
+		url,
+	}: {
+		readonly request: Request
+		readonly url: URL
+	}) => {
+		const client = await getDefaultClient()
+
+		/** get the parent post id */
+		const splitUrl = url.pathname.split('/')
+		const postId = splitUrl[splitUrl.length - 2]
+
+		// eslint-disable-next-line functional/no-expression-statement
+		console.log('postId: ', postId)
+		return new Response(
+			JSON.stringify({
+				success: true,
+			}),
+			{
+				status: 200,
+			},
+		)
+	}
