@@ -297,22 +297,25 @@ export const deletePost = async ({
 	readonly userAddress: string
 }) => {
 	// first fetch the post
-	// const post = await client.get(`${schema.Prefix.Post}:${scope}:${postId}`)
-	const post = await client.json.get(`${schema.Prefix.Post}:${scope}:${postId}`)
-	console.log(post)
+	const doc = await client.json.get(`${schema.Prefix.Post}:${scope}:${postId}`)
 
-	if (!post) {
+	if (!doc) {
 		return false
 	}
 
-	return true
+	const post = doc?.valueOf() as Posts
 
-	// ensure post is created by owner
-	// if (post)
+	// ensure the user is the owner of the post
+	if (post.created_by !== userAddress) {
+		return false
+	}
 
 	// delete by id
-	// const success = await client.del(postId)
-	// return success
+	const success = await client.del(`${schema.Prefix.Post}:${scope}:${postId}`)
+	return success === 1
+
+	// @todo: delete comments
+	// @todo: delete reactions
 }
 
 export const setReaction = async ({

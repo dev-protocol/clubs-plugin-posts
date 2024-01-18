@@ -12,6 +12,7 @@ import { addPostEncodedRedis } from './posts-encoded-redis'
 import { addPostDocumentsRedis } from './posts-documents-redis'
 import { getDefaultClient } from '../db/redis'
 import { Prefix } from '../constants/redis'
+import { deletePost } from '../db/redis-documents'
 
 export type AddCommentRequestJson = Readonly<{
 	readonly contents: string
@@ -171,28 +172,41 @@ export const fetchPostHandler =
  * @returns a single post
  */
 export const deletePostHandler =
-	(dbQueryKey: string) =>
-	async ({
-		request,
-		url,
-	}: {
-		readonly request: Request
-		readonly url: URL
-	}) => {
+	(
+		// conf: ClubsConfiguration,
+		// dbQueryType: 'encoded:redis' | 'documents:redis',
+		dbQueryKey: string,
+	) =>
+	async ({ request }: { readonly request: Request }) => {
+		const { postId, hash, sig } = (await request.json()) as {
+			readonly postId: string
+			readonly hash: string
+			readonly sig: string
+		}
 		const client = await getDefaultClient()
 
 		/** get the parent post id */
-		const splitUrl = url.pathname.split('/')
-		const postId = splitUrl[splitUrl.length - 2]
+		// const splitUrl = url.pathname.split('/')
+		// const postId = splitUrl[splitUrl.length - 2]
+		const createdBy = verifyMessage(hash, sig)
+
+		const success = await deletePost({
+			postId,
+			client,
+			scope: dbQueryKey,
+			userAddress: createdBy,
+		})
+
+		// console.log('success is: ', success)
 
 		// eslint-disable-next-line functional/no-expression-statement
-		console.log('postId: ', postId)
-		return new Response(
-			JSON.stringify({
-				success: true,
-			}),
-			{
-				status: 200,
-			},
-		)
+		await client.quit()
+
+		return success
+			? new Response(JSON.stringify({ success: true }), {
+					status: 200,
+				})
+			: new Response(JSON.stringify({ success: false }), {
+					status: 500,
+				})
 	}

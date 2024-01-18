@@ -174,7 +174,7 @@ export const getApiPaths = (async (options, config) => {
 						 * delete post
 						 */
 						{
-							paths: [db.id, 'message', /((?!\/).)+/, 'delete'],
+							paths: [db.id, 'message', 'delete'],
 							method: 'POST',
 							handler: deletePostHandler(db.database.key),
 						},

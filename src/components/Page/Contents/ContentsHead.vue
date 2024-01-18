@@ -55,7 +55,7 @@ const deletePost = async () => {
 	const sig = await signer.signMessage(hash)
 
 	const response = await fetch(
-		`/api/devprotocol:clubs:plugin:posts/${feedId}/message/${postId}/delete`,
+		`/api/devprotocol:clubs:plugin:posts/${feedId}/message/delete`,
 		{
 			method: 'POST',
 			headers: {
@@ -64,6 +64,7 @@ const deletePost = async () => {
 			body: JSON.stringify({
 				hash,
 				sig,
+				postId,
 			}),
 		},
 	)
