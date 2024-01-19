@@ -138,7 +138,6 @@ const filterRequiredMemberships = (post: Posts): Membership[] => {
 }
 
 const onPostDeleted = (id: string) => {
-	console.log('hit post deleted!: ', id)
 	posts.value = (posts.value as Posts[]).filter((post: Posts) => post.id !== id)
 }
 </script>
