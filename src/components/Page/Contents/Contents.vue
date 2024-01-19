@@ -19,6 +19,9 @@ type Props = {
 }
 
 const props = defineProps<Props>()
+const emit = defineEmits<{
+	(e: 'postDeleted', id: string): void
+}>()
 
 const content = computed<string | undefined>(() =>
 	props.contents ? DOMPurify.sanitize(marked.parse(props.contents)) : undefined,
@@ -46,6 +49,7 @@ marked.use({ renderer })
 		:feedId="props.feedId"
 		:date="props.date"
 		:title="props.title"
+		@post-deleted="$emit('postDeleted', props.postId)"
 	/>
 
 	<div

@@ -19,6 +19,9 @@ const connection = ref<typeof Connection>()
 const signer = ref<UndefinedOr<Signer>>()
 const walletAddress = ref<string | undefined>('')
 const managePostDropdownOpen = ref(false)
+const emit = defineEmits<{
+	(e: 'postDeleted', id: string): void
+}>()
 
 onMounted(async () => {
 	const { connection: conct } = await import(
@@ -71,6 +74,7 @@ const deletePost = async () => {
 
 	if (response.status === 200) {
 		console.log('post deleted!')
+		emit('postDeleted', postId)
 	} else {
 		console.log('post not deleted!')
 	}
