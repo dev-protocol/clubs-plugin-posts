@@ -312,10 +312,42 @@ export const deletePost = async ({
 
 	// delete by id
 	const success = await client.del(`${schema.Prefix.Post}:${scope}:${postId}`)
-	return success === 1
+	// return success === 1
 
 	// @todo: delete comments
 	// @todo: delete reactions
+
+	const deleteAllComments = async (
+		scope: string,
+		postId: string,
+		client: RedisDefaultClient,
+	) => {
+		// eslint-disable-next-line functional/no-let
+		let page = 0
+		// eslint-disable-next-line functional/no-let
+		let comments
+
+		// eslint-disable-next-line functional/no-loop-statement
+		do {
+			comments = await fetchComments({ scope, postId, client, page })
+			const deleteCommentPromises = comments.map((comment) =>
+				deleteComment({
+					scope,
+					commentId: comment.id,
+					parentType: 'post',
+					client,
+				}),
+			)
+
+			await Promise.all(deleteCommentPromises)
+			page++
+		} while (comments.length > 0)
+		return true
+	}
+
+	const commentsDeleted = deleteAllComments(scope, postId, client)
+
+	return success === 1 && commentsDeleted
 }
 
 export const setReaction = async ({
@@ -432,6 +464,8 @@ export const deleteComment = async ({
 	readonly parentType: OptionDocument['_parent_type']
 	readonly client: RedisDefaultClient
 }) => {
+	console.log('deleting comment: ', commentId)
+
 	const query = `@${schema._parent_type['$._parent_type'].AS}:${parentType} @${
 		schema._parent_id['$._parent_id'].AS
 	}:{${uuidToQuery(commentId)}}`
