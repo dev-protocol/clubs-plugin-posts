@@ -55,16 +55,16 @@ export default () =>
 					{
 						key: 'feeds',
 						value: [
-							{
-								id: 'default',
-								database: {
-									type: 'encoded:redis',
-									key: `posts::${uuidv5(
-										toUtf8Bytes('EXAMPLE'),
-										uuidv5('EXAMPLE_NAMESPACE', uuidv5.URL),
-									)}`, // > posts::694666bb-b2ec-542b-a5d6-65b470e5c494
-								},
-							},
+							// {
+							// 	id: 'default',
+							// 	database: {
+							// 		type: 'encoded:redis',
+							// 		key: `posts::${uuidv5(
+							// 			toUtf8Bytes('EXAMPLE'),
+							// 			uuidv5('EXAMPLE_NAMESPACE', uuidv5.URL),
+							// 		)}`, // > posts::694666bb-b2ec-542b-a5d6-65b470e5c494
+							// 	},
+							// },
 							{
 								id: 'default-2',
 								slug: 'posts-2',

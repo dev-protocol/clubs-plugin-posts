@@ -17,7 +17,11 @@ import { v5 as uuidv5 } from 'uuid'
 import { verifyMessage } from 'ethers'
 import { whenDefinedAll, type UndefinedOr } from '@devprotocol/util-ts'
 import { getAllPosts } from './db'
-import { addCommentHandler, fetchCommentsHandler } from './apiHandler/comment'
+import {
+	addCommentHandler,
+	deleteCommentHandler,
+	fetchCommentsHandler,
+} from './apiHandler/comment'
 import { maskFactory } from './fixtures/masking'
 import { addReactionHandler } from './apiHandler/reactions'
 import {
@@ -299,6 +303,15 @@ export const getApiPaths = (async (options, config) => {
 							paths: [db.id, 'comment'], // This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/comment
 							method: 'POST',
 							handler: addCommentHandler(
+								config,
+								db.database.type,
+								db.database.key,
+							),
+						},
+						{
+							paths: [db.id, 'comment', 'delete'], // This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/comment
+							method: 'POST',
+							handler: deleteCommentHandler(
 								config,
 								db.database.type,
 								db.database.key,

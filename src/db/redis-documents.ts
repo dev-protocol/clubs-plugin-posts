@@ -421,6 +421,39 @@ export const setComment = async ({
 	return true
 }
 
+export const deleteComment = async ({
+	scope,
+	parentType,
+	commentId,
+	client,
+}: {
+	readonly scope: string
+	readonly commentId: string
+	readonly parentType: OptionDocument['_parent_type']
+	readonly client: RedisDefaultClient
+}) => {
+	const query = `@${schema._parent_type['$._parent_type'].AS}:${parentType} @${
+		schema._parent_id['$._parent_id'].AS
+	}:{${uuidToQuery(commentId)}}`
+	const commentOptionsDataRecord = await client.ft.search(
+		schema.Index.Option,
+		query,
+	)
+
+	const commentKey = generateKeyOf(schema.Prefix.Comment, scope, commentId)
+	try {
+		await client.del(commentKey) // Delete the comment.
+		await Promise.all(
+			commentOptionsDataRecord.documents.map(
+				async (record) => await client.del(record.id),
+			),
+		)
+		return true
+	} catch (err) {
+		return false
+	}
+}
+
 /**
  * Fetch paginated comments related to the parent post
  * @param scope - the associated db scope

@@ -233,6 +233,9 @@ const onPostDeleted = (id: string) => {
 				:feedId="props.feedId"
 				:postId="post.id"
 				:comments="post.comments"
+				:hashEditableRole="hasEditableRole"
+				:postOwnerAddress="post.created_by"
+				:walletAddress="walletAddress"
 			/>
 
 			<EncodedPostData :post="post" />
