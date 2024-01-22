@@ -42,6 +42,7 @@ export type CommentDocument = Omit<
 	readonly _post_id: string
 }
 export type ReactionRawDocument = {
+	readonly id: string
 	readonly content: string
 	readonly created_by: string
 }
@@ -101,6 +102,7 @@ export const reactionDocument = ({
 	readonly scope: string
 	readonly postId: string
 }): ReactionDocument => ({
+	id: data.id,
 	content: data.content,
 	created_by: data.created_by,
 	_scope: scope,
@@ -225,6 +227,7 @@ export const setPost = async ({
 			return users.map((created_by) =>
 				reactionDocument({
 					data: {
+						id: generateKeyOf(schema.Prefix.Reaction, scope, key),
 						content: key,
 						created_by,
 					},
@@ -347,6 +350,15 @@ export const deletePost = async ({
 
 	const commentsDeleted = deleteAllComments(scope, postId, client)
 
+	const reactions = await fetchAllReactions({ scope, postId, client })
+
+	// delete all reactions with postId
+	const deleteReactionsPromises = reactions.map((reaction) => {
+		return client.del(`${schema.Prefix.Reaction}:${scope}:${reaction.id}`)
+	})
+
+	await Promise.all(deleteReactionsPromises)
+
 	return success === 1 && commentsDeleted
 }
 
@@ -385,8 +397,10 @@ export const implSetReaction = async ({
 	readonly createdBy: string
 }) => {
 	const uuid = uuidFactory(url)
+	const id = uuid()
 	const newReactionData = reactionDocument({
 		data: {
+			id,
 			content: reaction,
 			created_by: createdBy,
 		},
@@ -395,7 +409,7 @@ export const implSetReaction = async ({
 	})
 
 	await client.json.set(
-		generateKeyOf(schema.Prefix.Reaction, scope, uuid()),
+		generateKeyOf(schema.Prefix.Reaction, scope, id),
 		'$',
 		newReactionData,
 	)
@@ -464,8 +478,6 @@ export const deleteComment = async ({
 	readonly parentType: OptionDocument['_parent_type']
 	readonly client: RedisDefaultClient
 }) => {
-	console.log('deleting comment: ', commentId)
-
 	const query = `@${schema._parent_type['$._parent_type'].AS}:${parentType} @${
 		schema._parent_id['$._parent_id'].AS
 	}:{${uuidToQuery(commentId)}}`

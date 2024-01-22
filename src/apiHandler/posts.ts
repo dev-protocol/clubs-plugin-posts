@@ -197,8 +197,6 @@ export const deletePostHandler =
 			userAddress: createdBy,
 		})
 
-		// console.log('success is: ', success)
-
 		// eslint-disable-next-line functional/no-expression-statement
 		await client.quit()
 

@@ -320,11 +320,7 @@ export const getApiPaths = (async (options, config) => {
 						{
 							paths: [db.id, 'reactions'], // This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/reactions
 							method: 'POST',
-							handler: addReactionHandler(
-								config,
-								db.database.type,
-								db.database.key,
-							),
+							handler: addReactionHandler(config, db.database.key),
 						},
 					] satisfies ClubsApiPaths,
 			)

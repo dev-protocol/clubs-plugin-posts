@@ -73,10 +73,9 @@ const deletePost = async () => {
 	)
 
 	if (response.status === 200) {
-		console.log('post deleted!')
 		emit('postDeleted', postId)
 	} else {
-		console.log('post not deleted!')
+		// @todo: error handling
 	}
 }
 </script>
