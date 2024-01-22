@@ -42,7 +42,6 @@ export type CommentDocument = Omit<
 	readonly _post_id: string
 }
 export type ReactionRawDocument = {
-	readonly id: string
 	readonly content: string
 	readonly created_by: string
 }
@@ -50,6 +49,11 @@ export type ReactionDocument = ReactionRawDocument & {
 	readonly _scope: string
 	readonly _post_id: string
 }
+
+export type ReactionDocumentWithId = ReactionDocument & {
+	readonly id: string
+}
+
 export type OptionRawDocument = PostOption
 export type OptionDocument = Omit<OptionRawDocument, 'value'> & {
 	readonly value: string
@@ -102,7 +106,6 @@ export const reactionDocument = ({
 	readonly scope: string
 	readonly postId: string
 }): ReactionDocument => ({
-	id: data.id,
 	content: data.content,
 	created_by: data.created_by,
 	_scope: scope,
@@ -227,7 +230,6 @@ export const setPost = async ({
 			return users.map((created_by) =>
 				reactionDocument({
 					data: {
-						id: generateKeyOf(schema.Prefix.Reaction, scope, key),
 						content: key,
 						created_by,
 					},
@@ -354,7 +356,7 @@ export const deletePost = async ({
 
 	// delete all reactions with postId
 	const deleteReactionsPromises = reactions.map((reaction) => {
-		return client.del(`${schema.Prefix.Reaction}:${scope}:${reaction.id}`)
+		return client.del(reaction.id)
 	})
 
 	await Promise.all(deleteReactionsPromises)
@@ -397,10 +399,8 @@ export const implSetReaction = async ({
 	readonly createdBy: string
 }) => {
 	const uuid = uuidFactory(url)
-	const id = uuid()
 	const newReactionData = reactionDocument({
 		data: {
-			id,
 			content: reaction,
 			created_by: createdBy,
 		},
@@ -409,7 +409,7 @@ export const implSetReaction = async ({
 	})
 
 	await client.json.set(
-		generateKeyOf(schema.Prefix.Reaction, scope, id),
+		generateKeyOf(schema.Prefix.Reaction, scope, uuid()),
 		'$',
 		newReactionData,
 	)
@@ -613,7 +613,7 @@ export const fetchAllReactions = async ({
 	readonly scope: string
 	readonly postId: string
 	readonly client: RedisDefaultClient
-}): Promise<readonly ReactionDocument[]> => {
+}): Promise<readonly ReactionDocumentWithId[]> => {
 	const limit = 10
 
 	/**
@@ -622,17 +622,19 @@ export const fetchAllReactions = async ({
 	const query = `@${schema._post_id['$._post_id'].AS}:{${uuidToQuery(postId)}}`
 	const loop = async (
 		start: number,
-		list: readonly ReactionDocument[],
-	): Promise<readonly ReactionDocument[]> => {
+		list: readonly ReactionDocumentWithId[],
+	): Promise<readonly ReactionDocumentWithId[]> => {
 		const result = await client.ft.search(schema.Index.Reaction, query, {
 			LIMIT: {
 				from: start,
 				size: limit,
 			},
 		})
-		const docs: readonly ReactionDocument[] = [
+		const docs: readonly ReactionDocumentWithId[] = [
 			...list,
-			...result.documents.map(({ value }) => value as ReactionDocument),
+			...result.documents.map(({ value, id }) => {
+				return { ...value, id } as ReactionDocumentWithId
+			}),
 		]
 		const isAll: boolean = result.total <= start + limit
 
