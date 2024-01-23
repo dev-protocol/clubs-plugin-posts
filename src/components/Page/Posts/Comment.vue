@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import dayjs from 'dayjs'
-import { ProseTextInherit, encode } from '@devprotocol/clubs-core'
+import { ProseTextInherit, decode, encode } from '@devprotocol/clubs-core'
 import { ref } from 'vue'
 import Profile from '../../Common/Profile.vue'
 import type { Comment, CommentPrimitives } from '../../../types'
@@ -91,7 +91,7 @@ const postComment = async () => {
 			content: comment.content,
 			created_at: Date.now(),
 			updated_at: Date.now(),
-			id: json?.id,
+			id: (decode(json?.data || '') as Comment)?.id || '',
 			created_by: await signer.getAddress(),
 			options: {},
 		})
