@@ -8,7 +8,6 @@
 
 	onMount(() => {
 		currentPost((data) => {
-			console.log('* currentPost', data)
 			post = data
 		}, self)
 	})

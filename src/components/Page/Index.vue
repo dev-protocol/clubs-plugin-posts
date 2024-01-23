@@ -10,7 +10,7 @@ import Line from '../Common/Line.vue'
 import { bytes32Hex, decode } from '@devprotocol/clubs-core'
 import type { connection as Connection } from '@devprotocol/clubs-core/connection'
 import type { Membership } from '../../types'
-import { type ContractRunner, hashMessage, type Signer } from 'ethers'
+import { type ContractRunner, hashMessage, type Signer, id } from 'ethers'
 import { whenDefined, type UndefinedOr } from '@devprotocol/util-ts'
 import { emojiAllowList } from '../../constants'
 import { clientsProperty } from '@devprotocol/dev-kit'
@@ -136,6 +136,10 @@ const filterRequiredMemberships = (post: Posts): Membership[] => {
 		)
 		.flat()
 }
+
+const onPostDeleted = (id: string) => {
+	posts.value = (posts.value as Posts[]).filter((post: Posts) => post.id !== id)
+}
 </script>
 
 <template>
@@ -198,6 +202,7 @@ const filterRequiredMemberships = (post: Posts): Membership[] => {
 			class="mb-5 grid gap-3 rounded bg-white p-5 text-black shadow"
 		>
 			<Contents
+				:postId="post.id"
 				:feedId="props.feedId"
 				:createdBy="post.created_by"
 				:date="post.created_at"
@@ -205,6 +210,7 @@ const filterRequiredMemberships = (post: Posts): Membership[] => {
 				:masked="post.masked ?? false"
 				:memberships="filterRequiredMemberships(post as Posts)"
 				:title="post.title"
+				@post-deleted="onPostDeleted"
 			>
 				<template v-slot:after-post-content>
 					<slot name="feed:after:post-content" />
@@ -227,6 +233,9 @@ const filterRequiredMemberships = (post: Posts): Membership[] => {
 				:feedId="props.feedId"
 				:postId="post.id"
 				:comments="post.comments"
+				:hashEditableRole="hasEditableRole"
+				:postOwnerAddress="post.created_by"
+				:walletAddress="walletAddress"
 			/>
 
 			<EncodedPostData :post="post" />

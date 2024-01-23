@@ -5,6 +5,7 @@ import { ref } from 'vue'
 import Profile from '../../Common/Profile.vue'
 import type { Comment, CommentPrimitives } from '../../../types'
 import IconSend from '../../../assets/images/icon-send.svg'
+import IconTrash from '../../../assets/images/icon-trash.svg'
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
 
@@ -12,11 +13,14 @@ type Props = {
 	feedId: string
 	postId: string
 	comments: readonly Comment[]
+	hashEditableRole: string
+	postOwnerAddress: string
+	walletAddress: string
 }
 const props = defineProps<Props>()
-
 const newComment = ref<string>('')
 const isCommenting = ref<boolean>(false)
+const isDeleting = ref<Readonly<{ [commentId: string]: boolean }>>({})
 
 const comments = ref<readonly Comment[]>(props.comments)
 
@@ -103,6 +107,90 @@ const postComment = async () => {
 		isCommenting.value = false
 	}
 }
+
+const deleteComment = async (commentId: string) => {
+	isDeleting.value = {
+		...isDeleting.value,
+		[commentId]: true,
+	}
+
+	const signer = (
+		await import('@devprotocol/clubs-core/connection')
+	).connection().signer.value
+	if (!signer) {
+		// TODO: add state for failure.
+		isDeleting.value = {
+			...isDeleting.value,
+			[commentId]: false,
+		}
+		return
+	}
+
+	const hash = encode('Deleting comment: ' + commentId)
+	let sig: string = ''
+	try {
+		sig = await signer.signMessage(hash)
+	} catch (error) {
+		// TODO: add state for failure.
+		isDeleting.value = {
+			...isDeleting.value,
+			[commentId]: false,
+		}
+		return
+	}
+
+	if (!sig) {
+		// TODO: add state for failure.
+		isDeleting.value = {
+			...isDeleting.value,
+			[commentId]: false,
+		}
+		return
+	}
+
+	const requestInfo = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			commentId: commentId,
+			postId: props.postId,
+			hash: hash,
+			sig: sig,
+		}),
+	}
+
+	let response: Response
+	try {
+		response = await fetch(
+			`/api/devprotocol:clubs:plugin:posts/${props.feedId}/comment/delete`,
+			requestInfo,
+		)
+
+		const json = await response.json()
+
+		const success = response.ok ? json?.message || false : false
+		if (!success) {
+			console.error('error deleting comment: ', response)
+			return
+		}
+
+		// Delete the element by filtering for commentId to be deleted.
+		// @ts-ignore
+		comments.value = comments.value.filter(
+			// @ts-ignore
+			(comment: Comment) => comment.id !== commentId,
+		)
+	} catch (error) {
+		console.error('error posting comment: ', error)
+	} finally {
+		isDeleting.value = {
+			...isDeleting.value,
+			[commentId]: false,
+		}
+	}
+}
 </script>
 
 <template>
@@ -119,11 +207,30 @@ const postComment = async () => {
 						{{ dayjs(comment.created_at).format('DD MMM HH:mm') }}
 					</p>
 				</div>
-				<div
-					class="prose text-gray-700"
-					:class="ProseTextInherit"
-					v-html="htmlComment(comment.content || '')"
-				></div>
+				<div class="item-center justify-center flex justify-between">
+					<div
+						class="prose text-gray-700 py-1"
+						:class="ProseTextInherit"
+						v-html="htmlComment(comment.content || '')"
+					></div>
+					<button
+						v-if="
+							props.hashEditableRole ||
+							props.postOwnerAddress === props.walletAddress ||
+							comment.created_by === props.walletAddress
+						"
+						:disabled="isDeleting[comment.id]"
+						@click="deleteComment(comment.id)"
+						class="inline-flex cursor-pointer items-center justify-center rounded-full px-2 py-1 shadow-sm"
+						type="button"
+					>
+						<div
+							v-if="isDeleting[comment.id]"
+							class="h-5 w-5 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"
+						></div>
+						<img v-else class="h-4 w-4" :src="IconTrash.src" alt="trash-can" />
+					</button>
+				</div>
 			</div>
 		</div>
 

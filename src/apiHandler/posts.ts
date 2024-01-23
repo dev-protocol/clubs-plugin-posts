@@ -12,6 +12,7 @@ import { addPostEncodedRedis } from './posts-encoded-redis'
 import { addPostDocumentsRedis } from './posts-documents-redis'
 import { getDefaultClient } from '../db/redis'
 import { Prefix } from '../constants/redis'
+import { deletePost } from '../db/redis-documents'
 
 export type AddCommentRequestJson = Readonly<{
 	readonly contents: string
@@ -127,7 +128,7 @@ export const fetchPostHandler =
 
 		try {
 			/**
-			 * fetch the comments
+			 * fetch the post
 			 */
 
 			const post = await client.get(`${Prefix.Post}:${dbQueryKey}:${postId}`)
@@ -163,4 +164,47 @@ export const fetchPostHandler =
 				},
 			)
 		}
+	}
+
+/**
+ * Deletes a single post
+ * @param dbQueryKey the scope of the query
+ * @returns a single post
+ */
+export const deletePostHandler =
+	(
+		// conf: ClubsConfiguration,
+		// dbQueryType: 'encoded:redis' | 'documents:redis',
+		dbQueryKey: string,
+	) =>
+	async ({ request }: { readonly request: Request }) => {
+		const { postId, hash, sig } = (await request.json()) as {
+			readonly postId: string
+			readonly hash: string
+			readonly sig: string
+		}
+		const client = await getDefaultClient()
+
+		/** get the parent post id */
+		// const splitUrl = url.pathname.split('/')
+		// const postId = splitUrl[splitUrl.length - 2]
+		const createdBy = verifyMessage(hash, sig)
+
+		const success = await deletePost({
+			postId,
+			client,
+			scope: dbQueryKey,
+			userAddress: createdBy,
+		})
+
+		// eslint-disable-next-line functional/no-expression-statement
+		await client.quit()
+
+		return success
+			? new Response(JSON.stringify({ success: true }), {
+					status: 200,
+				})
+			: new Response(JSON.stringify({ success: false }), {
+					status: 500,
+				})
 	}

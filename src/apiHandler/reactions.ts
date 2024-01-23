@@ -1,7 +1,7 @@
 import { verifyMessage } from 'ethers'
 import type { ClubsConfiguration } from '@devprotocol/clubs-core'
 import { emojiAllowList } from '../constants'
-import { addReactionEncodedRedis } from './reactions-encoded-redis'
+import { addReactionDocumentsRedis } from './reactions-documents-redis'
 
 export type AddReactionRequestJson = Readonly<{
 	readonly hash: string
@@ -11,11 +11,7 @@ export type AddReactionRequestJson = Readonly<{
 }>
 
 export const addReactionHandler =
-	(
-		conf: ClubsConfiguration,
-		dbQueryType: 'encoded:redis' | 'documents:redis',
-		dbQueryKey: string,
-	) =>
+	(conf: ClubsConfiguration, dbQueryKey: string) =>
 	async ({ request }: { readonly request: Request }) => {
 		const { hash, sig, postId, emoji } =
 			(await request.json()) as AddReactionRequestJson
@@ -55,25 +51,11 @@ export const addReactionHandler =
 		// get user address
 		const userAddress = verifyMessage(hash, sig)
 
-		switch (dbQueryType) {
-			case 'encoded:redis':
-				return addReactionEncodedRedis({
-					conf,
-					data: emoji,
-					userAddress,
-					postId,
-					dbQueryKey,
-				})
-
-			case 'documents:redis':
-				return addReactionEncodedRedis({
-					conf,
-					data: emoji,
-					userAddress,
-					postId,
-					dbQueryKey,
-				})
-			default:
-				return new Response(JSON.stringify({ message: 'not implemented' }))
-		}
+		return addReactionDocumentsRedis({
+			conf,
+			data: emoji,
+			userAddress,
+			postId,
+			dbQueryKey,
+		})
 	}

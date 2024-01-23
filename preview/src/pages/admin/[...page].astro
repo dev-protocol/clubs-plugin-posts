@@ -39,10 +39,6 @@ const Content = path?.props.component
 	import { onSubmitConfig } from '@devprotocol/clubs-core'
 
 	onSubmitConfig((data, onFinish) => {
-		console.log(
-			`Detected a new ClubsConfiguration, but it is not saved because this app is just an example.`,
-			data,
-		)
 		setTimeout(() => {
 			onFinish({ success: true })
 		}, 1000)
