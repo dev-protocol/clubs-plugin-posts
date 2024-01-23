@@ -5,6 +5,7 @@ import { ref } from 'vue'
 import Profile from '../../Common/Profile.vue'
 import type { Comment, CommentPrimitives } from '../../../types'
 import IconSend from '../../../assets/images/icon-send.svg'
+import IconTrash from '../../../assets/images/icon-trash.svg'
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
 
@@ -17,7 +18,6 @@ type Props = {
 	walletAddress: string
 }
 const props = defineProps<Props>()
-console.log('Props', props)
 const newComment = ref<string>('')
 const isCommenting = ref<boolean>(false)
 const isDeleting = ref<Readonly<{ [commentId: string]: boolean }>>({})
@@ -228,12 +228,7 @@ const deleteComment = async (commentId: string) => {
 							v-if="isDeleting[comment.id]"
 							class="h-5 w-5 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"
 						></div>
-						<img
-							v-else
-							class="h-5 w-5"
-							:src="IconSend.src"
-							alt="paper-airplane"
-						/>
+						<img v-else class="h-4 w-4" :src="IconTrash.src" alt="trash-can" />
 					</button>
 				</div>
 			</div>
