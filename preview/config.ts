@@ -36,7 +36,7 @@ export default () =>
 		twitterHandle: '@debug',
 		description: '',
 		url: '',
-		propertyAddress: '0xE59fEDaBB0F79b0EC605737805a9125cd8d87B1f',
+		propertyAddress: '0xE8FCe1957bbaDb79C39E04dFf81782E892A22b9d',
 		chainId: 80001,
 		rpcUrl: 'https://polygon-mumbai-bor.publicnode.com',
 		adminRolePoints: 50,
@@ -55,16 +55,16 @@ export default () =>
 					{
 						key: 'feeds',
 						value: [
-							{
-								id: 'default',
-								database: {
-									type: 'encoded:redis',
-									key: `posts::${uuidv5(
-										toUtf8Bytes('EXAMPLE'),
-										uuidv5('EXAMPLE_NAMESPACE', uuidv5.URL),
-									)}`, // > posts::694666bb-b2ec-542b-a5d6-65b470e5c494
-								},
-							},
+							// {
+							// 	id: 'default',
+							// 	database: {
+							// 		type: 'encoded:redis',
+							// 		key: `posts::${uuidv5(
+							// 			toUtf8Bytes('EXAMPLE'),
+							// 			uuidv5('EXAMPLE_NAMESPACE', uuidv5.URL),
+							// 		)}`, // > posts::694666bb-b2ec-542b-a5d6-65b470e5c494
+							// 	},
+							// },
 							{
 								id: 'default-2',
 								slug: 'posts-2',

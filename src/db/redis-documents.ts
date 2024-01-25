@@ -49,6 +49,11 @@ export type ReactionDocument = ReactionRawDocument & {
 	readonly _scope: string
 	readonly _post_id: string
 }
+
+export type ReactionDocumentWithId = ReactionDocument & {
+	readonly id: string
+}
+
 export type OptionRawDocument = PostOption
 export type OptionDocument = Omit<OptionRawDocument, 'value'> & {
 	readonly value: string
@@ -285,6 +290,80 @@ export const setPost = async ({
 	return true
 }
 
+export const deletePost = async ({
+	postId,
+	client,
+	scope,
+	userAddress,
+}: {
+	readonly scope: string
+	readonly postId: string
+	readonly client: RedisDefaultClient
+	readonly userAddress: string
+}) => {
+	// first fetch the post
+	const doc = await client.json.get(`${schema.Prefix.Post}:${scope}:${postId}`)
+
+	if (!doc) {
+		return false
+	}
+
+	const post = doc?.valueOf() as Posts
+
+	// ensure the user is the owner of the post
+	if (post.created_by !== userAddress) {
+		return false
+	}
+
+	// delete by id
+	const success = await client.del(`${schema.Prefix.Post}:${scope}:${postId}`)
+	// return success === 1
+
+	// @todo: delete comments
+	// @todo: delete reactions
+
+	const deleteAllComments = async (
+		scope: string,
+		postId: string,
+		client: RedisDefaultClient,
+	) => {
+		// eslint-disable-next-line functional/no-let
+		let page = 0
+		// eslint-disable-next-line functional/no-let
+		let comments
+
+		// eslint-disable-next-line functional/no-loop-statement
+		do {
+			comments = await fetchComments({ scope, postId, client, page })
+			const deleteCommentPromises = comments.map((comment) =>
+				deleteComment({
+					scope,
+					commentId: comment.id,
+					parentType: 'post',
+					client,
+				}),
+			)
+
+			await Promise.all(deleteCommentPromises)
+			page++
+		} while (comments.length > 0)
+		return true
+	}
+
+	const commentsDeleted = deleteAllComments(scope, postId, client)
+
+	const reactions = await fetchAllReactions({ scope, postId, client })
+
+	// delete all reactions with postId
+	const deleteReactionsPromises = reactions.map((reaction) => {
+		return client.del(reaction.id)
+	})
+
+	await Promise.all(deleteReactionsPromises)
+
+	return success === 1 && commentsDeleted
+}
+
 export const setReaction = async ({
 	scope,
 	reaction,
@@ -386,6 +465,39 @@ export const setComment = async ({
 	)
 
 	return true
+}
+
+export const deleteComment = async ({
+	scope,
+	parentType,
+	commentId,
+	client,
+}: {
+	readonly scope: string
+	readonly commentId: string
+	readonly parentType: OptionDocument['_parent_type']
+	readonly client: RedisDefaultClient
+}) => {
+	const query = `@${schema._parent_type['$._parent_type'].AS}:${parentType} @${
+		schema._parent_id['$._parent_id'].AS
+	}:{${uuidToQuery(commentId)}}`
+	const commentOptionsDataRecord = await client.ft.search(
+		schema.Index.Option,
+		query,
+	)
+
+	const commentKey = generateKeyOf(schema.Prefix.Comment, scope, commentId)
+	try {
+		await client.del(commentKey) // Delete the comment.
+		await Promise.all(
+			commentOptionsDataRecord.documents.map(
+				async (record) => await client.del(record.id),
+			),
+		)
+		return true
+	} catch (err) {
+		return false
+	}
 }
 
 /**
@@ -501,7 +613,7 @@ export const fetchAllReactions = async ({
 	readonly scope: string
 	readonly postId: string
 	readonly client: RedisDefaultClient
-}): Promise<readonly ReactionDocument[]> => {
+}): Promise<readonly ReactionDocumentWithId[]> => {
 	const limit = 10
 
 	/**
@@ -510,17 +622,19 @@ export const fetchAllReactions = async ({
 	const query = `@${schema._post_id['$._post_id'].AS}:{${uuidToQuery(postId)}}`
 	const loop = async (
 		start: number,
-		list: readonly ReactionDocument[],
-	): Promise<readonly ReactionDocument[]> => {
+		list: readonly ReactionDocumentWithId[],
+	): Promise<readonly ReactionDocumentWithId[]> => {
 		const result = await client.ft.search(schema.Index.Reaction, query, {
 			LIMIT: {
 				from: start,
 				size: limit,
 			},
 		})
-		const docs: readonly ReactionDocument[] = [
+		const docs: readonly ReactionDocumentWithId[] = [
 			...list,
-			...result.documents.map(({ value }) => value as ReactionDocument),
+			...result.documents.map(({ value, id }) => {
+				return { ...value, id } as ReactionDocumentWithId
+			}),
 		]
 		const isAll: boolean = result.total <= start + limit
 
