@@ -26,6 +26,7 @@ export const handleAddOnUpdateHandler = (e: EventAddOnUpdateListener) => {
 
 // eslint-disable-next-line functional/no-return-void
 export const onUpdate = (handler: OnUpdateHandler) =>
+	typeof document !== 'undefined' &&
 	document.dispatchEvent(
 		new CustomEvent(Event.AddOnUpdateHandler, { detail: { handler } }),
 	)
