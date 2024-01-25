@@ -4,7 +4,7 @@ import Reactions from './Posts/Reactions.vue'
 import Contents from './Contents/Contents.vue'
 import Media from './Posts/Media.vue'
 import Comment from './Posts/Comment.vue'
-import type { Option, Posts } from '../../types'
+import { Event, type Option, type Posts } from '../../types'
 import { onMounted, ref } from 'vue'
 import Line from '../Common/Line.vue'
 import { bytes32Hex, decode } from '@devprotocol/clubs-core'
@@ -15,6 +15,7 @@ import { whenDefined, type UndefinedOr } from '@devprotocol/util-ts'
 import { emojiAllowList } from '../../constants'
 import { clientsProperty } from '@devprotocol/dev-kit'
 import EncodedPostData from '../../components/Common/EncodedPostData.vue'
+import { handleAddOnUpdateHandler } from '../../plugin-helper'
 
 type Props = {
 	options: Option[]
@@ -100,6 +101,7 @@ const fetchPosts = async ({ hash, sig }: { hash?: string; sig?: string }) => {
 }
 
 onMounted(async () => {
+	document.addEventListener(Event.AddOnUpdateHandler, handleAddOnUpdateHandler)
 	fetchPosts({})
 	const { connection: conct } = await import(
 		'@devprotocol/clubs-core/connection'

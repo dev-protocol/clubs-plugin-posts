@@ -4,7 +4,7 @@
 /* eslint-disable functional/no-return-void */
 /* eslint-disable functional/no-loop-statement */
 import { always, tryCatch } from 'ramda'
-import { type PostPrimitives, type Posts } from '../types'
+import { Event, type PostPrimitives, type Posts } from '../types'
 import { whenDefined, type UndefinedOr } from '@devprotocol/util-ts'
 import { decode } from '@devprotocol/clubs-core'
 
@@ -12,11 +12,23 @@ export type OnUpdateHandler = (
 	post: PostPrimitives,
 ) => PostPrimitives | Promise<PostPrimitives>
 
-const onUpdateHandlers = new Set<OnUpdateHandler>()
+export type EventAddOnUpdateListener = CustomEvent<{
+	readonly handler?: OnUpdateHandler
+}>
+
+export const onUpdateHandlers = new Set<OnUpdateHandler>()
+
+export const handleAddOnUpdateHandler = (e: EventAddOnUpdateListener) => {
+	return typeof e.detail.handler === 'function'
+		? onUpdateHandlers.add(e.detail.handler)
+		: onUpdateHandlers
+}
 
 // eslint-disable-next-line functional/no-return-void
 export const onUpdate = (handler: OnUpdateHandler) =>
-	onUpdateHandlers.add(handler)
+	document.dispatchEvent(
+		new CustomEvent(Event.AddOnUpdateHandler, { detail: { handler } }),
+	)
 
 export const update = async (
 	_post: PostPrimitives,
@@ -55,4 +67,12 @@ export const currentPost = (
 		return _input
 	})
 	return input
+}
+
+const { AddOnUpdateHandler: AddOnUpdateListener } = Event
+
+declare global {
+	interface DocumentEventMap {
+		readonly [AddOnUpdateListener]: EventAddOnUpdateListener
+	}
 }
