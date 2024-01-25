@@ -11,6 +11,7 @@ export enum Prefix {
 	Post = 'doc::devprotocol:clubs:plugin:posts::post:',
 	Comment = 'doc::devprotocol:clubs:plugin:posts::comment:',
 	Reaction = 'doc::devprotocol:clubs:plugin:posts::reaction:',
+	Voting = 'doc::devprotocol:clubs:plugin:posts::voting:',
 	Option = 'doc::devprotocol:clubs:plugin:posts::option:',
 }
 

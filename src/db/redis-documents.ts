@@ -57,6 +57,14 @@ export type OptionDocument = Omit<OptionRawDocument, 'value'> & {
 	readonly _parent_id: string
 	readonly _scope: string
 }
+export type VotingRawDocument = {
+	readonly content: string
+	readonly created_by: string
+}
+export type VotingDocument = VotingRawDocument & {
+	readonly _scope: string
+	readonly _post_id: string
+}
 
 export const postDocument = ({
 	data,
@@ -106,6 +114,22 @@ export const reactionDocument = ({
 	_scope: scope,
 	_post_id: postId,
 })
+
+export const votingDocument = ({
+	data,
+	scope,
+	postId,
+}: {
+	readonly data: VotingRawDocument
+	readonly scope: string
+	readonly postId: string
+}): VotingDocument => ({
+	content: data.content,
+	created_by: data.created_by,
+	_scope: scope,
+	_post_id: postId,
+})
+
 export const optionDocument = ({
 	data,
 	scope,
@@ -283,6 +307,57 @@ export const setPost = async ({
 	)
 
 	return true
+}
+
+export const setVoting = async ({
+	scope,
+	voting,
+	postId,
+	url,
+	client,
+	createdBy,
+}: {
+	readonly scope: string
+	readonly voting: string
+	readonly postId: string
+	readonly url: string
+	readonly client: RedisDefaultClient
+	readonly createdBy: string
+}) => {
+	await implSetVoting({ scope, voting, postId, url, client, createdBy })
+	return true
+}
+
+export const implSetVoting = async ({
+	scope,
+	voting,
+	postId,
+	url,
+	client,
+	createdBy,
+}: {
+	readonly scope: string
+	readonly voting: string
+	readonly postId: string
+	readonly url: string
+	readonly client: RedisDefaultClient
+	readonly createdBy: string
+}) => {
+	const uuid = uuidFactory(url)
+	const newVotingData = votingDocument({
+		data: {
+			content: voting,
+			created_by: createdBy,
+		},
+		scope: scope,
+		postId,
+	})
+
+	await client.json.set(
+		generateKeyOf(schema.Prefix.Voting, scope, uuid()),
+		'$',
+		newVotingData,
+	)
 }
 
 export const setReaction = async ({

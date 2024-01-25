@@ -30,6 +30,7 @@ import { CreateNavigationLink } from '@devprotocol/clubs-core/layouts'
 import { copyPostFromEncodedRedisToDocumentsRedisHandler } from './apiHandler/copy-encoded-redis_to_documents-redis'
 import { xprod } from 'ramda'
 import { getDefaultClient } from './db/redis'
+import { addVotingHandler } from './apiHandler/voting.ts'
 
 export const getPagePaths = (async (
 	options,
@@ -269,7 +270,7 @@ export const getApiPaths = (async (options, config) => {
 						 * Fetch individual post
 						 */
 						{
-							paths: [db.id, 'message', /((?!\/).)+/],
+							paths: [db.id, 'message', /((?!\/).)+/], // This will be [GET] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/message
 							method: 'GET',
 							handler: fetchPostHandler(db.database.key),
 						},
@@ -294,6 +295,15 @@ export const getApiPaths = (async (options, config) => {
 							paths: [db.id, 'reactions'], // This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/reactions
 							method: 'POST',
 							handler: addReactionHandler(
+								config,
+								db.database.type,
+								db.database.key,
+							),
+						},
+						{
+							paths: [db.id, 'voting'], // This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/voting
+							method: 'POST',
+							handler: addVotingHandler(
 								config,
 								db.database.type,
 								db.database.key,

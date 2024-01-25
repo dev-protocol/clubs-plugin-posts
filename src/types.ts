@@ -24,6 +24,7 @@ export type Posts = PostPrimitives & {
 	readonly comments: readonly Comment[]
 	readonly reactions: Reactions
 	readonly masked?: boolean
+	readonly voting: Voting
 }
 
 export type PostOption = {
@@ -75,6 +76,10 @@ export type Membership = {
  */
 export type Reactions = {
 	readonly [emoji: string]: readonly string[]
+}
+
+export type Voting = {
+	readonly [vote: string]: readonly string[]
 }
 
 export enum SlotName {
