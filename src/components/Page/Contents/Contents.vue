@@ -8,6 +8,7 @@ import { computed } from 'vue'
 import { ProseTextInherit } from '@devprotocol/clubs-core'
 
 type Props = {
+	postId: string
 	feedId: string
 	createdBy: string
 	date: Date
@@ -18,6 +19,9 @@ type Props = {
 }
 
 const props = defineProps<Props>()
+const emit = defineEmits<{
+	(e: 'postDeleted', id: string): void
+}>()
 
 const content = computed<string | undefined>(() =>
 	props.contents ? DOMPurify.sanitize(marked.parse(props.contents)) : undefined,
@@ -40,10 +44,12 @@ marked.use({ renderer })
 
 <template>
 	<ContentsHead
+		:postId="props.postId"
 		:address="props.createdBy"
 		:feedId="props.feedId"
 		:date="props.date"
 		:title="props.title"
+		@post-deleted="$emit('postDeleted', props.postId)"
 	/>
 
 	<div

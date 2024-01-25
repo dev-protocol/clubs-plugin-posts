@@ -17,10 +17,18 @@ import { v5 as uuidv5 } from 'uuid'
 import { verifyMessage } from 'ethers'
 import { whenDefinedAll, type UndefinedOr } from '@devprotocol/util-ts'
 import { getAllPosts } from './db'
-import { addCommentHandler, fetchCommentsHandler } from './apiHandler/comment'
+import {
+	addCommentHandler,
+	deleteCommentHandler,
+	fetchCommentsHandler,
+} from './apiHandler/comment'
 import { maskFactory } from './fixtures/masking'
 import { addReactionHandler } from './apiHandler/reactions'
-import { addPostHandler, fetchPostHandler } from './apiHandler/posts'
+import {
+	addPostHandler,
+	deletePostHandler,
+	fetchPostHandler,
+} from './apiHandler/posts'
 import Screenshot1 from './assets/images/posts-1.jpg'
 import Screenshot2 from './assets/images/posts-2.jpg'
 import Screenshot3 from './assets/images/posts-3.jpg'
@@ -166,6 +174,15 @@ export const getApiPaths = (async (options, config) => {
 								}
 							},
 						},
+
+						/**
+						 * delete post
+						 */
+						{
+							paths: [db.id, 'message', 'delete'],
+							method: 'POST',
+							handler: deletePostHandler(db.database.key),
+						},
 						{
 							paths: [db.id, 'message'],
 							// This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/message
@@ -176,6 +193,7 @@ export const getApiPaths = (async (options, config) => {
 								db.database.key,
 							),
 						},
+
 						/**
 						 * For fetching paginated posts
 						 */
@@ -292,13 +310,18 @@ export const getApiPaths = (async (options, config) => {
 							),
 						},
 						{
-							paths: [db.id, 'reactions'], // This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/reactions
+							paths: [db.id, 'comment', 'delete'], // This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/comment
 							method: 'POST',
-							handler: addReactionHandler(
+							handler: deleteCommentHandler(
 								config,
 								db.database.type,
 								db.database.key,
 							),
+						},
+						{
+							paths: [db.id, 'reactions'], // This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/reactions
+							method: 'POST',
+							handler: addReactionHandler(config, db.database.key),
 						},
 						{
 							paths: [db.id, 'voting'], // This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/voting
