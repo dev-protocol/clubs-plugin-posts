@@ -32,7 +32,9 @@
 				"functional/functional-parameters": "off",
 				"functional/no-return-void": "off",
 				"@typescript-eslint/prefer-readonly-parameter-types": "off",
-				"@typescript-eslint/no-explicit-any": "off"
+				"@typescript-eslint/no-explicit-any": "off",
+				"functional/no-let": "off",
+				"functional/immutable-data": "off"
 			}
 		},
 		{

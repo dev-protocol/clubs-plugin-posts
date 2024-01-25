@@ -7,13 +7,14 @@
 		"skipLibCheck": true,
 		"resolveJsonModule": true,
 		"jsx": "preserve",
-		"types": ["astro/client"]
+		"types": ["astro/client"],
 	},
 	"include": [
 		"src",
 		"preview",
 		"config.js",
 		"rollup.config.js",
-		"tailwind.config.js"
-	]
+		"tailwind.config.js",
+		"vitest.config.ts",
+	],
 }
