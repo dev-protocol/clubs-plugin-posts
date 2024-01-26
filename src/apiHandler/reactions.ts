@@ -7,18 +7,18 @@ export type AddReactionRequestJson = Readonly<{
 	readonly hash: string
 	readonly sig: string
 	readonly postId: string
-	readonly emoji: string
+	readonly data: string
 }>
 
 export const addReactionHandler =
 	(conf: ClubsConfiguration, dbQueryKey: string) =>
 	async ({ request }: { readonly request: Request }) => {
-		const { hash, sig, postId, emoji } =
+		const { hash, sig, postId, data } =
 			(await request.json()) as AddReactionRequestJson
-		if (!emoji || !hash || !sig || !postId) {
+		if (!data || !hash || !sig || !postId) {
 			return new Response(
 				JSON.stringify({
-					error: 'Missing data',
+					error: 'Missing required content',
 				}),
 				{
 					status: 400,
@@ -58,7 +58,7 @@ export const addReactionHandler =
 
 		return addReactionDocumentsRedis({
 			conf,
-			data: emoji,
+			data,
 			userAddress,
 			postId,
 			dbQueryKey,

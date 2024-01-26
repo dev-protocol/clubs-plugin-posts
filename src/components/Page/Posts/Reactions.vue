@@ -52,7 +52,7 @@ const toggleReaction = async (emoji: string) => {
 		},
 		body: JSON.stringify({
 			postId: props.postId,
-			emoji,
+			data: emoji,
 			hash,
 			sig,
 		}),
