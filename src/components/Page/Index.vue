@@ -15,7 +15,7 @@ import { whenDefined, type UndefinedOr } from '@devprotocol/util-ts'
 import { emojiAllowList } from '../../constants'
 import { clientsProperty } from '@devprotocol/dev-kit'
 import EncodedPostData from '../../components/Common/EncodedPostData.vue'
-import { handleAddOnUpdateHandler } from '../../plugin-helper'
+import { handleRegisterOnUpdateHandler } from '../../plugin-helper'
 
 type Props = {
 	options: Option[]
@@ -101,7 +101,10 @@ const fetchPosts = async ({ hash, sig }: { hash?: string; sig?: string }) => {
 }
 
 onMounted(async () => {
-	document.addEventListener(Event.AddOnUpdateHandler, handleAddOnUpdateHandler)
+	document.addEventListener(
+		Event.RegisterOnUpdateHandler,
+		handleRegisterOnUpdateHandler,
+	)
 	fetchPosts({})
 	const { connection: conct } = await import(
 		'@devprotocol/clubs-core/connection'
