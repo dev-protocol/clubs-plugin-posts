@@ -1,6 +1,6 @@
 {
 	"name": "@devprotocol/clubs-plugin-posts",
-	"version": "0.8.7",
+	"version": "0.8.8",
 	"type": "module",
 	"description": "Template repository for using TypeScript",
 	"main": "dist/index.js",
@@ -26,10 +26,9 @@
 		"clubs-plugin"
 	],
 	"scripts": {
-		"test": "ava || echo 'skip'",
+		"test": "vitest",
 		"preview": "astro --root preview dev",
 		"build": "rollup -c",
-		"pretest": "yarn build",
 		"prebuild": "rimraf dist",
 		"lint": "yarn lint:eslint && yarn lint:format",
 		"lint:eslint": "eslint . --ext .ts,.js --fix",
@@ -58,7 +57,6 @@
 		"@astrojs/svelte": "^5.0.0",
 		"@astrojs/tailwind": "^5.0.0",
 		"@astrojs/vue": "^4.0.0",
-		"@ava/typescript": "4.1.0",
 		"@devprotocol/clubs-core": "^3.0.0-alpha.0",
 		"@nanostores/vue": "^0.10.0",
 		"@redis/json": "^1.0.4",
@@ -73,13 +71,13 @@
 		"@typescript-eslint/eslint-plugin": "5.62.0",
 		"@typescript-eslint/parser": "5.62.0",
 		"astro": "4.2.4",
-		"ava": "6.1.0",
 		"dotenv": "16.4.1",
 		"eslint": "8.56.0",
 		"eslint-config-prettier": "9.1.0",
 		"eslint-plugin-functional": "4.4.1",
 		"eslint-plugin-tailwind": "^0.2.1",
 		"husky": "9.0.6",
+		"jsdom": "^24.0.0",
 		"nanostores": "^0.9.1",
 		"prettier": "3.2.4",
 		"prettier-plugin-astro": "^0.13.0",
@@ -92,20 +90,10 @@
 		"tailwindcss": "3.4.1",
 		"txtgen": "^3.0.6",
 		"typescript": "5.3.3",
+		"vitest": "^1.2.1",
 		"vue": "3.4.15"
 	},
 	"peerDependencies": {
 		"@devprotocol/clubs-core": "^2.1.0 || ^3.0.0"
-	},
-	"ava": {
-		"files": [
-			"**/*.test.ts"
-		],
-		"typescript": {
-			"rewritePaths": {
-				"/": "dist/"
-			},
-			"compile": false
-		}
 	}
 }

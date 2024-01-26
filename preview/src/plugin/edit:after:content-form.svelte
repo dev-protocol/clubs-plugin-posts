@@ -2,6 +2,7 @@
 	import { onUpdate } from '../../../src/plugin-helper'
 
 	onUpdate((post) => {
+		console.log('onUpdate', post)
 		return {
 			...post,
 			options: [

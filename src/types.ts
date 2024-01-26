@@ -81,3 +81,7 @@ export enum SlotName {
 	PostsEditAfterContentForm = 'posts:edit:after:content-form',
 	PostsFeedAfterPostContent = 'posts:feed:after:post-content',
 }
+
+export enum Event {
+	RegisterOnUpdateHandler = 'posts:event::register_on_update_handler',
+}
