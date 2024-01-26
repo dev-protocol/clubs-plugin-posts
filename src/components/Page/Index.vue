@@ -23,7 +23,7 @@ type Props = {
 	propertyAddress: string
 	memberships?: Membership[]
 	adminRolePoints: number
-	emojiAllowList: string[]
+	emojiAllowList?: string[]
 }
 
 const props = defineProps<Props>()
