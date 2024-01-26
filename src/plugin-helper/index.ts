@@ -12,13 +12,15 @@ export type OnUpdateHandler = (
 	post: PostPrimitives,
 ) => PostPrimitives | Promise<PostPrimitives>
 
-export type EventAddOnUpdateListener = CustomEvent<{
+export type EventRegisterOnUpdateHandler = CustomEvent<{
 	readonly handler?: OnUpdateHandler
 }>
 
 export const onUpdateHandlers = new Set<OnUpdateHandler>()
 
-export const handleAddOnUpdateHandler = (e: EventAddOnUpdateListener) => {
+export const handleRegisterOnUpdateHandler = (
+	e: EventRegisterOnUpdateHandler,
+) => {
 	return typeof e.detail.handler === 'function'
 		? onUpdateHandlers.add(e.detail.handler)
 		: onUpdateHandlers
@@ -28,7 +30,7 @@ export const handleAddOnUpdateHandler = (e: EventAddOnUpdateListener) => {
 export const onUpdate = (handler: OnUpdateHandler) =>
 	typeof document !== 'undefined' &&
 	document.dispatchEvent(
-		new CustomEvent(Event.AddOnUpdateHandler, { detail: { handler } }),
+		new CustomEvent(Event.RegisterOnUpdateHandler, { detail: { handler } }),
 	)
 
 export const update = async (
@@ -70,10 +72,10 @@ export const currentPost = (
 	return input
 }
 
-const { AddOnUpdateHandler: AddOnUpdateListener } = Event
+const { RegisterOnUpdateHandler } = Event
 
 declare global {
 	interface DocumentEventMap {
-		readonly [AddOnUpdateListener]: EventAddOnUpdateListener
+		readonly [RegisterOnUpdateHandler]: EventRegisterOnUpdateHandler
 	}
 }

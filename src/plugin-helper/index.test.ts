@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { Event } from '../types'
-import { handleAddOnUpdateHandler, onUpdate, onUpdateHandlers } from '.'
+import { handleRegisterOnUpdateHandler, onUpdate, onUpdateHandlers } from '.'
 
 describe('onUpdate', () => {
 	it('should be calling CustomEvent with posts:event::add_on_update_listener on document', () => {
@@ -10,7 +10,7 @@ describe('onUpdate', () => {
 			options: [],
 		})
 		let val
-		document.addEventListener(Event.AddOnUpdateHandler, async (e) => {
+		document.addEventListener(Event.RegisterOnUpdateHandler, async (e) => {
 			val = e.detail.handler
 		})
 		onUpdate(expected)
@@ -27,8 +27,8 @@ describe('handleAddOnUpdateListener', () => {
 			options: [],
 		})
 		document.addEventListener(
-			Event.AddOnUpdateHandler,
-			handleAddOnUpdateHandler,
+			Event.RegisterOnUpdateHandler,
+			handleRegisterOnUpdateHandler,
 		)
 		onUpdate(expected)
 

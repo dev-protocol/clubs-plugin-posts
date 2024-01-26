@@ -83,5 +83,5 @@ export enum SlotName {
 }
 
 export enum Event {
-	AddOnUpdateHandler = 'posts:event::add_on_update_handler',
+	RegisterOnUpdateHandler = 'posts:event::register_on_update_handler',
 }
