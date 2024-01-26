@@ -55,6 +55,9 @@ export const getPagePaths = (async (
 		({ key }: Readonly<{ readonly key: string }>) => key === 'feeds',
 	)?.value as UndefinedOr<readonly OptionsDatabase[]>
 
+	const emojiAllowList = options?.find((item) => item.key === 'emojiAllowList')
+		?.value as UndefinedOr<readonly string[]>
+
 	return [
 		...(dbs?.map(({ id, slug }) => ({
 			paths: [slug ?? 'posts'],
@@ -65,6 +68,7 @@ export const getPagePaths = (async (
 				propertyAddress,
 				memberships,
 				adminRolePoints,
+				emojiAllowList,
 			},
 			// `propertyAddress` is required for calling post API, so passed to the FE here.
 		})) ?? []),

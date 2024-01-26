@@ -23,6 +23,7 @@ type Props = {
 	propertyAddress: string
 	memberships?: Membership[]
 	adminRolePoints: number
+	emojiAllowList: string[]
 }
 
 const props = defineProps<Props>()
@@ -230,7 +231,7 @@ const onPostDeleted = (id: string) => {
 				:comments="post.comments"
 				:reactions="post.reactions"
 				:post-id="post.id"
-				:emoji-allow-list="emojiAllowList"
+				:emoji-allow-list="props.emojiAllowList ?? emojiAllowList"
 			/>
 			<Line v-if="!post?.masked" class="my-2" />
 			<Comment

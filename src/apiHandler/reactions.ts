@@ -27,26 +27,31 @@ export const addReactionHandler =
 		}
 
 		/**
-		 * Check if club has allowListEmojis option
-		 * If not, use default allowListEmojis
+		 * Emoji validation is now disabled.
+		 * Reactions can also be used for voting, not only showing emotes.
+		 * Also, restrictions on displayable emojis as reactions are doing on Reactions.vue.
 		 */
-		const clubAllowListEmojis =
-			(conf.options?.find((item) => item.key === 'allowListEmojis')
-				?.value as readonly string[]) ?? emojiAllowList
+		// /**
+		//  * Check if club has allowListEmojis option
+		//  * If not, use default allowListEmojis
+		//  */
+		// const clubAllowListEmojis =
+		// 	(conf.options?.find((item) => item.key === 'allowListEmojis')
+		// 		?.value as readonly string[]) ?? emojiAllowList
 
-		/**
-		 * Only allowlist emojis accepted
-		 */
-		if (!clubAllowListEmojis.includes(emoji)) {
-			return new Response(
-				JSON.stringify({
-					error: 'Emoji not allowed',
-				}),
-				{
-					status: 400,
-				},
-			)
-		}
+		// /**
+		//  * Only allowlist emojis accepted
+		//  */
+		// if (!clubAllowListEmojis.includes(emoji)) {
+		// 	return new Response(
+		// 		JSON.stringify({
+		// 			error: 'Emoji not allowed',
+		// 		}),
+		// 		{
+		// 			status: 400,
+		// 		},
+		// 	)
+		// }
 
 		// get user address
 		const userAddress = verifyMessage(hash, sig)
