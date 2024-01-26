@@ -1,6 +1,5 @@
 import { verifyMessage } from 'ethers'
 import type { ClubsConfiguration } from '@devprotocol/clubs-core'
-import { emojiAllowList } from '../constants'
 import { addReactionDocumentsRedis } from './reactions-documents-redis'
 
 export type AddReactionRequestJson = Readonly<{
