@@ -5,7 +5,10 @@ import Spinner from '../../../Spinner/Spinner.vue'
 import type { PostPrimitives, Posts } from '../../../../types'
 import { encode, decode } from '@devprotocol/clubs-core'
 import { whenDefined } from '@devprotocol/util-ts'
-import { update as callUpdate } from '../../../../plugin-helper'
+import {
+	update as callUpdate,
+	dispatchPostCreated,
+} from '../../../../plugin-helper'
 
 type Props = {
 	feedId: string
@@ -88,6 +91,7 @@ const onClickPost = async () => {
 
 	// 終了のemit
 	composedPost && emit('post:success', composedPost)
+	composedPost && dispatchPostCreated(composedPost)
 }
 
 async function uploadImageToImgur(image: string): Promise<string> {
