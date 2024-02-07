@@ -12,8 +12,14 @@ export type OnUpdateHandler = (
 	post: PostPrimitives,
 ) => PostPrimitives | Promise<PostPrimitives>
 
+export type OnPostCreatedHandler = (post: Posts) => void | Promise<void>
+
 export type EventRegisterOnUpdateHandler = CustomEvent<{
 	readonly handler?: OnUpdateHandler
+}>
+
+export type EventPostCreated = CustomEvent<{
+	readonly post: Posts
 }>
 
 export const onUpdateHandlers = new Set<OnUpdateHandler>()
@@ -72,10 +78,22 @@ export const currentPost = (
 	return input
 }
 
-const { RegisterOnUpdateHandler } = Event
+export const onPostCreated = (handler: OnPostCreatedHandler) =>
+	typeof document !== 'undefined' &&
+	document.addEventListener(Event.PostCreated, (e) => handler(e.detail.post))
+
+const { PostCreated, RegisterOnUpdateHandler } = Event
+
+// eslint-disable-next-line functional/no-return-void
+export const dispatchPostCreated = (post: Posts) =>
+	typeof document !== 'undefined' &&
+	document.dispatchEvent(
+		new CustomEvent(Event.PostCreated, { detail: { post } }),
+	)
 
 declare global {
 	interface DocumentEventMap {
 		readonly [RegisterOnUpdateHandler]: EventRegisterOnUpdateHandler
+		readonly [PostCreated]: EventPostCreated
 	}
 }

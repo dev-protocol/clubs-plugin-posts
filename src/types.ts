@@ -83,5 +83,6 @@ export enum SlotName {
 }
 
 export enum Event {
+	PostCreated = 'posts:event::post_created',
 	RegisterOnUpdateHandler = 'posts:event::register_on_update_handler',
 }
