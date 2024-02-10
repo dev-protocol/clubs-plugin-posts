@@ -1,6 +1,19 @@
 <script lang="ts" setup>
 import Icon from '../../assets/images/plugin-icon.svg'
 import AddFeed from './AddFeed.vue'
+import type { PropType } from 'vue'
+import type { ClubsPropsAdminPages } from '@devprotocol/clubs-core'
+
+const props = defineProps({
+	options: {
+		type: Array as PropType<any>,
+		required: true,
+	},
+	clubs: {
+		type: Object as PropType<ClubsPropsAdminPages['clubs']>,
+		required: true,
+	},
+})
 </script>
 
 <template>
@@ -19,6 +32,6 @@ import AddFeed from './AddFeed.vue'
 			/>
 		</div>
 
-		<AddFeed />
+		<AddFeed :options="props.options" />
 	</div>
 </template>
