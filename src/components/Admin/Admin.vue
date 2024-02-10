@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import Icon from '../../assets/images/plugin-icon.svg'
+import AddFeed from './AddFeed.vue'
 </script>
 
 <template>
@@ -17,5 +18,7 @@ import Icon from '../../assets/images/plugin-icon.svg'
 				:height="Icon.height"
 			/>
 		</div>
+
+		<AddFeed />
 	</div>
 </template>
