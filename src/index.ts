@@ -9,8 +9,12 @@ import {
 	fetchProfile,
 	type ClubsApiPaths,
 	type ClubsFunctionGetSlots,
+	SinglePath,
 } from '@devprotocol/clubs-core'
 import { default as Admin } from './pages/Admin.astro'
+import { default as NewFeed } from './pages/NewFeed.astro'
+import { default as EditFeed } from './pages/EditFeed.astro'
+import { default as ListFeed } from './pages/ListFeed.astro'
 import Posts from './pages/Posts.astro'
 import type { OptionsDatabase } from './types'
 import { v5 as uuidv5 } from 'uuid'
@@ -75,12 +79,22 @@ export const getPagePaths = (async (
 	]
 }) satisfies ClubsFunctionGetPagePaths
 
-export const getAdminPaths = (async (options) => {
+export const getAdminPaths = (async (options, config) => {
 	return [
 		{
 			paths: ['posts'],
-			component: Admin,
+			component: ListFeed,
 			props: { options },
+		},
+		{
+			paths: ['posts', 'new'],
+			component: NewFeed,
+			props: { options, url: config.url },
+		},
+		{
+			paths: ['posts', 'edit', SinglePath], // idは
+			component: EditFeed,
+			props: { options, url: config.url },
 		},
 	]
 }) satisfies ClubsFunctionGetAdminPaths
