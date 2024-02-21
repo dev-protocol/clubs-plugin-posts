@@ -78,7 +78,7 @@
 		"eslint-plugin-tailwind": "^0.2.1",
 		"husky": "9.0.11",
 		"jsdom": "^24.0.0",
-		"nanostores": "^0.9.1",
+		"nanostores": "^0.10.0",
 		"prettier": "3.2.5",
 		"prettier-plugin-astro": "^0.13.0",
 		"prettier-plugin-svelte": "^3.0.0",
