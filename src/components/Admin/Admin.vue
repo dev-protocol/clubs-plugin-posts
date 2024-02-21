@@ -15,12 +15,6 @@ const props = defineProps({
 		required: true,
 	},
 })
-
-// Todo feedsの値受け取る
-const feeds: OptionsDatabase[] =
-	props.options.find(({ key }: { key: string }) => key === 'feeds')?.value || []
-
-// Todo Editを作る（Slugだけ変更する）
 </script>
 
 <template>

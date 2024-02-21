@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { onMounted, type PropType, ref } from 'vue'
+import { type PropType, ref } from 'vue'
 import { type ClubsPropsAdminPages, setOptions } from '@devprotocol/clubs-core'
-import { v5 as uuidv5 } from 'uuid'
-import { ethers, toUtf8Bytes } from 'ethers'
-import { uuidFactory } from '../../db/uuidFactory.ts'
+import type { OptionsDatabase } from '../../types.ts'
 
 const props = defineProps({
 	options: {
@@ -18,13 +16,14 @@ const props = defineProps({
 		type: String as PropType<string>,
 		required: true,
 	},
+	feedId: {
+		type: String as PropType<string>,
+		required: true,
+	},
 })
 
-console.log('url', props)
-
 const currentPluginIndex = ref(props.clubs?.currentPluginIndex || 0)
-
-const slug = ref('')
+const slug = ref(props.feedId)
 
 const onChange = () => {
 	if (currentPluginIndex.value === 0) {
@@ -35,37 +34,26 @@ const onChange = () => {
 		return
 	}
 
-	// props.linksの値受け取る
-	let feeds: {
-		id: string
-		slug: string
-		database: {
-			type: string
-			key: string
-		}
-	}[] =
+	let feeds: OptionsDatabase[] =
 		props.options.find(({ key }: { key: string }) => key === 'feeds')?.value ||
 		[]
 
-	// Todo urlが空の確認をする
-	const uuid = uuidFactory(props.url)
-	feeds = feeds.concat([
-		{
-			id: uuid(),
-			slug: slug.value,
-			database: {
-				type: 'documents:redis',
-				key: uuid(),
-			},
-		},
-	])
+	feeds = feeds.map((feed) => {
+		if (feed.id === props.feedId) {
+			return {
+				...feed,
+				slug: slug.value,
+			}
+		}
+		return feed
+	})
 
 	setOptions([{ key: 'feeds', value: feeds }], currentPluginIndex.value)
 }
 </script>
 <template>
 	<div class="py-4">
-		<h1 class="mb-4 text-3xl font-bold">New Feeds</h1>
+		<h1 class="mb-8 text-3xl font-bold">Edit Feeds</h1>
 		<label class="hs-form-field is-filled mb-10 flex flex-col">
 			<span class="hs-form-field__label"> Slug </span>
 			<input

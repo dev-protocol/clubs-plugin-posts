@@ -80,6 +80,8 @@ export const getPagePaths = (async (
 }) satisfies ClubsFunctionGetPagePaths
 
 export const getAdminPaths = (async (options, config) => {
+	const feeds = options.find(({ key }) => key === 'feeds')?.value ?? []
+
 	return [
 		{
 			paths: ['posts'],
@@ -91,11 +93,11 @@ export const getAdminPaths = (async (options, config) => {
 			component: NewFeed,
 			props: { options, url: config.url },
 		},
-		{
-			paths: ['posts', 'edit', SinglePath], // idは
+		...feeds.map(({ id }) => ({
+			paths: ['posts', 'edit', id],
 			component: EditFeed,
-			props: { options, url: config.url },
-		},
+			props: { options, feedId: id, url: config.url },
+		})),
 	]
 }) satisfies ClubsFunctionGetAdminPaths
 
