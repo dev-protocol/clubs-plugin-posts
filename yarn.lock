@@ -6082,9 +6082,9 @@ tunnel-agent@^0.6.0:
     safe-buffer "^5.0.1"
 
 txtgen@^3.0.6:
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/txtgen/-/txtgen-3.0.6.tgz#67bb56101f488b263942c66fa75adee4a97ef47a"
-  integrity sha512-5beXLv3Z6VYtoefq9tUny0tKx2qB03MXkoSJQhMcvqdt+ZN5XL26o1Wa5TsCUWYLEm9caJK5LvMQu5cJEUUtOw==
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/txtgen/-/txtgen-3.0.7.tgz#81cb16a6f73a21a51f36aca95944bf58631e0678"
+  integrity sha512-1yIREceryZibOmv3CU+rUFTnGJLLSyiB336E9P5+cRru8RLoSAzmm6F6ACkaSoC3uCWykICMKm5GGNlriJxdbA==
 
 type-check@^0.4.0, type-check@~0.4.0:
   version "0.4.0"
