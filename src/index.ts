@@ -42,6 +42,7 @@ import { CreateNavigationLink } from '@devprotocol/clubs-core/layouts'
 import { copyPostFromEncodedRedisToDocumentsRedisHandler } from './apiHandler/copy-encoded-redis_to_documents-redis'
 import { xprod } from 'ramda'
 import { getDefaultClient } from './db/redis'
+import NavigationLink from './components/Admin/NavigationLink.vue'
 
 export const getPagePaths = (async (
 	options,
@@ -80,7 +81,9 @@ export const getPagePaths = (async (
 }) satisfies ClubsFunctionGetPagePaths
 
 export const getAdminPaths = (async (options, config) => {
-	const feeds = options.find(({ key }) => key === 'feeds')?.value ?? []
+	const feeds =
+		(options.find(({ key }) => key === 'feeds')
+			?.value as readonly OptionsDatabase[]) ?? []
 
 	return [
 		{
@@ -93,10 +96,10 @@ export const getAdminPaths = (async (options, config) => {
 			component: NewFeed,
 			props: { options, url: config.url },
 		},
-		...feeds.map(({ id }) => ({
-			paths: ['posts', 'edit', id],
+		...feeds.map(({ id, slug, title }) => ({
+			paths: ['posts', 'edit', slug],
 			component: EditFeed,
-			props: { options, feedId: id, url: config.url },
+			props: { options, feedId: id, slug, url: config.url, title },
 		})),
 	]
 }) satisfies ClubsFunctionGetAdminPaths
@@ -367,25 +370,57 @@ export const getApiPaths = (async (options, config) => {
 	]
 }) satisfies ClubsFunctionGetApiPaths
 
-export const getSlots = (async (_, __, { paths, factory }) => {
-	const [path1] = paths
-	return factory === 'admin' && path1 === 'posts'
-		? [
-				{
-					slot: 'admin:aside:after-built-in-buttons',
-					component: CreateNavigationLink,
-					props: {
-						createNavigation: {
-							label: `Add 'Posts' to the menu`,
-							link: {
-								display: 'Posts',
-								path: '/posts',
-							},
-						},
+export const getSlots = (async (options, __, { paths, factory }) => {
+	const [path1, path2, path3] = paths
+
+	if (factory === 'admin' && path1 === 'posts' && path2 === undefined) {
+		const addSlotsValue = {
+			slot: 'admin:aside:after-built-in-buttons',
+			component: NavigationLink,
+			props: {
+				createNavigation: {
+					label: 'Create Feeds',
+					link: {
+						display: 'Create Feeds',
+						path: '/admin/posts/new',
 					},
 				},
-			]
-		: []
+			},
+		}
+
+		return [addSlotsValue]
+	}
+
+	if (factory === 'admin' && path1 === 'posts' && path2 === 'edit' && path3) {
+		const feeds =
+			(options.find(({ key }) => key === 'feeds')
+				?.value as readonly OptionsDatabase[]) ?? []
+		const feed = feeds.find((feed) => feed.id === path3)
+
+		const label = feed?.title
+			? `Add '${feed.title}' to the menu`
+			: `Add 'Posts' to the menu`
+		const display = feed?.title ? feed.title : 'Posts'
+		const path = feed?.slug ? `/${feed.slug}` : '/posts'
+
+		const addSlotsValue = {
+			slot: 'admin:aside:after-built-in-buttons',
+			component: CreateNavigationLink,
+			props: {
+				createNavigation: {
+					label,
+					link: {
+						display,
+						path,
+					},
+				},
+			},
+		}
+
+		return [addSlotsValue]
+	}
+
+	return []
 }) satisfies ClubsFunctionGetSlots
 
 export default {

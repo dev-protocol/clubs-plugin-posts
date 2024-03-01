@@ -26,7 +26,7 @@ const feeds: OptionsDatabase[] =
 				</p>
 				<a
 					class="hs-button is-medium is-filled"
-					:href="`/admin/posts/edit/${feed.id}`"
+					:href="`/admin/posts/edit/${feed.slug}`"
 					>Edit</a
 				>
 			</li>
