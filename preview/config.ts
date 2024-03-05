@@ -76,6 +76,28 @@ export default () =>
 									), // > 16be5315-0e57-5139-bba9-71d05675856b
 								},
 							},
+							{
+								id: 'default-3',
+								slug: 'posts-3',
+								database: {
+									type: 'documents:redis',
+									key: uuidv5(
+										toUtf8Bytes('default-3'),
+										uuidv5('EXAMPLE_NAMESPACE', uuidv5.URL),
+									), // > 16be5315-0e57-5139-bba9-71d05675856b
+								},
+							},
+							{
+								id: 'default-4',
+								slug: 'posts-4',
+								database: {
+									type: 'documents:redis',
+									key: uuidv5(
+										toUtf8Bytes('default-4'),
+										uuidv5('EXAMPLE_NAMESPACE', uuidv5.URL),
+									), // > 16be5315-0e57-5139-bba9-71d05675856b
+								},
+							},
 						] satisfies readonly OptionsDatabase[],
 					},
 				],

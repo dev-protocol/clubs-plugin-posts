@@ -1,0 +1,12 @@
+---
+import type { OptionsDatabase } from '../types'
+import type { ClubsPropsAdminPages } from '@devprotocol/clubs-core'
+import Feed from '../components/Admin/Feed.vue'
+
+type Props = ClubsPropsAdminPages & {
+	feeds: OptionsDatabase[]
+	edit?: OptionsDatabase
+}
+---
+
+<Feed client:load {...Astro.props} />
