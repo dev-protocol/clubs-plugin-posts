@@ -19,7 +19,7 @@ const props = defineProps({
 	},
 })
 
-const currentPluginIndex = ref(props.clubs?.currentPluginIndex || 0)
+const currentPluginIndex = ref(props.clubs.currentPluginIndex)
 
 const slug = ref('')
 const title = ref('')
@@ -27,10 +27,6 @@ const isSlugError = ref(false)
 const errorMessage = ref('')
 
 const onChange = () => {
-	if (currentPluginIndex.value === 0) {
-		return
-	}
-
 	if (slug.value === '') {
 		isSlugError.value = true
 		errorMessage.value = 'slug is required'
@@ -77,9 +73,19 @@ const onChange = () => {
 </style>
 <template>
 	<div class="py-4">
-		<h1 class="mb-2 text-3xl font-bold">Create New Feeds</h1>
+		<h1 class="mb-2 text-3xl font-bold">Create New Feed</h1>
 		<p class="mb-6">Please enter the following to add a new feed</p>
 		<div class="flex flex-col gap-2">
+			<label class="hs-form-field is-filled flex flex-col">
+				<span class="hs-form-field__label"> Title </span>
+				<input
+					v-model="title"
+					class="hs-form-field__input"
+					placeholder="title"
+					@change="onChange"
+				/>
+			</label>
+
 			<label class="hs-form-field is-filled flex flex-col">
 				<span
 					class="hs-form-field__label"
@@ -96,16 +102,6 @@ const onChange = () => {
 				<span v-if="isSlugError" class="hs-form-field__helper label__error">
 					{{ errorMessage }}
 				</span>
-			</label>
-
-			<label class="hs-form-field is-filled flex flex-col">
-				<span class="hs-form-field__label"> Title </span>
-				<input
-					v-model="title"
-					class="hs-form-field__input"
-					placeholder="title"
-					@change="onChange"
-				/>
 			</label>
 		</div>
 	</div>

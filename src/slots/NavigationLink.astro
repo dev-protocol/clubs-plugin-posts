@@ -1,0 +1,12 @@
+---
+import NavigationLink_ from '../components/Admin/NavigationLink.vue'
+
+type Props = {
+	navigation: {
+		display: string
+		path: string
+	}
+}
+---
+
+<NavigationLink_ client:load {...Astro.props} />

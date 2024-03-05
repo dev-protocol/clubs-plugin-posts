@@ -1,16 +1,13 @@
 <script setup lang="ts">
-import { type PropType, ref } from 'vue'
+import type { PropType } from 'vue'
 
 type Navigation = {
-	label: string
-	link: {
-		display: string
-		path: string
-	}
+	display: string
+	path: string
 }
 
 const props = defineProps({
-	createNavigation: {
+	navigation: {
 		type: Object as PropType<Navigation>,
 		required: true,
 	},
@@ -20,8 +17,8 @@ const props = defineProps({
 <template>
 	<a
 		class="hs-button is-large is-filled transition is-action-button w-full"
-		:href="props.createNavigation.link.path"
-		>{{ props.createNavigation.label }}</a
+		:href="props.navigation.path"
+		>{{ props.navigation.display }}</a
 	>
 </template>
 

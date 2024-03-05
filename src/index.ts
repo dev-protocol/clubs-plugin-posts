@@ -9,9 +9,7 @@ import {
 	fetchProfile,
 	type ClubsApiPaths,
 	type ClubsFunctionGetSlots,
-	SinglePath,
 } from '@devprotocol/clubs-core'
-import { default as Admin } from './pages/Admin.astro'
 import { default as NewFeed } from './pages/NewFeed.astro'
 import { default as EditFeed } from './pages/EditFeed.astro'
 import { default as ListFeed } from './pages/ListFeed.astro'
@@ -42,7 +40,7 @@ import { CreateNavigationLink } from '@devprotocol/clubs-core/layouts'
 import { copyPostFromEncodedRedisToDocumentsRedisHandler } from './apiHandler/copy-encoded-redis_to_documents-redis'
 import { xprod } from 'ramda'
 import { getDefaultClient } from './db/redis'
-import NavigationLink from './components/Admin/NavigationLink.vue'
+import NavigationLink from './slots/NavigationLink.astro'
 
 export const getPagePaths = (async (
 	options,
@@ -97,7 +95,7 @@ export const getAdminPaths = (async (options, config) => {
 			props: { options, url: config.url },
 		},
 		...feeds.map(({ id, slug, title }) => ({
-			paths: ['posts', 'edit', slug],
+			paths: ['posts', 'edit', id],
 			component: EditFeed,
 			props: { options, feedId: id, slug, url: config.url, title },
 		})),
@@ -378,12 +376,9 @@ export const getSlots = (async (options, __, { paths, factory }) => {
 			slot: 'admin:aside:after-built-in-buttons',
 			component: NavigationLink,
 			props: {
-				createNavigation: {
-					label: 'Create Feeds',
-					link: {
-						display: 'Create Feeds',
-						path: '/admin/posts/new',
-					},
+				navigation: {
+					display: 'Create a new feed',
+					path: '/admin/posts/new',
 				},
 			},
 		}
