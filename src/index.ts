@@ -9,6 +9,7 @@ import {
 	fetchProfile,
 	type ClubsApiPaths,
 	type ClubsFunctionGetSlots,
+	SinglePath,
 } from '@devprotocol/clubs-core'
 import { default as Feed } from './pages/Feed.astro'
 import { default as ListFeed } from './pages/ListFeed.astro'
@@ -40,6 +41,7 @@ import { copyPostFromEncodedRedisToDocumentsRedisHandler } from './apiHandler/co
 import { xprod } from 'ramda'
 import { getDefaultClient } from './db/redis'
 import NavigationLink from './slots/NavigationLink.astro'
+import { fetchPostHas } from './apiHandler/posts-documents-redis copy'
 
 export const getPagePaths = (async (
 	options,
