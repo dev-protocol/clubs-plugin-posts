@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { type PropType, ref } from 'vue'
 import { type ClubsPropsAdminPages, setOptions } from '@devprotocol/clubs-core'
-import { uuidFactory } from '../../db/uuidFactory.ts'
 import type { OptionsDatabase } from '../../types.ts'
+import { uuidFactory } from '../../db/uuidFactory.ts'
 
 const props = defineProps({
-	options: {
-		type: Array as PropType<any>,
+	feeds: {
+		type: Array as PropType<OptionsDatabase[]>,
 		required: true,
 	},
 	clubs: {
@@ -17,14 +17,30 @@ const props = defineProps({
 		type: String as PropType<string>,
 		required: true,
 	},
+	edit: {
+		type: Object as PropType<OptionsDatabase>,
+	},
 })
 
+const IS_EDIT = Boolean(props.edit)
 const currentPluginIndex = ref(props.clubs.currentPluginIndex)
-
-const slug = ref('')
-const title = ref('')
+const slug = ref(props.edit?.slug)
+const title = ref(props.edit?.title)
 const isSlugError = ref(false)
 const errorMessage = ref('')
+
+const uuid = uuidFactory(props.url)
+const defineFeed = (): OptionsDatabase => {
+	return {
+		id: uuid(),
+		slug: slug.value ?? uuid(),
+		title: title.value,
+		database: {
+			type: 'documents:redis',
+			key: uuid(),
+		},
+	}
+}
 
 const onChange = () => {
 	if (slug.value === '') {
@@ -34,31 +50,32 @@ const onChange = () => {
 	}
 	isSlugError.value = false
 
-	let feeds: OptionsDatabase[] =
-		props.options.find(({ key }: { key: string }) => key === 'feeds')?.value ||
-		[]
-
-	if (feeds.some((feed) => feed.slug === slug.value)) {
+	if (
+		props.feeds.some(
+			(feed) => feed.slug === slug.value && feed.id !== props.edit?.id,
+		)
+	) {
 		isSlugError.value = true
 		errorMessage.value = 'slug is already exists'
 		return
 	}
 	isSlugError.value = false
 
-	const uuid = uuidFactory(props.url)
-	feeds = feeds.concat([
-		{
-			id: uuid(),
-			slug: slug.value,
-			title: title.value,
-			database: {
-				type: 'documents:redis',
-				key: uuid(),
-			},
-		},
-	])
+	const feeds = props.feeds.map((feed) => {
+		if (feed.id === props.edit?.id) {
+			return {
+				...feed,
+				slug: slug.value,
+				title: title.value,
+			}
+		}
+		return feed
+	})
 
-	setOptions([{ key: 'feeds', value: feeds }], currentPluginIndex.value)
+	setOptions(
+		[{ key: 'feeds', value: IS_EDIT ? [...feeds] : [...feeds, defineFeed()] }],
+		currentPluginIndex.value,
+	)
 }
 </script>
 <style scoped>
@@ -73,8 +90,16 @@ const onChange = () => {
 </style>
 <template>
 	<div class="py-4">
-		<h1 class="mb-2 text-3xl font-bold">Create New Feed</h1>
-		<p class="mb-6">Please enter the following to add a new feed</p>
+		<h1 class="mb-2 text-3xl font-bold">
+			{{ IS_EDIT ? 'Edit feed' : 'Create a new feed' }}
+		</h1>
+		<p class="mb-6">
+			{{
+				IS_EDIT
+					? 'You can change the settings of the Feed'
+					: 'Please enter the following to add a new feed'
+			}}
+		</p>
 		<div class="flex flex-col gap-2">
 			<label class="hs-form-field is-filled flex flex-col">
 				<span class="hs-form-field__label"> Title </span>

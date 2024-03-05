@@ -10,8 +10,7 @@ import {
 	type ClubsApiPaths,
 	type ClubsFunctionGetSlots,
 } from '@devprotocol/clubs-core'
-import { default as NewFeed } from './pages/NewFeed.astro'
-import { default as EditFeed } from './pages/EditFeed.astro'
+import { default as Feed } from './pages/Feed.astro'
 import { default as ListFeed } from './pages/ListFeed.astro'
 import Posts from './pages/Posts.astro'
 import type { OptionsDatabase } from './types'
@@ -91,13 +90,13 @@ export const getAdminPaths = (async (options, config) => {
 		},
 		{
 			paths: ['posts', 'new'],
-			component: NewFeed,
-			props: { options, url: config.url },
+			component: Feed,
+			props: { feeds, url: config.url },
 		},
-		...feeds.map(({ id, slug, title }) => ({
-			paths: ['posts', 'edit', id],
-			component: EditFeed,
-			props: { options, feedId: id, slug, url: config.url, title },
+		...feeds.map((feed) => ({
+			paths: ['posts', 'edit', feed.id],
+			component: Feed,
+			props: { feeds, url: config.url, edit: feed },
 		})),
 	]
 }) satisfies ClubsFunctionGetAdminPaths
