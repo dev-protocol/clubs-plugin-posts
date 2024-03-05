@@ -84,18 +84,61 @@ export const getPaginatedPosts = async ({
 		},
 	)
 
-	const posts: readonly PostRawDocument[] = fetchPosts.documents
+	const postIds: readonly string[] = fetchPosts.documents
 		// JSON parse each post
 		.map((post) => post.value as PostDocument)
 		// filter out null values from the array
 		.filter((post): post is PostDocument => post !== null)
 		// decode post data (get post data without document db related keys)
-		.map(({ _raw }) => decode<PostRawDocument>(_raw))
+		.map(({ id }) => id)
+
+	const results = await Promise.all(
+		postIds.map((id) => fetchSinglePost({ id, client })),
+	)
+
+	return results
+}
+
+/**
+ * Fetches the single post from Redis
+ * @param id - The id of the post
+ * @param client - The Redis client
+ * @returns The post
+ */
+export const fetchSinglePost = async ({
+	id,
+	client,
+}: {
+	readonly id: string
+	readonly client: RedisDefaultClient
+}): Promise<Posts> => {
+	const fetchPost = await client.ft.search(
+		Index.Post,
+		`@id:{${uuidToQuery(id)}}`,
+		{
+			LIMIT: { from: 0, size: 1 },
+		},
+	)
+
+	const posts: readonly (PostDocument & {
+		readonly source: PostRawDocument
+	})[] = fetchPost.documents
+		// JSON parse each post
+		.map((post) => post.value as PostDocument)
+		// filter out null values from the array
+		.filter((post): post is PostDocument => post !== null)
+		// decode post data (get post data without document db related keys)
+		.map(({ _raw, ...all }) => ({
+			source: decode<PostRawDocument>(_raw),
+			_raw,
+			...all,
+		}))
 
 	/**
 	 * Create fetch promises for each post
 	 */
 	const fetchCommentsPromises = posts.map(async (post) => {
+		const scope = post._scope
 		const comments = await fetchComments({ scope, postId: post.id, client })
 		const options = await Promise.all(
 			comments.map((comment) =>
@@ -122,6 +165,7 @@ export const getPaginatedPosts = async ({
 	 * Create fetch options promises for each post
 	 */
 	const fetchOptionsPromises = posts.map(async (post) => {
+		const scope = post._scope
 		const options = await fetchAllOptions({
 			scope,
 			parentType: 'post',
@@ -137,6 +181,7 @@ export const getPaginatedPosts = async ({
 	 */
 	const fetchReactionsPromises: readonly Promise<Reactions>[] = posts.map(
 		async (post) => {
+			const scope = post._scope
 			const reactions = await fetchAllReactions({
 				scope,
 				postId: post.id,
@@ -163,14 +208,14 @@ export const getPaginatedPosts = async ({
 	/**
 	 * Map the comments to the posts
 	 */
-	const results = posts.map((post, index) => ({
-		...post,
+	const [result] = posts.map((post, index) => ({
+		...post.source,
 		comments: postsComments[index],
 		options: postsOptions[index],
 		reactions: postsReactions[index],
 	}))
 
-	return results
+	return result
 }
 
 export const setAllPosts = async ({
