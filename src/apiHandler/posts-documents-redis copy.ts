@@ -1,35 +1,22 @@
-import { ZeroAddress, getDefaultProvider, verifyMessage } from 'ethers'
-import {
-	decode,
-	type ClubsConfiguration,
-	authenticate,
-	encode,
-} from '@devprotocol/clubs-core'
-import type { Comment, PostPrimitives, Reactions } from '../types'
+import { verifyMessage } from 'ethers'
+import { type ClubsConfiguration, encode } from '@devprotocol/clubs-core'
 import {
 	whenDefined,
 	whenDefinedAll,
 	whenNotError,
 	whenNotErrorAll,
-	type ErrorOr,
 } from '@devprotocol/util-ts'
-import { uuidFactory } from '../db/uuidFactory'
-import { addPostEncodedRedis } from './posts-encoded-redis'
-import { addPostDocumentsRedis } from './posts-documents-redis'
 import { fetchSinglePost, getDefaultClient } from '../db/redis'
-import { Prefix } from '../constants/redis'
-import { deletePost, type OptionDocument } from '../db/redis-documents'
 import type { APIRoute } from 'astro'
 import { aperture, tryCatch } from 'ramda'
 import * as schema from '../constants/redis'
 import { maskFactory } from '../fixtures/masking'
+import { headers } from '../fixtures/json'
+import { uuidToQuery } from '../fixtures/search'
+import type { OptionDocument } from '../db/redis-documents'
 
-const REG_ALL_SYMBOL = /[\W_]/
-const sanitize = (q: string) =>
-	q
-		.split('')
-		.map((s) => (REG_ALL_SYMBOL.test(s) ? `\\${s}` : s))
-		.join('')
+const AVAILABLE_VALUE = /^[\w#-]+$/
+const normalize = (q: string) => q.replaceAll('-', ' ')
 
 /**
  * This can be used to fetch a single Post by ID
@@ -40,7 +27,7 @@ const sanitize = (q: string) =>
 export const fetchPostHas =
 	(dbQueryKey: string, config: ClubsConfiguration): APIRoute =>
 	async ({ url }: { readonly request: Request; readonly url: URL }) => {
-		const pathquery = aperture(2, url.pathname.split('/'))
+		const pathquery = aperture(2, decodeURIComponent(url.pathname).split('/'))
 		const [, hasOption] = pathquery.find(([key]) => key === 'has:option') ?? []
 		const limit = 10
 		const { hash, sig, _page } = {
@@ -52,8 +39,12 @@ export const fetchPostHas =
 			readonly sig?: string
 			readonly _page?: string
 		}
-		const page = parseInt(_page ?? '0')
-		const start = (page - 1) * limit
+		const safeHasOption =
+			whenDefined(hasOption, (q) =>
+				AVAILABLE_VALUE.test(q) ? q : new Error('Invalid query'),
+			) ?? new Error('Query is required')
+		const page = ((n) => (n < 0 ? 0 : n))(parseInt(_page ?? '0'))
+		const start = page > 0 ? (page - 1) * limit : 0
 
 		const reader = whenDefinedAll([hash, sig], ([h, s]) =>
 			tryCatch(
@@ -62,16 +53,16 @@ export const fetchPostHas =
 			)([h, s]),
 		)
 
-		const query = whenDefined(hasOption, (q) =>
+		const query = whenNotError(safeHasOption, (q) =>
 			[
-				`@${schema._scope['$._scope'].AS}:{${dbQueryKey}}`,
+				`@${schema._scope['$._scope'].AS}:{${uuidToQuery(dbQueryKey)}}`,
 				`@${schema._parent_type['$._parent_type'].AS}:post`,
-				`@${schema.key['$.key'].AS}:${sanitize(q)}`,
+				`@${schema.key['$.key'].AS}:${normalize(q)}`,
 			].join(' '),
 		)
 		const client = await getDefaultClient()
 		const optionsResult =
-			(await whenDefined(query, (q) =>
+			(await whenNotError(query, (q) =>
 				client.ft
 					.search(schema.Index.Option, q, {
 						LIMIT: {
@@ -106,10 +97,11 @@ export const fetchPostHas =
 		return results instanceof Error
 			? new Response(
 					JSON.stringify({
-						error: results,
+						error: results.message,
 					}),
 					{
 						status: 500,
+						headers,
 					},
 				)
 			: new Response(
@@ -118,6 +110,7 @@ export const fetchPostHas =
 					}),
 					{
 						status: 200,
+						headers,
 					},
 				)
 	}

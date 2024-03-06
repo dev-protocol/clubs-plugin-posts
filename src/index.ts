@@ -9,6 +9,7 @@ import {
 	fetchProfile,
 	type ClubsApiPaths,
 	type ClubsFunctionGetSlots,
+	type ClubsApiPath,
 } from '@devprotocol/clubs-core'
 import {
 	addCommentHandler,
@@ -34,6 +35,7 @@ import { xprod } from 'ramda'
 import { createIndex } from './db/redis-documents'
 import { getAllPosts } from './db'
 import { getDefaultClient } from './db/redis'
+import { headers } from './fixtures/json'
 import { CreateNavigationLink } from '@devprotocol/clubs-core/layouts'
 import {
 	type Option,
@@ -48,6 +50,7 @@ import {
 	SlotName,
 	Event,
 } from './types'
+import { fetchPostHas } from './apiHandler/posts-documents-redis copy'
 import { default as Feed } from './pages/Feed.astro'
 import { default as ListFeed } from './pages/ListFeed.astro'
 import NavigationLink from './slots/NavigationLink.astro'
@@ -158,6 +161,15 @@ export const getApiPaths = (async (options, config) => {
 				// eslint-disable-next-line functional/no-expression-statement
 				await client.quit()
 				return new Response(JSON.stringify(res))
+			},
+		},
+		{
+			paths: ['options', 'feeds'],
+			method: 'GET',
+			handler: async () => {
+				return new Response(JSON.stringify(dbs), {
+					headers,
+				})
 			},
 		},
 		...dbs
@@ -373,22 +385,28 @@ export const getApiPaths = (async (options, config) => {
 		...xprod(
 			dbs.filter(({ database: { type } }) => type === 'encoded:redis'),
 			dbs.filter(({ database: { type } }) => type === 'documents:redis'),
-		)
+		).map(
+			([encodedRedis, documentsRedis]) =>
+				({
+					paths: [encodedRedis.id, 'copy', 'to', documentsRedis.id],
+					method: 'POST',
+					handler: copyPostFromEncodedRedisToDocumentsRedisHandler({
+						config,
+						srcDatabaseKey: encodedRedis.database.key,
+						distDatabaseKey: documentsRedis.database.key,
+					}),
+				}) satisfies ClubsApiPath,
+		),
+		...dbs
+			.filter(({ database: { type } }) => type === 'documents:redis')
 			.map(
-				([encodedRedis, documentsRedis]) =>
-					[
-						{
-							paths: [encodedRedis.id, 'copy', 'to', documentsRedis.id],
-							method: 'POST',
-							handler: copyPostFromEncodedRedisToDocumentsRedisHandler({
-								config,
-								srcDatabaseKey: encodedRedis.database.key,
-								distDatabaseKey: documentsRedis.database.key,
-							}),
-						},
-					] satisfies ClubsApiPaths,
-			)
-			.flat(),
+				(db) =>
+					({
+						paths: [db.id, 'search', /.*/],
+						method: 'GET',
+						handler: fetchPostHas(db.database.key, config),
+					}) satisfies ClubsApiPath,
+			),
 	]
 }) satisfies ClubsFunctionGetApiPaths
 
