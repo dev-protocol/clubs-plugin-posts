@@ -50,7 +50,7 @@ import {
 	SlotName,
 	Event,
 } from './types'
-import { fetchPostHas } from './apiHandler/posts-documents-redis copy'
+import { fetchPostHas } from './apiHandler/search'
 import { default as Feed } from './pages/Feed.astro'
 import { default as ListFeed } from './pages/ListFeed.astro'
 import NavigationLink from './slots/NavigationLink.astro'
