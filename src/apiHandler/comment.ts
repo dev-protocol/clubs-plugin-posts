@@ -11,8 +11,8 @@ import {
 	deleteCommentDocumentsRedis,
 } from './comment-documents-redis'
 import {
-	CommentDocument,
-	PostDocument,
+	type CommentDocument,
+	type PostDocument,
 	fetchComments,
 	generateKeyOf,
 } from '../db/redis-documents'

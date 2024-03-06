@@ -9,16 +9,7 @@ import {
 	fetchProfile,
 	type ClubsApiPaths,
 	type ClubsFunctionGetSlots,
-	SinglePath,
 } from '@devprotocol/clubs-core'
-import { default as Feed } from './pages/Feed.astro'
-import { default as ListFeed } from './pages/ListFeed.astro'
-import Posts from './pages/Posts.astro'
-import type { OptionsDatabase } from './types'
-import { v5 as uuidv5 } from 'uuid'
-import { verifyMessage } from 'ethers'
-import { whenDefinedAll, type UndefinedOr } from '@devprotocol/util-ts'
-import { getAllPosts } from './db'
 import {
 	addCommentHandler,
 	deleteCommentHandler,
@@ -31,17 +22,50 @@ import {
 	deletePostHandler,
 	fetchPostHandler,
 } from './apiHandler/posts'
+import { v5 as uuidv5 } from 'uuid'
+import { verifyMessage } from 'ethers'
+import { whenDefinedAll, type UndefinedOr } from '@devprotocol/util-ts'
 import Screenshot1 from './assets/images/posts-1.jpg'
 import Screenshot2 from './assets/images/posts-2.jpg'
 import Screenshot3 from './assets/images/posts-3.jpg'
 import Icon from './assets/images/plugin-icon.svg'
-import Readme from './readme.astro'
-import { CreateNavigationLink } from '@devprotocol/clubs-core/layouts'
 import { copyPostFromEncodedRedisToDocumentsRedisHandler } from './apiHandler/copy-encoded-redis_to_documents-redis'
 import { xprod } from 'ramda'
+import { createIndex } from './db/redis-documents'
+import { getAllPosts } from './db'
 import { getDefaultClient } from './db/redis'
+import { CreateNavigationLink } from '@devprotocol/clubs-core/layouts'
+import {
+	type Option,
+	type TokenURIWithId,
+	type PostPrimitives,
+	type Posts,
+	type PostOption,
+	type CommentPrimitives,
+	type Comment,
+	type OptionsDatabase,
+	type Reactions,
+	SlotName,
+	Event,
+} from './types'
+import { default as Feed } from './pages/Feed.astro'
+import { default as ListFeed } from './pages/ListFeed.astro'
 import NavigationLink from './slots/NavigationLink.astro'
-import { fetchPostHas } from './apiHandler/posts-documents-redis copy'
+import Posts_ from './pages/Posts.astro'
+import Readme from './readme.astro'
+
+export type {
+	Option,
+	TokenURIWithId,
+	PostPrimitives,
+	Posts,
+	PostOption,
+	CommentPrimitives,
+	Comment,
+	OptionsDatabase,
+	Reactions,
+}
+export { SlotName, Event }
 
 export const getPagePaths = (async (
 	options,
@@ -65,7 +89,7 @@ export const getPagePaths = (async (
 	return [
 		...(dbs?.map(({ id, slug }) => ({
 			paths: [slug ?? 'posts'],
-			component: Posts,
+			component: Posts_,
 			props: {
 				options,
 				feedId: id,
@@ -119,7 +143,6 @@ export const getApiPaths = (async (options, config) => {
 	const dbs = options.find(
 		({ key }: Readonly<{ readonly key: string }>) => key === 'feeds',
 	)?.value as UndefinedOr<readonly OptionsDatabase[]>
-	const { createIndex } = await import('./db/redis-documents')
 
 	if (!dbs) {
 		return []
@@ -426,5 +449,3 @@ export default {
 	getSlots,
 	meta,
 } satisfies ClubsFunctionPlugin
-
-export * from './types'
