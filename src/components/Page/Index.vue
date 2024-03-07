@@ -24,6 +24,7 @@ type Props = {
 	memberships?: Membership[]
 	adminRolePoints: number
 	emojiAllowList?: string[]
+	postId?: string
 }
 
 const props = defineProps<Props>()
@@ -80,7 +81,7 @@ const fetchPosts = async ({ hash, sig }: { hash?: string; sig?: string }) => {
 	const query =
 		hash && sig ? new URLSearchParams({ hash, sig }) : new URLSearchParams()
 	const url = new URL(
-		`/api/devprotocol:clubs:plugin:posts/${props.feedId}/message?${query}`,
+		`/api/devprotocol:clubs:plugin:posts/${props.feedId}/message${props.postId ? `/${props.postId}` : ''}?${query}`,
 		window.location.origin,
 	)
 

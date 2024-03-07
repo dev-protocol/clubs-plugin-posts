@@ -10,8 +10,7 @@ import { whenDefinedAll } from '@devprotocol/util-ts'
 import { uuidFactory } from '../db/uuidFactory'
 import { addPostEncodedRedis } from './posts-encoded-redis'
 import { addPostDocumentsRedis } from './posts-documents-redis'
-import { getDefaultClient } from '../db/redis'
-import { Prefix } from '../constants/redis'
+import { fetchSinglePost, getDefaultClient } from '../db/redis'
 import { deletePost } from '../db/redis-documents'
 
 export type AddCommentRequestJson = Readonly<{
@@ -131,7 +130,7 @@ export const fetchPostHandler =
 			 * fetch the post
 			 */
 
-			const post = await client.get(`${Prefix.Post}:${dbQueryKey}:${postId}`)
+			const post = await fetchSinglePost({ id: postId, client })
 
 			if (!post) {
 				return new Response(
@@ -144,10 +143,11 @@ export const fetchPostHandler =
 					},
 				)
 			}
+			const contents = [post]
 
 			return new Response(
 				JSON.stringify({
-					post: decode<PostPrimitives>(post),
+					contents: encode(contents),
 				}),
 				{
 					status: 200,
