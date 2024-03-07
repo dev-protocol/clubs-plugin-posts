@@ -3,6 +3,7 @@ import { type PropType, ref } from 'vue'
 import { type ClubsPropsAdminPages, setOptions } from '@devprotocol/clubs-core'
 import type { OptionsDatabase } from '../../types.ts'
 import { uuidFactory } from '../../db/uuidFactory.ts'
+import { nanoid } from 'nanoid'
 
 const props = defineProps({
 	feeds: {
@@ -31,9 +32,10 @@ const errorMessage = ref('')
 
 const uuid = uuidFactory(props.url)
 const defineFeed = (): OptionsDatabase => {
+	const id = nanoid(10)
 	return {
-		id: uuid(),
-		slug: slug.value ?? uuid(),
+		id,
+		slug: slug.value ?? id,
 		title: title.value,
 		database: {
 			type: 'documents:redis',
