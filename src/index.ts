@@ -358,7 +358,10 @@ export const getApiPaths = (async (options, config) => {
 						{
 							paths: [db.id, 'message', /((?!\/).)+/],
 							method: 'GET',
-							handler: fetchPostHandler(db.database.key),
+							handler: fetchPostHandler({
+								dbQueryKey: db.database.key,
+								config,
+							}),
 						},
 						/**
 						 * Fetch paginated comments by post id

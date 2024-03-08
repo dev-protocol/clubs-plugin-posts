@@ -6,12 +6,18 @@ import {
 	encode,
 } from '@devprotocol/clubs-core'
 import type { Comment, PostPrimitives, Reactions } from '../types'
-import { whenDefinedAll } from '@devprotocol/util-ts'
+import {
+	whenDefinedAll,
+	whenNotError,
+	whenNotErrorAll,
+} from '@devprotocol/util-ts'
 import { uuidFactory } from '../db/uuidFactory'
 import { addPostEncodedRedis } from './posts-encoded-redis'
 import { addPostDocumentsRedis } from './posts-documents-redis'
 import { fetchSinglePost, getDefaultClient } from '../db/redis'
 import { deletePost } from '../db/redis-documents'
+import { tryCatch } from 'ramda'
+import { maskFactory } from '../fixtures/masking'
 
 export type AddCommentRequestJson = Readonly<{
 	readonly contents: string
@@ -107,11 +113,19 @@ export const addPostHandler =
 
 /**
  * This can be used to fetch a single Post by ID
- * @param dbQueryKey the scope of the query
+ * @param options the all options
+ * @param options.dbQueryKey the scope of the query
+ * @param options.config the ClubsConfigutation
  * @returns a single post
  */
 export const fetchPostHandler =
-	(dbQueryKey: string) =>
+	({
+		dbQueryKey,
+		config,
+	}: {
+		readonly dbQueryKey: string
+		readonly config: ClubsConfiguration
+	}) =>
 	async ({
 		request,
 		url,
@@ -124,6 +138,27 @@ export const fetchPostHandler =
 		/** get the parent post id */
 		const splitUrl = url.pathname.split('/')
 		const postId = splitUrl[splitUrl.length - 1]
+		const { hash, sig } = {
+			hash: url.searchParams.get('hash'),
+			sig: url.searchParams.get('sig'),
+		} as {
+			readonly hash?: string
+			readonly sig?: string
+		}
+		const reader = whenDefinedAll([hash, sig], ([_hash, _sig]) => {
+			return tryCatch(
+				([_h, _s]: readonly [string, string]) =>
+					whenDefinedAll([_h, _s], ([h, s]) => verifyMessage(h, s)),
+				(err: Error) => err,
+			)([_hash, _sig])
+		})
+		const mask = await whenNotError(reader, (user) =>
+			maskFactory({
+				user,
+				propertyAddress: config.propertyAddress,
+				rpcUrl: config.rpcUrl,
+			}),
+		)
 
 		try {
 			/**
@@ -131,8 +166,11 @@ export const fetchPostHandler =
 			 */
 
 			const post = await fetchSinglePost({ id: postId, client })
+			const result = whenNotErrorAll([post, mask], ([p, maskFn]) =>
+				[p].map(maskFn),
+			)
 
-			if (!post) {
+			if (result instanceof Error) {
 				return new Response(
 					JSON.stringify({
 						error: 'Post not found',
@@ -143,11 +181,10 @@ export const fetchPostHandler =
 					},
 				)
 			}
-			const contents = [post]
 
 			return new Response(
 				JSON.stringify({
-					contents: encode(contents),
+					contents: encode(result),
 				}),
 				{
 					status: 200,
