@@ -2,7 +2,7 @@
 import dayjs from 'dayjs'
 import Profile from '../../Common/Profile.vue'
 import type { connection as Connection } from '@devprotocol/clubs-core/connection'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import type { UndefinedOr } from '@devprotocol/util-ts'
 import { keccak256, type Signer } from 'ethers'
 
@@ -19,6 +19,7 @@ const connection = ref<typeof Connection>()
 const signer = ref<UndefinedOr<Signer>>()
 const walletAddress = ref<string | undefined>('')
 const managePostDropdownOpen = ref(false)
+const singlePage = computed(() => `/posts/${feedId}/${postId}`)
 const emit = defineEmits<{
 	(e: 'postDeleted', id: string): void
 }>()
@@ -112,8 +113,12 @@ const deletePost = async () => {
 
 		<div class="flex items-center justify-between">
 			<Profile :address="address" :feedId="feedId" />
-			<p class="text-center text-xs text-gray-400 lg:text-base">
-				{{ dayjs(date).format('DD MMM HH:mm') }}
+			<p class="text-center text-xs lg:text-base">
+				<a
+					:href="singlePage"
+					class="hs-link rounded p-1 no-underline text-gray-400"
+					>{{ dayjs(date).format('DD MMM HH:mm') }}</a
+				>
 			</p>
 		</div>
 	</div>

@@ -3,6 +3,7 @@ import type { ClubsPropsPages } from '@devprotocol/clubs-core'
 import Posts_ from '../components/Page/Index.vue'
 import type { Membership, Option } from '../types'
 import { SlotName } from '../types'
+import { aperture } from 'ramda'
 
 interface Props extends ClubsPropsPages {
 	options: Option[]
@@ -23,6 +24,9 @@ const {
 	clubs,
 } = Astro.props
 
+const url = Astro.url.pathname
+const [, postId] = aperture(2, url.split('/')).find(([p]) => p === feedId) ?? []
+
 const SlotsPostsEditAfterContentForm = clubs.slots.filter(
 	(slot) => slot.slot === SlotName.PostsEditAfterContentForm,
 )
@@ -39,6 +43,7 @@ const SlotsPostsFeedAfterPostContent = clubs.slots.filter(
 	memberships={memberships}
 	adminRolePoints={adminRolePoints}
 	emojiAllowList={emojiAllowList}
+	postId={postId}
 >
 	{
 		SlotsPostsEditAfterContentForm.map((Slot) => (

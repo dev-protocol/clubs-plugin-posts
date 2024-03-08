@@ -10,6 +10,7 @@ import {
 	type ClubsApiPaths,
 	type ClubsFunctionGetSlots,
 	type ClubsApiPath,
+	SinglePath,
 } from '@devprotocol/clubs-core'
 import {
 	addCommentHandler,
@@ -89,21 +90,32 @@ export const getPagePaths = (async (
 	const emojiAllowList = options?.find((item) => item.key === 'emojiAllowList')
 		?.value as UndefinedOr<readonly string[]>
 
-	return [
-		...(dbs?.map(({ id, slug }) => ({
-			paths: [slug ?? 'posts'],
-			component: Posts_,
-			props: {
-				options,
-				feedId: id,
-				propertyAddress,
-				memberships,
-				adminRolePoints,
-				emojiAllowList,
-			},
-			// `propertyAddress` is required for calling post API, so passed to the FE here.
-		})) ?? []),
-	]
+	const props = {
+		options,
+		propertyAddress,
+		memberships,
+		adminRolePoints,
+		emojiAllowList,
+	}
+	return dbs
+		? [
+				...dbs.map(({ id, slug }) => {
+					return {
+						paths: [slug ?? 'posts'],
+						component: Posts_,
+						props: { ...props, feedId: id },
+						// `propertyAddress` is required for calling post API, so passed to the FE here.
+					}
+				}),
+				...dbs.map(({ id }) => {
+					return {
+						paths: ['posts', id, SinglePath],
+						component: Posts_,
+						props: { ...props, feedId: id },
+					}
+				}),
+			]
+		: []
 }) satisfies ClubsFunctionGetPagePaths
 
 export const getAdminPaths = (async (options, config) => {
@@ -346,7 +358,10 @@ export const getApiPaths = (async (options, config) => {
 						{
 							paths: [db.id, 'message', /((?!\/).)+/],
 							method: 'GET',
-							handler: fetchPostHandler(db.database.key),
+							handler: fetchPostHandler({
+								dbQueryKey: db.database.key,
+								config,
+							}),
 						},
 						/**
 						 * Fetch paginated comments by post id

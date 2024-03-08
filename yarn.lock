@@ -383,7 +383,7 @@
   resolved "https://registry.yarnpkg.com/@boringer-avatars/vue3/-/vue3-0.2.1.tgz#db9d4183540de0d0af9e4e160cfc009f6f405e87"
   integrity sha512-KzAfh31SDXToTvFL0tBNG5Ur+VzfD1PP4jmY5/GS+eIuObGTIAiUu9eiht0LjuAGI+0xCgnaEgsTrOx8H3vLOQ==
 
-"@devprotocol/clubs-core@^3.0.0-alpha.0":
+"@devprotocol/clubs-core@3.3.1":
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/@devprotocol/clubs-core/-/clubs-core-3.3.1.tgz#5b54efd1a926c1ea790252e41e34a48fbc49b28a"
   integrity sha512-8zDTNQvnVPsEY3gr0wO4MFj0e9Ndq7lQgje1j0AFjDwXO3vir1gSTJWROki/prdXEJthPjPJ+apUvkvTdDJ6Sg==

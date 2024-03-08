@@ -24,9 +24,11 @@ type Props = {
 	memberships?: Membership[]
 	adminRolePoints: number
 	emojiAllowList?: string[]
+	postId?: string
 }
 
 const props = defineProps<Props>()
+const IS_SINGLE = props.postId !== undefined
 
 if (props.options === undefined) {
 	throw new Error('props.options is undefined')
@@ -80,7 +82,7 @@ const fetchPosts = async ({ hash, sig }: { hash?: string; sig?: string }) => {
 	const query =
 		hash && sig ? new URLSearchParams({ hash, sig }) : new URLSearchParams()
 	const url = new URL(
-		`/api/devprotocol:clubs:plugin:posts/${props.feedId}/message?${query}`,
+		`/api/devprotocol:clubs:plugin:posts/${props.feedId}/message${props.postId ? `/${props.postId}` : ''}?${query}`,
 		window.location.origin,
 	)
 
@@ -151,7 +153,7 @@ const onPostDeleted = (id: string) => {
 <template>
 	<div class="mx-auto w-full max-w-2xl">
 		<section
-			v-if="hasEditableRole && walletAddress"
+			v-if="IS_SINGLE === false && hasEditableRole && walletAddress"
 			class="mb-5 rounded-2xl bg-white p-5"
 		>
 			<Post
