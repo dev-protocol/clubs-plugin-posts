@@ -28,6 +28,7 @@ type Props = {
 }
 
 const props = defineProps<Props>()
+const IS_SINGLE = props.postId !== undefined
 
 if (props.options === undefined) {
 	throw new Error('props.options is undefined')
@@ -152,7 +153,7 @@ const onPostDeleted = (id: string) => {
 <template>
 	<div class="mx-auto w-full max-w-2xl">
 		<section
-			v-if="hasEditableRole && walletAddress"
+			v-if="IS_SINGLE === false && hasEditableRole && walletAddress"
 			class="mb-5 rounded-2xl bg-white p-5"
 		>
 			<Post

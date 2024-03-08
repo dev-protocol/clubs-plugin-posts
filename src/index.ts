@@ -57,7 +57,6 @@ import { default as ListFeed } from './pages/ListFeed.astro'
 import NavigationLink from './slots/NavigationLink.astro'
 import Posts_ from './pages/Posts.astro'
 import Readme from './readme.astro'
-import Debug from './pages/Debug.astro'
 
 export type {
 	Option,
