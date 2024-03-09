@@ -103,6 +103,31 @@ const fetchPosts = async ({ hash, sig }: { hash?: string; sig?: string }) => {
 		})
 }
 
+const fetchPostsPoll = async () => {
+	const url = new URL(
+		`/api/devprotocol:clubs:plugin:posts/default-2/search/has:option/poll`,
+		window.location.origin,
+	)
+
+	fetch(url.toString())
+		.then(async (res) => {
+			if (res.status === 200) {
+				const json = await res.json()
+				posts.value = decode<Posts[]>(json.contents)
+
+				console.log(posts.value)
+			}
+		})
+		.catch((err) => {
+			console.error(err)
+			error.value =
+				'Sorry, but there was an error loading the timeline. Please try again later.'
+		})
+		.finally(() => {
+			isLoading.value = false
+		})
+}
+
 onMounted(async () => {
 	document.addEventListener(
 		Event.RegisterOnUpdateHandler,
@@ -199,6 +224,16 @@ const onPostDeleted = (id: string) => {
 				@click="handleVerify"
 			>
 				Sign in
+			</button>
+		</div>
+
+		<!-- list voting -->
+		<div class="mb-5 rounded bg-white p-5 text-right">
+			<button
+				class="my-5 rounded-2xl py-2 px-8 text-white bg-blue-600"
+				@click="fetchPostsPoll"
+			>
+				Poll lists
 			</button>
 		</div>
 
