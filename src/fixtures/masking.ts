@@ -7,6 +7,9 @@ import {
 } from '@devprotocol/util-ts'
 import { clientsSTokens, client } from '@devprotocol/dev-kit'
 import { bytes32Hex } from '@devprotocol/clubs-core'
+import pQueue from 'p-queue'
+
+const queue = new pQueue({ concurrency: 3 })
 
 type MaskFactory = (opts: {
 	readonly user?: string
@@ -54,7 +57,7 @@ export const maskFactory: MaskFactory = async ({
 		: []
 	const allMembershipPayloadsUserHave = await Promise.all(
 		allSTokenIDsUserHave.map(async (id) => {
-			const payload = await sTokens?.payloadOf(id)
+			const payload = await queue.add(async () => sTokens?.payloadOf(id))
 			return payload
 		}),
 	)

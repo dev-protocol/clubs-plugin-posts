@@ -48,6 +48,7 @@
 		"ethers": "^6.6.4",
 		"marked": "12.0.1",
 		"nanoid": "^5.0.6",
+		"p-queue": "^8.0.1",
 		"photoswipe": "5.4.3",
 		"ramda": "0.29.1",
 		"redis": "^4.6.7",

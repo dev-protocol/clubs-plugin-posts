@@ -9,7 +9,6 @@ import type { Comment, PostPrimitives, Reactions } from '../types'
 import {
 	whenDefined,
 	whenDefinedAll,
-	whenNotError,
 	whenNotErrorAll,
 } from '@devprotocol/util-ts'
 import { uuidFactory } from '../db/uuidFactory'
@@ -154,13 +153,6 @@ export const fetchPostHandler =
 				(err: Error) => err,
 			)([_hash, _sig])
 		})
-		const mask = await whenNotError(reader, (user) =>
-			maskFactory({
-				user,
-				propertyAddress: config.propertyAddress,
-				rpcUrl: config.rpcUrl,
-			}),
-		)
 
 		try {
 			/**
@@ -170,6 +162,13 @@ export const fetchPostHandler =
 			const post =
 				(await whenDefined(postId, (id) => fetchSinglePost({ id, client }))) ??
 				new Error('Post ID not found')
+			const mask = await whenNotErrorAll([reader, post], ([user]) =>
+				maskFactory({
+					user,
+					propertyAddress: config.propertyAddress,
+					rpcUrl: config.rpcUrl,
+				}),
+			)
 			const result = whenNotErrorAll([post, mask], ([p, maskFn]) =>
 				[p].map(maskFn),
 			)
