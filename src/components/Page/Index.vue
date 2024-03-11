@@ -70,7 +70,7 @@ const handleConnection = async (signer: UndefinedOr<Signer>) => {
 	walletAddress.value = connectedAddress
 
 	// sign message
-	const hash = hashMessage(connectedAddress)
+	const hash = `Sign in as ${connectedAddress} to access secret post(s). @ts:${new Date().getTime()}`
 	const sig = await signer.signMessage(hash)
 
 	fetchPosts({ hash, sig })

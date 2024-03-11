@@ -7,6 +7,7 @@ import {
 } from '@devprotocol/clubs-core'
 import type { Comment, PostPrimitives, Reactions } from '../types'
 import {
+	whenDefined,
 	whenDefinedAll,
 	whenNotError,
 	whenNotErrorAll,
@@ -16,7 +17,7 @@ import { addPostEncodedRedis } from './posts-encoded-redis'
 import { addPostDocumentsRedis } from './posts-documents-redis'
 import { fetchSinglePost, getDefaultClient } from '../db/redis'
 import { deletePost } from '../db/redis-documents'
-import { tryCatch } from 'ramda'
+import { aperture, tryCatch } from 'ramda'
 import { maskFactory } from '../fixtures/masking'
 
 export type AddCommentRequestJson = Readonly<{
@@ -136,8 +137,9 @@ export const fetchPostHandler =
 		const client = await getDefaultClient()
 
 		/** get the parent post id */
-		const splitUrl = url.pathname.split('/')
-		const postId = splitUrl[splitUrl.length - 1]
+		const pathquery = aperture(2, decodeURIComponent(url.pathname).split('/'))
+		const [, postId] = pathquery.find(([key]) => key === 'message') ?? []
+
 		const { hash, sig } = {
 			hash: url.searchParams.get('hash'),
 			sig: url.searchParams.get('sig'),
@@ -165,7 +167,9 @@ export const fetchPostHandler =
 			 * fetch the post
 			 */
 
-			const post = await fetchSinglePost({ id: postId, client })
+			const post =
+				(await whenDefined(postId, (id) => fetchSinglePost({ id, client }))) ??
+				new Error('Post ID not found')
 			const result = whenNotErrorAll([post, mask], ([p, maskFn]) =>
 				[p].map(maskFn),
 			)
