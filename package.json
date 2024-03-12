@@ -16,8 +16,10 @@
 	},
 	"types": "./dist/index.d.ts",
 	"files": [
-		"dist/**/*.d.ts",
-		"dist/**/*.js",
+		"dist/index.d.ts",
+		"dist/index.js",
+		"dist/plugin-helper/index.d.ts",
+		"dist/plugin-helper/index.js",
 		"!**/*.test.*",
 		"src",
 		"plugin-helper.d.ts"
