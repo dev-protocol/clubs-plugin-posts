@@ -44,6 +44,13 @@ const defineFeed = (): OptionsDatabase => {
 	}
 }
 
+const normalize = (value?: string) =>
+	value?.toLowerCase().replace(/[\s\W]/g, '-')
+
+const onInput = () => {
+	slug.value = normalize(slug.value)
+}
+
 const onChange = () => {
 	if (slug.value === '') {
 		isSlugError.value = true
@@ -120,12 +127,19 @@ const onChange = () => {
 				>
 					Slug
 				</span>
-				<input
-					v-model="slug"
-					class="hs-form-field__input"
-					placeholder="slug"
-					@change="onChange"
-				/>
+				<div class="grid gap-2 rounded bg-surface-400 p-2">
+					<input
+						v-model="slug"
+						class="hs-form-field__input"
+						placeholder="slug"
+						@change="onChange"
+						@keyup="onInput"
+					/>
+					<p>
+						<span class="text-sm font-mono opacity-30">{{ props.url }}</span
+						><span class="text-sm font-mono">/{{ slug }}</span>
+					</p>
+				</div>
 				<span v-if="isSlugError" class="hs-form-field__helper label__error">
 					{{ errorMessage }}
 				</span>
