@@ -11,6 +11,7 @@ import {
 	type ClubsFunctionGetSlots,
 	type ClubsApiPath,
 	SinglePath,
+	type Membership,
 } from '@devprotocol/clubs-core'
 import {
 	addCommentHandler,
@@ -152,12 +153,23 @@ export const meta = {
 	icon: Icon.src,
 } satisfies ClubsPluginMeta
 
-export const getApiPaths = (async (options, config) => {
+export const getApiPaths = (async (
+	options,
+	config,
+	{ getPluginConfigById },
+) => {
 	const namespace = uuidv5(config.url, uuidv5.URL)
 	const previousConfiguration = encode(config)
 	const dbs = options.find(
 		({ key }: Readonly<{ readonly key: string }>) => key === 'feeds',
 	)?.value as UndefinedOr<readonly OptionsDatabase[]>
+
+	const [membershipsPlugin] = getPluginConfigById(
+		'devprotocol:clubs:simple-memberships',
+	)
+	const memberships = membershipsPlugin?.options?.find(
+		({ key }) => key === 'memberships',
+	)?.value as UndefinedOr<readonly Membership[]>
 
 	if (!dbs) {
 		return []
@@ -307,6 +319,7 @@ export const getApiPaths = (async (options, config) => {
 										user: reader,
 										propertyAddress: config.propertyAddress,
 										rpcUrl: config.rpcUrl,
+										memberships: memberships ?? [],
 									})
 									// eslint-disable-next-line
 									allPosts =
@@ -361,6 +374,7 @@ export const getApiPaths = (async (options, config) => {
 							handler: fetchPostHandler({
 								dbQueryKey: db.database.key,
 								config,
+								memberships: memberships ?? [],
 							}),
 						},
 						/**
@@ -419,7 +433,7 @@ export const getApiPaths = (async (options, config) => {
 					({
 						paths: [db.id, 'search', /.*/],
 						method: 'GET',
-						handler: fetchPostHas(db.database.key, config),
+						handler: fetchPostHas(db.database.key, config, memberships ?? []),
 					}) satisfies ClubsApiPath,
 			),
 	]

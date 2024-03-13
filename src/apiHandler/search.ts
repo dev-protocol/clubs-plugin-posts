@@ -1,5 +1,9 @@
 import { verifyMessage } from 'ethers'
-import { type ClubsConfiguration, encode } from '@devprotocol/clubs-core'
+import {
+	type ClubsConfiguration,
+	encode,
+	type Membership,
+} from '@devprotocol/clubs-core'
 import {
 	whenDefined,
 	whenDefinedAll,
@@ -25,7 +29,11 @@ const normalize = (q: string) => q.replaceAll('-', ' ')
  * @returns a single post
  */
 export const fetchPostHas =
-	(dbQueryKey: string, config: ClubsConfiguration): APIRoute =>
+	(
+		dbQueryKey: string,
+		config: ClubsConfiguration,
+		memberships: readonly Membership[],
+	): APIRoute =>
 	async ({ url }: { readonly request: Request; readonly url: URL }) => {
 		const pathquery = aperture(2, decodeURIComponent(url.pathname).split('/'))
 		const [, hasOption] = pathquery.find(([key]) => key === 'has:option') ?? []
@@ -87,6 +95,7 @@ export const fetchPostHas =
 				user,
 				propertyAddress: config.propertyAddress,
 				rpcUrl: config.rpcUrl,
+				memberships,
 			}),
 		)
 
