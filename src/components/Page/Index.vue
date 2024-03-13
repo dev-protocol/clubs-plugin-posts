@@ -206,7 +206,7 @@ const onPostDeleted = (id: string) => {
 				:memberships="
 					filterRequiredMemberships({
 						post: post as Posts,
-						memberships: props.memberships ?? [],
+						memberships: [...props.memberships] ?? [],
 					})
 				"
 				:title="post.title"

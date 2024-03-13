@@ -61,7 +61,10 @@ export const maskFactory: MaskFactory = async ({
 			return post
 		}
 
-		const requiredMemberships = filterRequiredMemberships({ post, memberships })
+		const requiredMemberships = filterRequiredMemberships({
+			post,
+			memberships: [...memberships],
+		})
 
 		const membershipVerifier = await membershipVerifierFactory({
 			provider,
