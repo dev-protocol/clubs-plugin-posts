@@ -16,6 +16,8 @@ import { emojiAllowList } from '../../constants'
 import { clientsProperty } from '@devprotocol/dev-kit'
 import EncodedPostData from '../../components/Common/EncodedPostData.vue'
 import { handleRegisterOnUpdateHandler } from '../../plugin-helper'
+import { filterRequiredMemberships } from '../../fixtures/memberships'
+import { prop } from 'ramda'
 
 type Props = {
 	options: Option[]
@@ -131,19 +133,19 @@ const handlePostSuccess = (post: Posts) => {
 	console.log(post)
 }
 
-const filterRequiredMemberships = (post: Posts): Membership[] => {
-	const requiredMemberships =
-		(post.options.find(({ key }) => key === 'require-one-of')
-			?.value as UndefinedOr<(string | Uint8Array)[]>) ?? []
-	return requiredMemberships
-		.map(
-			(key) =>
-				props.memberships?.find(
-					(mem) => bytes32Hex(mem.payload ?? []) === bytes32Hex(key),
-				) ?? [],
-		)
-		.flat()
-}
+// const filterRequiredMemberships = (post: Posts): Membership[] => {
+// 	const requiredMemberships =
+// 		(post.options.find(({ key }) => key === 'require-one-of')
+// 			?.value as UndefinedOr<(string | Uint8Array)[]>) ?? []
+// 	return requiredMemberships
+// 		.map(
+// 			(key) =>
+// 				props.memberships?.find(
+// 					(mem) => bytes32Hex(mem.payload ?? []) === bytes32Hex(key),
+// 				) ?? [],
+// 		)
+// 		.flat()
+// }
 
 const onPostDeleted = (id: string) => {
 	posts.value = (posts.value as Posts[]).filter((post: Posts) => post.id !== id)
@@ -216,7 +218,9 @@ const onPostDeleted = (id: string) => {
 				:date="post.created_at"
 				:contents="post.content"
 				:masked="post.masked ?? false"
-				:memberships="filterRequiredMemberships(post as Posts)"
+				:memberships="
+					filterRequiredMemberships(post as Posts, props.memberships ?? [])
+				"
 				:title="post.title"
 				@post-deleted="onPostDeleted"
 			>

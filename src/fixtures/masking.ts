@@ -6,7 +6,11 @@ import {
 	whenDefinedAll,
 } from '@devprotocol/util-ts'
 import { clientsSTokens, client } from '@devprotocol/dev-kit'
-import { bytes32Hex } from '@devprotocol/clubs-core'
+import {
+	bytes32Hex,
+	membershipVerifierFactory,
+	type Membership,
+} from '@devprotocol/clubs-core'
 import pQueue from 'p-queue'
 
 const queue = new pQueue({ concurrency: 3 })
@@ -15,6 +19,7 @@ type MaskFactory = (opts: {
 	readonly user?: string
 	readonly propertyAddress: string
 	readonly rpcUrl: string
+	readonly memberships: readonly Membership[]
 }) => Promise<(post: Posts) => Posts>
 
 const maskOptions = (options: readonly PostOption[]): readonly PostOption[] => {
@@ -40,10 +45,12 @@ export const maskFactory: MaskFactory = async ({
 	user,
 	propertyAddress,
 	rpcUrl,
+	memberships,
 }: {
 	readonly user?: string
 	readonly propertyAddress: string
 	readonly rpcUrl: string
+	readonly memberships: readonly Membership[]
 }) => {
 	const provider = new JsonRpcProvider(rpcUrl)
 	const sTokens = await whenDefined(user, async () =>
@@ -62,7 +69,7 @@ export const maskFactory: MaskFactory = async ({
 		}),
 	)
 
-	return (post: Posts) => {
+	return async (post: Posts) => {
 		// Do not Mask : post.created_by === user
 		if (post.created_by === user) {
 			return post
@@ -71,13 +78,14 @@ export const maskFactory: MaskFactory = async ({
 		const requireOneOf =
 			(post.options.find((opt) => opt.key === 'require-one-of')
 				?.value as UndefinedOr<readonly Uint8Array[]>) ?? []
-		const requiredPayloads = requireOneOf.map((v) => bytes32Hex(v))
-		const verified =
-			requiredPayloads.length > 0
-				? requiredPayloads.some((payload) =>
-						allMembershipPayloadsUserHave.includes(payload),
-					)
-				: true
+
+		const membershipVerifier = await membershipVerifierFactory({
+			provider,
+			propertyAddress,
+			memberships: requireOneOf,
+		})
+
+		const verified = user ? membershipVerifier(user) : false
 
 		return verified ? post : mask(post)
 	}
