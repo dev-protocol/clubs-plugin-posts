@@ -219,7 +219,10 @@ const onPostDeleted = (id: string) => {
 				:contents="post.content"
 				:masked="post.masked ?? false"
 				:memberships="
-					filterRequiredMemberships(post as Posts, props.memberships ?? [])
+					filterRequiredMemberships({
+						post: post as Posts,
+						memberships: props.memberships ?? [],
+					})
 				"
 				:title="post.title"
 				@post-deleted="onPostDeleted"

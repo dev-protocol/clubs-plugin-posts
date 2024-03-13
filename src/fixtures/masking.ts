@@ -12,6 +12,7 @@ import {
 	type Membership,
 } from '@devprotocol/clubs-core'
 import pQueue from 'p-queue'
+import { filterRequiredMemberships } from './memberships'
 
 const queue = new pQueue({ concurrency: 3 })
 
@@ -20,7 +21,7 @@ type MaskFactory = (opts: {
 	readonly propertyAddress: string
 	readonly rpcUrl: string
 	readonly memberships: readonly Membership[]
-}) => Promise<(post: Posts) => Posts>
+}) => Promise<(post: Posts) => Promise<Posts>>
 
 const maskOptions = (options: readonly PostOption[]): readonly PostOption[] => {
 	return options
@@ -53,21 +54,6 @@ export const maskFactory: MaskFactory = async ({
 	readonly memberships: readonly Membership[]
 }) => {
 	const provider = new JsonRpcProvider(rpcUrl)
-	const sTokens = await whenDefined(user, async () =>
-		(([a, b]) => a ?? b)(await clientsSTokens(provider)),
-	)
-	const isValidProperty = propertyAddress !== ZeroAddress
-	const allSTokenIDsUserHave = isValidProperty
-		? (await whenDefinedAll([sTokens, user], ([contract, account]) =>
-				client.createDetectSTokens(contract)(propertyAddress, account),
-			)) ?? []
-		: []
-	const allMembershipPayloadsUserHave = await Promise.all(
-		allSTokenIDsUserHave.map(async (id) => {
-			const payload = await queue.add(async () => sTokens?.payloadOf(id))
-			return payload
-		}),
-	)
 
 	return async (post: Posts) => {
 		// Do not Mask : post.created_by === user
@@ -75,14 +61,12 @@ export const maskFactory: MaskFactory = async ({
 			return post
 		}
 
-		const requireOneOf =
-			(post.options.find((opt) => opt.key === 'require-one-of')
-				?.value as UndefinedOr<readonly Uint8Array[]>) ?? []
+		const requiredMemberships = filterRequiredMemberships({ post, memberships })
 
 		const membershipVerifier = await membershipVerifierFactory({
 			provider,
 			propertyAddress,
-			memberships: requireOneOf,
+			memberships: requiredMemberships,
 		})
 
 		const verified = user ? membershipVerifier(user) : false
