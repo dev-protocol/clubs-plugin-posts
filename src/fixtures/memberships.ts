@@ -8,7 +8,7 @@ export const filterRequiredMemberships = ({
 }: {
 	readonly post: Posts
 	// eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types, functional/prefer-readonly-type
-	readonly memberships: Membership[]
+	memberships: Membership[]
 }): readonly Membership[] => {
 	const requiredMemberships =
 		(post.options.find(({ key }) => key === 'require-one-of')
