@@ -4,6 +4,7 @@ import {
 	type ClubsConfiguration,
 	authenticate,
 	encode,
+	type Membership,
 } from '@devprotocol/clubs-core'
 import type { Comment, PostPrimitives, Reactions } from '../types'
 import {
@@ -122,9 +123,11 @@ export const fetchPostHandler =
 	({
 		dbQueryKey,
 		config,
+		memberships,
 	}: {
 		readonly dbQueryKey: string
 		readonly config: ClubsConfiguration
+		readonly memberships: readonly Membership[]
 	}) =>
 	async ({
 		request,
@@ -167,6 +170,7 @@ export const fetchPostHandler =
 					user,
 					propertyAddress: config.propertyAddress,
 					rpcUrl: config.rpcUrl,
+					memberships: memberships,
 				}),
 			)
 			const result = whenNotErrorAll([post, mask], ([p, maskFn]) =>
