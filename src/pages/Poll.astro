@@ -1,0 +1,66 @@
+---
+import type { ClubsPropsPages } from '@devprotocol/clubs-core'
+import Poll from '../components/Page/PollList.vue'
+import type { Membership, Option } from '../types'
+import { SlotName } from '../types'
+import { aperture } from 'ramda'
+
+interface Props extends ClubsPropsPages {
+	options: Option[]
+	feedId: string
+	propertyAddress: string
+	memberships?: Membership[]
+	adminRolePoints: number
+	emojiAllowList?: string[]
+}
+
+const {
+	options,
+	feedId,
+	propertyAddress,
+	memberships,
+	adminRolePoints,
+	emojiAllowList,
+	clubs,
+} = Astro.props
+
+const url = Astro.url.pathname
+const [, postId] = aperture(2, url.split('/')).find(([p]) => p === feedId) ?? []
+
+const SlotsPostsEditAfterContentForm = clubs.slots.filter(
+	(slot) => slot.slot === SlotName.PostsEditAfterContentForm,
+)
+const SlotsPostsFeedAfterPostContent = clubs.slots.filter(
+	(slot) => slot.slot === SlotName.PostsFeedAfterPostContent,
+)
+---
+
+<Poll
+	client:load
+	options={options}
+	feedId={feedId}
+	propertyAddress={propertyAddress}
+	memberships={memberships}
+	adminRolePoints={adminRolePoints}
+	emojiAllowList={emojiAllowList}
+	postId={postId}
+>
+	{
+		SlotsPostsEditAfterContentForm.map((Slot) => (
+			<Slot.component
+				{...Slot.props}
+				feedId={feedId}
+				slot="edit:after:content-form"
+			/>
+		))
+	}
+	{
+		SlotsPostsFeedAfterPostContent.map((Slot) => (
+			<Slot.component
+				{...Slot.props}
+				feedId={feedId}
+				slot="feed:after:post-content"
+			/>
+		))
+	}
+</Poll>

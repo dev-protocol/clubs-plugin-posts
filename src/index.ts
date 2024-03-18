@@ -56,6 +56,7 @@ import { default as Feed } from './pages/Feed.astro'
 import { default as ListFeed } from './pages/ListFeed.astro'
 import NavigationLink from './slots/NavigationLink.astro'
 import Posts_ from './pages/Posts.astro'
+import Poll_ from './pages/Poll.astro'
 import Readme from './readme.astro'
 
 export type {
@@ -111,6 +112,13 @@ export const getPagePaths = (async (
 					return {
 						paths: ['posts', id, SinglePath],
 						component: Posts_,
+						props: { ...props, feedId: id },
+					}
+				}),
+				...dbs.map(({ id }) => {
+					return {
+						paths: ['poll', id],
+						component: Poll_,
 						props: { ...props, feedId: id },
 					}
 				}),
