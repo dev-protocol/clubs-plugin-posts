@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { type PropType, ref } from 'vue'
 import { type ClubsPropsAdminPages, setOptions } from '@devprotocol/clubs-core'
-import type { OptionsDatabase } from '../../types.ts'
+import type { Membership, OptionsDatabase } from '../../types.ts'
 import { uuidFactory } from '../../db/uuidFactory.ts'
 import { nanoid } from 'nanoid'
 
@@ -21,6 +21,7 @@ const props = defineProps({
 	edit: {
 		type: Object as PropType<OptionsDatabase>,
 	},
+	memberships: Array as PropType<Membership[]>,
 })
 
 const IS_EDIT = Boolean(props.edit)
@@ -143,6 +144,14 @@ const onChange = () => {
 				<span v-if="isSlugError" class="hs-form-field__helper label__error">
 					{{ errorMessage }}
 				</span>
+			</label>
+
+			<label class="hs-form-field is-filled flex flex-col">
+				<span class="hs-form-field__label"> Editable role holders </span>
+				<span class="text-sm"
+					>Those who have memberships in one of the following or have an admin
+					role in this Club can create posts.</span
+				>
 			</label>
 		</div>
 	</div>
