@@ -146,13 +146,35 @@ const onChange = () => {
 				</span>
 			</label>
 
-			<label class="hs-form-field is-filled flex flex-col">
-				<span class="hs-form-field__label"> Editable role holders </span>
-				<span class="text-sm"
-					>Those who have memberships in one of the following or have an admin
-					role in this Club can create posts.</span
-				>
-			</label>
+			<div class="hs-form-field is-filled">
+				<p class="hs-form-field__label">Editable role holders</p>
+				<p class="mb-4 text-sm">
+					Those who have memberships in one of the following or have an admin
+					role in this Club can create posts.
+				</p>
+
+				<ul class="flex flex-row justify-start flex-wrap gap-8">
+					<li v-for="membership in memberships" :key="membership.id">
+						<input type="checkbox" class="hidden peer" :id="membership.id" />
+						<label
+							:for="membership.id"
+							class="inline-flex items-center justify-between w-full p-3 bg-surface-400 rounded-lg cursor-pointer border-2 border-surface-400 peer-checked:border-blue-600 brightness-75 peer-checked:brightness-100"
+						>
+							<span class="block">
+								<img
+									class="mb-2 rounded-lg max-w-32"
+									:src="membership.imageSrc"
+									alt=""
+								/>
+								<span class="block mb-8 text-sm">{{ membership.name }}</span>
+								<span class="block text-sm">
+									{{ membership.price }} {{ membership.currency }}
+								</span>
+							</span>
+						</label>
+					</li>
+				</ul>
+			</div>
 		</div>
 	</div>
 </template>
