@@ -30,6 +30,7 @@ const slug = ref(props.edit?.slug)
 const title = ref(props.edit?.title)
 const isSlugError = ref(false)
 const errorMessage = ref('')
+const editorRoleHolders = ref([])
 
 const uuid = uuidFactory(props.url)
 const defineFeed = (): OptionsDatabase => {
@@ -71,15 +72,58 @@ const onChange = () => {
 	}
 	isSlugError.value = false
 
+	// editorRoleHoldersがある場合に、その値(membership.id)のmembershipを取得して、payloadを取得する
+	const roles =
+		editorRoleHolders.value?.length > 0
+			? {
+					write: {
+						memberships: editorRoleHolders.value.map(
+							(id) => props.memberships?.find((m) => m.id === id)?.payload,
+						),
+					},
+				}
+			: {
+					write: {
+						memberships: [],
+					},
+				}
+
+	if (!IS_EDIT) {
+		setOptions(
+			[
+				{
+					key: 'feeds',
+					value: [
+						...props.feeds,
+						{
+							...defineFeed(),
+							roles: roles,
+						},
+					],
+				},
+			],
+			currentPluginIndex.value,
+		)
+		return
+	}
+
 	const feeds = props.feeds.map((feed) => {
 		if (feed.id === props.edit?.id) {
 			return {
 				...feed,
 				slug: slug.value,
 				title: title.value,
+				roles,
 			}
 		}
-		return feed
+		return {
+			...feed,
+			roles: {
+				write: {
+					memberships: [],
+				},
+			},
+		}
 	})
 
 	setOptions(
@@ -149,16 +193,25 @@ const onChange = () => {
 					role in this Club can create posts.
 				</p>
 
-				<ul class="flex flex-row justify-start flex-wrap gap-8">
+				<ul
+					class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] justify-between gap-4"
+				>
 					<li v-for="membership in memberships" :key="membership.id">
-						<input type="checkbox" class="hidden peer" :id="membership.id" />
+						<input
+							type="checkbox"
+							class="hidden peer"
+							:id="membership.id"
+							:value="membership.id"
+							v-model="editorRoleHolders"
+							@change="onChange"
+						/>
 						<label
 							:for="membership.id"
-							class="inline-flex items-center justify-between w-full p-3 bg-surface-400 rounded-lg cursor-pointer border-2 border-surface-400 peer-checked:border-blue-600 brightness-75 peer-checked:brightness-100"
+							class="inline-flex items-center justify-between w-full p-3 bg-surface-300 rounded-lg cursor-pointer border-2 border-surface-400 peer-checked:border-accent-300 brightness-90 peer-checked:brightness-100"
 						>
 							<span class="block">
 								<img
-									class="mb-2 rounded-lg max-w-32"
+									class="mb-2 rounded-lg"
 									:src="membership.imageSrc"
 									alt=""
 								/>
