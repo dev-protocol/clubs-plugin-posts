@@ -89,13 +89,9 @@ const onChange = () => {
 }
 </script>
 <style scoped>
-.hs-form-field {
-	.hs-form-field__helper,
-	.hs-form-field__label {
-		&.label__error {
-			color: #c92020;
-		}
-	}
+.hs-form-field .hs-form-field__helper.label__error,
+.hs-form-field .hs-form-field__label.label__error {
+	color: #c92020;
 }
 </style>
 <template>
