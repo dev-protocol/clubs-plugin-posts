@@ -5,6 +5,7 @@ import {
 	type Membership,
 } from '@devprotocol/clubs-core'
 import { filterRequiredMemberships } from './memberships'
+import { whenDefined } from '@devprotocol/util-ts'
 
 type MaskFactory = (opts: {
 	readonly user?: string
@@ -45,6 +46,14 @@ export const maskFactory: MaskFactory = async ({
 }) => {
 	const provider = new JsonRpcProvider(rpcUrl)
 
+	const membershipVerifier = await whenDefined(user, (account) =>
+		membershipVerifierFactory({
+			provider,
+			propertyAddress,
+			account,
+		}),
+	)
+
 	return async (post: Posts) => {
 		// Do not Mask : post.created_by === user
 		if (post.created_by === user) {
@@ -56,13 +65,9 @@ export const maskFactory: MaskFactory = async ({
 			memberships: [...memberships],
 		})
 
-		const membershipVerifier = await membershipVerifierFactory({
-			provider,
-			propertyAddress,
-			memberships: requiredMemberships,
-		})
-
-		const verified = user ? (await membershipVerifier(user)).result : false
+		const verified = membershipVerifier
+			? (await membershipVerifier(requiredMemberships)).result
+			: false
 
 		return verified ? post : mask(post)
 	}
