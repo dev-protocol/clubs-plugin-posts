@@ -1,20 +1,10 @@
-import { JsonRpcProvider, ZeroAddress } from 'ethers'
+import { JsonRpcProvider } from 'ethers'
 import type { PostOption, Posts } from '../types'
 import {
-	type UndefinedOr,
-	whenDefined,
-	whenDefinedAll,
-} from '@devprotocol/util-ts'
-import { clientsSTokens, client } from '@devprotocol/dev-kit'
-import {
-	bytes32Hex,
 	membershipVerifierFactory,
 	type Membership,
 } from '@devprotocol/clubs-core'
-import pQueue from 'p-queue'
 import { filterRequiredMemberships } from './memberships'
-
-const queue = new pQueue({ concurrency: 3 })
 
 type MaskFactory = (opts: {
 	readonly user?: string
@@ -72,7 +62,7 @@ export const maskFactory: MaskFactory = async ({
 			memberships: requiredMemberships,
 		})
 
-		const verified = user ? membershipVerifier(user) : false
+		const verified = user ? (await membershipVerifier(user)).result : false
 
 		return verified ? post : mask(post)
 	}

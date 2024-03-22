@@ -323,9 +323,13 @@ export const getApiPaths = (async (
 									})
 									// eslint-disable-next-line
 									allPosts =
-										whenDefinedAll([mask, _allPosts], ([maskFn, posts]) =>
-											posts instanceof Error ? posts : posts.map(maskFn),
-										) ?? _allPosts
+										(await whenDefinedAll(
+											[mask, _allPosts],
+											([maskFn, posts]) =>
+												posts instanceof Error
+													? posts
+													: Promise.all(posts.map(maskFn)),
+										)) ?? _allPosts
 								} catch (error) {
 									return new Response(
 										JSON.stringify({

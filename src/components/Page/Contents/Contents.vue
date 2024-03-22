@@ -14,7 +14,7 @@ type Props = {
 	date: Date
 	contents: string
 	masked: boolean
-	memberships: Membership[]
+	memberships: readonly Membership[]
 	title: string
 }
 

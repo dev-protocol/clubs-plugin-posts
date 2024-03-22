@@ -99,8 +99,8 @@ export const fetchPostHas =
 			}),
 		)
 
-		const results = whenNotErrorAll([posts, mask], ([data, maskFn]) =>
-			data.map(maskFn),
+		const results = await whenNotErrorAll([posts, mask], ([data, maskFn]) =>
+			Promise.all(data.map(maskFn)),
 		)
 
 		return results instanceof Error

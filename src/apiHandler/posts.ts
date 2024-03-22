@@ -173,8 +173,8 @@ export const fetchPostHandler =
 					memberships: memberships,
 				}),
 			)
-			const result = whenNotErrorAll([post, mask], ([p, maskFn]) =>
-				[p].map(maskFn),
+			const result = await whenNotErrorAll([post, mask], ([p, maskFn]) =>
+				Promise.all([p].map(maskFn)),
 			)
 
 			if (result instanceof Error) {

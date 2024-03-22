@@ -3,7 +3,7 @@ import type { Membership } from '../../../types'
 import Image from '../../../assets/images/mask-post-bg.png'
 
 type Props = {
-	memberships?: Membership[]
+	memberships?: readonly Membership[]
 }
 
 const props = defineProps<Props>()
