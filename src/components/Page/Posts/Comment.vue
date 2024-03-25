@@ -236,7 +236,7 @@ const deleteComment = async (commentId: string) => {
 
 		<div class="item-center flex justify-between">
 			<input
-				class="w-11/12 rounded border border-gray-400 px-2 py-2 text-base text-gray-700 focus:border-indigo-500 focus:outline-none"
+				class="w-11/12 bg-transparent rounded border border-gray-400 px-2 py-2 text-base text-gray-700 focus:border-indigo-500 focus:outline-none"
 				type="text"
 				v-model="newComment"
 				placeholder="Add your thoughts..."

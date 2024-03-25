@@ -74,7 +74,7 @@ export { SlotName, Event }
 
 export const getPagePaths = (async (
 	options,
-	{ propertyAddress, adminRolePoints },
+	{ propertyAddress, adminRolePoints, rpcUrl },
 	{ getPluginConfigById },
 ) => {
 	const [membershipsPlugin] = getPluginConfigById(
@@ -97,6 +97,7 @@ export const getPagePaths = (async (
 		memberships,
 		adminRolePoints,
 		emojiAllowList,
+		rpcUrl,
 	}
 	return dbs
 		? [

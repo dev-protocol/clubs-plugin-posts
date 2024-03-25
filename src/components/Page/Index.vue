@@ -17,6 +17,7 @@ import { clientsProperty } from '@devprotocol/dev-kit'
 import EncodedPostData from '../../components/Common/EncodedPostData.vue'
 import { handleRegisterOnUpdateHandler } from '../../plugin-helper'
 import { filterRequiredMemberships } from '../../fixtures/memberships'
+import { JsonRpcProvider } from 'ethers'
 
 type Props = {
 	options: Option[]
@@ -26,6 +27,7 @@ type Props = {
 	adminRolePoints: number
 	emojiAllowList?: string[]
 	postId?: string
+	rpcUrl: string
 }
 
 const props = defineProps<Props>()
@@ -76,7 +78,10 @@ const handleConnection = async (signer: UndefinedOr<Signer>) => {
 
 	fetchPosts({ hash, sig })
 
-	hasEditableRole.value = await testPermission(walletAddress.value, signer)
+	hasEditableRole.value = await testPermission(
+		walletAddress.value,
+		new JsonRpcProvider(props.rpcUrl),
+	)
 }
 
 const fetchPosts = async ({ hash, sig }: { hash?: string; sig?: string }) => {

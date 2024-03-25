@@ -116,7 +116,7 @@ const handleDeleteImageAll = () => {
 			<div class="text-3xl font-bold text-black">
 				<input
 					v-model="title"
-					class="w-full border-none px-2 py-2 text-gray-700 focus:border-indigo-500 focus:outline-none"
+					class="w-full bg-transparent border-none px-2 py-2 text-gray-700 focus:border-indigo-500 focus:outline-none"
 					type="text"
 					placeholder="Title"
 				/>
@@ -126,7 +126,7 @@ const handleDeleteImageAll = () => {
 			<div class="text-3xl font-bold text-black">
 				<textarea
 					v-model="contents"
-					class="w-full border-none px-2 py-2 text-base text-gray-700 focus:border-indigo-500 focus:outline-none"
+					class="w-full bg-transparent border-none px-2 py-2 text-base text-gray-700 focus:border-indigo-500 focus:outline-none"
 					rows="3"
 					type="text"
 					placeholder="What’s happening?"
