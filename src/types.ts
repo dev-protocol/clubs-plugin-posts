@@ -49,7 +49,7 @@ export type OptionsDatabase = {
 	readonly title?: string
 	readonly roles?: {
 		readonly write: {
-			memberships: readonly [] | readonly Uint8Array[]
+			readonly memberships: readonly [] | readonly Uint8Array[]
 		}
 	}
 	readonly database:
