@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type PropType, ref } from 'vue'
+import { onMounted, type PropType, ref } from 'vue'
 import { type ClubsPropsAdminPages, setOptions } from '@devprotocol/clubs-core'
 import type { Membership, OptionsDatabase } from '../../types.ts'
 import { uuidFactory } from '../../db/uuidFactory.ts'
@@ -30,7 +30,7 @@ const slug = ref(props.edit?.slug)
 const title = ref(props.edit?.title)
 const isSlugError = ref(false)
 const errorMessage = ref('')
-const editorRoleHolders = ref([])
+const editorRoleHolders = ref<(string | undefined)[]>([])
 
 const uuid = uuidFactory(props.url)
 const defineFeed = (): OptionsDatabase => {
@@ -45,6 +45,23 @@ const defineFeed = (): OptionsDatabase => {
 		},
 	}
 }
+
+onMounted(() => {
+	if (IS_EDIT) {
+		const feed = props.feeds?.filter((feed) => {
+			return feed.slug === slug.value
+		})
+
+		const roles = feed[0].roles
+
+		editorRoleHolders.value =
+			roles?.write.memberships
+				.map((membership) => {
+					return props.memberships?.find((m) => m.payload === membership)?.id
+				})
+				.filter((id) => id) || []
+	}
+})
 
 const normalize = (value?: string) =>
 	value?.toLowerCase().replace(/[\s\W]/g, '-')
@@ -72,7 +89,6 @@ const onChange = () => {
 	}
 	isSlugError.value = false
 
-	// editorRoleHoldersがある場合に、その値(membership.id)のmembershipを取得して、payloadを取得する
 	const roles =
 		editorRoleHolders.value?.length > 0
 			? {
