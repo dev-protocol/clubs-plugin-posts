@@ -47,6 +47,11 @@ export type OptionsDatabase = {
 	readonly id: string
 	readonly slug?: string
 	readonly title?: string
+	readonly roles?: {
+		readonly write: {
+			readonly memberships: readonly [] | readonly Uint8Array[]
+		}
+	}
 	readonly database:
 		| {
 				readonly type: 'encoded:redis'

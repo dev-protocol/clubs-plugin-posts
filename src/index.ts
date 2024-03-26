@@ -120,7 +120,18 @@ export const getPagePaths = (async (
 		: []
 }) satisfies ClubsFunctionGetPagePaths
 
-export const getAdminPaths = (async (options, config) => {
+export const getAdminPaths = (async (
+	options,
+	config,
+	{ getPluginConfigById },
+) => {
+	const [membershipsPlugin] = getPluginConfigById(
+		'devprotocol:clubs:simple-memberships',
+	)
+	const memberships = membershipsPlugin?.options?.find(
+		({ key }) => key === 'memberships',
+	)?.value
+
 	const feeds =
 		(options.find(({ key }) => key === 'feeds')
 			?.value as readonly OptionsDatabase[]) ?? []
@@ -134,12 +145,12 @@ export const getAdminPaths = (async (options, config) => {
 		{
 			paths: ['posts', 'new'],
 			component: Feed,
-			props: { feeds, url: config.url },
+			props: { feeds, url: config.url, memberships },
 		},
 		...feeds.map((feed) => ({
 			paths: ['posts', 'edit', feed.id],
 			component: Feed,
-			props: { feeds, url: config.url, edit: feed },
+			props: { feeds, url: config.url, edit: feed, memberships },
 		})),
 	]
 }) satisfies ClubsFunctionGetAdminPaths
