@@ -15,7 +15,10 @@ import { whenDefined, type UndefinedOr } from '@devprotocol/util-ts'
 import { emojiAllowList } from '../../constants'
 import { clientsProperty } from '@devprotocol/dev-kit'
 import EncodedPostData from '../../components/Common/EncodedPostData.vue'
-import { handleRegisterOnUpdateHandler } from '../../plugin-helper'
+import {
+	handleRegisterOnUpdateHandler,
+	handleRegisterOnSetupHandler,
+} from '../../plugin-helper'
 import { filterRequiredMemberships } from '../../fixtures/memberships'
 import { JsonRpcProvider } from 'ethers'
 
@@ -113,6 +116,10 @@ onMounted(async () => {
 	document.addEventListener(
 		Event.RegisterOnUpdateHandler,
 		handleRegisterOnUpdateHandler,
+	)
+	document.addEventListener(
+		Event.RegisterOnSetupHandler,
+		handleRegisterOnSetupHandler,
 	)
 	fetchPosts({})
 	const { connection: conct } = await import(
