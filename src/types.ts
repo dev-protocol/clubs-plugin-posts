@@ -85,6 +85,7 @@ export type Reactions = {
 
 export enum SlotName {
 	PostsEditAfterContentForm = 'posts:edit:after:content-form',
+	PostsEditToolbarButton = 'posts:edit:toolbar:button',
 	PostsFeedAfterPostContent = 'posts:feed:after:post-content',
 }
 
@@ -92,4 +93,5 @@ export enum Event {
 	PostCreated = 'posts:event::post_created',
 	RegisterOnUpdateHandler = 'posts:event::register_on_update_handler',
 	RegisterOnSetupHandler = 'posts:event::register_on_setup_handler',
+	ClickToolbar = 'posts:event::click_toolbar',
 }

@@ -32,6 +32,9 @@ const [, postId] = aperture(2, url.split('/')).find(([p]) => p === feedId) ?? []
 const SlotsPostsEditAfterContentForm = clubs.slots.filter(
 	(slot) => slot.slot === SlotName.PostsEditAfterContentForm,
 )
+const SlotsPostsEditToolbarButton = clubs.slots.filter(
+	(slot) => slot.slot === SlotName.PostsEditToolbarButton,
+)
 const SlotsPostsFeedAfterPostContent = clubs.slots.filter(
 	(slot) => slot.slot === SlotName.PostsFeedAfterPostContent,
 )
@@ -54,6 +57,15 @@ const SlotsPostsFeedAfterPostContent = clubs.slots.filter(
 				{...Slot.props}
 				feedId={feedId}
 				slot="edit:after:content-form"
+			/>
+		))
+	}
+	{
+		SlotsPostsEditToolbarButton.map((Slot) => (
+			<Slot.component
+				{...Slot.props}
+				feedId={feedId}
+				slot="edit:toolbar:button"
 			/>
 		))
 	}
