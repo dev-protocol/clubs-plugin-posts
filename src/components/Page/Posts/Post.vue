@@ -221,9 +221,10 @@ const handleDeleteImageAll = () => {
 		<Line class="" />
 		<!-- アクションエリア -->
 		<div class="flex items-center justify-between">
-			<!-- 画像ボタン -->
-			<AddMedia @upload:image="handleUploadImages" />
-			<!-- /画像ボタン -->
+			<div class="flex flex-wrap gap-3">
+				<AddMedia @upload:image="handleUploadImages" />
+				<slot name="toolbar-button"></slot>
+			</div>
 			<!-- Postボタン -->
 			<DoPost
 				:feedId="props.feedId"

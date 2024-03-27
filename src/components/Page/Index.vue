@@ -164,6 +164,9 @@ const onPostDeleted = (id: string) => {
 				<template v-slot:after-content-form>
 					<slot name="edit:after:content-form" />
 				</template>
+				<template v-slot:toolbar-button>
+					<slot name="edit:toolbar:button" />
+				</template>
 			</Post>
 		</section>
 

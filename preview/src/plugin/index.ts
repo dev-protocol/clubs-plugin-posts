@@ -6,6 +6,7 @@ import {
 } from '@devprotocol/clubs-core'
 import AfterContentForm from './edit:after:content-form.astro'
 import AfterPostContent from './feed:after:post-content.astro'
+import EditToolbarButton from './edit:toolbar:button.astro'
 import { SlotName } from '../../../src'
 
 export const getSlots = (async () => [
@@ -16,6 +17,10 @@ export const getSlots = (async () => [
 	{
 		slot: SlotName.PostsFeedAfterPostContent,
 		component: AfterPostContent,
+	},
+	{
+		slot: SlotName.PostsEditToolbarButton,
+		component: EditToolbarButton,
 	},
 ]) satisfies ClubsFunctionGetSlots
 
