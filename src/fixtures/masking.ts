@@ -65,9 +65,12 @@ export const maskFactory: MaskFactory = async ({
 			memberships: [...memberships],
 		})
 
-		const verified = membershipVerifier
-			? (await membershipVerifier(requiredMemberships)).result
-			: false
+		const hasRequiredMemberships = requiredMemberships.length > 0
+
+		const verified =
+			membershipVerifier && hasRequiredMemberships
+				? (await membershipVerifier(requiredMemberships)).result
+				: !hasRequiredMemberships
 
 		return verified ? post : mask(post)
 	}

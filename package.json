@@ -1,6 +1,6 @@
 {
 	"name": "@devprotocol/clubs-plugin-posts",
-	"version": "0.16.1",
+	"version": "0.16.2",
 	"type": "module",
 	"description": "Template repository for using TypeScript",
 	"main": "dist/index.js",
@@ -87,7 +87,7 @@
 		"prettier-plugin-svelte": "^3.0.0",
 		"prettier-plugin-tailwindcss": "^0.5.5",
 		"rimraf": "5.0.5",
-		"rollup": "4.13.0",
+		"rollup": "4.13.1",
 		"rollup-plugin-dts": "^6.0.2",
 		"svelte": "^4.2.1",
 		"tailwindcss": "3.4.1",
