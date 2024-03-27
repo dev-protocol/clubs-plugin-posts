@@ -11,18 +11,23 @@ import { decode } from '@devprotocol/clubs-core'
 export type OnUpdateHandler = (
 	post: PostPrimitives,
 ) => PostPrimitives | Promise<PostPrimitives>
-
+export type OnSetupHandler = (
+	post: PostPrimitives,
+) => PostPrimitives | Promise<PostPrimitives>
 export type OnPostCreatedHandler = (post: Posts) => void | Promise<void>
 
 export type EventRegisterOnUpdateHandler = CustomEvent<{
 	readonly handler?: OnUpdateHandler
 }>
-
+export type EventRegisterOnSetupHandler = CustomEvent<{
+	readonly handler?: OnSetupHandler
+}>
 export type EventPostCreated = CustomEvent<{
 	readonly post: Posts
 }>
 
 export const onUpdateHandlers = new Set<OnUpdateHandler>()
+export const onSetupHandlers = new Set<OnSetupHandler>()
 
 export const handleRegisterOnUpdateHandler = (
 	e: EventRegisterOnUpdateHandler,
@@ -31,6 +36,13 @@ export const handleRegisterOnUpdateHandler = (
 		? onUpdateHandlers.add(e.detail.handler)
 		: onUpdateHandlers
 }
+export const handleRegisterOnSetupHandler = (
+	e: EventRegisterOnSetupHandler,
+) => {
+	return typeof e.detail.handler === 'function'
+		? onSetupHandlers.add(e.detail.handler)
+		: onSetupHandlers
+}
 
 // eslint-disable-next-line functional/no-return-void
 export const onUpdate = (handler: OnUpdateHandler) =>
@@ -38,16 +50,31 @@ export const onUpdate = (handler: OnUpdateHandler) =>
 	document.dispatchEvent(
 		new CustomEvent(Event.RegisterOnUpdateHandler, { detail: { handler } }),
 	)
+export const onSetup = (handler: OnSetupHandler) =>
+	typeof document !== 'undefined' &&
+	document.dispatchEvent(
+		new CustomEvent(Event.RegisterOnSetupHandler, { detail: { handler } }),
+	)
 
-export const update = async (
+const callHandlers = async (
+	_set: ReadonlySet<OnUpdateHandler | OnSetupHandler>,
 	_post: PostPrimitives,
 ): Promise<PostPrimitives> => {
 	// eslint-disable-next-line functional/no-let
 	let post = _post
-	for await (const handler of onUpdateHandlers) {
+	for await (const handler of _set) {
 		post = await tryCatch(handler, always(post))(post)
 	}
 	return post
+}
+
+export const update = async (
+	_post: PostPrimitives,
+): Promise<PostPrimitives> => {
+	return callHandlers(onUpdateHandlers, _post)
+}
+export const setup = async (_post: PostPrimitives): Promise<PostPrimitives> => {
+	return callHandlers(onSetupHandlers, _post)
 }
 
 export const EncodedPostClassName = '__input-encoded-post__'
@@ -82,7 +109,7 @@ export const onPostCreated = (handler: OnPostCreatedHandler) =>
 	typeof document !== 'undefined' &&
 	document.addEventListener(Event.PostCreated, (e) => handler(e.detail.post))
 
-const { PostCreated, RegisterOnUpdateHandler } = Event
+const { PostCreated, RegisterOnUpdateHandler, RegisterOnSetupHandler } = Event
 
 // eslint-disable-next-line functional/no-return-void
 export const dispatchPostCreated = (post: Posts) =>
@@ -95,5 +122,6 @@ declare global {
 	interface DocumentEventMap {
 		readonly [RegisterOnUpdateHandler]: EventRegisterOnUpdateHandler
 		readonly [PostCreated]: EventPostCreated
+		readonly [RegisterOnSetupHandler]: EventRegisterOnSetupHandler
 	}
 }

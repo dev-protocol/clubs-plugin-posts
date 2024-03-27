@@ -6,7 +6,7 @@ import type { PostPrimitives, Posts } from '../../../../types'
 import { encode, decode } from '@devprotocol/clubs-core'
 import { whenDefined } from '@devprotocol/util-ts'
 import {
-	update as callUpdate,
+	setup as callSetup,
 	dispatchPostCreated,
 } from '../../../../plugin-helper'
 
@@ -27,19 +27,6 @@ const emit = defineEmits<Emits>()
 
 const onClickPost = async () => {
 	isPosting.value = true
-
-	const signer = (
-		await import('@devprotocol/clubs-core/connection')
-	).connection().signer.value
-	if (!signer) {
-		isPosting.value = false
-		return
-	}
-
-	const signerAddress = await signer.getAddress()
-
-	const hash = await keccak256(signerAddress)
-	const sig = await signer.signMessage(hash)
 
 	// 画像アップロード
 	const uploadedImageURLs: string[] = []
@@ -62,7 +49,20 @@ const onClickPost = async () => {
 			},
 		],
 	}
-	const newPost = await callUpdate(post)
+	const newPost = await callSetup(post)
+
+	const signer = (
+		await import('@devprotocol/clubs-core/connection')
+	).connection().signer.value
+	if (!signer) {
+		isPosting.value = false
+		return
+	}
+
+	const signerAddress = await signer.getAddress()
+
+	const hash = keccak256(signerAddress)
+	const sig = await signer.signMessage(hash)
 
 	// fetchで /message.jsonをpostしてasync/awaitでレスポンスを取得する
 	const response = await fetch(
