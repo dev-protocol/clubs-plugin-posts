@@ -25,6 +25,7 @@ export type EventRegisterOnSetupHandler = CustomEvent<{
 export type EventPostCreated = CustomEvent<{
 	readonly post: Posts
 }>
+export type EventClickToolbar = CustomEvent<{ readonly key: string }>
 
 export const onUpdateHandlers = new Set<OnUpdateHandler>()
 export const onSetupHandlers = new Set<OnSetupHandler>()
@@ -54,6 +55,19 @@ export const onSetup = (handler: OnSetupHandler) =>
 	typeof document !== 'undefined' &&
 	document.dispatchEvent(
 		new CustomEvent(Event.RegisterOnSetupHandler, { detail: { handler } }),
+	)
+export const onClickToolbar = (
+	key: string,
+	handler: (ev: EventClickToolbar) => unknown,
+) =>
+	typeof document !== 'undefined' &&
+	document.addEventListener(Event.ClickToolbar, (ev) => {
+		ev.detail.key === key && handler(ev)
+	})
+export const emitClickToolbar = (key: string) =>
+	typeof document !== 'undefined' &&
+	document.dispatchEvent(
+		new CustomEvent(Event.ClickToolbar, { detail: { key } }),
 	)
 
 const callHandlers = async (
@@ -109,7 +123,12 @@ export const onPostCreated = (handler: OnPostCreatedHandler) =>
 	typeof document !== 'undefined' &&
 	document.addEventListener(Event.PostCreated, (e) => handler(e.detail.post))
 
-const { PostCreated, RegisterOnUpdateHandler, RegisterOnSetupHandler } = Event
+const {
+	PostCreated,
+	RegisterOnUpdateHandler,
+	RegisterOnSetupHandler,
+	ClickToolbar,
+} = Event
 
 // eslint-disable-next-line functional/no-return-void
 export const dispatchPostCreated = (post: Posts) =>
@@ -123,5 +142,6 @@ declare global {
 		readonly [RegisterOnUpdateHandler]: EventRegisterOnUpdateHandler
 		readonly [PostCreated]: EventPostCreated
 		readonly [RegisterOnSetupHandler]: EventRegisterOnSetupHandler
+		readonly [ClickToolbar]: EventClickToolbar
 	}
 }

@@ -90,8 +90,8 @@ export enum SlotName {
 }
 
 export enum Event {
-	EventKey = 'posts:event::',
 	PostCreated = 'posts:event::post_created',
 	RegisterOnUpdateHandler = 'posts:event::register_on_update_handler',
 	RegisterOnSetupHandler = 'posts:event::register_on_setup_handler',
+	ClickToolbar = 'posts:event::click_toolbar',
 }

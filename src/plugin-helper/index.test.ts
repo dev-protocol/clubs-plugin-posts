@@ -11,6 +11,8 @@ import {
 	onSetup,
 	onSetupHandlers,
 	setup,
+	onClickToolbar,
+	emitClickToolbar,
 } from '.'
 
 describe('onUpdate', () => {
@@ -187,5 +189,35 @@ describe('dispatchPostCreated', () => {
 
 		expect(Event.PostCreated).toBe('posts:event::post_created')
 		expect(val).toEqual(expected)
+	})
+})
+
+describe('onClickToolbar', () => {
+	it('should add handler to posts:event::click_toolbar event and the handler will be called when only `detail.key` is matched', () => {
+		let count = 0
+		onClickToolbar('key_xyz', () => {
+			count = count + 1
+		})
+		document.dispatchEvent(
+			new CustomEvent(Event.ClickToolbar, { detail: { key: 'key_xyz' } }),
+		)
+		document.dispatchEvent(
+			new CustomEvent(Event.ClickToolbar, { detail: { key: 'key_xyz_2' } }),
+		)
+
+		expect(Event.ClickToolbar).toBe('posts:event::click_toolbar')
+		expect(count).toBe(1)
+	})
+})
+
+describe('emitClickToolbar', () => {
+	it('should dispatch posts:event::click_toolbar event with `detail.key`', () => {
+		let count = 0
+		document.addEventListener(Event.ClickToolbar, () => {
+			count = count + 1
+		})
+		emitClickToolbar('key_xyz')
+
+		expect(count).toBe(1)
 	})
 })

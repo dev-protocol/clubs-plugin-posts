@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { onSetup, onUpdate } from '../../../src/plugin-helper'
+	import { emitClickToolbar } from '../../../src/plugin-helper'
 </script>
 
-<button
+<button on:click={() => emitClickToolbar('edit')}
 	><svg
 		xmlns="http://www.w3.org/2000/svg"
 		fill="none"

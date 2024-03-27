@@ -1,5 +1,11 @@
 <script lang="ts">
-	import { onSetup, onUpdate } from '../../../src/plugin-helper'
+	import { onSetup, onUpdate, onClickToolbar } from '../../../src/plugin-helper'
+
+	let show = false
+
+	onClickToolbar('edit', () => {
+		show = !show
+	})
 
 	onUpdate((post) => {
 		console.log('onUpdate', post)
@@ -24,4 +30,6 @@
 	})
 </script>
 
-<div class="rounded bg-black/10 p-2">example-plugin added this slot</div>
+{#if show}
+	<div class="rounded bg-black/10 p-2">example-plugin added this slot</div>
+{/if}
