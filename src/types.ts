@@ -2,7 +2,7 @@ import type { ClubsGeneralUnit } from '@devprotocol/clubs-core'
 
 export type Option = {
 	readonly key: 'posts'
-	readonly value: readonly Posts[]
+	readonly value: readonly OptionsDatabase[]
 }
 
 export type TokenURIWithId = {

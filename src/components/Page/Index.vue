@@ -4,10 +4,19 @@ import Reactions from './Posts/Reactions.vue'
 import Contents from './Contents/Contents.vue'
 import Media from './Posts/Media.vue'
 import Comment from './Posts/Comment.vue'
-import { Event, type Option, type Posts } from '../../types'
+import {
+	Event,
+	type Option,
+	type OptionsDatabase,
+	type Posts,
+} from '../../types'
 import { onMounted, ref } from 'vue'
 import Line from '../Common/Line.vue'
-import { decode } from '@devprotocol/clubs-core'
+import {
+	bytes32Hex,
+	decode,
+	membershipVerifierFactory,
+} from '@devprotocol/clubs-core'
 import type { connection as Connection } from '@devprotocol/clubs-core/connection'
 import type { Membership } from '../../types'
 import { type ContractRunner, type Signer } from 'ethers'
@@ -26,7 +35,7 @@ type Props = {
 	options: Option[]
 	feedId: string
 	propertyAddress: string
-	memberships?: Membership[]
+	memberships?: readonly Membership[]
 	adminRolePoints: number
 	emojiAllowList?: string[]
 	postId?: string
@@ -53,15 +62,53 @@ const testPermission = async (
 	user: string,
 	provider: ContractRunner,
 ): Promise<boolean> => {
+	// console.log('testPermission', props.memberships)
+
+	const membershipVerifier = await whenDefined(user, (account) =>
+		membershipVerifierFactory({
+			provider,
+			propertyAddress: props.propertyAddress,
+			account,
+		}),
+	)
+	if (!membershipVerifier) {
+		return false
+	}
+
+	// props.options[0].valueからidがprops.feedIdのものを取得し、関連する情報を一度に取得
+	const { roles } =
+		props.options[0].value.find((option) => option.id === props.feedId) || {}
+
+	// props.membershipsからroles.write.membershipsに含まれるpayloadを持つmembershipを取得
+	const requireMembership = roles?.write.memberships
+		?.map((payload) => {
+			return props.memberships
+				?.filter(
+					(membership) =>
+						bytes32Hex(membership.payload ?? []) === bytes32Hex(payload),
+				)
+				.flat()
+		})
+		.flat()
+
+	// console.log('requireMembership::', requireMembership)
+
+	const hasWriteMembership = await membershipVerifier(requireMembership)
+	console.log('hasWriteMembership::', hasWriteMembership)
+
 	const [a, b] = await clientsProperty(provider, props.propertyAddress)
+
 	const [balance, totalSupply] = await Promise.all([
 		whenDefined(a ?? b, (client) => client.balanceOf(user)),
 		whenDefined(a ?? b, (client) => client.totalSupply()),
 	])
+
 	const share =
 		(BigInt(balance ?? 0) * MULTIPLY) /
 		BigInt(totalSupply ?? '10000000000000000000000000')
+
 	const expected = (BigInt(props.adminRolePoints) * MULTIPLY) / 100n
+
 	return share >= expected
 }
 
@@ -84,6 +131,7 @@ const handleConnection = async (signer: UndefinedOr<Signer>) => {
 	hasEditableRole.value = await testPermission(
 		walletAddress.value,
 		new JsonRpcProvider(props.rpcUrl),
+		props.propertyAddress,
 	)
 }
 
