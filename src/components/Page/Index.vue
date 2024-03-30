@@ -58,12 +58,11 @@ const hasEditableRole = ref(false)
 const connection = ref<typeof Connection>()
 
 const MULTIPLY = 1000000n
-const testPermission = async (
+
+const writePermission = async (
 	user: string,
 	provider: ContractRunner,
 ): Promise<boolean> => {
-	// console.log('testPermission', props.memberships)
-
 	const membershipVerifier = await whenDefined(user, (account) =>
 		membershipVerifierFactory({
 			provider,
@@ -75,13 +74,15 @@ const testPermission = async (
 		return false
 	}
 
-	// props.options[0].valueからidがprops.feedIdのものを取得し、関連する情報を一度に取得
 	const { roles } =
 		props.options[0].value.find((option) => option.id === props.feedId) || {}
 
-	// props.membershipsからroles.write.membershipsに含まれるpayloadを持つmembershipを取得
-	const requireMembership = roles?.write.memberships
-		?.map((payload) => {
+	if (!roles?.write?.memberships) {
+		return false
+	}
+
+	let requireMembership = roles.write.memberships
+		.map((payload) => {
 			return props.memberships
 				?.filter(
 					(membership) =>
@@ -91,10 +92,17 @@ const testPermission = async (
 		})
 		.flat()
 
-	// console.log('requireMembership::', requireMembership)
+	const verifier = await membershipVerifier(requireMembership)
 
-	const hasWriteMembership = await membershipVerifier(requireMembership)
-	console.log('hasWriteMembership::', hasWriteMembership)
+	return verifier.result
+}
+
+const testPermission = async (
+	user: string,
+	provider: ContractRunner,
+): Promise<boolean> => {
+	const write = await writePermission(user, provider)
+	console.log('write:', write)
 
 	const [a, b] = await clientsProperty(provider, props.propertyAddress)
 
