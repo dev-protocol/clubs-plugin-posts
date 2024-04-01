@@ -6,7 +6,7 @@ import { solidityPackedKeccak256 } from 'ethers'
 import { always } from 'ramda'
 
 type Props = {
-	images: string[]
+	images: (string | null)[]
 	isPost?: boolean
 }
 type ImageData = {
@@ -23,10 +23,10 @@ interface Emits {
 const { images } = defineProps<Props>()
 const galleryImages = ref<ImageData[]>()
 const galleryId = computed<string>(() =>
-	solidityPackedKeccak256(images.map(always('string')), images).replace(
-		/[0-9]/g,
-		'',
-	),
+	solidityPackedKeccak256(
+		images.map(always('string')),
+		images.map((src) => src ?? ''),
+	).replace(/[0-9]/g, ''),
 )
 
 const emit = defineEmits<Emits>()
