@@ -75,6 +75,11 @@ export default () =>
 										uuidv5('EXAMPLE_NAMESPACE', uuidv5.URL),
 									), // > 16be5315-0e57-5139-bba9-71d05675856b
 								},
+								roles: {
+									write: {
+										memberships: [payloads[0]],
+									},
+								},
 							},
 							{
 								id: 'default-3',
