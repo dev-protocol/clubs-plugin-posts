@@ -94,16 +94,20 @@ const writePermission = async (
 
 	const verifier = await membershipVerifier(requireMembership)
 
-	return verifier.result
+	return verifier ? verifier.result : false
 }
 
 const testPermission = async (
 	user: string,
 	provider: ContractRunner,
 ): Promise<boolean> => {
+	// check membership
 	const write = await writePermission(user, provider)
-	console.log('write:', write)
+	if (!write) {
+		return false
+	}
 
+	// check
 	const [a, b] = await clientsProperty(provider, props.propertyAddress)
 
 	const [balance, totalSupply] = await Promise.all([
