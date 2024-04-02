@@ -91,23 +91,17 @@ const writePermission = async (
 				.flat()
 		})
 		.flat()
+		.filter((x) => x !== undefined)
 
-	const verifier = await membershipVerifier(requireMembership)
+	const verifier = await membershipVerifier([...requireMembership])
 
 	return verifier ? verifier.result : false
 }
 
-const testPermission = async (
+const hasAdminRole = async (
 	user: string,
 	provider: ContractRunner,
 ): Promise<boolean> => {
-	// check membership
-	const write = await writePermission(user, provider)
-	if (!write) {
-		return false
-	}
-
-	// check
 	const [a, b] = await clientsProperty(provider, props.propertyAddress)
 
 	const [balance, totalSupply] = await Promise.all([
@@ -122,6 +116,17 @@ const testPermission = async (
 	const expected = (BigInt(props.adminRolePoints) * MULTIPLY) / 100n
 
 	return share >= expected
+}
+
+const testPermission = async (
+	user: string,
+	provider: ContractRunner,
+): Promise<boolean> => {
+	const membership = await writePermission(user, provider)
+	const admin =
+		membership === false ? await hasAdminRole(user, provider) : false
+
+	return membership || admin
 }
 
 const handleConnection = async (signer: UndefinedOr<Signer>) => {
@@ -143,7 +148,6 @@ const handleConnection = async (signer: UndefinedOr<Signer>) => {
 	hasEditableRole.value = await testPermission(
 		walletAddress.value,
 		new JsonRpcProvider(props.rpcUrl),
-		props.propertyAddress,
 	)
 }
 
@@ -218,7 +222,7 @@ const onPostDeleted = (id: string) => {
 			<Post
 				:feedId="props.feedId"
 				:address="walletAddress"
-				:memberships="props.memberships"
+				:memberships="[...props.memberships]"
 				@post:success="handlePostSuccess"
 			>
 				<template v-slot:after-content-form>

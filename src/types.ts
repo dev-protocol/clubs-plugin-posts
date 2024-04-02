@@ -1,4 +1,7 @@
-import type { ClubsGeneralUnit } from '@devprotocol/clubs-core'
+import type {
+	ClubsGeneralUnit,
+	Membership as MembershipCore,
+} from '@devprotocol/clubs-core'
 
 export type Option = {
 	readonly key: 'posts'
@@ -63,15 +66,7 @@ export type OptionsDatabase = {
 		  }
 }
 
-export type Membership = {
-	readonly id: string
-	readonly name: string
-	readonly description: string
-	readonly price: number
-	readonly currency: string
-	readonly imageSrc: string
-	readonly payload?: Uint8Array
-}
+export type Membership = MembershipCore
 
 /**
  * Reaction is a map of emoji to users who reacted to a post
