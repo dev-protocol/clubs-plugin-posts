@@ -4,19 +4,10 @@ import Reactions from './Posts/Reactions.vue'
 import Contents from './Contents/Contents.vue'
 import Media from './Posts/Media.vue'
 import Comment from './Posts/Comment.vue'
-import {
-	Event,
-	type Option,
-	type OptionsDatabase,
-	type Posts,
-} from '../../types'
+import { Event, type Option, type Posts } from '../../types'
 import { onMounted, ref } from 'vue'
 import Line from '../Common/Line.vue'
-import {
-	bytes32Hex,
-	decode,
-	membershipVerifierFactory,
-} from '@devprotocol/clubs-core'
+import { decode } from '@devprotocol/clubs-core'
 import type { connection as Connection } from '@devprotocol/clubs-core/connection'
 import type { Membership } from '../../types'
 import { type ContractRunner, type Signer } from 'ethers'
@@ -28,7 +19,10 @@ import {
 	handleRegisterOnUpdateHandler,
 	handleRegisterOnSetupHandler,
 } from '../../plugin-helper'
-import { filterRequiredMemberships } from '../../fixtures/memberships'
+import {
+	filterRequiredMemberships,
+	hasWritePermission,
+} from '../../fixtures/memberships'
 import { JsonRpcProvider } from 'ethers'
 
 type Props = {
@@ -63,39 +57,18 @@ const writePermission = async (
 	user: string,
 	provider: ContractRunner,
 ): Promise<boolean> => {
-	const membershipVerifier = await whenDefined(user, (account) =>
-		membershipVerifierFactory({
-			provider,
-			propertyAddress: props.propertyAddress,
-			account,
-		}),
-	)
-	if (!membershipVerifier) {
-		return false
-	}
-
 	const { roles } =
-		props.options[0].value.find((option) => option.id === props.feedId) || {}
+		props.options
+			.find(({ key }) => key === 'posts')
+			?.value.find((option) => option.id === props.feedId) || {}
 
-	if (!roles?.write?.memberships) {
-		return false
-	}
-
-	let requireMembership = roles.write.memberships
-		.map((payload) => {
-			return props.memberships
-				?.filter(
-					(membership) =>
-						bytes32Hex(membership.payload ?? []) === bytes32Hex(payload),
-				)
-				.flat()
-		})
-		.flat()
-		.filter((x) => x !== undefined)
-
-	const verifier = await membershipVerifier([...requireMembership])
-
-	return verifier ? verifier.result : false
+	return hasWritePermission({
+		account: user,
+		provider,
+		propertyAddress: props.propertyAddress,
+		memberships: props.memberships,
+		roles,
+	})
 }
 
 const hasAdminRole = async (
