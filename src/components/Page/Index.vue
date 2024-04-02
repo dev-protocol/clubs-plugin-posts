@@ -58,9 +58,7 @@ const writePermission = async (
 	provider: ContractRunner,
 ): Promise<boolean> => {
 	const { roles } =
-		props.options
-			.find(({ key }) => key === 'posts')
-			?.value.find((option) => option.id === props.feedId) || {}
+		props.options[0].value.find((option) => option.id === props.feedId) || {}
 
 	return hasWritePermission({
 		account: user,
@@ -96,8 +94,7 @@ const testPermission = async (
 	provider: ContractRunner,
 ): Promise<boolean> => {
 	const membership = await writePermission(user, provider)
-	const admin =
-		membership === false ? await hasAdminRole(user, provider) : false
+	const admin = membership ? await hasAdminRole(user, provider) : false
 
 	return membership || admin
 }
