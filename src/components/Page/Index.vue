@@ -19,14 +19,17 @@ import {
 	handleRegisterOnUpdateHandler,
 	handleRegisterOnSetupHandler,
 } from '../../plugin-helper'
-import { filterRequiredMemberships } from '../../fixtures/memberships'
+import {
+	filterRequiredMemberships,
+	hasWritePermission,
+} from '../../fixtures/memberships'
 import { JsonRpcProvider } from 'ethers'
 
 type Props = {
 	options: Option[]
 	feedId: string
 	propertyAddress: string
-	memberships?: Membership[]
+	memberships?: readonly Membership[]
 	adminRolePoints: number
 	emojiAllowList?: string[]
 	postId?: string
@@ -49,20 +52,52 @@ const hasEditableRole = ref(false)
 const connection = ref<typeof Connection>()
 
 const MULTIPLY = 1000000n
-const testPermission = async (
+
+const writePermission = async (
+	user: string,
+	provider: ContractRunner,
+): Promise<boolean> => {
+	const { roles } =
+		props.options[0].value.find((option) => option.id === props.feedId) || {}
+
+	return hasWritePermission({
+		account: user,
+		provider,
+		propertyAddress: props.propertyAddress,
+		memberships: props.memberships,
+		roles,
+	})
+}
+
+const hasAdminRole = async (
 	user: string,
 	provider: ContractRunner,
 ): Promise<boolean> => {
 	const [a, b] = await clientsProperty(provider, props.propertyAddress)
+
 	const [balance, totalSupply] = await Promise.all([
 		whenDefined(a ?? b, (client) => client.balanceOf(user)),
 		whenDefined(a ?? b, (client) => client.totalSupply()),
 	])
+
 	const share =
 		(BigInt(balance ?? 0) * MULTIPLY) /
 		BigInt(totalSupply ?? '10000000000000000000000000')
+
 	const expected = (BigInt(props.adminRolePoints) * MULTIPLY) / 100n
+
 	return share >= expected
+}
+
+const testPermission = async (
+	user: string,
+	provider: ContractRunner,
+): Promise<boolean> => {
+	const membership = await writePermission(user, provider)
+	const admin =
+		membership === false ? await hasAdminRole(user, provider) : false
+
+	return membership || admin
 }
 
 const handleConnection = async (signer: UndefinedOr<Signer>) => {
@@ -158,7 +193,7 @@ const onPostDeleted = (id: string) => {
 			<Post
 				:feedId="props.feedId"
 				:address="walletAddress"
-				:memberships="props.memberships"
+				:memberships="[...props.memberships]"
 				@post:success="handlePostSuccess"
 			>
 				<template v-slot:after-content-form>

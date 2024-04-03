@@ -36,7 +36,7 @@ export default () =>
 		twitterHandle: '@debug',
 		description: '',
 		url: 'http://localhost:3000',
-		propertyAddress: '0xE8FCe1957bbaDb79C39E04dFf81782E892A22b9d',
+		propertyAddress: '0xE59fEDaBB0F79b0EC605737805a9125cd8d87B1f',
 		chainId: 80001,
 		rpcUrl: 'https://polygon-mumbai-bor.publicnode.com',
 		adminRolePoints: 0,
@@ -74,6 +74,11 @@ export default () =>
 										toUtf8Bytes('default-2'),
 										uuidv5('EXAMPLE_NAMESPACE', uuidv5.URL),
 									), // > 16be5315-0e57-5139-bba9-71d05675856b
+								},
+								roles: {
+									write: {
+										memberships: [payloads[0], payloads[1], payloads[2]], // You can post only if you have either Tier-1, Tier-2, or Tier-3.
+									},
 								},
 							},
 							{

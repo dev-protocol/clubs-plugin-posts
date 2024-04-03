@@ -283,6 +283,8 @@ export const getApiPaths = (async (
 								config,
 								db.database.type,
 								db.database.key,
+								memberships ?? [],
+								db.roles,
 							),
 						},
 

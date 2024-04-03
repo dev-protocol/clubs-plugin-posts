@@ -6,7 +6,12 @@ import {
 	encode,
 	type Membership,
 } from '@devprotocol/clubs-core'
-import type { Comment, PostPrimitives, Reactions } from '../types'
+import type {
+	Comment,
+	OptionsDatabase,
+	PostPrimitives,
+	Reactions,
+} from '../types'
 import {
 	whenDefined,
 	whenDefinedAll,
@@ -19,6 +24,7 @@ import { fetchSinglePost, getDefaultClient } from '../db/redis'
 import { deletePost } from '../db/redis-documents'
 import { aperture, tryCatch } from 'ramda'
 import { maskFactory } from '../fixtures/masking'
+import { hasWritePermission } from '../fixtures/memberships'
 
 export type AddCommentRequestJson = Readonly<{
 	readonly contents: string
@@ -32,6 +38,8 @@ export const addPostHandler =
 		conf: ClubsConfiguration,
 		dbQueryType: 'encoded:redis' | 'documents:redis',
 		dbQueryKey: string,
+		memberships?: readonly Membership[],
+		roles?: OptionsDatabase['roles'],
 	) =>
 	async ({ request }: { readonly request: Request }) => {
 		const { contents, hash, sig } = (await request.json()) as {
@@ -54,20 +62,27 @@ export const addPostHandler =
 
 		const skipAuthentication = conf.propertyAddress === ZeroAddress
 
+		const created_by = verifyMessage(hash, sig)
+
 		const authenticated =
 			!skipAuthentication &&
-			(await whenDefinedAll([hash, sig], ([h, s]) =>
+			((await whenDefinedAll([hash, sig], ([h, s]) =>
 				authenticate({
 					message: h,
 					signature: s,
 					previousConfiguration: encode(conf),
 					provider: getDefaultProvider(conf.rpcUrl),
 				}),
-			))
+			)) ||
+				(await hasWritePermission({
+					account: created_by,
+					provider: getDefaultProvider(conf.rpcUrl),
+					propertyAddress: conf.propertyAddress,
+					memberships,
+					roles,
+				})))
 		// const { randomBytes, recoverAddress, hashMessage } = utils
 		const id = uuidFactory(conf.url)()
-
-		const created_by = verifyMessage(hash, sig)
 
 		const now = new Date()
 		const created_at = now
