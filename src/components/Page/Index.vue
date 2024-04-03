@@ -94,7 +94,8 @@ const testPermission = async (
 	provider: ContractRunner,
 ): Promise<boolean> => {
 	const membership = await writePermission(user, provider)
-	const admin = membership ? await hasAdminRole(user, provider) : false
+	const admin =
+		membership === false ? await hasAdminRole(user, provider) : false
 
 	return membership || admin
 }
