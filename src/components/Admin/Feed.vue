@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { onMounted, type PropType, ref } from 'vue'
-import { type ClubsPropsAdminPages, setOptions } from '@devprotocol/clubs-core'
+import {
+	type ClubsPropsAdminPages,
+	ClubsSlotName,
+	setOptions,
+} from '@devprotocol/clubs-core'
 import type { Membership, OptionsDatabase } from '../../types.ts'
 import { uuidFactory } from '../../db/uuidFactory.ts'
 import { nanoid } from 'nanoid'
@@ -31,6 +35,9 @@ const title = ref(props.edit?.title)
 const isSlugError = ref(false)
 const errorMessage = ref('')
 const editorRoleHolders = ref<(string | undefined)[]>([])
+const titleNews = ref('')
+const enableNews = ref(false)
+const countNews = ref(3)
 
 const uuid = uuidFactory(props.url)
 const defineFeed = (): OptionsDatabase => {
@@ -71,6 +78,8 @@ const onInput = () => {
 }
 
 const onChange = () => {
+	console.log('onChange')
+
 	if (slug.value === '') {
 		isSlugError.value = true
 		errorMessage.value = 'slug is required'
@@ -104,6 +113,18 @@ const onChange = () => {
 					},
 				}
 
+	if (titleNews.value === '') {
+		titleNews.value = 'News'
+	}
+
+	const slots = {
+		[ClubsSlotName.PageContentHomeBeforeContent]: {
+			enable: enableNews.value,
+			title: titleNews.value,
+			items: countNews.value,
+		},
+	}
+
 	if (!IS_EDIT) {
 		setOptions(
 			[
@@ -114,6 +135,7 @@ const onChange = () => {
 						{
 							...defineFeed(),
 							roles: roles,
+							slots,
 						},
 					],
 				},
@@ -130,6 +152,7 @@ const onChange = () => {
 				slug: slug.value,
 				title: title.value,
 				roles,
+				slots,
 			}
 		}
 		return {
@@ -139,6 +162,7 @@ const onChange = () => {
 					memberships: [],
 				},
 			},
+			slots: {},
 		}
 	})
 
@@ -239,6 +263,63 @@ const onChange = () => {
 						</label>
 					</li>
 				</ul>
+			</div>
+
+			<div class="hs-form-field is-filled">
+				<p class="hs-form-field__label text-xl">Latest News</p>
+
+				<div class="mb-4">
+					<label for="information-title" class="hs-form-field__label block">
+						Enable News
+					</label>
+					<p class="mb-4 text-sm block">
+						When activated, this feature displays a set number of the latest
+						news items at Clubs page.
+					</p>
+					<label class="relative inline-flex items-center cursor-pointer">
+						<input
+							v-model="enableNews"
+							type="checkbox"
+							class="sr-only peer"
+							@change="onChange"
+						/>
+						<span
+							class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+						></span>
+					</label>
+				</div>
+
+				<div class="mb-4">
+					<label for="information-title" class="hs-form-field__label block">
+						News title
+					</label>
+					<p class="mb-4 text-sm block">
+						You can change the title of the latest news
+					</p>
+					<input
+						v-model="titleNews"
+						id="information-title"
+						class="hs-form-field__input w-full"
+						placeholder="News"
+						@change="onChange"
+					/>
+				</div>
+				<label for="number-of-information" class="hs-form-field__label block">
+					Number of Latest Information Displayed
+				</label>
+				<p class="mb-4 text-sm block">
+					The latest information will be displayed up to the number set here.
+				</p>
+				<select
+					v-model="countNews"
+					id="number-of-information"
+					class="hs-form-field__input"
+					@change="onChange"
+				>
+					<option v-for="value in 10" :value="value">
+						{{ value }}
+					</option>
+				</select>
 			</div>
 		</div>
 	</div>

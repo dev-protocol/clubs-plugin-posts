@@ -1,6 +1,7 @@
 import type {
 	ClubsGeneralUnit,
 	Membership as MembershipCore,
+	ClubsSlotName,
 } from '@devprotocol/clubs-core'
 
 export type Option = {
@@ -46,6 +47,7 @@ export type Comment = CommentPrimitives & {
 	readonly updated_at: Date
 }
 
+// Todo: ここにslotsが追加される？ https://devprtcl.atlassian.net/jira/software/projects/CLUB/boards/1?selectedIssue=CLUB-67
 export type OptionsDatabase = {
 	readonly id: string
 	readonly slug?: string
