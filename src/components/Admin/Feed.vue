@@ -78,8 +78,6 @@ const onInput = () => {
 }
 
 const onChange = () => {
-	console.log('onChange')
-
 	if (slug.value === '') {
 		isSlugError.value = true
 		errorMessage.value = 'slug is required'
