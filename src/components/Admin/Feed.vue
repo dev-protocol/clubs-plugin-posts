@@ -264,7 +264,7 @@ const onChange = () => {
 			</div>
 
 			<div class="hs-form-field is-filled">
-				<p class="hs-form-field__label text-xl">Latest News</p>
+				<p class="hs-form-field__label text-xl mb-4">Latest News</p>
 
 				<div class="mb-4">
 					<label for="information-title" class="hs-form-field__label block">
@@ -287,22 +287,22 @@ const onChange = () => {
 					</label>
 				</div>
 
-				<div class="mb-4">
-					<label for="information-title" class="hs-form-field__label block">
-						News title
-					</label>
-					<p class="mb-4 text-sm block">
-						You can change the title of the latest news
-					</p>
-					<input
-						v-model="titleNews"
-						id="information-title"
-						class="hs-form-field__input w-full"
-						placeholder="News"
-						@change="onChange"
-					/>
-				</div>
-				<label for="number-of-information" class="hs-form-field__label block">
+				<label for="information-title" class="hs-form-field__label block">
+					News title
+				</label>
+				<p class="mb-4 text-sm block">
+					You can change the title of the latest news
+				</p>
+				<input
+					v-model="titleNews"
+					id="information-title"
+					class="hs-form-field__input w-full"
+					placeholder="News"
+					@change="onChange"
+				/>
+			</div>
+			<div class="hs-select-field">
+				<label for="number-of-information" class="hs-select-field__label block">
 					Number of Latest Information Displayed
 				</label>
 				<p class="mb-4 text-sm block">
@@ -311,7 +311,7 @@ const onChange = () => {
 				<select
 					v-model="countNews"
 					id="number-of-information"
-					class="hs-form-field__input"
+					class="hs-form-field hs-select-field__input"
 					@change="onChange"
 				>
 					<option v-for="value in 10" :value="value">
