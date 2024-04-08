@@ -80,6 +80,12 @@ export default () =>
 										memberships: [payloads[0], payloads[1], payloads[2]], // You can post only if you have either Tier-1, Tier-2, or Tier-3.
 									},
 								},
+								slots: {
+									'page:content:home:before-content': {
+										title: 'News',
+										items: 5,
+									},
+								},
 							},
 							{
 								id: 'default-3',

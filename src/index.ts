@@ -12,13 +12,14 @@ import {
 	type ClubsApiPath,
 	SinglePath,
 	type Membership,
+	ClubsSlotName,
 } from '@devprotocol/clubs-core'
 import {
 	addCommentHandler,
 	deleteCommentHandler,
 	fetchCommentsHandler,
 } from './apiHandler/comment'
-import { maskFactory } from './fixtures/masking'
+import { mask, maskFactory } from './fixtures/masking'
 import { addReactionHandler } from './apiHandler/reactions'
 import {
 	addPostHandler,
@@ -27,7 +28,11 @@ import {
 } from './apiHandler/posts'
 import { v5 as uuidv5 } from 'uuid'
 import { verifyMessage } from 'ethers'
-import { whenDefinedAll, type UndefinedOr } from '@devprotocol/util-ts'
+import {
+	isNotError,
+	whenDefinedAll,
+	type UndefinedOr,
+} from '@devprotocol/util-ts'
 import Screenshot1 from './assets/images/posts-1.jpg'
 import Screenshot2 from './assets/images/posts-2.jpg'
 import Screenshot3 from './assets/images/posts-3.jpg'
@@ -459,52 +464,75 @@ export const getApiPaths = (async (
 
 export const getSlots = (async (options, __, { paths, factory }) => {
 	const [path1, path2, path3] = paths
+	const feeds =
+		(options.find(({ key }) => key === 'feeds')
+			?.value as readonly OptionsDatabase[]) ?? []
 
-	if (factory === 'admin' && path1 === 'posts' && path2 === undefined) {
-		const addSlotsValue = {
-			slot: 'admin:aside:after-built-in-buttons',
-			component: NavigationLink,
-			props: {
-				navigation: {
-					display: 'Create a new feed',
-					path: '/admin/posts/new',
-				},
-			},
-		}
-
-		return [addSlotsValue]
-	}
-
-	if (factory === 'admin' && path1 === 'posts' && path2 === 'edit' && path3) {
-		const feeds =
-			(options.find(({ key }) => key === 'feeds')
-				?.value as readonly OptionsDatabase[]) ?? []
-		const feed = feeds.find((feed) => feed.id === path3)
-
-		const label = feed?.title
-			? `Add '${feed.title}' to the menu`
-			: `Add 'Posts' to the menu`
-		const display = feed?.title ? feed.title : 'Posts'
-		const path = feed?.slug ? `/${feed.slug}` : '/posts'
-
-		const addSlotsValue = {
-			slot: 'admin:aside:after-built-in-buttons',
-			component: CreateNavigationLink,
-			props: {
-				createNavigation: {
-					label,
-					link: {
-						display,
-						path,
+	return [
+		...(factory === 'page' // == The public feed page with PageContentHomeBeforeContent slot
+			? (
+					await Promise.all(
+						feeds
+							.filter(
+								(feed) =>
+									feed.slots?.[ClubsSlotName.PageContentHomeBeforeContent] !==
+									undefined,
+							)
+							.map(async (feed) => {
+								const posts = await getAllPosts('documents:redis', {
+									key: feed.database.key,
+								})
+								return [
+									{
+										slot: ClubsSlotName.PageContentHomeBeforeContent,
+										component: Readme, // @@@TODO: This should be replaced in another component
+										props: {
+											posts: isNotError(posts) ? posts.map(mask) : [],
+											feedId: feed.id,
+										},
+									},
+								]
+							}),
+					)
+				).flat()
+			: []),
+		...(factory === 'admin' && path1 === 'posts' && path2 === undefined // == The feeds list page
+			? [
+					{
+						slot: 'admin:aside:after-built-in-buttons',
+						component: NavigationLink,
+						props: {
+							navigation: {
+								display: 'Create a new feed',
+								path: '/admin/posts/new',
+							},
+						},
 					},
-				},
-			},
-		}
-
-		return [addSlotsValue]
-	}
-
-	return []
+				]
+			: []),
+		...((feed) =>
+			feed &&
+			factory === 'admin' &&
+			path1 === 'posts' &&
+			path2 === 'edit' &&
+			path3 // == The feed edit page
+				? [
+						{
+							slot: 'admin:aside:after-built-in-buttons',
+							component: CreateNavigationLink,
+							props: {
+								createNavigation: {
+									label: `Add '${feed.title ?? 'Posts'}' to the menu`,
+									link: {
+										display: feed.title ?? 'Posts',
+										path: `/${feed.slug ?? 'posts'}`,
+									},
+								},
+							},
+						},
+					]
+				: [])(feeds.find((feed) => feed.id === path3)),
+	]
 }) satisfies ClubsFunctionGetSlots
 
 export default {
