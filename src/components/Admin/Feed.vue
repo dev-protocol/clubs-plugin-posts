@@ -264,11 +264,11 @@ const onChange = () => {
 			</div>
 
 			<div class="hs-form-field is-filled">
-				<p class="hs-form-field__label text-xl mb-4">Latest News</p>
+				<p class="hs-form-field__label text-xl mb-4">Posts widget</p>
 
 				<div class="mb-4">
 					<label for="information-title" class="hs-form-field__label block">
-						Enable News
+						Add Posts widget on the top page
 					</label>
 					<p class="mb-4 text-sm block">
 						When activated, this feature displays a set number of the latest
@@ -288,7 +288,7 @@ const onChange = () => {
 				</div>
 
 				<label for="information-title" class="hs-form-field__label block">
-					News title
+					Title
 				</label>
 				<p class="mb-4 text-sm block">
 					You can change the title of the latest news
