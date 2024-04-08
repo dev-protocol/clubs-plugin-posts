@@ -58,9 +58,9 @@ export type OptionsDatabase = {
 	}
 	readonly slots?: {
 		readonly [key in ClubsSlotName]?: {
-			enable: boolean
-			title: string
-			items: number
+			readonly enable: boolean
+			readonly title: string
+			readonly items: number
 		}
 	}
 	readonly database:
