@@ -2,6 +2,7 @@ import type {
 	ClubsGeneralUnit,
 	Membership as MembershipCore,
 } from '@devprotocol/clubs-core'
+import { ClubsSlotName } from '@devprotocol/clubs-core'
 
 export type Option = {
 	readonly key: 'posts'
@@ -46,6 +47,7 @@ export type Comment = CommentPrimitives & {
 	readonly updated_at: Date
 }
 
+const { PageContentHomeBeforeContent } = ClubsSlotName
 export type OptionsDatabase = {
 	readonly id: string
 	readonly slug?: string
@@ -53,6 +55,12 @@ export type OptionsDatabase = {
 	readonly roles?: {
 		readonly write: {
 			readonly memberships: readonly [] | readonly Uint8Array[]
+		}
+	}
+	readonly slots?: {
+		readonly [PageContentHomeBeforeContent]?: {
+			readonly title: string
+			readonly items: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
 		}
 	}
 	readonly database:
