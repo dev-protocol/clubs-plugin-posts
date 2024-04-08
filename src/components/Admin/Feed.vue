@@ -71,7 +71,7 @@ onMounted(() => {
 		const slots = feed[0].slots
 		if (slots && slots[ClubsSlotName.PageContentHomeBeforeContent]) {
 			enableNews.value =
-				slots[ClubsSlotName.PageContentHomeBeforeContent].enable
+				slots[ClubsSlotName.PageContentHomeBeforeContent].enabled
 			titleNews.value = slots[ClubsSlotName.PageContentHomeBeforeContent].title
 			countNews.value = slots[ClubsSlotName.PageContentHomeBeforeContent].items
 		}
@@ -125,7 +125,7 @@ const onChange = () => {
 
 	const slots = {
 		[ClubsSlotName.PageContentHomeBeforeContent]: {
-			enable: enableNews.value,
+			enabled: enableNews.value,
 			title: titleNews.value,
 			items: countNews.value,
 		},

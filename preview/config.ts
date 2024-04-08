@@ -82,6 +82,7 @@ export default () =>
 								},
 								slots: {
 									'page:content:home:before-content': {
+										enabled: true,
 										title: 'News',
 										items: 5,
 									},
