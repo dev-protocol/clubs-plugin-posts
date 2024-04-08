@@ -47,7 +47,6 @@ export type Comment = CommentPrimitives & {
 	readonly updated_at: Date
 }
 
-// Todo: ここにslotsが追加される？ https://devprtcl.atlassian.net/jira/software/projects/CLUB/boards/1?selectedIssue=CLUB-67
 export type OptionsDatabase = {
 	readonly id: string
 	readonly slug?: string
@@ -55,6 +54,13 @@ export type OptionsDatabase = {
 	readonly roles?: {
 		readonly write: {
 			readonly memberships: readonly [] | readonly Uint8Array[]
+		}
+	}
+	readonly slots?: {
+		readonly [key in ClubsSlotName]?: {
+			enable: boolean
+			title: string
+			items: number
 		}
 	}
 	readonly database:

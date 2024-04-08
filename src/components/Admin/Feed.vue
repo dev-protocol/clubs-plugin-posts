@@ -67,6 +67,14 @@ onMounted(() => {
 					return props.memberships?.find((m) => m.payload === membership)?.id
 				})
 				.filter((id) => id) || []
+
+		const slots = feed[0].slots
+		if (slots && slots[ClubsSlotName.PageContentHomeBeforeContent]) {
+			enableNews.value =
+				slots[ClubsSlotName.PageContentHomeBeforeContent].enable
+			titleNews.value = slots[ClubsSlotName.PageContentHomeBeforeContent].title
+			countNews.value = slots[ClubsSlotName.PageContentHomeBeforeContent].items
+		}
 	}
 })
 
