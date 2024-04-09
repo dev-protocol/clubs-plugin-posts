@@ -1,19 +1,20 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import IconPic from '../../../../assets/images/icon-pic.svg'
 
 interface Emits {
 	(e: 'upload:image', image: string): void
 }
 
-const imageUrl = ref<string | null>(null)
 const emit = defineEmits<Emits>()
-const handleFileUpload = (event) => {
-	const file = event.target.files[0]
+const handleFileUpload = (event: Event) => {
+	const target = event.target as HTMLInputElement
+	const file = target.files ? target.files[0] : null
 	if (file) {
 		const reader = new FileReader()
-		reader.onload = (event) => {
-			const base64Text = event.currentTarget.result
+		reader.onload = (_event) => {
+			if (_event.currentTarget === null) return
+			const reader = _event.currentTarget as FileReader
+			const base64Text = reader.result as string
 			emit('upload:image', base64Text)
 		}
 		reader.readAsDataURL(file)

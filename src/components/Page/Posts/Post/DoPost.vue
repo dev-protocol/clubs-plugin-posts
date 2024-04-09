@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { keccak256 } from 'ethers'
 import Spinner from '../../../Spinner/Spinner.vue'
 import type { PostPrimitives, Posts } from '../../../../types'
@@ -9,6 +9,11 @@ import {
 	setup as callSetup,
 	dispatchPostCreated,
 } from '../../../../plugin-helper'
+import { Strings } from '../i18n'
+import { i18nFactory } from '@devprotocol/clubs-core'
+
+const i18nBase = i18nFactory(Strings)
+let i18n = i18nBase(['en'])
 
 type Props = {
 	feedId: string
@@ -19,6 +24,10 @@ type Props = {
 interface Emits {
 	(e: 'post:success', post: Posts): void
 }
+
+onMounted(() => {
+	i18n = i18nBase(navigator.languages)
+})
 
 const props = defineProps<Props>()
 const isPosting = ref(false)
@@ -120,7 +129,7 @@ async function uploadImageToImgur(image: string): Promise<string> {
 			:disabled="isPosting"
 		>
 			<Spinner v-if="isPosting" />
-			<span v-if="!isPosting">Post</span>
+			<span v-if="!isPosting">{{ i18n('Post') }}</span>
 		</button>
 	</div>
 </template>

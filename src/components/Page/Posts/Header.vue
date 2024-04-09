@@ -21,7 +21,7 @@ const props = defineProps({
 			<img
 				class="mr-3 h-12 w-12 rounded-full"
 				:src="props.avatar"
-				alt="Avatar of Aggre"
+				alt="Avatar"
 			/>
 			<p class="text-base font-bold text-black">{{ props.name }}</p>
 		</div>

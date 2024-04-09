@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import Line from '../../Common/Line.vue'
 import AddMedia from './Post/AddMedia.vue'
 import DoPost from './Post/DoPost.vue'
@@ -7,6 +7,15 @@ import Images from './Media/Images.vue'
 import type { Membership, PostPrimitives, Posts } from '../../../types'
 import Profile from '../../Common/Profile.vue'
 import { update as callUpdate } from '../../../plugin-helper'
+import { Strings } from './i18n'
+import { i18nFactory } from '@devprotocol/clubs-core'
+
+const i18nBase = i18nFactory(Strings)
+let i18n = i18nBase(['en'])
+
+onMounted(() => {
+	i18n = i18nBase(navigator.languages)
+})
 
 type Props = {
 	feedId: string
@@ -118,7 +127,7 @@ const handleDeleteImageAll = () => {
 					v-model="title"
 					class="w-full bg-transparent border-none px-2 py-2 text-gray-700 focus:border-indigo-500 focus:outline-none"
 					type="text"
-					placeholder="Title"
+					:placeholder="i18n('Title')"
 				/>
 			</div>
 
@@ -129,7 +138,7 @@ const handleDeleteImageAll = () => {
 					class="w-full bg-transparent border-none px-2 py-2 text-base text-gray-700 focus:border-indigo-500 focus:outline-none"
 					rows="3"
 					type="text"
-					placeholder="What’s happening?"
+					:placeholder="i18n('WhatsHappening')"
 				/>
 			</div>
 		</span>
@@ -156,7 +165,7 @@ const handleDeleteImageAll = () => {
 						clip-rule="evenodd"
 					/>
 				</svg>
-				Limited access
+				{{ i18n('LimitedAccess') }}
 			</button>
 			<!-- 選択済みのLimited accessを表示 -->
 			<div class="ml-3 flex items-center gap-3">
