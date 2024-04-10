@@ -5,5 +5,8 @@ export const Strings = {
 	Title: { en: 'Title', ja: '件名' },
 	WhatsHappening: { en: "What's happening", ja: '本文' },
 	LimitedAccess: { en: 'Limited access', ja: '限定アクセス' },
-	UnlockInstructions: { en: 'Unlock this post by becoming a member', ja: 'メンバーになってこの投稿をアンロックする' },
+	UnlockInstructions: {
+		en: 'Unlock this post by becoming a member',
+		ja: 'メンバーになってこの投稿をアンロックする',
+	},
 } satisfies ClubsI18nParts

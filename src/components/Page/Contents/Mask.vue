@@ -1,6 +1,16 @@
 <script lang="ts" setup>
 import type { Membership } from '../../../types'
 import Image from '../../../assets/images/mask-post-bg.png'
+import { Strings } from './i18n'
+import { i18nFactory } from '@devprotocol/clubs-core'
+import { onMounted } from 'vue'
+
+const i18nBase = i18nFactory(Strings)
+let i18n = i18nBase(['en'])
+
+onMounted(() => {
+	i18n = i18nBase(navigator.languages)
+})
 
 type Props = {
 	memberships?: readonly Membership[]
@@ -14,7 +24,7 @@ const { memberships } = props
 <template>
 	<div class="bg-mask flex flex-col justify-center rounded-xl p-4">
 		<p class="mb-4 text-center text-white sm:mb-4">
-			Unlock this post by becoming a member.
+			{{ i18n('Unlock') }}
 		</p>
 
 		<div
