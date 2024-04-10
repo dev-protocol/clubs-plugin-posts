@@ -5,6 +5,11 @@ import type { connection as Connection } from '@devprotocol/clubs-core/connectio
 import { computed, onMounted, ref } from 'vue'
 import type { UndefinedOr } from '@devprotocol/util-ts'
 import { keccak256, type Signer } from 'ethers'
+import { Strings } from './i18n'
+import { i18nFactory } from '@devprotocol/clubs-core'
+
+const i18nBase = i18nFactory(Strings)
+let i18n = i18nBase(['en'])
 
 type Props = {
 	postId: string
@@ -25,6 +30,8 @@ const emit = defineEmits<{
 }>()
 
 onMounted(async () => {
+	i18n = i18nBase(navigator.languages)
+
 	const { connection: conct } = await import(
 		'@devprotocol/clubs-core/connection'
 	)
@@ -99,7 +106,7 @@ const deletePost = async () => {
 					v-on:click="deletePost"
 					class="w-full px-2 py-1 text-left font-bold text-orange-700"
 				>
-					Delete
+					{{ i18n('Delete') }}
 				</button>
 			</div>
 
