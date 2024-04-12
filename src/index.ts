@@ -63,6 +63,7 @@ import { default as ListFeed } from './pages/ListFeed.astro'
 import NavigationLink from './slots/NavigationLink.astro'
 import Posts_ from './pages/Posts.astro'
 import Readme from './readme.astro'
+import News from './pages/News.astro'
 
 export type {
 	Option,
@@ -485,10 +486,11 @@ export const getSlots = (async (options, __, { paths, factory }) => {
 								return [
 									{
 										slot: ClubsSlotName.PageContentHomeBeforeContent,
-										component: Readme, // @@@TODO: This should be replaced in another component
+										component: News,
 										props: {
 											posts: isNotError(posts) ? posts.map(mask) : [],
 											feedId: feed.id,
+											slots: feed.slots,
 										},
 									},
 								]
