@@ -6,5 +6,5 @@ export const Strings = {
 		ja: 'メンバーになってこの投稿をアンロックする',
 	},
 	Delete: { en: 'Delete', ja: 'デリート' },
-	Share : { en: 'Share on 𝕏', ja: '𝕏 と共有する' },
+	Share: { en: 'Share on 𝕏', ja: '𝕏 と共有する' },
 } satisfies ClubsI18nParts
