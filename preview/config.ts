@@ -69,7 +69,6 @@ export default () =>
 								id: 'default-2',
 								slug: 'posts-2',
 								database: {
-									type: 'documents:redis',
 									key: uuidv5(
 										toUtf8Bytes('default-2'),
 										uuidv5('EXAMPLE_NAMESPACE', uuidv5.URL),
@@ -92,7 +91,6 @@ export default () =>
 								id: 'default-3',
 								slug: 'posts-3',
 								database: {
-									type: 'documents:redis',
 									key: uuidv5(
 										toUtf8Bytes('default-3'),
 										uuidv5('EXAMPLE_NAMESPACE', uuidv5.URL),
@@ -103,7 +101,6 @@ export default () =>
 								id: 'default-4',
 								slug: 'posts-4',
 								database: {
-									type: 'documents:redis',
 									key: uuidv5(
 										toUtf8Bytes('default-4'),
 										uuidv5('EXAMPLE_NAMESPACE', uuidv5.URL),

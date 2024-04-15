@@ -47,7 +47,6 @@ const defineFeed = (): OptionsDatabase => {
 		slug: slug.value ?? id,
 		title: title.value,
 		database: {
-			type: 'documents:redis',
 			key: uuid(),
 		},
 	}

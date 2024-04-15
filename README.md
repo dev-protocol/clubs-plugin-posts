@@ -26,21 +26,18 @@ curl -X POST -H "Content-Type: application/json" http://localhost:3000/api/devpr
 		{
 			id: 'default',
 			database: {
-				type: 'encoded:redis',
 				key: 'DATABASE_KEY', // i.g., posts::694666bb-b2ec-542b-a5d6-65b470e5c494
 			}
 		},
 		{
 			id: 'my-hobby',
 			database: {
-				type: 'encoded:redis',
 				key: 'DATABASE_KEY', // i.g., posts::694666bb-b2ec-542b-a5d6-65b470e5c494
 			}
 		},
 		{
 			id: 'travel',
 			database: {
-				type: 'documents:redis', // New database type supported in the future
 				key: 'INDEX_SCOPE', // i.g., scope::694666bb-b2ec-542b-a5d6-65b470e5c494
 			}
 		},
