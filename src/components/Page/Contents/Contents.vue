@@ -49,6 +49,7 @@ marked.use({ renderer })
 		:feedId="props.feedId"
 		:date="props.date"
 		:title="props.title"
+		:contents="props.contents"
 		@post-deleted="$emit('postDeleted', props.postId)"
 	/>
 

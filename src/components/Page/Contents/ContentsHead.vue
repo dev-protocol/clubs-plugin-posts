@@ -17,9 +17,10 @@ type Props = {
 	address: string
 	feedId: string
 	title?: string
+	contents: string
 }
 
-const { date, address, feedId, title, postId } = defineProps<Props>()
+const { date, address, feedId, title, postId, contents } = defineProps<Props>()
 const connection = ref<typeof Connection>()
 const signer = ref<UndefinedOr<Signer>>()
 const walletAddress = ref<string | undefined>('')
@@ -86,6 +87,15 @@ const deletePost = async () => {
 		// @todo: error handling
 	}
 }
+
+const shareOnTwitter = () => {
+	const baseURI = window.location.origin
+	const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+		`${title}\n\n${contents}\n\nMore on post:\n${baseURI}${singlePage.value}`, 
+	).replace(/%0A/g, '%0A')}`
+	window.open(url, '_blank')
+}
+
 </script>
 
 <template>
@@ -106,7 +116,13 @@ const deletePost = async () => {
 					v-on:click="deletePost"
 					class="w-full px-2 py-1 text-left font-bold text-orange-700"
 				>
-					{{ i18n('Delete') }}
+				{{ i18n('Delete') }}
+				</button>
+				<button
+					v-on:click="shareOnTwitter"
+					class="w-full px-2 py-1 text-left font-bold text-black"
+				>
+					Share on 𝕏
 				</button>
 			</div>
 
