@@ -91,11 +91,10 @@ const deletePost = async () => {
 const shareOnTwitter = () => {
 	const baseURI = window.location.origin
 	const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-		`${title}\n\n${contents}\n\nMore on post:\n${baseURI}${singlePage.value}`, 
+		`${title}\n\n${contents}\n\nMore on post:\n${baseURI}${singlePage.value}`,
 	).replace(/%0A/g, '%0A')}`
 	window.open(url, '_blank')
 }
-
 </script>
 
 <template>
@@ -116,7 +115,7 @@ const shareOnTwitter = () => {
 					v-on:click="deletePost"
 					class="w-full px-2 py-1 text-left font-bold text-orange-700"
 				>
-				{{ i18n('Delete') }}
+					{{ i18n('Delete') }}
 				</button>
 				<button
 					v-on:click="shareOnTwitter"
