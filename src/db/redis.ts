@@ -15,23 +15,25 @@ import {
 import { reduceBy } from 'ramda'
 import { uuidToQuery } from '../fixtures/search'
 
-const defaultClient = createClient({
-	url: import.meta.env.REDIS_URL,
-	username: import.meta.env.REDIS_USERNAME ?? '',
-	password: import.meta.env.REDIS_PASSWORD ?? '',
-	socket: {
-		keepAlive: 1,
-		reconnectStrategy: 1,
-	},
-})
+const defaultClient = () =>
+	createClient({
+		url: import.meta.env.REDIS_URL,
+		username: import.meta.env.REDIS_USERNAME ?? '',
+		password: import.meta.env.REDIS_PASSWORD ?? '',
+		socket: {
+			keepAlive: 1,
+			reconnectStrategy: 1,
+		},
+	})
 
-export type RedisDefaultClient = typeof defaultClient
+export type RedisDefaultClient = ReturnType<typeof defaultClient>
 
 export const getDefaultClient = async () => {
-	if (defaultClient.isOpen === false) {
-		await defaultClient.connect()
+	const client = defaultClient()
+	if (client.isOpen === false) {
+		await client.connect()
 	}
-	return defaultClient
+	return client
 }
 
 export const getAllPosts = async ({

@@ -1,5 +1,13 @@
 ---
+import { ClubsSlotName, type ClubsPropsPages } from '@devprotocol/clubs-core'
 import '@devprotocol/clubs-core/styles'
+
+type Props = ClubsPropsPages
+const { clubs } = Astro.props
+
+const SlotsPageContentHomeBeforeContent = clubs.slots.filter(
+	(slot) => slot.slot === ClubsSlotName.PageContentHomeBeforeContent,
+)
 ---
 
 <!doctype html>
@@ -11,6 +19,11 @@ import '@devprotocol/clubs-core/styles'
 
 	<body>
 		<main>
+			{
+				SlotsPageContentHomeBeforeContent.map((Slot) => (
+					<Slot.component {...Slot.props} />
+				))
+			}
 			<slot />
 		</main>
 	</body>
