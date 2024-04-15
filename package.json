@@ -87,7 +87,7 @@
 		"prettier-plugin-svelte": "^3.0.0",
 		"prettier-plugin-tailwindcss": "^0.5.5",
 		"rimraf": "5.0.5",
-		"rollup": "4.14.2",
+		"rollup": "4.14.3",
 		"rollup-plugin-dts": "^6.0.2",
 		"svelte": "^4.2.1",
 		"tailwindcss": "3.4.3",
