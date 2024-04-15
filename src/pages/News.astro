@@ -1,0 +1,57 @@
+---
+import type { ClubsPropsPages } from '@devprotocol/clubs-core'
+import type { Posts } from '../types'
+import { ClubsSlotName } from '@devprotocol/clubs-core'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+dayjs.extend(relativeTime)
+
+const { PageContentHomeBeforeContent } = ClubsSlotName
+
+interface Props extends ClubsPropsPages {
+	posts: Posts[]
+	feedId: string
+	slots: {
+		readonly [PageContentHomeBeforeContent]?: {
+			readonly enabled: boolean
+			readonly title: string
+			readonly items: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
+		}
+	}
+}
+
+const { posts, feedId, slots } = Astro.props
+
+const widgetContent = slots[PageContentHomeBeforeContent]
+
+const limitedPosts = posts.filter((post) => {
+	return posts.indexOf(post) < (widgetContent?.items ?? 0)
+})
+
+const getTimeAgo = (date: Date) => {
+	return dayjs(date).fromNow()
+}
+---
+
+{
+	widgetContent?.enabled && (
+		<section class="grid">
+			<h2 class="mb-4 text-center text-2xl font-bold lg:text-4xl">
+				{widgetContent?.title}
+			</h2>
+			<ul class="p-2 border rounded-md">
+				{limitedPosts.map((post) => (
+					<li>
+						<a
+							class="p-4 grid justify-around grid-cols-[1fr_auto]"
+							href={`/posts/${feedId}/${post.id}`}
+						>
+							<span class="font-bold ">{post.title}</span>
+							<span class="opacity-60">{getTimeAgo(post.created_at)}</span>
+						</a>
+					</li>
+				))}
+			</ul>
+		</section>
+	)
+}
