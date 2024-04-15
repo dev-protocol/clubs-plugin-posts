@@ -112,16 +112,16 @@ const shareOnTwitter = () => {
 				class="absolute right-0 top-2 w-48 bg-white rounded border border-gray-100 shadow-xl z-20"
 			>
 				<button
+					v-on:click="shareOnTwitter"
+					class="w-full px-2 py-1 text-left font-bold text-black"
+				>
+					{{ i18n('Share') }}
+				</button>
+				<button
 					v-on:click="deletePost"
 					class="w-full px-2 py-1 text-left font-bold text-orange-700"
 				>
 					{{ i18n('Delete') }}
-				</button>
-				<button
-					v-on:click="shareOnTwitter"
-					class="w-full px-2 py-1 text-left font-bold text-black"
-				>
-					Share on 𝕏
 				</button>
 			</div>
 
