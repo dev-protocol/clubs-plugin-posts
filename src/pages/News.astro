@@ -2,6 +2,9 @@
 import type { ClubsPropsPages } from '@devprotocol/clubs-core'
 import type { Posts } from '../types'
 import { ClubsSlotName } from '@devprotocol/clubs-core'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+dayjs.extend(relativeTime)
 
 const { PageContentHomeBeforeContent } = ClubsSlotName
 
@@ -22,70 +25,30 @@ const { posts, feedId, slots } = Astro.props
 const widgetContent = slots[PageContentHomeBeforeContent]
 
 const limitedPosts = posts.filter((post) => {
-	return posts.indexOf(post) < widgetContent?.items
+	return posts.indexOf(post) < (widgetContent?.items ?? 0)
 })
 
 const getTimeAgo = (date: Date) => {
-	const now = new Date()
-	const diff = now.getTime() - date.getTime()
-	const seconds = Math.floor(diff / 1000)
-	const minutes = Math.floor(seconds / 60)
-	const hours = Math.floor(minutes / 60)
-	const days = Math.floor(hours / 24)
-
-	if (days > 0) {
-		return `${days} days ago`
-	} else if (hours > 0) {
-		return `${hours} hours ago`
-	} else if (minutes > 0) {
-		return `${minutes} minutes ago`
-	} else {
-		return `${seconds} seconds ago`
-	}
+	return dayjs(date).fromNow()
 }
 ---
 
 {
 	widgetContent?.enabled && (
 		<section class="grid">
-			<h2
-				class="text-center text-2xl font-bold lg:text-4xl"
-				style="
-    margin-bottom: 1rem;
-"
-			>
+			<h2 class="mb-4 text-center text-2xl font-bold lg:text-4xl">
 				{widgetContent?.title}
 			</h2>
-			<ul
-				style="
-    padding: 0.5rem;
-    border: 1px solid;
-    border-radius: 8px;
-"
-			>
+			<ul class="p-2 border rounded-md">
 				{limitedPosts.map((post) => (
-					<li
-						style="
-    padding: 1rem;
-    display: grid;
-    justify-content: space-around;
-    grid-template-columns: 1fr auto;
-"
-					>
-						<span
-							style="
-    font-weight: bold;
-"
+					<li>
+						<a
+							class="p-4 grid justify-around grid-cols-[1fr_auto]"
+							href={`/posts/${feedId}/${post.id}`}
 						>
-							{post.title}
-						</span>
-						<span
-							style="
-    opacity: 0.6;
-"
-						>
-							{getTimeAgo(post.created_at)}
-						</span>
+							<span class="font-bold ">{post.title}</span>
+							<span class="opacity-60">{getTimeAgo(post.created_at)}</span>
+						</a>
 					</li>
 				))}
 			</ul>
