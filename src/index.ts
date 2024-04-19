@@ -37,8 +37,6 @@ import Screenshot1 from './assets/images/posts-1.jpg'
 import Screenshot2 from './assets/images/posts-2.jpg'
 import Screenshot3 from './assets/images/posts-3.jpg'
 import Icon from './assets/images/plugin-icon.svg'
-import { copyPostFromEncodedRedisToDocumentsRedisHandler } from './apiHandler/copy-encoded-redis_to_documents-redis'
-import { xprod } from 'ramda'
 import { createIndex } from './db/redis-documents'
 import { getAllPosts } from './db'
 import { getDefaultClient } from './db/redis'
@@ -287,7 +285,6 @@ export const getApiPaths = (async (
 							method: 'POST',
 							handler: addPostHandler(
 								config,
-								db.database.type,
 								db.database.key,
 								memberships ?? [],
 								db.roles,
@@ -331,8 +328,8 @@ export const getApiPaths = (async (
 								// eslint-disable-next-line
 								try {
 									const _allPosts = await whenDefinedAll(
-										[db.database.type, db.database.key],
-										([type, key]) => getAllPosts(type, { key }, parsedPage),
+										[db.database.key],
+										([key]) => getAllPosts({ key }, parsedPage),
 									)
 
 									const mask = await maskFactory({
@@ -412,20 +409,12 @@ export const getApiPaths = (async (
 						{
 							paths: [db.id, 'comment'], // This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/comment
 							method: 'POST',
-							handler: addCommentHandler(
-								config,
-								db.database.type,
-								db.database.key,
-							),
+							handler: addCommentHandler(config, db.database.key),
 						},
 						{
 							paths: [db.id, 'comment', 'delete'], // This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/comment
 							method: 'POST',
-							handler: deleteCommentHandler(
-								config,
-								db.database.type,
-								db.database.key,
-							),
+							handler: deleteCommentHandler(config, db.database.key),
 						},
 						{
 							paths: [db.id, 'reactions'], // This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/reactions
@@ -435,31 +424,14 @@ export const getApiPaths = (async (
 					] satisfies ClubsApiPaths,
 			)
 			.flat(),
-		...xprod(
-			dbs.filter(({ database: { type } }) => type === 'encoded:redis'),
-			dbs.filter(({ database: { type } }) => type === 'documents:redis'),
-		).map(
-			([encodedRedis, documentsRedis]) =>
+		...dbs.map(
+			(db) =>
 				({
-					paths: [encodedRedis.id, 'copy', 'to', documentsRedis.id],
-					method: 'POST',
-					handler: copyPostFromEncodedRedisToDocumentsRedisHandler({
-						config,
-						srcDatabaseKey: encodedRedis.database.key,
-						distDatabaseKey: documentsRedis.database.key,
-					}),
+					paths: [db.id, 'search', /.*/],
+					method: 'GET',
+					handler: fetchPostHas(db.database.key, config, memberships ?? []),
 				}) satisfies ClubsApiPath,
 		),
-		...dbs
-			.filter(({ database: { type } }) => type === 'documents:redis')
-			.map(
-				(db) =>
-					({
-						paths: [db.id, 'search', /.*/],
-						method: 'GET',
-						handler: fetchPostHas(db.database.key, config, memberships ?? []),
-					}) satisfies ClubsApiPath,
-			),
 	]
 }) satisfies ClubsFunctionGetApiPaths
 
@@ -480,7 +452,7 @@ export const getSlots = (async (options, __, { paths, factory }) => {
 									undefined,
 							)
 							.map(async (feed) => {
-								const posts = await getAllPosts('documents:redis', {
+								const posts = await getAllPosts({
 									key: feed.database.key,
 								})
 								return [

@@ -1,10 +1,6 @@
 import { verifyMessage } from 'ethers'
 import { decode, type ClubsConfiguration } from '@devprotocol/clubs-core'
 import type { CommentPrimitives, Comment } from '../types'
-import {
-	addCommentEncodedRedis,
-	deleteCommentEncodedRedis,
-} from './comment-encoded-redis'
 import { uuidFactory } from '../db/uuidFactory'
 import {
 	addCommentDocumentsRedis,
@@ -35,11 +31,7 @@ export type DeleteCommentRequestJson = Readonly<{
 }>
 
 export const addCommentHandler =
-	(
-		conf: ClubsConfiguration,
-		dbQueryType: 'encoded:redis' | 'documents:redis',
-		dbQueryKey: string,
-	) =>
+	(conf: ClubsConfiguration, dbQueryKey: string) =>
 	async ({ request }: { readonly request: Request }) => {
 		const { contents, hash, sig, postId } =
 			(await request.json()) as AddCommentRequestJson
@@ -65,32 +57,16 @@ export const addCommentHandler =
 			updated_at: date,
 		}
 
-		switch (dbQueryType) {
-			case 'encoded:redis':
-				return addCommentEncodedRedis({
-					conf,
-					data: newComment,
-					postId,
-					dbQueryKey,
-				})
-			case 'documents:redis':
-				return addCommentDocumentsRedis({
-					conf,
-					data: newComment,
-					postId,
-					dbQueryKey,
-				})
-			default:
-				return new Response(JSON.stringify({ message: 'not implemented' }))
-		}
+		return addCommentDocumentsRedis({
+			conf,
+			data: newComment,
+			postId,
+			dbQueryKey,
+		})
 	}
 
 export const deleteCommentHandler =
-	(
-		conf: ClubsConfiguration,
-		dbQueryType: 'encoded:redis' | 'documents:redis',
-		dbQueryKey: string,
-	) =>
+	(conf: ClubsConfiguration, dbQueryKey: string) =>
 	async ({ request }: { readonly request: Request }) => {
 		const { commentId, hash, sig, postId } =
 			(await request.json()) as DeleteCommentRequestJson
@@ -156,24 +132,12 @@ export const deleteCommentHandler =
 			)
 		}
 
-		switch (dbQueryType) {
-			case 'encoded:redis':
-				return deleteCommentEncodedRedis({
-					conf,
-					commentId,
-					postId,
-					dbQueryKey,
-				})
-			case 'documents:redis':
-				return deleteCommentDocumentsRedis({
-					conf,
-					commentId,
-					postId,
-					dbQueryKey,
-				})
-			default:
-				return new Response(JSON.stringify({ message: 'not implemented' }))
-		}
+		return deleteCommentDocumentsRedis({
+			conf,
+			commentId,
+			postId,
+			dbQueryKey,
+		})
 	}
 
 /**

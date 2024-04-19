@@ -18,7 +18,6 @@ import {
 	whenNotErrorAll,
 } from '@devprotocol/util-ts'
 import { uuidFactory } from '../db/uuidFactory'
-import { addPostEncodedRedis } from './posts-encoded-redis'
 import { addPostDocumentsRedis } from './posts-documents-redis'
 import { fetchSinglePost, getDefaultClient } from '../db/redis'
 import { deletePost } from '../db/redis-documents'
@@ -36,7 +35,6 @@ export type AddCommentRequestJson = Readonly<{
 export const addPostHandler =
 	(
 		conf: ClubsConfiguration,
-		dbQueryType: 'encoded:redis' | 'documents:redis',
 		dbQueryKey: string,
 		memberships?: readonly Membership[],
 		roles?: OptionsDatabase['roles'],
@@ -107,24 +105,11 @@ export const addPostHandler =
 			})
 		}
 
-		switch (dbQueryType) {
-			case 'encoded:redis':
-				return addPostEncodedRedis({
-					conf,
-					data: composed,
-					dbQueryKey,
-				})
-			case 'documents:redis': {
-				// return new Response(JSON.stringify({ message: 'not implemented' }))
-				return addPostDocumentsRedis({
-					conf,
-					data: composed,
-					dbQueryKey,
-				})
-			}
-			default:
-				return new Response(JSON.stringify({ message: 'not implemented' }))
-		}
+		return addPostDocumentsRedis({
+			conf,
+			data: composed,
+			dbQueryKey,
+		})
 	}
 
 /**
@@ -231,11 +216,7 @@ export const fetchPostHandler =
  * @returns a single post
  */
 export const deletePostHandler =
-	(
-		// conf: ClubsConfiguration,
-		// dbQueryType: 'encoded:redis' | 'documents:redis',
-		dbQueryKey: string,
-	) =>
+	(dbQueryKey: string) =>
 	async ({ request }: { readonly request: Request }) => {
 		const { postId, hash, sig } = (await request.json()) as {
 			readonly postId: string

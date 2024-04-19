@@ -1,7 +1,6 @@
 import type {
 	ClubsGeneralUnit,
 	Membership as MembershipCore,
-	ClubsSlotName,
 } from '@devprotocol/clubs-core'
 import { ClubsSlotName } from '@devprotocol/clubs-core'
 
@@ -65,15 +64,9 @@ export type OptionsDatabase = {
 			readonly items: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
 		}
 	}
-	readonly database:
-		| {
-				readonly type: 'encoded:redis'
-				readonly key: string
-		  }
-		| {
-				readonly type: 'documents:redis'
-				readonly key: string
-		  }
+	readonly database: {
+		readonly key: string
+	}
 }
 
 export type Membership = MembershipCore
