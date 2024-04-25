@@ -39,7 +39,7 @@ import Screenshot3 from './assets/images/posts-3.jpg'
 import Icon from './assets/images/plugin-icon.svg'
 import { createIndex } from './db/redis-documents'
 import { getAllPosts } from './db'
-import { getDefaultClient } from './db/redis'
+import { getDefaultClient, getPaginatedPosts } from './db/redis'
 import { headers } from './fixtures/json'
 import { CreateNavigationLink } from '@devprotocol/clubs-core/layouts'
 import {
@@ -451,8 +451,10 @@ export const getSlots = (async (options, __, { paths, factory }) => {
 					const client = await getDefaultClient()
 					const contents = await Promise.all(
 						feedsHasPageContentHomeBeforeContent.map(async (feed) => {
-							const posts = await getAllPosts({
-								key: feed.database.key,
+							const posts = await getPaginatedPosts({
+								scope: feed.database.key,
+								client,
+								page: 0,
 							})
 							return [
 								{
