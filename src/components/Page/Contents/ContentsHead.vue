@@ -95,6 +95,14 @@ const shareOnTwitter = () => {
 	).replace(/%0A/g, '%0A')}`
 	window.open(url, '_blank')
 }
+
+const shareOnHey = () => {
+	const baseURI = window.location.origin
+	const url = `https://hey.xyz/?text=${encodeURIComponent(
+		`${title}\n\n${contents}\n\nMore on post: ${baseURI}${singlePage.value}`,
+	).replace(/%0A/g, '%0A')}`
+	window.open(url, '_blank')
+}
 </script>
 
 <template>
@@ -115,7 +123,13 @@ const shareOnTwitter = () => {
 					v-on:click="shareOnTwitter"
 					class="w-full px-2 py-1 text-left font-bold text-black"
 				>
-					{{ i18n('Share') }}
+					{{ i18n('ShareOnX') }}
+				</button>
+				<button
+					v-on:click="shareOnHey"
+					class="w-full px-2 py-1 text-left font-bold text-black"
+				>
+					{{ i18n('ShareOnHey') }}
 				</button>
 				<button
 					v-on:click="deletePost"
