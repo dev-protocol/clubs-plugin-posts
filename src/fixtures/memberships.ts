@@ -50,22 +50,23 @@ export const hasWritePermission = async ({
 		account,
 	}).catch((err: Error) => err)
 
-	const requireMemberships =
-		roles?.write.memberships
-			.map((payload) => {
-				return memberships
-					?.filter(
-						(membership) =>
-							bytes32Hex(membership.payload ?? []) === bytes32Hex(payload),
-					)
-					.flat()
-			})
-			.flat()
-			.filter((x) => x !== undefined) ?? []
+	const requireMemberships = roles?.write.memberships
+		.map((payload) => {
+			return memberships
+				?.filter(
+					(membership) =>
+						bytes32Hex(membership.payload ?? []) === bytes32Hex(payload),
+				)
+				.flat()
+		})
+		.flat()
+		.filter((x) => x !== undefined)
 
-	const verify = await whenNotError(membershipVerifier, (verifier) =>
-		verifier(requireMemberships),
-	)
+	const verify = requireMemberships
+		? await whenNotError(membershipVerifier, (verifier) =>
+				verifier(requireMemberships),
+			)
+		: { result: false }
 	// eslint-disable-next-line functional/no-expression-statement
 	console.log({ verify })
 
