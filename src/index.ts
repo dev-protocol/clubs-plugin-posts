@@ -39,7 +39,7 @@ import Screenshot3 from './assets/images/posts-3.jpg'
 import Icon from './assets/images/plugin-icon.svg'
 import { createIndex } from './db/redis-documents'
 import { getAllPosts } from './db'
-import { getDefaultClient } from './db/redis'
+import { getDefaultClient, getPaginatedPosts } from './db/redis'
 import { headers } from './fixtures/json'
 import { CreateNavigationLink } from '@devprotocol/clubs-core/layouts'
 import {
@@ -440,35 +440,44 @@ export const getSlots = (async (options, __, { paths, factory }) => {
 	const feeds =
 		(options.find(({ key }) => key === 'feeds')
 			?.value as readonly OptionsDatabase[]) ?? []
+	const feedsHasPageContentHomeBeforeContent = feeds.filter(
+		(feed) =>
+			feed.slots?.[ClubsSlotName.PageContentHomeBeforeContent] !== undefined &&
+			feed.slots[ClubsSlotName.PageContentHomeBeforeContent].enabled,
+	)
+	const slotsForPageContentHomeBeforeContent =
+		feedsHasPageContentHomeBeforeContent.length > 0
+			? await (async () => {
+					const client = await getDefaultClient()
+					const contents = await Promise.all(
+						feedsHasPageContentHomeBeforeContent.map(async (feed) => {
+							const posts = await getPaginatedPosts({
+								scope: feed.database.key,
+								client,
+								page: 0,
+							})
+							return [
+								{
+									slot: ClubsSlotName.PageContentHomeBeforeContent,
+									component: News,
+									props: {
+										posts: isNotError(posts) ? posts.map(mask) : [],
+										feedId: feed.id,
+										slots: feed.slots,
+									},
+								},
+							]
+						}),
+					)
+					// eslint-disable-next-line functional/no-expression-statement
+					await client.quit()
+					return contents.flat()
+				})()
+			: []
 
 	return [
 		...(factory === 'page' // == The public feed page with PageContentHomeBeforeContent slot
-			? (
-					await Promise.all(
-						feeds
-							.filter(
-								(feed) =>
-									feed.slots?.[ClubsSlotName.PageContentHomeBeforeContent] !==
-									undefined,
-							)
-							.map(async (feed) => {
-								const posts = await getAllPosts({
-									key: feed.database.key,
-								})
-								return [
-									{
-										slot: ClubsSlotName.PageContentHomeBeforeContent,
-										component: News,
-										props: {
-											posts: isNotError(posts) ? posts.map(mask) : [],
-											feedId: feed.id,
-											slots: feed.slots,
-										},
-									},
-								]
-							}),
-					)
-				).flat()
+			? slotsForPageContentHomeBeforeContent
 			: []),
 		...(factory === 'admin' && path1 === 'posts' && path2 === undefined // == The feeds list page
 			? [
