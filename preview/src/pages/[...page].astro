@@ -1,5 +1,6 @@
 ---
 import {
+	ClubsSlotName,
 	pageFactory,
 	routerFactory,
 	type ClubsFunctionFactoryOptions,
@@ -29,7 +30,7 @@ const Layout = path?.props.layout
 {
 	Layout && Content && (
 		<Layout {...path.props}>
-			<Connect client:only="vue" />
+			<Connect client:only="vue" slot={ClubsSlotName.ConnectButton} />
 			<Content {...path.props} />
 		</Layout>
 	)
