@@ -1,32 +1,38 @@
 ---
 import type { ClubsPropsPages } from '@devprotocol/clubs-core'
-import type { Posts } from '../types'
 import { ClubsSlotName } from '@devprotocol/clubs-core'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { getDefaultClient, getPaginatedPosts } from '../db/redis'
+import { mask } from '../fixtures/masking'
+import type { OptionsDatabase } from '../types'
 dayjs.extend(relativeTime)
 
 const { PageContentHomeBeforeContent } = ClubsSlotName
 
 interface Props extends ClubsPropsPages {
-	posts: Posts[]
+	scope: string
 	feedId: string
-	slots: {
-		readonly [PageContentHomeBeforeContent]?: {
-			readonly enabled: boolean
-			readonly title: string
-			readonly items: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
-		}
-	}
+	slots: OptionsDatabase['slots']
 }
 
-const { posts, feedId, slots } = Astro.props
+const { scope, feedId, slots } = Astro.props
 
-const widgetContent = slots[PageContentHomeBeforeContent]
+const widgetContent = slots?.[PageContentHomeBeforeContent]
 
-const limitedPosts = posts.filter((post) => {
-	return posts.indexOf(post) < (widgetContent?.items ?? 0)
+const client = await getDefaultClient()
+const posts = await getPaginatedPosts({
+	scope,
+	client,
+	page: 0,
 })
+await client.quit()
+
+const limitedPosts = posts
+	.filter((post) => {
+		return posts.indexOf(post) < (widgetContent?.items ?? 0)
+	})
+	.map(mask)
 
 const getTimeAgo = (date: Date) => {
 	return dayjs(date).fromNow()
