@@ -36,9 +36,9 @@ export default () =>
 		twitterHandle: '@debug',
 		description: '',
 		url: 'http://localhost:3000',
-		propertyAddress: '0xE59fEDaBB0F79b0EC605737805a9125cd8d87B1f',
-		chainId: 80001,
-		rpcUrl: 'https://polygon-mumbai-bor.publicnode.com',
+		propertyAddress: '0xF5fb43b4674Cc8D07FB45e53Dc77B651e17dC407',
+		chainId: 137,
+		rpcUrl: 'https://polygon-rpc.com',
 		adminRolePoints: 0,
 		plugins: [
 			{
