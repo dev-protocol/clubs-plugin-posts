@@ -52,6 +52,18 @@ const defineFeed = (): OptionsDatabase => {
 	}
 }
 
+/**
+ * Compare two Uint8Arrays and check if they are equal.
+ *
+ * @param {Uint8Array} a - The first Uint8Array to compare.
+ * @param {Uint8Array} b - The second Uint8Array to compare.
+ * @return {boolean} - Returns true if the Uint8Arrays are equal, false otherwise.
+ */
+function compareUint8Array(a: Uint8Array, b: Uint8Array) {
+	if (a.byteLength != b.byteLength) return false
+	return a.every((val, i) => val === b[i])
+}
+
 onMounted(() => {
 	if (IS_EDIT) {
 		const feed = props.feeds?.filter((feed) => {
@@ -63,7 +75,11 @@ onMounted(() => {
 		editorRoleHolders.value =
 			roles?.write.memberships
 				.map((membership) => {
-					return props.memberships?.find((m) => m.payload === membership)?.id
+					return props.memberships?.find((m) => {
+						const mPayload = new Uint8Array(m.payload)
+						const membershipPayload = new Uint8Array(membership)
+						return compareUint8Array(mPayload, membershipPayload)
+					})?.id
 				})
 				.filter((id) => id) || []
 
