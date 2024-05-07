@@ -94,7 +94,7 @@
 		"txtgen": "^3.0.6",
 		"typescript": "5.4.5",
 		"vitest": "^1.2.1",
-		"vue": "3.4.26"
+		"vue": "3.4.27"
 	},
 	"peerDependencies": {
 		"@devprotocol/clubs-core": "^2.1.0 || ^3.0.0"
