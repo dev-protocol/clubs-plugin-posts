@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, type PropType, ref } from 'vue'
 import {
+	bytes32Hex,
 	type ClubsPropsAdminPages,
 	ClubsSlotName,
 	setOptions,
@@ -59,9 +60,8 @@ const defineFeed = (): OptionsDatabase => {
  * @param {Uint8Array} b - The second Uint8Array to compare.
  * @return {boolean} - Returns true if the Uint8Arrays are equal, false otherwise.
  */
-function compareUint8Array(a: Uint8Array, b: Uint8Array) {
-	if (a.byteLength != b.byteLength) return false
-	return a.every((val, i) => val === b[i])
+function compareUint8Array(a: Uint8Array | string, b: Uint8Array | string) {
+	return bytes32Hex(a) === bytes32Hex(b)
 }
 
 onMounted(() => {
@@ -76,9 +76,7 @@ onMounted(() => {
 			roles?.write.memberships
 				.map((membership) => {
 					return props.memberships?.find((m) => {
-						const mPayload = new Uint8Array(m.payload)
-						const membershipPayload = new Uint8Array(membership)
-						return compareUint8Array(mPayload, membershipPayload)
+						return compareUint8Array(m.payload, membership)
 					})?.id
 				})
 				.filter((id) => id) || []
