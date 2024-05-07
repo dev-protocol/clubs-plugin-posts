@@ -53,7 +53,7 @@
 		"photoswipe": "5.4.3",
 		"ramda": "0.30.0",
 		"redis": "^4.6.7",
-		"sass": "1.76.0",
+		"sass": "1.77.0",
 		"uuid": "^9.0.0"
 	},
 	"devDependencies": {
