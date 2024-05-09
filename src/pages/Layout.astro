@@ -1,67 +1,83 @@
 ---
-import { decode } from '@devprotocol/clubs-core';
-import { aperture } from 'ramda';
-import { type Posts } from '../types';
+import { decode } from '@devprotocol/clubs-core'
+import { aperture } from 'ramda'
+import { type Posts } from '../types'
 
-const {name, feedId} = Astro.props
+const { name, feedId } = Astro.props
 
-const fullUrl = Astro.request.url;
-const urlObject = new URL(fullUrl);
-const origin = urlObject.origin;
-const url = Astro.url.pathname;
-const [, postId] = aperture(2, url.split('/')).find(([p]) => p === feedId) ?? [];
+const fullUrl = Astro.request.url
+const urlObject = new URL(fullUrl)
+const origin = urlObject.origin
+const url = Astro.url.pathname
+const [, postId] = aperture(2, url.split('/')).find(([p]) => p === feedId) ?? []
 
-const requestUrl = new URL(`/api/devprotocol:clubs:plugin:posts/${feedId}/message${postId ? `/${postId}` : ''}`, origin);
+const requestUrl = new URL(
+	`/api/devprotocol:clubs:plugin:posts/${feedId}/message${postId ? `/${postId}` : ''}`,
+	origin,
+)
 
 // Async function to fetch post data
 async function fetchPostData() {
-    try {
-        const response = await fetch(requestUrl.toString());
-        const jsonData = await response.json();
-        return decode<Posts[]>(jsonData.contents);
-    } catch (error) {
-        console.error("Failed to fetch post data:", error);
-        return null;
-    }
+	try {
+		const response = await fetch(requestUrl.toString())
+		const jsonData = await response.json()
+		return decode<Posts[]>(jsonData.contents)
+	} catch (error) {
+		console.error('Failed to fetch post data:', error)
+		return null
+	}
 }
 
 // Await the fetching data
-const posts = await fetchPostData();
-const post = posts?.[0];
-const images = post?.options.find((item) => item.key === '#images')?.value as string []
+const posts = await fetchPostData()
+const post = posts?.[0]
+const images = post?.options.find((item) => item.key === '#images')
+	?.value as string[]
 const image = images?.[0]
 const defaultImage = 'https://i.imgur.com/1INcnkk.png'
 const defaultTitle = `${name} - Post`
 
 const truncatedDescription = ((desc) =>
-  desc.slice(0, 139).join('') + (desc.length > 139 ? '...' : ''))([
-  ...(post?.content?.replace(/[\s|\n|\r\n|\r]/g, ' ') ?? ''),
+	desc.slice(0, 139).join('') + (desc.length > 139 ? '...' : ''))([
+	...(post?.content?.replace(/[\s|\n|\r\n|\r]/g, ' ') ?? ''),
 ])
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg" href={"./favicon.svg"} />
-    <meta property="og:title" content={`${post?.title ? post.title : defaultTitle}`} />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={`${requestUrl}`} />
-    <meta property="og:image" content={`${image ? image : defaultImage}`} />
-    <meta property="og:description" content={`${truncatedDescription ? truncatedDescription : ''}`} />
-    <meta property="og:site_name" content={`${name}`} />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={`${post?.title ? post.title : defaultTitle}`} />
-    <meta name="twitter:description" content={`${truncatedDescription ? truncatedDescription : ''}`} />
-    <meta name="twitter:image" content={`${image ? image : defaultImage}`} />
-</head>
-<body class="grid min-h-screen gap-5 overflow-hidden font-body">
-    <header>
-        <slot name="clubs:connect-button" />
-    </header>
-    <main>
-        <!-- slot -->
-    </main>
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg" href={'./favicon.svg'} />
+		<meta
+			property="og:title"
+			content={`${post?.title ? post.title : defaultTitle}`}
+		/>
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={`${requestUrl}`} />
+		<meta property="og:image" content={`${image ? image : defaultImage}`} />
+		<meta
+			property="og:description"
+			content={`${truncatedDescription ? truncatedDescription : ''}`}
+		/>
+		<meta property="og:site_name" content={`${name}`} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta
+			name="twitter:title"
+			content={`${post?.title ? post.title : defaultTitle}`}
+		/>
+		<meta
+			name="twitter:description"
+			content={`${truncatedDescription ? truncatedDescription : ''}`}
+		/>
+		<meta name="twitter:image" content={`${image ? image : defaultImage}`} />
+	</head>
+	<body class="grid min-h-screen gap-5 overflow-hidden font-body">
+		<header>
+			<slot name="clubs:connect-button" />
+		</header>
+		<main>
+			<!-- slot -->
+		</main>
+	</body>
 </html>
