@@ -1,6 +1,6 @@
 {
 	"name": "@devprotocol/clubs-plugin-posts",
-	"version": "0.20.2",
+	"version": "0.20.3",
 	"type": "module",
 	"description": "Template repository for using TypeScript",
 	"main": "dist/index.js",
@@ -60,7 +60,7 @@
 		"@astrojs/svelte": "^5.0.0",
 		"@astrojs/tailwind": "^5.0.0",
 		"@astrojs/vue": "^4.0.0",
-		"@devprotocol/clubs-core": "3.12.2",
+		"@devprotocol/clubs-core": "3.10.4",
 		"@nanostores/vue": "^0.10.0",
 		"@redis/json": "^1.0.4",
 		"@rollup/plugin-typescript": "11.1.6",

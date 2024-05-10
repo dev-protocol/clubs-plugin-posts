@@ -21,8 +21,7 @@ const defaultClient = () =>
 		username: import.meta.env.REDIS_USERNAME ?? '',
 		password: import.meta.env.REDIS_PASSWORD ?? '',
 		socket: {
-			keepAlive: 1,
-			reconnectStrategy: 1,
+			connectTimeout: 5000,
 		},
 	})
 
