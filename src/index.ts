@@ -58,6 +58,7 @@ import {
 import { fetchPostHas } from './apiHandler/search'
 import { default as Feed } from './pages/Feed.astro'
 import { default as ListFeed } from './pages/ListFeed.astro'
+import { default as Layout } from './pages/Layout.astro'
 import NavigationLink from './slots/NavigationLink.astro'
 import Posts_ from './pages/Posts.astro'
 import Readme from './readme.astro'
@@ -78,7 +79,7 @@ export { SlotName, Event }
 
 export const getPagePaths = (async (
 	options,
-	{ propertyAddress, adminRolePoints, rpcUrl },
+	{ name, propertyAddress, adminRolePoints, rpcUrl },
 	{ getPluginConfigById },
 ) => {
 	const [membershipsPlugin] = getPluginConfigById(
@@ -96,6 +97,7 @@ export const getPagePaths = (async (
 		?.value as UndefinedOr<readonly string[]>
 
 	const props = {
+		name,
 		options,
 		propertyAddress,
 		memberships,
@@ -118,6 +120,7 @@ export const getPagePaths = (async (
 						paths: ['posts', id, SinglePath],
 						component: Posts_,
 						props: { ...props, feedId: id },
+						layout: Layout,
 					}
 				}),
 			]
