@@ -58,7 +58,7 @@ const truncatedDescription = ((desc) =>
 		<meta property="og:image" content={`${image ? image : defaultImage}`} />
 		<meta
 			property="og:description"
-			content={`${truncatedDescription ? truncatedDescription : ''}`}
+			content={`${truncatedDescription ? truncatedDescription : 'More...'}`}
 		/>
 		<meta property="og:site_name" content={`${name}`} />
 		<meta name="twitter:card" content="summary_large_image" />
@@ -72,12 +72,12 @@ const truncatedDescription = ((desc) =>
 		/>
 		<meta name="twitter:image" content={`${image ? image : defaultImage}`} />
 	</head>
-	<body class="grid min-h-screen gap-5 overflow-hidden font-body">
+	<body class="grid min-h-screen gap-5 font-body bg-white">
 		<header>
 			<slot name="clubs:connect-button" />
 		</header>
 		<main>
-			<!-- slot -->
+			<slot/>
 		</main>
 	</body>
 </html>
