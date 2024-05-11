@@ -498,6 +498,16 @@
     js-base64 "^3.7.2"
     ramda "^0.29.0"
 
+"@devprotocol/dev-kit@8.6.1":
+  version "8.6.1"
+  resolved "https://registry.yarnpkg.com/@devprotocol/dev-kit/-/dev-kit-8.6.1.tgz#035612f441f1d8aa837342787f792985cd2ce7f6"
+  integrity sha512-zsT0IAMEBVLwbuf6l6zWwMqhvIl+KIx+3B03szN0pZKuPx1/tcT3R70ldi6oe/+0uZdFnK2a0cENedV93SxMFw==
+  dependencies:
+    "@devprotocol/util-ts" "4.0.0"
+    bignumber.js "9.1.2"
+    js-base64 "^3.7.2"
+    ramda "^0.30.0"
+
 "@devprotocol/elements@1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@devprotocol/elements/-/elements-1.1.0.tgz#009ed288f2e884356c4c28e7657d70dfa1d5002e"
@@ -5276,7 +5286,7 @@ queue-microtask@^1.2.2:
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
-ramda@0.30.0:
+ramda@0.30.0, ramda@^0.30.0:
   version "0.30.0"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.30.0.tgz#3cc4f0ddddfa6334dad2f371bd72c33237d92cd0"
   integrity sha512-13Y0iMhIQuAm/wNGBL/9HEqIfRGmNmjKnTPlKWfA9f7dnDkr8d45wQ+S7+ZLh/Pq9PdcGxkqKUEA7ySu1QSd9Q==
