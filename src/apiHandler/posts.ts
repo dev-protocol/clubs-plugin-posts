@@ -163,8 +163,9 @@ export const fetchPostHandler =
 			 */
 
 			const post =
-				(await whenDefined(postId, (id) => fetchSinglePost({ id, scope: dbQueryKey, client }))) ??
-				new Error('Post ID not found')
+				(await whenDefined(postId, (id) =>
+					fetchSinglePost({ id, scope: dbQueryKey, client }),
+				)) ?? new Error('Post ID not found')
 			const mask = await whenNotErrorAll([reader, post], ([user]) =>
 				maskFactory({
 					user,

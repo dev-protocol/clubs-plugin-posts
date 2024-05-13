@@ -95,7 +95,7 @@ export const getPagePaths = (async (
 
 	const avatarImgSrc: UndefinedOr<string> = config.options?.find(
 		(option) => option.key === 'avatarImgSrc',
-	  )?.value as string
+	)?.value as string
 
 	const emojiAllowList = options?.find((item) => item.key === 'emojiAllowList')
 		?.value as UndefinedOr<readonly string[]>
@@ -124,7 +124,7 @@ export const getPagePaths = (async (
 					return {
 						paths: ['posts', id, SinglePath],
 						component: Posts_,
-						props: { ...props, feedId: id, scope: database.key},
+						props: { ...props, feedId: id, scope: database.key },
 						layout: Layout,
 					}
 				}),
