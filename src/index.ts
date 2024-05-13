@@ -79,7 +79,7 @@ export { SlotName, Event }
 
 export const getPagePaths = (async (
 	options,
-	{ name, propertyAddress, adminRolePoints, rpcUrl },
+	config,
 	{ getPluginConfigById },
 ) => {
 	const [membershipsPlugin] = getPluginConfigById(
@@ -93,17 +93,22 @@ export const getPagePaths = (async (
 		({ key }: Readonly<{ readonly key: string }>) => key === 'feeds',
 	)?.value as UndefinedOr<readonly OptionsDatabase[]>
 
+	const avatarImgSrc: UndefinedOr<string> = config.options?.find(
+		(option) => option.key === 'avatarImgSrc',
+	  )?.value as string
+
 	const emojiAllowList = options?.find((item) => item.key === 'emojiAllowList')
 		?.value as UndefinedOr<readonly string[]>
 
 	const props = {
-		name,
+		name: config.name,
 		options,
-		propertyAddress,
+		propertyAddress: config.propertyAddress,
 		memberships,
-		adminRolePoints,
+		adminRolePoints: config.adminRolePoints,
 		emojiAllowList,
-		rpcUrl,
+		rpcUrl: config.rpcUrl,
+		avatarImgSrc,
 	}
 	return dbs
 		? [
@@ -115,11 +120,11 @@ export const getPagePaths = (async (
 						// `propertyAddress` is required for calling post API, so passed to the FE here.
 					}
 				}),
-				...dbs.map(({ id }) => {
+				...dbs.map(({ id, database }) => {
 					return {
 						paths: ['posts', id, SinglePath],
 						component: Posts_,
-						props: { ...props, feedId: id },
+						props: { ...props, feedId: id, scope: database.key},
 						layout: Layout,
 					}
 				}),
