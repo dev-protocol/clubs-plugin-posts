@@ -1,9 +1,10 @@
 ---
+import { getDefaultClient, fetchSinglePost } from '../db/redis'
 import { decode } from '@devprotocol/clubs-core'
 import { aperture } from 'ramda'
 import { type Posts } from '../types'
 
-const { name, feedId } = Astro.props
+const { name, feedId, scope, avatarImgSrc } = Astro.props
 
 const fullUrl = Astro.request.url
 const urlObject = new URL(fullUrl)
@@ -11,17 +12,19 @@ const origin = urlObject.origin
 const url = Astro.url.pathname
 const [, postId] = aperture(2, url.split('/')).find(([p]) => p === feedId) ?? []
 
-const requestUrl = new URL(
-	`/api/devprotocol:clubs:plugin:posts/${feedId}/message${postId ? `/${postId}` : ''}`,
-	origin,
-)
 
 // Async function to fetch post data
 async function fetchPostData() {
 	try {
-		const response = await fetch(requestUrl.toString())
-		const jsonData = await response.json()
-		return decode<Posts[]>(jsonData.contents)
+		if (postId === undefined) return null
+		const client = await getDefaultClient()
+		const post = await fetchSinglePost({
+			id: postId,
+			scope,
+			client,
+		})
+		await client.quit()
+		return post as Posts
 	} catch (error) {
 		console.error('Failed to fetch post data:', error)
 		return null
@@ -29,8 +32,7 @@ async function fetchPostData() {
 }
 
 // Await the fetching data
-const posts = await fetchPostData()
-const post = posts?.[0]
+const post = await fetchPostData()
 const images = post?.options.find((item) => item.key === '#images')
 	?.value as string[]
 const image = images?.[0]
@@ -48,13 +50,13 @@ const truncatedDescription = ((desc) =>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg" href={'./favicon.svg'} />
+		<link rel="icon" type="image/svg" href={avatarImgSrc || '/favicon.svg'} />
 		<meta
 			property="og:title"
 			content={`${post?.title ? post.title : defaultTitle}`}
 		/>
 		<meta property="og:type" content="website" />
-		<meta property="og:url" content={`${requestUrl}`} />
+		<meta property="og:url" content={`${fullUrl}`} />
 		<meta property="og:image" content={`${image ? image : defaultImage}`} />
 		<meta
 			property="og:description"

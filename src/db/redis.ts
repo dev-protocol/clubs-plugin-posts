@@ -123,7 +123,6 @@ export const fetchSinglePost = async ({
 			LIMIT: { from: 0, size: 1 },
 		},
 	)
-	console.log({fetchPost})
 
 	const posts: readonly (PostDocument & {
 		readonly source: PostRawDocument
