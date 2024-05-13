@@ -1,5 +1,8 @@
 ---
 import { getDefaultClient, fetchSinglePost } from '../db/redis'
+import {
+	type UndefinedOr,
+} from '@devprotocol/util-ts'
 import { decode } from '@devprotocol/clubs-core'
 import { aperture } from 'ramda'
 import { type Posts } from '../types'
@@ -31,9 +34,12 @@ async function fetchPostData() {
 
 // Await the fetching data
 const post = await fetchPostData()
+const requiredMemberships =
+		(post?.options?.find(({ key }) => key === 'require-one-of')
+			?.value as UndefinedOr<readonly (string | Uint8Array)[]>) ?? []
 const images = post?.options.find((item) => item.key === '#images')
 	?.value as string[]
-const image = images?.[0]
+
 const defaultImage = 'https://i.imgur.com/1INcnkk.png'
 const defaultTitle = `${name} - Post`
 
@@ -41,6 +47,15 @@ const truncatedDescription = ((desc) =>
 	desc.slice(0, 139).join('') + (desc.length > 139 ? '...' : ''))([
 	...(post?.content?.replace(/[\s|\n|\r\n|\r]/g, ' ') ?? ''),
 ])
+
+const description =  requiredMemberships.length > 0
+	? `Click to view the content`
+	: truncatedDescription
+
+const image = requiredMemberships.length > 0
+	? defaultImage
+	: images[0] ?? defaultImage
+
 ---
 
 <!doctype html>
@@ -55,10 +70,10 @@ const truncatedDescription = ((desc) =>
 		/>
 		<meta property="og:type" content="website" />
 		<meta property="og:url" content={`${fullUrl}`} />
-		<meta property="og:image" content={`${image ? image : defaultImage}`} />
+		<meta property="og:image" content={`${image}`} />
 		<meta
 			property="og:description"
-			content={`${truncatedDescription ? truncatedDescription : 'More...'}`}
+			content={`${description}`}
 		/>
 		<meta property="og:site_name" content={`${name}`} />
 		<meta name="twitter:card" content="summary_large_image" />
@@ -68,9 +83,9 @@ const truncatedDescription = ((desc) =>
 		/>
 		<meta
 			name="twitter:description"
-			content={`${truncatedDescription ? truncatedDescription : ''}`}
+			content={`${description}`}
 		/>
-		<meta name="twitter:image" content={`${image ? image : defaultImage}`} />
+		<meta name="twitter:image" content={`${image}`} />
 	</head>
 	<body class="grid min-h-screen gap-5 font-body bg-white">
 		<header>
