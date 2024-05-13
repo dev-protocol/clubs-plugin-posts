@@ -1,6 +1,6 @@
 {
 	"name": "@devprotocol/clubs-plugin-posts",
-	"version": "0.20.5-beta.0",
+	"version": "0.20.5-beta.1",
 	"type": "module",
 	"description": "Template repository for using TypeScript",
 	"main": "dist/index.js",
