@@ -8,10 +8,8 @@ const { name, feedId, scope, avatarImgSrc } = Astro.props
 
 const fullUrl = Astro.request.url
 const urlObject = new URL(fullUrl)
-const origin = urlObject.origin
-const url = Astro.url.pathname
+const url = urlObject.pathname
 const [, postId] = aperture(2, url.split('/')).find(([p]) => p === feedId) ?? []
-
 
 // Async function to fetch post data
 async function fetchPostData() {
