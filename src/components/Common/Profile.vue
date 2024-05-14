@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { ZeroAddress } from 'ethers'
 import { Avatar } from '@boringer-avatars/vue3'
+import { fetchProfile } from '@devprotocol/clubs-core'
 
 type Props = {
 	feedId: string
@@ -13,14 +14,19 @@ const props = defineProps<Props>()
 const avatar = ref('')
 const name = ref('')
 
-onMounted(() => {
+onMounted(async () => {
 	if (!props.address || props.address === ZeroAddress) {
 		name.value = truncateEthAddress(props.address)
 		return
 	}
 
 	// fetch profile
-	fetchProfile(props.address)
+	const { profile } = await fetchProfile(props.address)
+
+	if (!profile) return
+
+	avatar.value = profile.avatar
+	name.value = profile.username ?? truncateEthAddress(props.address)
 })
 
 const truncateEthAddress = (address: string) => {
@@ -29,26 +35,6 @@ const truncateEthAddress = (address: string) => {
 	)
 	if (!match) return address
 	return `${match[1]}\u2026${match[2]}`
-}
-
-const fetchProfile = async (address: string) => {
-	const url = new URL(
-		`/api/devprotocol:clubs:plugin:posts/${props.feedId}/profile?address=${address}`,
-		window.location.origin,
-	)
-
-	return fetch(url.toString())
-		.then(async (res) => {
-			if (res.status !== 200) return
-
-			const json = await res.json()
-
-			avatar.value = json.profile.avatar
-			name.value = json.profile.username ?? truncateEthAddress(address)
-		})
-		.catch((err) => {
-			console.error(err)
-		})
 }
 </script>
 

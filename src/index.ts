@@ -230,61 +230,6 @@ export const getApiPaths = (async (
 			.map(
 				(db) =>
 					[
-						{
-							paths: [db.id, 'profile'],
-							method: 'GET',
-							handler: async ({ url }) => {
-								const address = url.searchParams.get('address')
-
-								if (!address) {
-									return new Response(
-										JSON.stringify({
-											error: 'Address is missing',
-											data: null,
-										}),
-										{
-											status: 400,
-										},
-									)
-								}
-
-								//
-								try {
-									const res = await fetchProfile(address)
-									if (res.error) {
-										return new Response(
-											JSON.stringify({
-												error: res.error,
-												data: null,
-											}),
-											{
-												status: 500,
-											},
-										)
-									}
-
-									return new Response(
-										JSON.stringify({
-											profile: res.profile,
-										}),
-										{
-											status: 200,
-										},
-									)
-								} catch (e) {
-									return new Response(
-										JSON.stringify({
-											error: e,
-											data: null,
-										}),
-										{
-											status: 500,
-										},
-									)
-								}
-							},
-						},
-
 						/**
 						 * delete post
 						 */
