@@ -7,7 +7,7 @@ import Comment from './Posts/Comment.vue'
 import { Event, type Option, type Posts } from '../../types'
 import { onMounted, ref } from 'vue'
 import Line from '../Common/Line.vue'
-import { decode } from '@devprotocol/clubs-core'
+import { encode, decode } from '@devprotocol/clubs-core'
 import type { connection as Connection } from '@devprotocol/clubs-core/connection'
 import type { Membership } from '../../types'
 import { type ContractRunner, type Signer } from 'ethers'
@@ -110,9 +110,14 @@ const handleConnection = async (signer: UndefinedOr<Signer>) => {
 	// const connectedAddress = '0x57E21bd98612DE0Bd1723F4bf81A944eF7BfF526'
 	walletAddress.value = connectedAddress
 
-	// sign message
-	const hash = `Sign in as ${connectedAddress} to access secret post(s). @ts:${new Date().getTime()}`
-	const sig = await signer.signMessage(hash)
+	const hash = encode(`Sign in as ${connectedAddress} to access secret post(s)`)
+
+	let sig = sessionStorage.getItem(`sig-of-${connectedAddress}`)
+	if(!sig) {
+		// sign message
+		sig = await signer.signMessage(hash)
+		sessionStorage.setItem(`sig-of-${connectedAddress}`, sig)
+	}
 
 	fetchPosts({ hash, sig })
 

@@ -32,12 +32,17 @@ const toggleReaction = async (emoji: string) => {
 		isTogglingReaction.value = false
 		return
 	}
+	// get wallet address
+	const connectedAddress = await signer.getAddress()
 
-	const hash = encode(`${props.postId}-${emoji}`)
-
-	let sig: UndefinedOr<string>
+	const hash = encode(`Sign in as ${connectedAddress} to access secret post(s)`)
+	let sig = sessionStorage.getItem(`sig-of-${connectedAddress}`)
 	try {
-		sig = await signer.signMessage(hash)
+		if(!sig) {
+			// sign message
+			sig = await signer.signMessage(hash)
+			sessionStorage.setItem(`sig-of-${connectedAddress}`, sig as string)
+		}
 	} catch (error) {
 		// TODO: add state for failure.
 		console.error('error occurred while signing message:', error)

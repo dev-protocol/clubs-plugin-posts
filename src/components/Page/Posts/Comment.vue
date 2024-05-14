@@ -38,15 +38,22 @@ const postComment = async () => {
 		isCommenting.value = false
 		return
 	}
+	// get wallet address
+	const connectedAddress = await signer.getAddress()
 
 	const comment: CommentPrimitives = {
 		content: newComment.value,
 		options: [],
 	}
-	const hash = encode(comment)
-	let sig: string = ''
+	const hash = encode(`Sign in as ${connectedAddress} to access secret post(s)`)
+	let sig = sessionStorage.getItem(`sig-of-${connectedAddress}`)
+	console.log({ sig , hash })
 	try {
-		sig = await signer.signMessage(hash)
+		if(!sig) {
+			// sign message
+			sig = await signer.signMessage(hash)
+			sessionStorage.setItem(`sig-of-${connectedAddress}`, sig as string)
+		}
 	} catch (error) {
 		// TODO: add state for failure.
 		isCommenting.value = false
@@ -68,7 +75,7 @@ const postComment = async () => {
 			postId: props.postId,
 			hash: hash,
 			sig: sig,
-			contents: hash,
+			contents: encode(comment),
 		}),
 	}
 
@@ -125,11 +132,18 @@ const deleteComment = async (commentId: string) => {
 		}
 		return
 	}
+	// get wallet address
+	const connectedAddress = await signer.getAddress()
 
-	const hash = encode('Deleting comment: ' + commentId)
-	let sig: string = ''
+	const hash = encode(`Sign in as ${connectedAddress} to access secret post(s)`)
+	let sig = sessionStorage.getItem(`sig-of-${connectedAddress}`)
+	console.log({ sig , hash })
 	try {
-		sig = await signer.signMessage(hash)
+		if(!sig) {
+			// sign message
+			sig = await signer.signMessage(hash)
+			sessionStorage.setItem(`sig-of-${connectedAddress}`, sig as string)
+		}
 	} catch (error) {
 		// TODO: add state for failure.
 		isDeleting.value = {
