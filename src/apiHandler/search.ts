@@ -86,7 +86,9 @@ export const fetchPostHas =
 				opts.documents
 					.map((opt) => opt.value)
 					.filter((opt): opt is OptionDocument => opt !== null)
-					.map((opt) => fetchSinglePost({ id: opt._parent_id, client })),
+					.map((opt) =>
+						fetchSinglePost({ id: opt._parent_id, client, scope: dbQueryKey }),
+					),
 			),
 		)
 
