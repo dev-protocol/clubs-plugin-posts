@@ -113,7 +113,7 @@ const handleConnection = async (signer: UndefinedOr<Signer>) => {
 	const hash = encode(`Sign in as ${connectedAddress} to access secret post(s)`)
 
 	let sig = sessionStorage.getItem(`sig-of-${connectedAddress}`)
-	if(!sig) {
+	if (!sig) {
 		// sign message
 		sig = await signer.signMessage(hash)
 		sessionStorage.setItem(`sig-of-${connectedAddress}`, sig)
