@@ -120,11 +120,17 @@ export const getPagePaths = (async (
 						// `propertyAddress` is required for calling post API, so passed to the FE here.
 					}
 				}),
-				...dbs.map(({ id, database }) => {
+				...dbs.map(({ id, database, slug, title }) => {
 					return {
 						paths: ['posts', id, SinglePath],
 						component: Posts_,
-						props: { ...props, feedId: id, scope: database.key },
+						props: {
+							...props,
+							feedId: id,
+							scope: database.key,
+							slug: slug ?? 'posts',
+							title,
+						},
 						layout: Layout,
 					}
 				}),

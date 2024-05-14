@@ -5,7 +5,7 @@ import { decode } from '@devprotocol/clubs-core'
 import { aperture } from 'ramda'
 import { type Posts } from '../types'
 
-const { name, feedId, scope, avatarImgSrc } = Astro.props
+const { name, feedId, scope, avatarImgSrc, slug, title } = Astro.props
 
 const fullUrl = Astro.request.url
 const urlObject = new URL(fullUrl)
@@ -61,6 +61,7 @@ const image =
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg" href={avatarImgSrc || '/favicon.svg'} />
+		<title>{post?.title ? post.title : defaultTitle}</title>
 		<meta
 			property="og:title"
 			content={`${post?.title ? post.title : defaultTitle}`}
@@ -79,11 +80,38 @@ const image =
 		<meta name="twitter:image" content={`${image}`} />
 	</head>
 	<body class="grid min-h-screen gap-5 font-body bg-white">
-		<header>
+		<header
+			class="container mx-auto flex max-w-7xl items-center justify-end p-6"
+		>
 			<slot name="clubs:connect-button" />
 		</header>
 		<main>
-			<slot />
+			<div
+				class="flex flex-col gap-4 mx-auto w-full max-w-2xl border border-b-0 py-4 rounded-t-xl lg:box-content"
+			>
+				<span class="px-4">
+					<a
+						href={`/${slug}`}
+						class="flex items-center gap-4 text-2xl font-bold"
+						><svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="w-6 h-6"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"></path>
+						</svg>
+						{title ?? 'Posts'}</a
+					>
+				</span>
+				<hr />
+				<slot />
+			</div>
 		</main>
 	</body>
 </html>

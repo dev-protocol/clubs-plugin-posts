@@ -32,15 +32,13 @@ const onClick = async () => {
 </script>
 
 <template>
-	<div class="container mx-auto py-8">
-		<div class="flex justify-end">
-			<button
-				v-if="!walletAddress"
-				class="rounded-3xl border border-transparent bg-blue-600 px-8 py-2 text-base text-white shadow-sm focus:outline-none"
-				@click="onClick"
-			>
-				Wallet connect
-			</button>
-		</div>
-	</div>
+	<span>
+		<button
+			v-if="!walletAddress"
+			class="rounded-3xl w-full border border-transparent bg-blue-600 px-8 py-2 text-base text-white shadow-sm focus:outline-none"
+			@click="onClick"
+		>
+			Wallet connect
+		</button>
+	</span>
 </template>

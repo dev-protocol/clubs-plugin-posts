@@ -244,7 +244,8 @@ const onPostDeleted = (id: string) => {
 			v-if="posts.length > 0"
 			v-for="(post, key) in posts"
 			:key="post.id"
-			class="mb-5 grid gap-3 rounded bg-white p-5 text-black shadow"
+			class="mb-5 grid gap-3 rounded bg-white p-5 text-black"
+			:class="IS_SINGLE ? '' : 'shadow'"
 		>
 			<Contents
 				:postId="post.id"
