@@ -1,27 +1,29 @@
 ---
+import { getDefaultClient, fetchSinglePost } from '../db/redis'
+import { type UndefinedOr } from '@devprotocol/util-ts'
 import { decode } from '@devprotocol/clubs-core'
 import { aperture } from 'ramda'
 import { type Posts } from '../types'
 
-const { name, feedId } = Astro.props
+const { name, feedId, scope, avatarImgSrc, slug, title } = Astro.props
 
 const fullUrl = Astro.request.url
 const urlObject = new URL(fullUrl)
-const origin = urlObject.origin
-const url = Astro.url.pathname
+const url = urlObject.pathname
 const [, postId] = aperture(2, url.split('/')).find(([p]) => p === feedId) ?? []
-
-const requestUrl = new URL(
-	`/api/devprotocol:clubs:plugin:posts/${feedId}/message${postId ? `/${postId}` : ''}`,
-	origin,
-)
 
 // Async function to fetch post data
 async function fetchPostData() {
 	try {
-		const response = await fetch(requestUrl.toString())
-		const jsonData = await response.json()
-		return decode<Posts[]>(jsonData.contents)
+		if (postId === undefined) return null
+		const client = await getDefaultClient()
+		const post = await fetchSinglePost({
+			id: postId,
+			scope,
+			client,
+		})
+		await client.quit()
+		return post as Posts
 	} catch (error) {
 		console.error('Failed to fetch post data:', error)
 		return null
@@ -29,11 +31,13 @@ async function fetchPostData() {
 }
 
 // Await the fetching data
-const posts = await fetchPostData()
-const post = posts?.[0]
+const post = await fetchPostData()
+const requiredMemberships =
+	(post?.options?.find(({ key }) => key === 'require-one-of')
+		?.value as UndefinedOr<readonly (string | Uint8Array)[]>) ?? []
 const images = post?.options.find((item) => item.key === '#images')
 	?.value as string[]
-const image = images?.[0]
+
 const defaultImage = 'https://i.imgur.com/1INcnkk.png'
 const defaultTitle = `${name} - Post`
 
@@ -41,6 +45,14 @@ const truncatedDescription = ((desc) =>
 	desc.slice(0, 139).join('') + (desc.length > 139 ? '...' : ''))([
 	...(post?.content?.replace(/[\s|\n|\r\n|\r]/g, ' ') ?? ''),
 ])
+
+const description =
+	requiredMemberships.length > 0
+		? `Click to view the content`
+		: truncatedDescription
+
+const image =
+	requiredMemberships.length > 0 ? defaultImage : images[0] ?? defaultImage
 ---
 
 <!doctype html>
@@ -48,36 +60,58 @@ const truncatedDescription = ((desc) =>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg" href={'./favicon.svg'} />
+		<link rel="icon" type="image/svg" href={avatarImgSrc || '/favicon.svg'} />
+		<title>{post?.title ? post.title : defaultTitle}</title>
 		<meta
 			property="og:title"
 			content={`${post?.title ? post.title : defaultTitle}`}
 		/>
 		<meta property="og:type" content="website" />
-		<meta property="og:url" content={`${requestUrl}`} />
-		<meta property="og:image" content={`${image ? image : defaultImage}`} />
-		<meta
-			property="og:description"
-			content={`${truncatedDescription ? truncatedDescription : 'More...'}`}
-		/>
+		<meta property="og:url" content={`${fullUrl}`} />
+		<meta property="og:image" content={`${image}`} />
+		<meta property="og:description" content={`${description}`} />
 		<meta property="og:site_name" content={`${name}`} />
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta
 			name="twitter:title"
 			content={`${post?.title ? post.title : defaultTitle}`}
 		/>
-		<meta
-			name="twitter:description"
-			content={`${truncatedDescription ? truncatedDescription : ''}`}
-		/>
-		<meta name="twitter:image" content={`${image ? image : defaultImage}`} />
+		<meta name="twitter:description" content={`${description}`} />
+		<meta name="twitter:image" content={`${image}`} />
 	</head>
 	<body class="grid min-h-screen gap-5 font-body bg-white">
-		<header>
+		<header
+			class="container mx-auto flex max-w-7xl items-center justify-end p-6"
+		>
 			<slot name="clubs:connect-button" />
 		</header>
 		<main>
-			<slot />
+			<div
+				class="flex flex-col gap-4 mx-auto w-full max-w-2xl border border-b-0 py-4 rounded-t-xl lg:box-content"
+			>
+				<span class="px-4">
+					<a
+						href={`/${slug}`}
+						class="flex items-center gap-4 text-2xl font-bold"
+						><svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="w-6 h-6"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"></path>
+						</svg>
+						{title ?? 'Posts'}</a
+					>
+				</span>
+				<hr />
+				<slot />
+			</div>
 		</main>
 	</body>
 </html>
