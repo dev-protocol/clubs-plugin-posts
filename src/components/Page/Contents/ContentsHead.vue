@@ -6,7 +6,7 @@ import { computed, onMounted, ref } from 'vue'
 import type { UndefinedOr } from '@devprotocol/util-ts'
 import { keccak256, type Signer } from 'ethers'
 import { Strings } from './i18n'
-import { i18nFactory } from '@devprotocol/clubs-core'
+import { i18nFactory, type ClubsProfile } from '@devprotocol/clubs-core'
 
 const i18nBase = i18nFactory(Strings)
 let i18n = i18nBase(['en'])
@@ -18,9 +18,11 @@ type Props = {
 	feedId: string
 	title?: string
 	contents: string
+	profiles: { [address: string]: ClubsProfile | undefined }
 }
 
-const { date, address, feedId, title, postId, contents } = defineProps<Props>()
+const { date, address, feedId, title, postId, contents, profiles } =
+	defineProps<Props>()
 const connection = ref<typeof Connection>()
 const signer = ref<UndefinedOr<Signer>>()
 const walletAddress = ref<string | undefined>('')
@@ -148,7 +150,11 @@ const shareOnHey = () => {
 		</div>
 
 		<div class="flex items-center justify-between">
-			<Profile :address="address" :feedId="feedId" />
+			<Profile
+				:address="address"
+				:feedId="feedId"
+				:profile="profiles[address]"
+			/>
 			<p class="text-center text-xs lg:text-base">
 				<a
 					:href="singlePage"

@@ -317,32 +317,78 @@ export const getApiPaths = (async (
 									)
 								}
 
-								return allPosts instanceof Error
-									? new Response(
-											JSON.stringify({
-												error: allPosts,
-											}),
-											{
-												status: 500,
-											},
-										)
-									: allPosts
-										? new Response(
-												JSON.stringify({
-													contents: encode(allPosts),
-												}),
-												{
-													status: 200,
-												},
-											)
-										: new Response(
-												JSON.stringify({
-													error: 'Some data is missing',
-												}),
-												{
-													status: 400,
-												},
-											)
+								/**
+								 * If there is an error, return the error
+								 */
+								if (allPosts instanceof Error) {
+									return new Response(
+										JSON.stringify({
+											error: allPosts,
+										}),
+										{
+											status: 500,
+										},
+									)
+								}
+
+								/**
+								 * If there is no data, return 400
+								 */
+								if (!allPosts) {
+									return new Response(
+										JSON.stringify({
+											error: 'Some data is missing',
+										}),
+										{
+											status: 400,
+										},
+									)
+								}
+
+								/**
+								 * get an array of addresses associated with the author of each post
+								 */
+								const createdByAddresses = allPosts.map(
+									(post) => post.created_by,
+								)
+
+								/**
+								 * get an array of addresses associated with posts comments
+								 */
+								const commentsAddresses = allPosts.map((post) =>
+									post.comments.map((comment) => comment.created_by),
+								)
+
+								/**
+								 * combine the two arrays into one and ensure that there are no duplicates
+								 */
+								const allAddresses = Array.from(
+									new Set([...createdByAddresses, ...commentsAddresses.flat()]),
+								)
+
+								/**
+								 * get the profile of each address
+								 */
+								const profiles = (
+									await Promise.all(
+										allAddresses.map(async (address) => ({
+											[address]:
+												(await fetchProfile(address))?.profile ?? undefined,
+										})),
+									)
+								)
+									// turn the array of objects into a single object
+									.reduce((acc, profile) => ({ ...acc, ...profile }), {})
+
+								return new Response(
+									JSON.stringify({
+										contents: encode(allPosts),
+										profiles: profiles,
+									}),
+									{
+										status: 200,
+									},
+								)
 							},
 						},
 						/**
