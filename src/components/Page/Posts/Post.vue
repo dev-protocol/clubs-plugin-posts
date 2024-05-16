@@ -8,7 +8,7 @@ import type { Membership, PostPrimitives, Posts } from '../../../types'
 import Profile from '../../Common/Profile.vue'
 import { update as callUpdate } from '../../../plugin-helper'
 import { Strings } from './i18n'
-import { i18nFactory } from '@devprotocol/clubs-core'
+import { i18nFactory, type ClubsProfile } from '@devprotocol/clubs-core'
 
 const i18nBase = i18nFactory(Strings)
 let i18n = i18nBase(['en'])
@@ -21,6 +21,7 @@ type Props = {
 	feedId: string
 	address: string
 	memberships?: Membership[]
+	profiles: { [address: string]: ClubsProfile | undefined }
 }
 
 interface Emits {
@@ -117,7 +118,11 @@ const handleDeleteImageAll = () => {
 <template>
 	<div class="grid gap-5">
 		<div class="flex items-center justify-between">
-			<Profile :address="props.address" :feedId="props.feedId" />
+			<Profile
+				:address="props.address"
+				:feedId="props.feedId"
+				:profile="props.profiles[props.address]"
+			/>
 		</div>
 
 		<!-- title -->

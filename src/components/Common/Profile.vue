@@ -2,11 +2,12 @@
 import { onMounted, ref } from 'vue'
 import { ZeroAddress } from 'ethers'
 import { Avatar } from '@boringer-avatars/vue3'
-import { fetchProfile } from '@devprotocol/clubs-core'
+import type { ClubsProfile } from '@devprotocol/clubs-core'
 
 type Props = {
 	feedId: string
 	address: string
+	profile: ClubsProfile | undefined
 }
 
 const props = defineProps<Props>()
@@ -15,15 +16,13 @@ const avatar = ref('')
 const name = ref('')
 
 onMounted(async () => {
-	if (!props.address || props.address === ZeroAddress) {
+	if (!props.profile || props.address === ZeroAddress) {
 		name.value = truncateEthAddress(props.address)
 		return
 	}
 
-	// fetch profile
-	const { profile } = await fetchProfile(props.address)
-
-	if (!profile) return
+	if (!props.profile) return
+	const { profile } = props
 
 	avatar.value = profile.avatar
 	name.value = profile.username ?? truncateEthAddress(props.address)

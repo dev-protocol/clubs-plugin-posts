@@ -1,6 +1,11 @@
 <script lang="ts" setup>
 import dayjs from 'dayjs'
-import { ProseTextInherit, decode, encode } from '@devprotocol/clubs-core'
+import {
+	ProseTextInherit,
+	decode,
+	encode,
+	type ClubsProfile,
+} from '@devprotocol/clubs-core'
 import { ref } from 'vue'
 import Profile from '../../Common/Profile.vue'
 import type { Comment, CommentPrimitives } from '../../../types'
@@ -13,9 +18,10 @@ type Props = {
 	feedId: string
 	postId: string
 	comments: readonly Comment[]
-	hashEditableRole: string
+	hashEditableRole: boolean
 	postOwnerAddress: string
 	walletAddress: string
+	profiles: { [address: string]: ClubsProfile | undefined }
 }
 const props = defineProps<Props>()
 const newComment = ref<string>('')
@@ -23,6 +29,9 @@ const isCommenting = ref<boolean>(false)
 const isDeleting = ref<Readonly<{ [commentId: string]: boolean }>>({})
 
 const comments = ref<readonly Comment[]>(props.comments)
+const profiles = ref<{ [address: string]: ClubsProfile | undefined }>(
+	props.profiles,
+)
 
 const htmlComment = (content: string) =>
 	DOMPurify.sanitize(marked.parse(content))
@@ -202,7 +211,11 @@ const deleteComment = async (commentId: string) => {
 				class="mb-5 last:mb-0"
 			>
 				<div class="mb-1 flex items-center justify-between">
-					<Profile :feedId="props.feedId" :address="comment.created_by" />
+					<Profile
+						:feedId="props.feedId"
+						:address="comment.created_by"
+						:profile="profiles[comment.created_by]"
+					/>
 					<p class="text-center text-xs text-gray-400 lg:text-base">
 						{{ dayjs(comment.created_at).format('DD MMM HH:mm') }}
 					</p>
