@@ -11,7 +11,7 @@ import {
 } from '../../../../plugin-helper'
 import { Strings } from '../i18n'
 import { i18nFactory } from '@devprotocol/clubs-core'
-import {getSignature, getMessage} from '../../../../fixtures/session'
+import { getSignature, getMessage } from '../../../../fixtures/session'
 
 const i18nBase = i18nFactory(Strings)
 let i18n = i18nBase(['en'])

@@ -6,7 +6,7 @@ import Profile from '../../Common/Profile.vue'
 import type { Comment, CommentPrimitives } from '../../../types'
 import IconSend from '../../../assets/images/icon-send.svg'
 import IconTrash from '../../../assets/images/icon-trash.svg'
-import {getSignature, getMessage} from '../../../fixtures/session'
+import { getSignature, getMessage } from '../../../fixtures/session'
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
 
@@ -46,7 +46,7 @@ const postComment = async () => {
 		content: newComment.value,
 		options: [],
 	}
-	
+
 	const hash = getMessage(connectedAddress)
 	let sig = await getSignature(connectedAddress, signer)
 	console.log({ sig, hash })

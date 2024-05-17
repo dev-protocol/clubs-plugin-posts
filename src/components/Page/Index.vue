@@ -24,7 +24,7 @@ import {
 	hasWritePermission,
 } from '../../fixtures/memberships'
 import { JsonRpcProvider } from 'ethers'
-import {getSignature, getMessage, consoleWarn} from '../../fixtures/session'
+import { getSignature, getMessage, consoleWarn } from '../../fixtures/session'
 
 type Props = {
 	options: Option[]
@@ -163,7 +163,7 @@ onMounted(async () => {
 		'@devprotocol/clubs-core/connection'
 	)
 	connection.value = conct
-	const signer  =  conct().signer.value
+	const signer = conct().signer.value
 	if (signer) {
 		const connectedAddress = await signer.getAddress()
 		walletAddress.value = connectedAddress
