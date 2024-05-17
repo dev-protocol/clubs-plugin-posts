@@ -32,7 +32,6 @@ export const getSignature = async (
 		}
 		// Sign the message if signature is not present or hash has changed
 		sig = encode(await signer.signMessage(message))
-		console.log('sig', sig)
 		sessionStorage.setItem(sigKey, sig)
 		sessionStorage.setItem(hashKey, currentHash)
 	}
