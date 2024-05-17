@@ -7,6 +7,7 @@ import type { UndefinedOr } from '@devprotocol/util-ts'
 import { keccak256, type Signer } from 'ethers'
 import { Strings } from './i18n'
 import { i18nFactory } from '@devprotocol/clubs-core'
+import { getSignature, getMessage } from '../../../fixtures/session'
 
 const i18nBase = i18nFactory(Strings)
 let i18n = i18nBase(['en'])
@@ -61,10 +62,11 @@ const deletePost = async () => {
 		return
 	}
 
-	const signerAddress = await signer.getAddress()
+	// get wallet address
+	const connectedAddress = await signer.getAddress()
+	const hash = getMessage(connectedAddress)
 
-	const hash = await keccak256(signerAddress)
-	const sig = await signer.signMessage(hash)
+	let sig = await getSignature(connectedAddress, signer)
 
 	const response = await fetch(
 		`/api/devprotocol:clubs:plugin:posts/${feedId}/message/delete`,
