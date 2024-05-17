@@ -11,6 +11,7 @@ import {
 } from '../../../../plugin-helper'
 import { Strings } from '../i18n'
 import { i18nFactory } from '@devprotocol/clubs-core'
+import {getSignature, getMessage} from '../../../../fixtures/session'
 
 const i18nBase = i18nFactory(Strings)
 let i18n = i18nBase(['en'])
@@ -68,10 +69,11 @@ const onClickPost = async () => {
 		return
 	}
 
-	const signerAddress = await signer.getAddress()
+	// get wallet address
+	const connectedAddress = await signer.getAddress()
 
-	const hash = keccak256(signerAddress)
-	const sig = await signer.signMessage(hash)
+	const hash = getMessage(connectedAddress)
+	let sig = await getSignature(connectedAddress, signer)
 
 	// fetchで /message.jsonをpostしてasync/awaitでレスポンスを取得する
 	const response = await fetch(

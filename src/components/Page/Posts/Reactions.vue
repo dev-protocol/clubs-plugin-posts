@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import type { Reactions } from '../../../types'
-import { encode } from '@devprotocol/clubs-core'
-import type { UndefinedOr } from '@devprotocol/util-ts'
+import { getSignature, getMessage } from '../../../fixtures/session'
 
 type Props = {
 	feedId: string
@@ -35,20 +34,8 @@ const toggleReaction = async (emoji: string) => {
 	// get wallet address
 	const connectedAddress = await signer.getAddress()
 
-	const hash = encode(`Sign in as ${connectedAddress} to access secret post(s)`)
-	let sig = sessionStorage.getItem(`sig-of-${connectedAddress}`)
-	try {
-		if (!sig) {
-			// sign message
-			sig = await signer.signMessage(hash)
-			sessionStorage.setItem(`sig-of-${connectedAddress}`, sig as string)
-		}
-	} catch (error) {
-		// TODO: add state for failure.
-		console.error('error occurred while signing message:', error)
-		isTogglingReaction.value = false
-		return
-	}
+	const hash = getMessage(connectedAddress)
+	let sig = await getSignature(connectedAddress, signer)
 
 	const requestInfo = {
 		method: 'POST',

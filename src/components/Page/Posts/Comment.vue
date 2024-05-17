@@ -6,6 +6,7 @@ import Profile from '../../Common/Profile.vue'
 import type { Comment, CommentPrimitives } from '../../../types'
 import IconSend from '../../../assets/images/icon-send.svg'
 import IconTrash from '../../../assets/images/icon-trash.svg'
+import {getSignature, getMessage} from '../../../fixtures/session'
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
 
@@ -45,8 +46,9 @@ const postComment = async () => {
 		content: newComment.value,
 		options: [],
 	}
-	const hash = encode(`Sign in as ${connectedAddress} to access secret post(s)`)
-	let sig = sessionStorage.getItem(`sig-of-${connectedAddress}`)
+	
+	const hash = getMessage(connectedAddress)
+	let sig = await getSignature(connectedAddress, signer)
 	console.log({ sig, hash })
 	try {
 		if (!sig) {
@@ -135,23 +137,8 @@ const deleteComment = async (commentId: string) => {
 	// get wallet address
 	const connectedAddress = await signer.getAddress()
 
-	const hash = encode(`Sign in as ${connectedAddress} to access secret post(s)`)
-	let sig = sessionStorage.getItem(`sig-of-${connectedAddress}`)
-	console.log({ sig, hash })
-	try {
-		if (!sig) {
-			// sign message
-			sig = await signer.signMessage(hash)
-			sessionStorage.setItem(`sig-of-${connectedAddress}`, sig as string)
-		}
-	} catch (error) {
-		// TODO: add state for failure.
-		isDeleting.value = {
-			...isDeleting.value,
-			[commentId]: false,
-		}
-		return
-	}
+	const hash = getMessage(connectedAddress)
+	let sig = await getSignature(connectedAddress, signer)
 
 	if (!sig) {
 		// TODO: add state for failure.
