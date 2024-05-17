@@ -5,7 +5,7 @@ import ContentsHead from './ContentsHead.vue'
 import Mask from './Mask.vue'
 import type { Membership } from '../../../types'
 import { computed } from 'vue'
-import { ProseTextInherit } from '@devprotocol/clubs-core'
+import { ProseTextInherit, type ClubsProfile } from '@devprotocol/clubs-core'
 
 type Props = {
 	postId: string
@@ -16,6 +16,7 @@ type Props = {
 	masked: boolean
 	memberships: readonly Membership[]
 	title: string
+	profiles: { [address: string]: ClubsProfile | undefined }
 }
 
 const props = defineProps<Props>()
@@ -50,6 +51,7 @@ marked.use({ renderer })
 		:date="props.date"
 		:title="props.title"
 		:contents="props.contents"
+		:profiles="props.profiles"
 		@post-deleted="$emit('postDeleted', props.postId)"
 	/>
 

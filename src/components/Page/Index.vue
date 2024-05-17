@@ -8,6 +8,7 @@ import { Event, type Option, type Posts } from '../../types'
 import { onMounted, ref } from 'vue'
 import Line from '../Common/Line.vue'
 import { encode, decode } from '@devprotocol/clubs-core'
+import { encode, type ClubsProfile, decode } from '@devprotocol/clubs-core'
 import type { connection as Connection } from '@devprotocol/clubs-core/connection'
 import type { Membership } from '../../types'
 import { type ContractRunner, type Signer } from 'ethers'
@@ -47,6 +48,7 @@ if (props.options === undefined) {
 let isLoading = ref<boolean>(true)
 let error = ref<string>('')
 let posts = ref<Posts[]>([])
+let profiles = ref<{ [address: string]: ClubsProfile | undefined }>({})
 
 const walletAddress = ref<string | undefined>('')
 const hasEditableRole = ref(false)
@@ -134,8 +136,12 @@ const fetchPosts = async ({ hash, sig }: { hash?: string; sig?: string }) => {
 	fetch(url.toString())
 		.then(async (res) => {
 			if (res.status === 200) {
-				const json = await res.json()
+				const json = (await res.json()) as {
+					contents: string
+					profiles: { [address: string]: ClubsProfile | undefined }
+				}
 				posts.value = decode<Posts[]>(json.contents)
+				profiles.value = json.profiles
 			}
 		})
 		.catch((err) => {
@@ -202,6 +208,7 @@ const onPostDeleted = (id: string) => {
 				:feedId="props.feedId"
 				:address="walletAddress"
 				:memberships="[...props.memberships]"
+				:profiles="profiles"
 				@post:success="handlePostSuccess"
 			>
 				<template v-slot:after-content-form>
@@ -252,7 +259,8 @@ const onPostDeleted = (id: string) => {
 			v-if="posts.length > 0"
 			v-for="(post, key) in posts"
 			:key="post.id"
-			class="mb-5 grid gap-3 rounded bg-white p-5 text-black shadow"
+			class="mb-5 grid gap-3 rounded bg-white p-5 text-black"
+			:class="IS_SINGLE ? '' : 'shadow'"
 		>
 			<Contents
 				:postId="post.id"
@@ -268,6 +276,7 @@ const onPostDeleted = (id: string) => {
 					})
 				"
 				:title="post.title"
+				:profiles="profiles"
 				@post-deleted="onPostDeleted"
 			>
 				<template v-slot:after-post-content>
@@ -294,6 +303,7 @@ const onPostDeleted = (id: string) => {
 				:hashEditableRole="hasEditableRole"
 				:postOwnerAddress="post.created_by"
 				:walletAddress="walletAddress"
+				:profiles="profiles"
 			/>
 
 			<EncodedPostData :post="post" />

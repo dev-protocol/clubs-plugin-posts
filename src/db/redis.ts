@@ -94,7 +94,7 @@ export const getPaginatedPosts = async ({
 		.map(({ id }) => id)
 
 	const results = await Promise.all(
-		postIds.map((id) => fetchSinglePost({ id, client })),
+		postIds.map((id) => fetchSinglePost({ id, scope, client })),
 	)
 
 	return results
@@ -103,19 +103,22 @@ export const getPaginatedPosts = async ({
 /**
  * Fetches the single post from Redis
  * @param id - The id of the post
+ * @param scope - The scope of the post
  * @param client - The Redis client
  * @returns The post
  */
 export const fetchSinglePost = async ({
 	id,
+	scope,
 	client,
 }: {
 	readonly id: string
+	readonly scope: string
 	readonly client: RedisDefaultClient
 }): Promise<Posts> => {
 	const fetchPost = await client.ft.search(
 		Index.Post,
-		`@id:{${uuidToQuery(id)}}`,
+		`@id:{${uuidToQuery(id)}} @_scope:{${uuidToQuery(scope)}}`,
 		{
 			LIMIT: { from: 0, size: 1 },
 		},

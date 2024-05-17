@@ -79,7 +79,7 @@ export { SlotName, Event }
 
 export const getPagePaths = (async (
 	options,
-	{ name, propertyAddress, adminRolePoints, rpcUrl },
+	config,
 	{ getPluginConfigById },
 ) => {
 	const [membershipsPlugin] = getPluginConfigById(
@@ -93,17 +93,22 @@ export const getPagePaths = (async (
 		({ key }: Readonly<{ readonly key: string }>) => key === 'feeds',
 	)?.value as UndefinedOr<readonly OptionsDatabase[]>
 
+	const avatarImgSrc: UndefinedOr<string> = config.options?.find(
+		(option) => option.key === 'avatarImgSrc',
+	)?.value as string
+
 	const emojiAllowList = options?.find((item) => item.key === 'emojiAllowList')
 		?.value as UndefinedOr<readonly string[]>
 
 	const props = {
-		name,
+		name: config.name,
 		options,
-		propertyAddress,
+		propertyAddress: config.propertyAddress,
 		memberships,
-		adminRolePoints,
+		adminRolePoints: config.adminRolePoints,
 		emojiAllowList,
-		rpcUrl,
+		rpcUrl: config.rpcUrl,
+		avatarImgSrc,
 	}
 	return dbs
 		? [
@@ -115,11 +120,17 @@ export const getPagePaths = (async (
 						// `propertyAddress` is required for calling post API, so passed to the FE here.
 					}
 				}),
-				...dbs.map(({ id }) => {
+				...dbs.map(({ id, database, slug, title }) => {
 					return {
 						paths: ['posts', id, SinglePath],
 						component: Posts_,
-						props: { ...props, feedId: id },
+						props: {
+							...props,
+							feedId: id,
+							scope: database.key,
+							slug: slug ?? 'posts',
+							title,
+						},
 						layout: Layout,
 					}
 				}),
@@ -219,61 +230,6 @@ export const getApiPaths = (async (
 			.map(
 				(db) =>
 					[
-						{
-							paths: [db.id, 'profile'],
-							method: 'GET',
-							handler: async ({ url }) => {
-								const address = url.searchParams.get('address')
-
-								if (!address) {
-									return new Response(
-										JSON.stringify({
-											error: 'Address is missing',
-											data: null,
-										}),
-										{
-											status: 400,
-										},
-									)
-								}
-
-								//
-								try {
-									const res = await fetchProfile(address)
-									if (res.error) {
-										return new Response(
-											JSON.stringify({
-												error: res.error,
-												data: null,
-											}),
-											{
-												status: 500,
-											},
-										)
-									}
-
-									return new Response(
-										JSON.stringify({
-											profile: res.profile,
-										}),
-										{
-											status: 200,
-										},
-									)
-								} catch (e) {
-									return new Response(
-										JSON.stringify({
-											error: e,
-											data: null,
-										}),
-										{
-											status: 500,
-										},
-									)
-								}
-							},
-						},
-
 						/**
 						 * delete post
 						 */
@@ -361,32 +317,78 @@ export const getApiPaths = (async (
 									)
 								}
 
-								return allPosts instanceof Error
-									? new Response(
-											JSON.stringify({
-												error: allPosts,
-											}),
-											{
-												status: 500,
-											},
-										)
-									: allPosts
-										? new Response(
-												JSON.stringify({
-													contents: encode(allPosts),
-												}),
-												{
-													status: 200,
-												},
-											)
-										: new Response(
-												JSON.stringify({
-													error: 'Some data is missing',
-												}),
-												{
-													status: 400,
-												},
-											)
+								/**
+								 * If there is an error, return the error
+								 */
+								if (allPosts instanceof Error) {
+									return new Response(
+										JSON.stringify({
+											error: allPosts,
+										}),
+										{
+											status: 500,
+										},
+									)
+								}
+
+								/**
+								 * If there is no data, return 400
+								 */
+								if (!allPosts) {
+									return new Response(
+										JSON.stringify({
+											error: 'Some data is missing',
+										}),
+										{
+											status: 400,
+										},
+									)
+								}
+
+								/**
+								 * get an array of addresses associated with the author of each post
+								 */
+								const createdByAddresses = allPosts.map(
+									(post) => post.created_by,
+								)
+
+								/**
+								 * get an array of addresses associated with posts comments
+								 */
+								const commentsAddresses = allPosts.map((post) =>
+									post.comments.map((comment) => comment.created_by),
+								)
+
+								/**
+								 * combine the two arrays into one and ensure that there are no duplicates
+								 */
+								const allAddresses = Array.from(
+									new Set([...createdByAddresses, ...commentsAddresses.flat()]),
+								)
+
+								/**
+								 * get the profile of each address
+								 */
+								const profiles = (
+									await Promise.all(
+										allAddresses.map(async (address) => ({
+											[address]:
+												(await fetchProfile(address))?.profile ?? undefined,
+										})),
+									)
+								)
+									// turn the array of objects into a single object
+									.reduce((acc, profile) => ({ ...acc, ...profile }), {})
+
+								return new Response(
+									JSON.stringify({
+										contents: encode(allPosts),
+										profiles: profiles,
+									}),
+									{
+										status: 200,
+									},
+								)
 							},
 						},
 						/**

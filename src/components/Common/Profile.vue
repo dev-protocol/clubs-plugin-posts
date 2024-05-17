@@ -2,10 +2,12 @@
 import { onMounted, ref } from 'vue'
 import { ZeroAddress } from 'ethers'
 import { Avatar } from '@boringer-avatars/vue3'
+import type { ClubsProfile } from '@devprotocol/clubs-core'
 
 type Props = {
 	feedId: string
 	address: string
+	profile: ClubsProfile | undefined
 }
 
 const props = defineProps<Props>()
@@ -13,14 +15,17 @@ const props = defineProps<Props>()
 const avatar = ref('')
 const name = ref('')
 
-onMounted(() => {
-	if (!props.address || props.address === ZeroAddress) {
+onMounted(async () => {
+	if (!props.profile || props.address === ZeroAddress) {
 		name.value = truncateEthAddress(props.address)
 		return
 	}
 
-	// fetch profile
-	fetchProfile(props.address)
+	if (!props.profile) return
+	const { profile } = props
+
+	avatar.value = profile.avatar
+	name.value = profile.username ?? truncateEthAddress(props.address)
 })
 
 const truncateEthAddress = (address: string) => {
@@ -29,26 +34,6 @@ const truncateEthAddress = (address: string) => {
 	)
 	if (!match) return address
 	return `${match[1]}\u2026${match[2]}`
-}
-
-const fetchProfile = async (address: string) => {
-	const url = new URL(
-		`/api/devprotocol:clubs:plugin:posts/${props.feedId}/profile?address=${address}`,
-		window.location.origin,
-	)
-
-	return fetch(url.toString())
-		.then(async (res) => {
-			if (res.status !== 200) return
-
-			const json = await res.json()
-
-			avatar.value = json.profile.avatar
-			name.value = json.profile.username ?? truncateEthAddress(address)
-		})
-		.catch((err) => {
-			console.error(err)
-		})
 }
 </script>
 
