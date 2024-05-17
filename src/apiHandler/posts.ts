@@ -218,18 +218,6 @@ export const fetchPostHandler =
 				// turn the array of objects into a single object
 				.reduce((acc, profile) => ({ ...acc, ...profile }), {})
 
-			if (result instanceof Error) {
-				return new Response(
-					JSON.stringify({
-						error: 'Post not found',
-						data: null,
-					}),
-					{
-						status: 404,
-					},
-				)
-			}
-
 			return new Response(
 				JSON.stringify({
 					contents: encode(result),
