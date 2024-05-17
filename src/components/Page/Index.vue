@@ -24,6 +24,7 @@ import {
 	hasWritePermission,
 } from '../../fixtures/memberships'
 import { JsonRpcProvider } from 'ethers'
+import { getSignature, getMessage, consoleWarn } from '../../fixtures/session'
 
 type Props = {
 	options: Option[]
@@ -111,9 +112,9 @@ const handleConnection = async (signer: UndefinedOr<Signer>) => {
 	// const connectedAddress = '0x57E21bd98612DE0Bd1723F4bf81A944eF7BfF526'
 	walletAddress.value = connectedAddress
 
-	// sign message
-	const hash = `Sign in as ${connectedAddress} to access secret post(s). @ts:${new Date().getTime()}`
-	const sig = await signer.signMessage(hash)
+	const hash = getMessage(connectedAddress)
+
+	let sig = await getSignature(connectedAddress, signer)
 
 	fetchPosts({ hash, sig })
 
@@ -162,10 +163,17 @@ onMounted(async () => {
 		handleRegisterOnSetupHandler,
 	)
 	fetchPosts({})
+	consoleWarn()
 	const { connection: conct } = await import(
 		'@devprotocol/clubs-core/connection'
 	)
 	connection.value = conct
+	const signer = conct().signer.value
+	if (signer) {
+		const connectedAddress = await signer.getAddress()
+		walletAddress.value = connectedAddress
+		isVerified.value = true
+	}
 })
 
 const isVerified = ref(false)

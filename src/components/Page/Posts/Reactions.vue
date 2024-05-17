@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import type { Reactions } from '../../../types'
-import { encode } from '@devprotocol/clubs-core'
-import type { UndefinedOr } from '@devprotocol/util-ts'
+import { getSignature, getMessage } from '../../../fixtures/session'
 
 type Props = {
 	feedId: string
@@ -32,18 +31,11 @@ const toggleReaction = async (emoji: string) => {
 		isTogglingReaction.value = false
 		return
 	}
+	// get wallet address
+	const connectedAddress = await signer.getAddress()
 
-	const hash = encode(`${props.postId}-${emoji}`)
-
-	let sig: UndefinedOr<string>
-	try {
-		sig = await signer.signMessage(hash)
-	} catch (error) {
-		// TODO: add state for failure.
-		console.error('error occurred while signing message:', error)
-		isTogglingReaction.value = false
-		return
-	}
+	const hash = getMessage(connectedAddress)
+	let sig = await getSignature(connectedAddress, signer)
 
 	const requestInfo = {
 		method: 'POST',
