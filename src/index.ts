@@ -383,7 +383,7 @@ export const getApiPaths = (async (
 								return new Response(
 									JSON.stringify({
 										contents: encode(allPosts),
-										profiles: profiles,
+										profiles,
 									}),
 									{
 										status: 200,

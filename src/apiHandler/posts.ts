@@ -5,6 +5,7 @@ import {
 	authenticate,
 	encode,
 	type Membership,
+	fetchProfile,
 } from '@devprotocol/clubs-core'
 import type {
 	Comment,
@@ -190,9 +191,37 @@ export const fetchPostHandler =
 				)
 			}
 
+			/**
+			 * get an array of addresses associated with posts comments
+			 */
+			const commentsAddresses = result[0].comments.map(
+				(comment) => comment.created_by,
+			)
+
+			/**
+			 * combine the two arrays into one and ensure that there are no duplicates
+			 */
+			const allAddresses = Array.from(
+				new Set([result[0].created_by, ...commentsAddresses.flat()]),
+			)
+
+			/**
+			 * get the profile of each address
+			 */
+			const profiles = (
+				await Promise.all(
+					allAddresses.map(async (address) => ({
+						[address]: (await fetchProfile(address))?.profile ?? undefined,
+					})),
+				)
+			)
+				// turn the array of objects into a single object
+				.reduce((acc, profile) => ({ ...acc, ...profile }), {})
+
 			return new Response(
 				JSON.stringify({
 					contents: encode(result),
+					profiles,
 				}),
 				{
 					status: 200,
