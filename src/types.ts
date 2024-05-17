@@ -75,10 +75,13 @@ export type Membership = MembershipCore
  * Reaction is a map of emoji to users who reacted to a post
  * An emoji as the key, and an array of addresses as the users who reacted to the post
  * @example
- * {'🦜': ['0x0', '0x2']}
+ * {'🦜': [{createdBy: '0x0', id: '123'}, {createdBy: '0x2', id: '456'}]}
  */
 export type Reactions = {
-	readonly [emoji: string]: readonly string[]
+	readonly [emoji: string]: readonly {
+		readonly createdBy: string
+		readonly id: string
+	}[]
 }
 
 export enum SlotName {

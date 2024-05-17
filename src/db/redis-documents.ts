@@ -226,12 +226,13 @@ export const setPost = async ({
 		post.reactions,
 	)
 		.map((key) => {
-			const users = post.reactions[key]
-			return users.map((created_by) =>
+			const reactions = post.reactions[key]
+			return reactions.map((reaction) =>
 				reactionDocument({
 					data: {
 						content: key,
-						created_by,
+						created_by: reaction.createdBy,
+						// created_by,
 					},
 					scope: scope,
 					postId: post.id,
@@ -379,8 +380,14 @@ export const setReaction = async ({
 	readonly client: RedisDefaultClient
 	readonly createdBy: string
 }) => {
-	await implSetReaction({ scope, reaction, postId, url, client, createdBy })
-	return true
+	return await implSetReaction({
+		scope,
+		reaction,
+		postId,
+		url,
+		client,
+		createdBy,
+	})
 }
 
 export const implSetReaction = async ({
@@ -408,11 +415,15 @@ export const implSetReaction = async ({
 		postId,
 	})
 
+	const id = uuid()
+
 	await client.json.set(
-		generateKeyOf(schema.Prefix.Reaction, scope, uuid()),
+		generateKeyOf(schema.Prefix.Reaction, scope, id),
 		'$',
 		newReactionData,
 	)
+
+	return id
 }
 
 export const setComment = async ({

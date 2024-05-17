@@ -18,7 +18,7 @@ export const addReactionDocumentsRedis = async ({
 	try {
 		const client = await getDefaultClient()
 
-		const saved = await setReaction({
+		const id = await setReaction({
 			scope: dbQueryKey,
 			reaction: data,
 			postId,
@@ -27,10 +27,10 @@ export const addReactionDocumentsRedis = async ({
 			createdBy: userAddress,
 		})
 
-		return saved
+		return id
 			? new Response(
 					JSON.stringify({
-						message: saved,
+						id,
 						data: encode(data),
 					}),
 					{

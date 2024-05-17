@@ -1,5 +1,9 @@
-import { verifyMessage } from 'ethers'
-import type { ClubsConfiguration } from '@devprotocol/clubs-core'
+import { getDefaultProvider, verifyMessage } from 'ethers'
+import {
+	authenticate,
+	encode,
+	type ClubsConfiguration,
+} from '@devprotocol/clubs-core'
 import { addReactionDocumentsRedis } from './reactions-documents-redis'
 
 export type AddReactionRequestJson = Readonly<{
@@ -7,6 +11,12 @@ export type AddReactionRequestJson = Readonly<{
 	readonly sig: string
 	readonly postId: string
 	readonly data: string
+}>
+
+export type RemoveReactionRequestJson = Readonly<{
+	readonly hash: string
+	readonly sig: string
+	readonly id: string
 }>
 
 export const addReactionHandler =
@@ -62,4 +72,40 @@ export const addReactionHandler =
 			postId,
 			dbQueryKey,
 		})
+	}
+
+const removeReactionHandler =
+	(conf: ClubsConfiguration, dbQueryKey: string) =>
+	async ({ request }: { readonly request: Request }) => {
+		const { hash, sig, id } =
+			(await request.json()) as RemoveReactionRequestJson
+
+		const authenticated = await authenticate({
+			message: hash,
+			signature: sig,
+			previousConfiguration: encode(conf),
+			provider: getDefaultProvider(conf.rpcUrl),
+		})
+
+		if (!authenticated) {
+			return new Response(
+				JSON.stringify({
+					error: 'Authentication failed',
+				}),
+				{
+					status: 401,
+				},
+			)
+		}
+
+		const userAddress = verifyMessage(hash, sig)
+
+		return new Response(
+			JSON.stringify({
+				error: 'Not implemented',
+			}),
+			{
+				status: 501,
+			},
+		)
 	}

@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onMounted, ref, toRaw } from 'vue'
 import type { Reactions } from '../../../types'
 import { encode } from '@devprotocol/clubs-core'
 import type { UndefinedOr } from '@devprotocol/util-ts'
+import type { Signer } from 'ethers'
 
 type Props = {
 	feedId: string
@@ -16,6 +17,10 @@ const reactions = ref<Reactions>({})
 const isTogglingReaction = ref<boolean>(false)
 
 reactions.value = props.reactions
+
+onMounted(() => {
+	console.log('reactions:', toRaw(reactions.value))
+})
 
 const toggleReaction = async (emoji: string) => {
 	if (isTogglingReaction.value) {
@@ -33,6 +38,37 @@ const toggleReaction = async (emoji: string) => {
 		return
 	}
 
+	const userAddress = (await signer.getAddress()) as string
+
+	// check if the user has already reacted with the emoji
+	const userHasReacted = reactions.value[emoji]?.find(
+		(reaction) => reaction.createdBy === userAddress,
+	)
+	console.log('user has reacted: ', toRaw(userHasReacted))
+
+	if (userHasReacted) {
+		await removeReaction({
+			emoji,
+			signer,
+			userAddress,
+			reactionId: userHasReacted.id,
+		})
+	} else {
+		await addReaction({ emoji, signer, userAddress })
+	}
+
+	isTogglingReaction.value = false
+}
+
+const addReaction = async ({
+	emoji,
+	userAddress,
+	signer,
+}: {
+	emoji: string
+	signer: Signer
+	userAddress: string
+}) => {
 	const hash = encode(`${props.postId}-${emoji}`)
 
 	let sig: UndefinedOr<string>
@@ -63,29 +99,51 @@ const toggleReaction = async (emoji: string) => {
 		requestInfo,
 	)
 
+	const { id } = await res.json()
+	console.log('id is: ', id)
+	console.log('emoji is: ', emoji)
+
 	if (res.status === 200) {
 		const emojiReactions = reactions.value[emoji] ?? []
-		const userAddress = await signer.getAddress()
-		const userAddressExists = emojiReactions.includes(await signer.getAddress())
+		console.log('emoji reactions are: ', emojiReactions)
+		reactions.value = {
+			...reactions.value,
+			[emoji]: [...emojiReactions, { createdBy: userAddress, id }],
+		}
+
+		// const userAddress = await signer.getAddress()
+		// const userAddressExists = emojiReactions.includes(await signer.getAddress())
 
 		// if user address exists, remove it
-		if (userAddressExists) {
-			reactions.value = {
-				...reactions.value,
-				[emoji]: emojiReactions.filter((address) => address !== userAddress),
-			}
-		} else {
-			// if user address does not exist, add it
-			reactions.value = {
-				...reactions.value,
-				[emoji]: [...emojiReactions, userAddress],
-			}
-		}
+		// if (userAddressExists) {
+		// 	reactions.value = {
+		// 		...reactions.value,
+		// 		[emoji]: emojiReactions.filter((address) => address !== userAddress),
+		// 	}
+		// } else {
+		// 	// if user address does not exist, add it
+		// 	reactions.value = {
+		// 		...reactions.value,
+		// 		[emoji]: [...emojiReactions, userAddress],
+		// 	}
+		// }
 	} else {
 		console.error('Error occurred while posting reaction:', res)
 	}
+}
 
-	isTogglingReaction.value = false
+const removeReaction = async ({
+	reactionId,
+	emoji,
+	userAddress,
+	signer,
+}: {
+	reactionId: string
+	emoji: string
+	signer: Signer
+	userAddress: string
+}) => {
+	console.log('remove reaction hit: ', reactionId)
 }
 </script>
 
