@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { i18nFactory } from '@devprotocol/clubs-core'
 import Post from './Posts/Post.vue'
 import Reactions from './Posts/Reactions.vue'
 import Contents from './Contents/Contents.vue'
@@ -25,6 +26,7 @@ import {
 } from '../../fixtures/memberships'
 import { JsonRpcProvider } from 'ethers'
 import { getSignature, getMessage, consoleWarn } from '../../fixtures/session'
+import { Strings } from '../../i18n'
 
 type Props = {
 	options: Option[]
@@ -39,6 +41,8 @@ type Props = {
 
 const props = defineProps<Props>()
 const IS_SINGLE = props.postId !== undefined
+const i18nBase = i18nFactory(Strings)
+let i18n = ref<ReturnType<typeof i18nBase>>(i18nBase(['en']))
 
 if (props.options === undefined) {
 	throw new Error('props.options is undefined')
@@ -145,8 +149,7 @@ const fetchPosts = async ({ hash, sig }: { hash?: string; sig?: string }) => {
 		})
 		.catch((err) => {
 			console.error(err)
-			error.value =
-				'Sorry, but there was an error loading the timeline. Please try again later.'
+			error.value = i18n.value('NoPostsOnTimelineTryAgain')
 		})
 		.finally(() => {
 			isLoading.value = false
@@ -174,6 +177,8 @@ onMounted(async () => {
 		walletAddress.value = connectedAddress
 		isVerified.value = true
 	}
+
+	i18n.value = i18nBase(navigator.languages)
 })
 
 const isVerified = ref(false)
@@ -237,7 +242,7 @@ const onPostDeleted = (id: string) => {
 			class="mb-5 rounded bg-white p-5"
 		>
 			<p class="text-center text-black">
-				Sorry, but there are no posts on this timeline yet
+				{{ i18n('NoPostsOnTimeline') }}
 			</p>
 		</div>
 
@@ -249,7 +254,7 @@ const onPostDeleted = (id: string) => {
 				class="rounded-full bg-blue-600 px-6 py-2 text-white shadow-xl focus:outline-none"
 				@click="handleVerify"
 			>
-				Sign in
+				{{ i18n('SignIn') }}
 			</button>
 		</div>
 
