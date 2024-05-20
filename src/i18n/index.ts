@@ -11,6 +11,10 @@ export const Strings = {
 	},
 	SignIn: {
 		en: 'Sign in',
-		ja: 'サインイン',
+		ja: '投稿に参加する',
+	},
+	SignInExplanatoryMsg: {
+		en: 'Click the Participate in Post button to view and comment on members-only articles.',
+		ja: '投稿に参加するボタンをクリックすると、メンバー限定記事の参照やコメントができます',
 	},
 } satisfies ClubsI18nParts
