@@ -144,6 +144,8 @@ const removeReaction = async ({
 	signer: Signer
 	userAddress: string
 }) => {
+	console.log('reaction id is: ', reactionId)
+
 	const hash = getMessage(userAddress)
 	let sig = await getSignature(userAddress, signer)
 

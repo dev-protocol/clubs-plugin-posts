@@ -416,14 +416,11 @@ export const implSetReaction = async ({
 	})
 
 	const id = uuid()
+	const key = generateKeyOf(schema.Prefix.Reaction, scope, id)
 
-	await client.json.set(
-		generateKeyOf(schema.Prefix.Reaction, scope, id),
-		'$',
-		newReactionData,
-	)
+	await client.json.set(key, '$', newReactionData)
 
-	return id
+	return key
 }
 
 export const deleteReaction = async ({

@@ -432,7 +432,7 @@ export const getApiPaths = (async (
 						{
 							paths: [db.id, 'reactions'], // This will be [DELETE] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/reactions
 							method: 'DELETE',
-							handler: deleteReactionHandler(config, db.database.key),
+							handler: deleteReactionHandler(config),
 						},
 					] satisfies ClubsApiPaths,
 			)
