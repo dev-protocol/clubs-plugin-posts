@@ -73,15 +73,6 @@ const addReaction = async ({
 	const hash = getMessage(userAddress)
 	let sig = await getSignature(userAddress, signer)
 
-	try {
-		sig = await signer.signMessage(hash)
-	} catch (error) {
-		// TODO: add state for failure.
-		console.error('error occurred while signing message:', error)
-		isTogglingReaction.value = false
-		return
-	}
-
 	const requestInfo = {
 		method: 'POST',
 		headers: {
@@ -101,8 +92,6 @@ const addReaction = async ({
 	)
 
 	const { id } = await res.json()
-	console.log('id is: ', id)
-	console.log('emoji is: ', emoji)
 
 	if (res.status === 200) {
 		const emojiReactions = reactions.value[emoji] ?? []
@@ -111,23 +100,6 @@ const addReaction = async ({
 			...reactions.value,
 			[emoji]: [...emojiReactions, { createdBy: userAddress, id }],
 		}
-
-		// const userAddress = await signer.getAddress()
-		// const userAddressExists = emojiReactions.includes(await signer.getAddress())
-
-		// if user address exists, remove it
-		// if (userAddressExists) {
-		// 	reactions.value = {
-		// 		...reactions.value,
-		// 		[emoji]: emojiReactions.filter((address) => address !== userAddress),
-		// 	}
-		// } else {
-		// 	// if user address does not exist, add it
-		// 	reactions.value = {
-		// 		...reactions.value,
-		// 		[emoji]: [...emojiReactions, userAddress],
-		// 	}
-		// }
 	} else {
 		console.error('Error occurred while posting reaction:', res)
 	}
@@ -144,19 +116,8 @@ const removeReaction = async ({
 	signer: Signer
 	userAddress: string
 }) => {
-	console.log('reaction id is: ', reactionId)
-
 	const hash = getMessage(userAddress)
 	let sig = await getSignature(userAddress, signer)
-
-	try {
-		sig = await signer.signMessage(hash)
-	} catch (error) {
-		// TODO: add state for failure.
-		console.error('error occurred while signing message:', error)
-		isTogglingReaction.value = false
-		return
-	}
 
 	const requestInfo = {
 		method: 'DELETE',
