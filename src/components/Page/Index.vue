@@ -202,6 +202,48 @@ const onPostDeleted = (id: string) => {
 }
 </script>
 
+<style>
+.tooltip {
+	position: relative;
+	display: inline-block;
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+	width: max-content;
+	max-width: 200%;
+	background-color: #555;
+	color: #fff;
+	text-align: center;
+	padding: 12px 6px;
+	border-radius: 16px;
+	position: absolute;
+	z-index: 1;
+	bottom: 120%;
+	left: 50%;
+	margin-left: -100%;
+	opacity: 0;
+	transition: opacity 0.3s;
+	word-wrap: break-word;
+}
+
+.tooltip .tooltiptext::after {
+	content: '';
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+	opacity: 1;
+	visibility: visible;
+}
+</style>
+
 <template>
 	<div class="mx-auto w-full max-w-2xl">
 		<section
@@ -251,10 +293,11 @@ const onPostDeleted = (id: string) => {
 			class="sticky top-0 z-10 px-5 py-5 text-right"
 		>
 			<button
-				class="rounded-full bg-blue-600 px-6 py-2 text-white shadow-xl focus:outline-none"
+				class="rounded-full bg-blue-600 px-6 py-2 text-white shadow-xl focus:outline-none tooltip"
 				@click="handleVerify"
 			>
 				{{ i18n('SignIn') }}
+				<span class="tooltiptext">{{ i18n('SignInExplanatoryMsg') }}</span>
 			</button>
 		</div>
 
