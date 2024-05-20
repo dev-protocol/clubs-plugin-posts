@@ -4,7 +4,10 @@ import {
 	encode,
 	type ClubsConfiguration,
 } from '@devprotocol/clubs-core'
-import { addReactionDocumentsRedis } from './reactions-documents-redis'
+import {
+	addReactionDocumentsRedis,
+	removeReactionDocumentsRedis,
+} from './reactions-documents-redis'
 
 export type AddReactionRequestJson = Readonly<{
 	readonly hash: string
@@ -74,8 +77,8 @@ export const addReactionHandler =
 		})
 	}
 
-const removeReactionHandler =
-	(conf: ClubsConfiguration, dbQueryKey: string) =>
+export const deleteReactionHandler =
+	(conf: ClubsConfiguration) =>
 	async ({ request }: { readonly request: Request }) => {
 		const { hash, sig, id } =
 			(await request.json()) as RemoveReactionRequestJson
@@ -100,12 +103,8 @@ const removeReactionHandler =
 
 		const userAddress = verifyMessage(hash, sig)
 
-		return new Response(
-			JSON.stringify({
-				error: 'Not implemented',
-			}),
-			{
-				status: 501,
-			},
-		)
+		return removeReactionDocumentsRedis({
+			reactionKey: id,
+			userAddress,
+		})
 	}

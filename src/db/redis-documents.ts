@@ -426,6 +426,38 @@ export const implSetReaction = async ({
 	return id
 }
 
+export const deleteReaction = async ({
+	reactionKey,
+	client,
+	userAddress,
+}: {
+	readonly reactionKey: string
+	readonly client: RedisDefaultClient
+	readonly userAddress: string
+}) => {
+	const reaction = await fetchReaction({
+		reactionKey,
+		client,
+	})
+
+	if (!reaction) {
+		return false
+	}
+
+	// make sure user is the owner of the reaction
+	if (reaction.created_by !== userAddress) {
+		return false
+	}
+
+	// const reactionKey = generateKeyOf(schema.Prefix.Reaction, scope, reactionId)
+	try {
+		await client.del(reactionKey) // Delete the reaction
+		return true
+	} catch (err) {
+		return false
+	}
+}
+
 export const setComment = async ({
 	scope,
 	comment,
@@ -654,4 +686,15 @@ export const fetchAllReactions = async ({
 	const result = await loop(0, [])
 
 	return result
+}
+
+export const fetchReaction = async ({
+	reactionKey,
+	client,
+}: {
+	readonly reactionKey: string
+	readonly client: RedisDefaultClient
+}) => {
+	const reaction = await client.json.get(reactionKey)
+	return reaction?.valueOf() as ReactionDocument
 }

@@ -19,8 +19,11 @@ import {
 	deleteCommentHandler,
 	fetchCommentsHandler,
 } from './apiHandler/comment'
-import { mask, maskFactory } from './fixtures/masking'
-import { addReactionHandler } from './apiHandler/reactions'
+import { maskFactory } from './fixtures/masking'
+import {
+	addReactionHandler,
+	deleteReactionHandler,
+} from './apiHandler/reactions'
 import {
 	addPostHandler,
 	deletePostHandler,
@@ -425,6 +428,11 @@ export const getApiPaths = (async (
 							paths: [db.id, 'reactions'], // This will be [POST] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/reactions
 							method: 'POST',
 							handler: addReactionHandler(config, db.database.key),
+						},
+						{
+							paths: [db.id, 'reactions'], // This will be [DELETE] /api/devprotocol:clubs:plugin:posts/{FEED_ID}/reactions
+							method: 'DELETE',
+							handler: deleteReactionHandler(config, db.database.key),
 						},
 					] satisfies ClubsApiPaths,
 			)

@@ -143,7 +143,43 @@ const removeReaction = async ({
 	signer: Signer
 	userAddress: string
 }) => {
-	console.log('remove reaction hit: ', reactionId)
+	const hash = encode(`${reactionId}`)
+	let sig: UndefinedOr<string>
+	try {
+		sig = await signer.signMessage(hash)
+	} catch (error) {
+		// TODO: add state for failure.
+		console.error('error occurred while signing message:', error)
+		isTogglingReaction.value = false
+		return
+	}
+
+	const requestInfo = {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			hash,
+			sig,
+			id: reactionId,
+		}),
+	}
+
+	const res = await fetch(
+		`/api/devprotocol:clubs:plugin:posts/${props.feedId}/reactions`,
+		requestInfo,
+	)
+
+	if (res.status === 200) {
+		const emojiReactions = reactions.value[emoji] ?? []
+		reactions.value = {
+			...reactions.value,
+			[emoji]: emojiReactions.filter((reaction) => reaction.id !== reactionId),
+		}
+	} else {
+		console.error('Error occurred while deleting reaction:', res)
+	}
 }
 </script>
 
