@@ -4,6 +4,7 @@ import type { Reactions } from '../../../types'
 import { encode } from '@devprotocol/clubs-core'
 import type { UndefinedOr } from '@devprotocol/util-ts'
 import type { Signer } from 'ethers'
+import { getSignature, getMessage } from '../../../fixtures/session'
 
 type Props = {
 	feedId: string
@@ -37,7 +38,7 @@ const toggleReaction = async (emoji: string) => {
 		isTogglingReaction.value = false
 		return
 	}
-
+	// get wallet address
 	const userAddress = (await signer.getAddress()) as string
 
 	// check if the user has already reacted with the emoji
@@ -69,9 +70,9 @@ const addReaction = async ({
 	signer: Signer
 	userAddress: string
 }) => {
-	const hash = encode(`${props.postId}-${emoji}`)
+	const hash = getMessage(userAddress)
+	let sig = await getSignature(userAddress, signer)
 
-	let sig: UndefinedOr<string>
 	try {
 		sig = await signer.signMessage(hash)
 	} catch (error) {
@@ -143,8 +144,9 @@ const removeReaction = async ({
 	signer: Signer
 	userAddress: string
 }) => {
-	const hash = encode(`${reactionId}`)
-	let sig: UndefinedOr<string>
+	const hash = getMessage(userAddress)
+	let sig = await getSignature(userAddress, signer)
+
 	try {
 		sig = await signer.signMessage(hash)
 	} catch (error) {

@@ -6,6 +6,7 @@ import { computed, onMounted, ref } from 'vue'
 import type { UndefinedOr } from '@devprotocol/util-ts'
 import { keccak256, type Signer } from 'ethers'
 import { Strings } from './i18n'
+import { getSignature, getMessage } from '../../../fixtures/session'
 import { i18nFactory, type ClubsProfile } from '@devprotocol/clubs-core'
 
 const i18nBase = i18nFactory(Strings)
@@ -63,10 +64,11 @@ const deletePost = async () => {
 		return
 	}
 
-	const signerAddress = await signer.getAddress()
+	// get wallet address
+	const connectedAddress = await signer.getAddress()
+	const hash = getMessage(connectedAddress)
 
-	const hash = await keccak256(signerAddress)
-	const sig = await signer.signMessage(hash)
+	let sig = await getSignature(connectedAddress, signer)
 
 	const response = await fetch(
 		`/api/devprotocol:clubs:plugin:posts/${feedId}/message/delete`,
