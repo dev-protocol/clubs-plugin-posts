@@ -11,6 +11,7 @@ import {
 	type PostDocument,
 	type PostRawDocument,
 	type ReactionDocument,
+	type ReactionDocumentWithId,
 } from './redis-documents'
 import { reduceBy } from 'ramda'
 import { uuidToQuery } from '../fixtures/search'
@@ -191,12 +192,18 @@ export const fetchSinglePost = async ({
 				postId: post.id,
 				client,
 			})
+			console.log('reactions are: ', reactions)
 			const groupCreatedBy = (
-				acc: readonly string[],
-				{ created_by }: ReactionDocument,
-			) => acc.concat(created_by)
+				acc: readonly {
+					readonly createdBy: string
+					readonly id: string
+				}[],
+				{ created_by, id }: ReactionDocumentWithId,
+			) => acc.concat([{ createdBy: created_by, id }])
 			const toEmoji = ({ content }: ReactionDocument) => content
-			return reduceBy(groupCreatedBy, [], toEmoji, reactions)
+			const reduced = reduceBy(groupCreatedBy, [], toEmoji, reactions)
+			console.log('reduced are: ', reduced)
+			return reduced
 		},
 	)
 

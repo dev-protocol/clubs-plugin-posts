@@ -1,6 +1,9 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onMounted, ref, toRaw } from 'vue'
 import type { Reactions } from '../../../types'
+import { encode } from '@devprotocol/clubs-core'
+import type { UndefinedOr } from '@devprotocol/util-ts'
+import type { Signer } from 'ethers'
 import { getSignature, getMessage } from '../../../fixtures/session'
 
 type Props = {
@@ -15,6 +18,10 @@ const reactions = ref<Reactions>({})
 const isTogglingReaction = ref<boolean>(false)
 
 reactions.value = props.reactions
+
+onMounted(() => {
+	console.log('reactions:', toRaw(reactions.value))
+})
 
 const toggleReaction = async (emoji: string) => {
 	if (isTogglingReaction.value) {
@@ -32,10 +39,48 @@ const toggleReaction = async (emoji: string) => {
 		return
 	}
 	// get wallet address
-	const connectedAddress = await signer.getAddress()
+	const userAddress = (await signer.getAddress()) as string
 
-	const hash = getMessage(connectedAddress)
-	let sig = await getSignature(connectedAddress, signer)
+	// check if the user has already reacted with the emoji
+	const userHasReacted = reactions.value[emoji]?.find(
+		(reaction) => reaction.createdBy === userAddress,
+	)
+	console.log('user has reacted: ', toRaw(userHasReacted))
+
+	if (userHasReacted) {
+		await removeReaction({
+			emoji,
+			signer,
+			userAddress,
+			reactionId: userHasReacted.id,
+		})
+	} else {
+		await addReaction({ emoji, signer, userAddress })
+	}
+
+	isTogglingReaction.value = false
+}
+
+const addReaction = async ({
+	emoji,
+	userAddress,
+	signer,
+}: {
+	emoji: string
+	signer: Signer
+	userAddress: string
+}) => {
+	const hash = getMessage(userAddress)
+	let sig = await getSignature(userAddress, signer)
+
+	try {
+		sig = await signer.signMessage(hash)
+	} catch (error) {
+		// TODO: add state for failure.
+		console.error('error occurred while signing message:', error)
+		isTogglingReaction.value = false
+		return
+	}
 
 	const requestInfo = {
 		method: 'POST',
@@ -55,29 +100,90 @@ const toggleReaction = async (emoji: string) => {
 		requestInfo,
 	)
 
+	const { id } = await res.json()
+	console.log('id is: ', id)
+	console.log('emoji is: ', emoji)
+
 	if (res.status === 200) {
 		const emojiReactions = reactions.value[emoji] ?? []
-		const userAddress = await signer.getAddress()
-		const userAddressExists = emojiReactions.includes(await signer.getAddress())
+		console.log('emoji reactions are: ', emojiReactions)
+		reactions.value = {
+			...reactions.value,
+			[emoji]: [...emojiReactions, { createdBy: userAddress, id }],
+		}
+
+		// const userAddress = await signer.getAddress()
+		// const userAddressExists = emojiReactions.includes(await signer.getAddress())
 
 		// if user address exists, remove it
-		if (userAddressExists) {
-			reactions.value = {
-				...reactions.value,
-				[emoji]: emojiReactions.filter((address) => address !== userAddress),
-			}
-		} else {
-			// if user address does not exist, add it
-			reactions.value = {
-				...reactions.value,
-				[emoji]: [...emojiReactions, userAddress],
-			}
-		}
+		// if (userAddressExists) {
+		// 	reactions.value = {
+		// 		...reactions.value,
+		// 		[emoji]: emojiReactions.filter((address) => address !== userAddress),
+		// 	}
+		// } else {
+		// 	// if user address does not exist, add it
+		// 	reactions.value = {
+		// 		...reactions.value,
+		// 		[emoji]: [...emojiReactions, userAddress],
+		// 	}
+		// }
 	} else {
 		console.error('Error occurred while posting reaction:', res)
 	}
+}
 
-	isTogglingReaction.value = false
+const removeReaction = async ({
+	reactionId,
+	emoji,
+	userAddress,
+	signer,
+}: {
+	reactionId: string
+	emoji: string
+	signer: Signer
+	userAddress: string
+}) => {
+	console.log('reaction id is: ', reactionId)
+
+	const hash = getMessage(userAddress)
+	let sig = await getSignature(userAddress, signer)
+
+	try {
+		sig = await signer.signMessage(hash)
+	} catch (error) {
+		// TODO: add state for failure.
+		console.error('error occurred while signing message:', error)
+		isTogglingReaction.value = false
+		return
+	}
+
+	const requestInfo = {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			hash,
+			sig,
+			id: reactionId,
+		}),
+	}
+
+	const res = await fetch(
+		`/api/devprotocol:clubs:plugin:posts/${props.feedId}/reactions`,
+		requestInfo,
+	)
+
+	if (res.status === 200) {
+		const emojiReactions = reactions.value[emoji] ?? []
+		reactions.value = {
+			...reactions.value,
+			[emoji]: emojiReactions.filter((reaction) => reaction.id !== reactionId),
+		}
+	} else {
+		console.error('Error occurred while deleting reaction:', res)
+	}
 }
 </script>
 

@@ -226,12 +226,13 @@ export const setPost = async ({
 		post.reactions,
 	)
 		.map((key) => {
-			const users = post.reactions[key]
-			return users.map((created_by) =>
+			const reactions = post.reactions[key]
+			return reactions.map((reaction) =>
 				reactionDocument({
 					data: {
 						content: key,
-						created_by,
+						created_by: reaction.createdBy,
+						// created_by,
 					},
 					scope: scope,
 					postId: post.id,
@@ -379,8 +380,14 @@ export const setReaction = async ({
 	readonly client: RedisDefaultClient
 	readonly createdBy: string
 }) => {
-	await implSetReaction({ scope, reaction, postId, url, client, createdBy })
-	return true
+	return await implSetReaction({
+		scope,
+		reaction,
+		postId,
+		url,
+		client,
+		createdBy,
+	})
 }
 
 export const implSetReaction = async ({
@@ -408,11 +415,44 @@ export const implSetReaction = async ({
 		postId,
 	})
 
-	await client.json.set(
-		generateKeyOf(schema.Prefix.Reaction, scope, uuid()),
-		'$',
-		newReactionData,
-	)
+	const id = uuid()
+	const key = generateKeyOf(schema.Prefix.Reaction, scope, id)
+
+	await client.json.set(key, '$', newReactionData)
+
+	return key
+}
+
+export const deleteReaction = async ({
+	reactionKey,
+	client,
+	userAddress,
+}: {
+	readonly reactionKey: string
+	readonly client: RedisDefaultClient
+	readonly userAddress: string
+}) => {
+	const reaction = await fetchReaction({
+		reactionKey,
+		client,
+	})
+
+	if (!reaction) {
+		return false
+	}
+
+	// make sure user is the owner of the reaction
+	if (reaction.created_by !== userAddress) {
+		return false
+	}
+
+	// const reactionKey = generateKeyOf(schema.Prefix.Reaction, scope, reactionId)
+	try {
+		await client.del(reactionKey) // Delete the reaction
+		return true
+	} catch (err) {
+		return false
+	}
 }
 
 export const setComment = async ({
@@ -643,4 +683,15 @@ export const fetchAllReactions = async ({
 	const result = await loop(0, [])
 
 	return result
+}
+
+export const fetchReaction = async ({
+	reactionKey,
+	client,
+}: {
+	readonly reactionKey: string
+	readonly client: RedisDefaultClient
+}) => {
+	const reaction = await client.json.get(reactionKey)
+	return reaction?.valueOf() as ReactionDocument
 }
