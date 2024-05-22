@@ -52,6 +52,7 @@ let isLoading = ref<boolean>(true)
 let error = ref<string>('')
 let posts = ref<Posts[]>([])
 let profiles = ref<{ [address: string]: ClubsProfile | undefined }>({})
+let walletSigner: Signer | undefined = undefined
 
 const walletAddress = ref<string | undefined>('')
 const hasEditableRole = ref(false)
@@ -171,6 +172,9 @@ onMounted(async () => {
 		'@devprotocol/clubs-core/connection'
 	)
 	connection.value = conct
+	conct().signer.subscribe((signer: UndefinedOr<Signer>) => {
+		walletSigner = signer
+	})
 	const signer = conct().signer.value
 	if (signer) {
 		const connectedAddress = await signer.getAddress()
@@ -184,7 +188,7 @@ onMounted(async () => {
 const isVerified = ref(false)
 
 const handleVerify = async () => {
-	connection.value?.().signer.subscribe(handleConnection)
+	handleConnection(walletSigner)
 	//
 	if (connection.value?.().signer.value) {
 		isVerified.value = true
