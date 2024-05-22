@@ -62,11 +62,12 @@ export const hasWritePermission = async ({
 		.flat()
 		.filter((x) => x !== undefined)
 
-	const verify = requireMemberships
-		? await whenNotError(membershipVerifier, (verifier) =>
-				verifier(requireMemberships),
-			)
-		: { result: false }
+	const verify =
+		requireMemberships && requireMemberships.length > 0
+			? await whenNotError(membershipVerifier, (verifier) =>
+					verifier(requireMemberships),
+				)
+			: { result: false }
 	// eslint-disable-next-line functional/no-expression-statement
 	console.log({ verify })
 
