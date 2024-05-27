@@ -1,14 +1,19 @@
 <script setup lang="ts">
+import { nanoid } from 'nanoid'
 import { onMounted, type PropType, ref } from 'vue'
 import {
 	bytes32Hex,
 	type ClubsPropsAdminPages,
 	ClubsSlotName,
 	setOptions,
+	i18nFactory,
 } from '@devprotocol/clubs-core'
-import type { Membership, OptionsDatabase } from '../../types.ts'
+import { Strings } from '../../i18n'
 import { uuidFactory } from '../../db/uuidFactory.ts'
-import { nanoid } from 'nanoid'
+import type { Membership, OptionsDatabase } from '../../types.ts'
+
+const i18nBase = i18nFactory(Strings)
+let i18n = ref<ReturnType<typeof i18nBase>>(i18nBase(['en']))
 
 const props = defineProps({
 	feeds: {
@@ -89,6 +94,8 @@ onMounted(() => {
 			countNews.value = slots[ClubsSlotName.PageContentHomeBeforeContent].items
 		}
 	}
+
+	i18n.value = i18nBase(navigator.languages)
 })
 
 const normalize = (value?: string) =>
@@ -211,7 +218,7 @@ const onChange = () => {
 		</p>
 		<div class="flex flex-col gap-2">
 			<label class="hs-form-field is-filled flex flex-col">
-				<span class="hs-form-field__label"> Title </span>
+				<span class="hs-form-field__label"> {{ i18n('Title') }} </span>
 				<input
 					v-model="title"
 					class="hs-form-field__input"
@@ -309,7 +316,7 @@ const onChange = () => {
 				</div>
 
 				<label for="information-title" class="hs-form-field__label block">
-					Title
+					{{ i18n('Title') }}
 				</label>
 				<p class="mb-4 text-sm block">
 					You can change the title of the latest news

@@ -14,7 +14,7 @@ import { i18nFactory } from '@devprotocol/clubs-core'
 import { getSignature, getMessage } from '../../../../fixtures/session'
 
 const i18nBase = i18nFactory(Strings)
-let i18n = i18nBase(['en'])
+let i18n = ref<ReturnType<typeof i18nBase>>(i18nBase(['en']))
 
 type Props = {
 	feedId: string
