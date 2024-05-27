@@ -11,10 +11,10 @@ import { Strings } from './i18n'
 import { i18nFactory, type ClubsProfile } from '@devprotocol/clubs-core'
 
 const i18nBase = i18nFactory(Strings)
-let i18n = i18nBase(['en'])
+let i18n = ref<ReturnType<typeof i18nBase>>(i18nBase(['en']))
 
 onMounted(() => {
-	i18n = i18nBase(navigator.languages)
+	i18n.value = i18nBase(navigator.languages)
 })
 
 type Props = {
