@@ -1,6 +1,10 @@
 import type { ClubsI18nParts } from '@devprotocol/clubs-core'
 
 export const Strings = {
+	Title: {
+		en: 'Title',
+		ja: '件名',
+	},
 	NoPostsOnTimeline: {
 		en: 'Sorry, but there are no posts on this timeline yet.',
 		ja: '申し訳ありません。このタイムラインにはまだ投稿がありません',
