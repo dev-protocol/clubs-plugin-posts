@@ -120,7 +120,9 @@ const handleConnection = async (signer: UndefinedOr<Signer>) => {
 	}
 	console.log('inside Handle Connection')
 	// get wallet address
-	const connectedAddress = signer ? await signer.getAddress() : await newSigner.getAddress()
+	const connectedAddress = signer
+		? await signer.getAddress()
+		: await newSigner.getAddress()
 	// const connectedAddress = '0x57E21bd98612DE0Bd1723F4bf81A944eF7BfF526'
 	walletAddress.value = connectedAddress
 	console.log({ connectedAddress })
@@ -184,8 +186,8 @@ onMounted(async () => {
 		walletSigner = signer
 	})
 	const signer = conct().signer.value
-	console.log({signer})
-	console.log({walletSigner})
+	console.log({ signer })
+	console.log({ walletSigner })
 	if (signer) {
 		const connectedAddress = await signer.getAddress()
 		walletAddress.value = connectedAddress

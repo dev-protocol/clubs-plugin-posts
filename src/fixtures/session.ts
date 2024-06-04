@@ -39,10 +39,7 @@ export const getSignature = async (
 	return decode(sig) as string
 }
 
-export const getSessionAddress = async(
-	hash: string,
-	sig: string,
-) => {
+export const getSessionAddress = async (hash: string, sig: string) => {
 	const address = verifyMessage(hash, sig)
 	return address
 }
