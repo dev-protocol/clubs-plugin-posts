@@ -2,6 +2,7 @@
 import { type UndefinedOr } from '@devprotocol/util-ts'
 import { type Signer } from 'ethers'
 import { encode, decode } from '@devprotocol/clubs-core'
+import { verifyMessage } from 'ethers'
 
 const maxValidity = 1 * 60 * 60 * 1000 // 1 hour
 
@@ -36,6 +37,14 @@ export const getSignature = async (
 		sessionStorage.setItem(hashKey, currentHash)
 	}
 	return decode(sig) as string
+}
+
+export const getSessionAddress = async(
+	hash: string,
+	sig: string,
+) => {
+	const address = verifyMessage(hash, sig)
+	return address
 }
 
 export const consoleWarn = () => {

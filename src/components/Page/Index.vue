@@ -108,14 +108,22 @@ const testPermission = async (
 }
 
 const handleConnection = async (signer: UndefinedOr<Signer>) => {
+	let newSigner: Signer = signer as Signer
+	console.log({ signer })
 	if (!signer) {
-		return
+		const { connection: conct } = await import(
+			'@devprotocol/clubs-core/connection'
+		)
+		connection.value = conct
+		newSigner = conct().signer.value
+		console.log({ newSigner })
 	}
-
+	console.log('inside Handle Connection')
 	// get wallet address
-	const connectedAddress = await signer.getAddress()
+	const connectedAddress = signer ? await signer.getAddress() : await newSigner.getAddress()
 	// const connectedAddress = '0x57E21bd98612DE0Bd1723F4bf81A944eF7BfF526'
 	walletAddress.value = connectedAddress
+	console.log({ connectedAddress })
 
 	const hash = getMessage(connectedAddress)
 
@@ -176,11 +184,16 @@ onMounted(async () => {
 		walletSigner = signer
 	})
 	const signer = conct().signer.value
+	console.log({signer})
+	console.log({walletSigner})
 	if (signer) {
 		const connectedAddress = await signer.getAddress()
 		walletAddress.value = connectedAddress
 		isVerified.value = true
 	}
+	setTimeout(() => {
+		handleConnection(walletSigner)
+	}, 1000)
 
 	i18n.value = i18nBase(navigator.languages)
 })
