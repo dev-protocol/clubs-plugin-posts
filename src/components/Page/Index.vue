@@ -25,7 +25,12 @@ import {
 	hasWritePermission,
 } from '../../fixtures/memberships'
 import { JsonRpcProvider } from 'ethers'
-import { getSignature, getMessage, checkSession, consoleWarn } from '../../fixtures/session'
+import {
+	getSignature,
+	getMessage,
+	checkSession,
+	consoleWarn,
+} from '../../fixtures/session'
 import { Strings } from '../../i18n'
 
 type Props = {
@@ -123,10 +128,10 @@ const handleConnection = async (signer: UndefinedOr<Signer>) => {
 	const connectedAddress = signer
 		? await signer.getAddress()
 		: await newSigner.getAddress()
-		
+
 	walletAddress.value = connectedAddress
 
-	if(isVerified.value){
+	if (isVerified.value) {
 		hasEditableRole.value = await testPermission(
 			walletAddress.value,
 			new JsonRpcProvider(props.rpcUrl),
@@ -177,14 +182,14 @@ onMounted(async () => {
 		'@devprotocol/clubs-core/connection'
 	)
 	connection.value = conct
-	conct().signer.subscribe(async(signer: UndefinedOr<Signer>) => {
+	conct().signer.subscribe(async (signer: UndefinedOr<Signer>) => {
 		if (signer) {
-		const connectedAddress = await signer.getAddress()
-		walletAddress.value = connectedAddress
-		isVerified.value = await checkSession(connectedAddress)
-		console.log( "isverfied", isVerified.value )
-		walletSigner = signer
-		handleConnection(signer)
+			const connectedAddress = await signer.getAddress()
+			walletAddress.value = connectedAddress
+			isVerified.value = await checkSession(connectedAddress)
+			console.log('isverfied', isVerified.value)
+			walletSigner = signer
+			handleConnection(signer)
 		}
 	})
 	i18n.value = i18nBase(navigator.languages)
@@ -193,7 +198,7 @@ onMounted(async () => {
 const isVerified = ref(false)
 
 const handleVerify = async () => {
-	const walletAddres = await walletSigner?.getAddress() as string
+	const walletAddres = (await walletSigner?.getAddress()) as string
 	const hash = getMessage(walletAddres)
 	let sig = await getSignature(walletAddres, walletSigner as Signer)
 	fetchPosts({ hash, sig })

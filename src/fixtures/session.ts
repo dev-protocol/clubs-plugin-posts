@@ -49,27 +49,26 @@ export const getSessionAddress = async (hash: string, sig: string) => {
 export const checkSession = async (address: string) => {
 	console.log('inside checkSession')
 	const hash = sessionStorage.getItem(`hash-of-${address}`)
-	const sigItem = sessionStorage.getItem(`sig-of-${address}`);
-	const sig = sigItem ? decode(sigItem) as string : undefined;
-	console.log({hash, sig})
+	const sigItem = sessionStorage.getItem(`sig-of-${address}`)
+	const sig = sigItem ? (decode(sigItem) as string) : undefined
+	console.log({ hash, sig })
 
 	if (!hash || !sig) {
-		return false;
+		return false
 	}
 
-	try{
+	try {
 		const SessoionAddress = await getSessionAddress(hash, sig)
-		console.log({SessoionAddress, address})
+		console.log({ SessoionAddress, address })
 
 		if (SessoionAddress !== address) {
 			console.log('inside here')
 			return false
 		}
 		return true
-	}
-	catch(error) {
+	} catch (error) {
 		console.log('inside catch')
-		console.error('Error checking session:', error);
+		console.error('Error checking session:', error)
 		return false
 	}
 }
