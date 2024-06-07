@@ -25,7 +25,7 @@ import {
 	hasWritePermission,
 } from '../../fixtures/memberships'
 import { JsonRpcProvider } from 'ethers'
-import { getSignature, getMessage, consoleWarn } from '../../fixtures/session'
+import { getSignature, getMessage, checkSession, consoleWarn } from '../../fixtures/session'
 import { Strings } from '../../i18n'
 
 type Props = {
@@ -123,20 +123,15 @@ const handleConnection = async (signer: UndefinedOr<Signer>) => {
 	const connectedAddress = signer
 		? await signer.getAddress()
 		: await newSigner.getAddress()
-	// const connectedAddress = '0x57E21bd98612DE0Bd1723F4bf81A944eF7BfF526'
+		
 	walletAddress.value = connectedAddress
-	console.log({ connectedAddress })
 
-	const hash = getMessage(connectedAddress)
-
-	let sig = await getSignature(connectedAddress, signer)
-
-	fetchPosts({ hash, sig })
-
-	hasEditableRole.value = await testPermission(
-		walletAddress.value,
-		new JsonRpcProvider(props.rpcUrl),
-	)
+	if(isVerified.value){
+		hasEditableRole.value = await testPermission(
+			walletAddress.value,
+			new JsonRpcProvider(props.rpcUrl),
+		)
+	}
 }
 
 const fetchPosts = async ({ hash, sig }: { hash?: string; sig?: string }) => {
@@ -182,32 +177,32 @@ onMounted(async () => {
 		'@devprotocol/clubs-core/connection'
 	)
 	connection.value = conct
-	conct().signer.subscribe((signer: UndefinedOr<Signer>) => {
-		walletSigner = signer
-	})
-	const signer = conct().signer.value
-	console.log({ signer })
-	console.log({ walletSigner })
-	if (signer) {
+	conct().signer.subscribe(async(signer: UndefinedOr<Signer>) => {
+		if (signer) {
 		const connectedAddress = await signer.getAddress()
 		walletAddress.value = connectedAddress
-		isVerified.value = true
-	}
-	setTimeout(() => {
-		handleConnection(walletSigner)
-	}, 1000)
-
+		isVerified.value = await checkSession(connectedAddress)
+		console.log( "isverfied", isVerified.value )
+		walletSigner = signer
+		handleConnection(signer)
+		}
+	})
 	i18n.value = i18nBase(navigator.languages)
 })
 
 const isVerified = ref(false)
 
 const handleVerify = async () => {
-	handleConnection(walletSigner)
+	const walletAddres = await walletSigner?.getAddress() as string
+	const hash = getMessage(walletAddres)
+	let sig = await getSignature(walletAddres, walletSigner as Signer)
+	fetchPosts({ hash, sig })
 	//
 	if (connection.value?.().signer.value) {
 		isVerified.value = true
 	}
+
+	handleConnection(walletSigner)
 }
 
 const handlePostSuccess = (post: Posts) => {
