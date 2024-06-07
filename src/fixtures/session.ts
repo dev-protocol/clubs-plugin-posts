@@ -2,6 +2,8 @@
 import { type UndefinedOr } from '@devprotocol/util-ts'
 import { type Signer } from 'ethers'
 import { encode, decode } from '@devprotocol/clubs-core'
+import { verifyMessage } from 'ethers'
+import type { Address } from 'cluster'
 
 const maxValidity = 1 * 60 * 60 * 1000 // 1 hour
 
@@ -36,6 +38,39 @@ export const getSignature = async (
 		sessionStorage.setItem(hashKey, currentHash)
 	}
 	return decode(sig) as string
+}
+
+export const getSessionAddress = async (hash: string, sig: string) => {
+	console.log('inside getSessionAddress')
+	const address = verifyMessage(hash, sig)
+	return address
+}
+
+export const checkSession = async (address: string) => {
+	console.log('inside checkSession')
+	const hash = sessionStorage.getItem(`hash-of-${address}`)
+	const sigItem = sessionStorage.getItem(`sig-of-${address}`)
+	const sig = sigItem ? (decode(sigItem) as string) : undefined
+	console.log({ hash, sig })
+
+	if (!hash || !sig) {
+		return false
+	}
+
+	try {
+		const SessoionAddress = await getSessionAddress(hash, sig)
+		console.log({ SessoionAddress, address })
+
+		if (SessoionAddress !== address) {
+			console.log('inside here')
+			return false
+		}
+		return true
+	} catch (error) {
+		console.log('inside catch')
+		console.error('Error checking session:', error)
+		return false
+	}
 }
 
 export const consoleWarn = () => {
