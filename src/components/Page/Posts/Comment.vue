@@ -6,7 +6,7 @@ import {
 	encode,
 	type ClubsProfile,
 } from '@devprotocol/clubs-core'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import Profile from '../../Common/Profile.vue'
 import type { Comment, CommentPrimitives } from '../../../types'
 import IconSend from '../../../assets/images/icon-send.svg'
@@ -14,6 +14,12 @@ import IconTrash from '../../../assets/images/icon-trash.svg'
 import { getSignature, getMessage } from '../../../fixtures/session'
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
+import { i18nFactory } from '@devprotocol/clubs-core'
+
+import { Strings } from './i18n'
+
+const i18nBase = i18nFactory(Strings)
+let i18n = ref<ReturnType<typeof i18nBase>>(i18nBase(['en']))
 
 type Props = {
 	feedId: string
@@ -201,6 +207,10 @@ const deleteComment = async (commentId: string) => {
 		}
 	}
 }
+
+onMounted(() => {
+	i18n.value = i18nBase(navigator.languages)
+})
 </script>
 
 <template>
@@ -253,7 +263,7 @@ const deleteComment = async (commentId: string) => {
 				class="w-11/12 bg-transparent rounded border border-gray-400 px-2 py-2 text-base text-gray-700 focus:border-indigo-500 focus:outline-none"
 				type="text"
 				v-model="newComment"
-				placeholder="Add your thoughts..."
+				:placeholder="i18n('AddYourThoughts')"
 				:disabled="isCommenting"
 			/>
 			<button
