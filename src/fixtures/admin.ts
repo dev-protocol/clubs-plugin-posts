@@ -7,7 +7,7 @@ const MULTIPLY = 1000000n
 
 export const hasAdminRole = async (
 	user: string,
-    config: ClubsConfiguration,
+	config: ClubsConfiguration,
 	provider: ContractRunner,
 ): Promise<boolean> => {
 	const [a, b] = await clientsProperty(provider, config.propertyAddress)
