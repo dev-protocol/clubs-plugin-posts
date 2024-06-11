@@ -246,7 +246,10 @@ export const fetchPostHandler =
  * @returns a single post
  */
 export const deletePostHandler =
-	(dbQueryKey: string) =>
+	(
+		config: ClubsConfiguration,
+		dbQueryKey: string
+	) =>
 	async ({ request }: { readonly request: Request }) => {
 		const { postId, hash, sig } = (await request.json()) as {
 			readonly postId: string
