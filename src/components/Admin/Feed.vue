@@ -181,15 +181,7 @@ const onChange = () => {
 				slots,
 			}
 		}
-		return {
-			...feed,
-			roles: {
-				write: {
-					memberships: [],
-				},
-			},
-			slots: {},
-		}
+		return feed
 	})
 
 	setOptions(
