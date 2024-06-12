@@ -144,7 +144,6 @@ const handleConnection = async (signer: UndefinedOr<Signer>) => {
 }
 
 const fetchPosts = async ({ hash, sig }: { hash?: string; sig?: string }) => {
-	
 	console.log('fetching posts')
 	const query =
 		hash && sig ? new URLSearchParams({ hash, sig }) : new URLSearchParams()
@@ -161,7 +160,7 @@ const fetchPosts = async ({ hash, sig }: { hash?: string; sig?: string }) => {
 					contents: string
 					profiles: { [address: string]: ClubsProfile | undefined }
 				}
-				console.log({json})
+				console.log({ json })
 				posts.value = decode<Posts[]>(json.contents)
 				profiles.value = json.profiles
 			}
