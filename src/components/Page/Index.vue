@@ -132,6 +132,10 @@ const handleConnection = async (signer: UndefinedOr<Signer>) => {
 	walletAddress.value = connectedAddress
 
 	if (isVerified.value) {
+		const walletAddres = (await walletSigner?.getAddress()) as string
+		const hash = getMessage(walletAddres)
+		let sig = await getSignature(walletAddres, walletSigner as Signer)
+		fetchPosts({ hash, sig })
 		hasEditableRole.value = await testPermission(
 			walletAddress.value,
 			new JsonRpcProvider(props.rpcUrl),
@@ -140,6 +144,8 @@ const handleConnection = async (signer: UndefinedOr<Signer>) => {
 }
 
 const fetchPosts = async ({ hash, sig }: { hash?: string; sig?: string }) => {
+	
+	console.log('fetching posts')
 	const query =
 		hash && sig ? new URLSearchParams({ hash, sig }) : new URLSearchParams()
 	const url = new URL(
@@ -150,10 +156,12 @@ const fetchPosts = async ({ hash, sig }: { hash?: string; sig?: string }) => {
 	fetch(url.toString())
 		.then(async (res) => {
 			if (res.status === 200) {
+				console.log('post success')
 				const json = (await res.json()) as {
 					contents: string
 					profiles: { [address: string]: ClubsProfile | undefined }
 				}
+				console.log({json})
 				posts.value = decode<Posts[]>(json.contents)
 				profiles.value = json.profiles
 			}
