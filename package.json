@@ -48,19 +48,19 @@
 		"dayjs": "^1.11.8",
 		"dompurify": "^3.0.5",
 		"ethers": "^6.6.4",
-		"marked": "12.0.2",
+		"marked": "13.0.0",
 		"nanoid": "^5.0.6",
 		"photoswipe": "5.4.4",
 		"ramda": "0.30.1",
 		"redis": "^4.6.7",
-		"sass": "1.77.4",
+		"sass": "1.77.6",
 		"uuid": "^10.0.0"
 	},
 	"devDependencies": {
 		"@astrojs/svelte": "^5.0.0",
 		"@astrojs/tailwind": "^5.0.0",
 		"@astrojs/vue": "^4.0.0",
-		"@devprotocol/clubs-core": "3.13.2",
+		"@devprotocol/clubs-core": "3.14.3",
 		"@nanostores/vue": "^0.10.0",
 		"@redis/json": "^1.0.4",
 		"@rollup/plugin-typescript": "11.1.6",
@@ -68,12 +68,12 @@
 		"@types/dompurify": "^3.0.2",
 		"@types/dotenv": "8.2.0",
 		"@types/marked": "^6.0.0",
-		"@types/node": "20.14.2",
+		"@types/node": "20.14.6",
 		"@types/ramda": "0.30.0",
 		"@types/uuid": "^9.0.2",
 		"@typescript-eslint/eslint-plugin": "5.62.0",
 		"@typescript-eslint/parser": "5.62.0",
-		"astro": "4.9.3",
+		"astro": "4.10.3",
 		"dotenv": "16.4.5",
 		"eslint": "8.57.0",
 		"eslint-config-prettier": "9.1.0",
@@ -94,7 +94,7 @@
 		"txtgen": "^3.0.6",
 		"typescript": "5.4.5",
 		"vitest": "^1.2.1",
-		"vue": "3.4.27"
+		"vue": "3.4.29"
 	},
 	"peerDependencies": {
 		"@devprotocol/clubs-core": "^2.1.0 || ^3.0.0"
