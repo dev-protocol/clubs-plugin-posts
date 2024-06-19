@@ -241,7 +241,7 @@ export const getApiPaths = (async (
 							method: 'POST',
 							handler: deletePostHandler(
 								memberships ?? [],
-								config, 
+								config,
 								db.database.key,
 								db.roles,
 							),

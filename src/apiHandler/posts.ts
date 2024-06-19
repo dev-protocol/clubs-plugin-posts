@@ -247,8 +247,8 @@ export const fetchPostHandler =
  */
 export const deletePostHandler =
 	(
-		memberships: readonly Membership[], 
-		config: ClubsConfiguration, 
+		memberships: readonly Membership[],
+		config: ClubsConfiguration,
 		dbQueryKey: string,
 		roles?: OptionsDatabase['roles'],
 	) =>
@@ -277,21 +277,23 @@ export const deletePostHandler =
 		// const splitUrl = url.pathname.split('/')
 		// const postId = splitUrl[splitUrl.length - 2]
 		const userAddress = verifyMessage(hash, sig)
-		const authenticated = !skipAuthentication && ((await whenDefinedAll([hash, sig], ([h, s]) =>
-			authenticate({
-				message: h,
-				signature: s,
-				previousConfiguration: encode(config),
-				provider: getDefaultProvider(config.rpcUrl),
-			}),
-		)) ||
-			(await hasWritePermission({
-				account: userAddress,
-				provider: getDefaultProvider(config.rpcUrl),
-				propertyAddress: config.propertyAddress,
-				memberships,
-				roles,
-			})))
+		const authenticated =
+			!skipAuthentication &&
+			((await whenDefinedAll([hash, sig], ([h, s]) =>
+				authenticate({
+					message: h,
+					signature: s,
+					previousConfiguration: encode(config),
+					provider: getDefaultProvider(config.rpcUrl),
+				}),
+			)) ||
+				(await hasWritePermission({
+					account: userAddress,
+					provider: getDefaultProvider(config.rpcUrl),
+					propertyAddress: config.propertyAddress,
+					memberships,
+					roles,
+				})))
 		const success = await deletePost({
 			postId,
 			client,
