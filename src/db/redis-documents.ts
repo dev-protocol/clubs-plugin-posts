@@ -296,11 +296,13 @@ export const deletePost = async ({
 	client,
 	scope,
 	userAddress,
+	authenticated,
 }: {
 	readonly scope: string
 	readonly postId: string
 	readonly client: RedisDefaultClient
 	readonly userAddress: string
+	readonly authenticated: boolean
 }) => {
 	// first fetch the post
 	const doc = await client.json.get(`${schema.Prefix.Post}:${scope}:${postId}`)
@@ -312,7 +314,7 @@ export const deletePost = async ({
 	const post = doc?.valueOf() as Posts
 
 	// ensure the user is the owner of the post
-	if (post.created_by !== userAddress) {
+	if (!authenticated && post.created_by !== userAddress) {
 		return false
 	}
 

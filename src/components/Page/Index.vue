@@ -342,6 +342,7 @@ const onPostDeleted = (id: string) => {
 				:date="post.created_at"
 				:contents="post.content"
 				:masked="post.masked ?? false"
+				:hasEditableRole="hasEditableRole"
 				:memberships="
 					filterRequiredMemberships({
 						post: post as Posts,

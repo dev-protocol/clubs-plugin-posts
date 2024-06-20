@@ -19,6 +19,7 @@ type Props = {
 	feedId: string
 	title?: string
 	contents: string
+	hasEditableRole: boolean
 	profiles: { [address: string]: ClubsProfile | undefined }
 }
 
@@ -111,7 +112,10 @@ const shareOnHey = () => {
 
 <template>
 	<div>
-		<div v-if="walletAddress === address" class="flex justify-end relative">
+		<div
+			v-if="walletAddress === address || hasEditableRole"
+			class="flex justify-end relative"
+		>
 			<button
 				class="text-gray-500 font-bold rounded-full hover:bg-gray-200 w-8 h-8 flex items-center justify-center"
 				v-on:click="managePostDropdownOpen = true"

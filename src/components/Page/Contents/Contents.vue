@@ -16,6 +16,7 @@ type Props = {
 	masked: boolean
 	memberships: readonly Membership[]
 	title: string
+	hasEditableRole: boolean
 	profiles: { [address: string]: ClubsProfile | undefined }
 }
 
@@ -52,6 +53,7 @@ marked.use({ renderer })
 		:title="props.title"
 		:contents="props.contents"
 		:profiles="props.profiles"
+		:hasEditableRole="props.hasEditableRole"
 		@post-deleted="$emit('postDeleted', props.postId)"
 	/>
 

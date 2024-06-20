@@ -246,25 +246,60 @@ export const fetchPostHandler =
  * @returns a single post
  */
 export const deletePostHandler =
-	(dbQueryKey: string) =>
+	(
+		memberships: readonly Membership[],
+		config: ClubsConfiguration,
+		dbQueryKey: string,
+		roles?: OptionsDatabase['roles'],
+	) =>
 	async ({ request }: { readonly request: Request }) => {
 		const { postId, hash, sig } = (await request.json()) as {
 			readonly postId: string
 			readonly hash: string
 			readonly sig: string
 		}
+		if (!hash || !sig) {
+			return new Response(
+				JSON.stringify({
+					error: 'Hash or Signature are missing',
+					data: null,
+				}),
+				{
+					status: 400,
+				},
+			)
+		}
 		const client = await getDefaultClient()
+
+		const skipAuthentication = config.propertyAddress === ZeroAddress
 
 		/** get the parent post id */
 		// const splitUrl = url.pathname.split('/')
 		// const postId = splitUrl[splitUrl.length - 2]
-		const createdBy = verifyMessage(hash, sig)
-
+		const userAddress = verifyMessage(hash, sig)
+		const authenticated =
+			!skipAuthentication &&
+			((await whenDefinedAll([hash, sig], ([h, s]) =>
+				authenticate({
+					message: h,
+					signature: s,
+					previousConfiguration: encode(config),
+					provider: getDefaultProvider(config.rpcUrl),
+				}),
+			)) ||
+				(await hasWritePermission({
+					account: userAddress,
+					provider: getDefaultProvider(config.rpcUrl),
+					propertyAddress: config.propertyAddress,
+					memberships,
+					roles,
+				})))
 		const success = await deletePost({
 			postId,
 			client,
 			scope: dbQueryKey,
-			userAddress: createdBy,
+			userAddress: userAddress,
+			authenticated,
 		})
 
 		// eslint-disable-next-line functional/no-expression-statement
