@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { keccak256 } from 'ethers'
 import Spinner from '../../../Spinner/Spinner.vue'
 import type { PostPrimitives, Posts } from '../../../../types'
 import { encode, decode } from '@devprotocol/clubs-core'
@@ -96,9 +95,6 @@ const onClickPost = async () => {
 	const composedPost = whenDefined(json.data, (data) => decode<Posts>(data))
 
 	isPosting.value = false
-
-	// レスポンスのjsonをコンソールに表示する
-	console.log(json)
 
 	// 終了のemit
 	composedPost && emit('post:success', composedPost)

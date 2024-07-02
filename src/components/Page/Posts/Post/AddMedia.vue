@@ -8,6 +8,7 @@ interface Emits {
 const emit = defineEmits<Emits>()
 const handleFileUpload = (event: Event) => {
 	const target = event.target as HTMLInputElement
+
 	const file = target.files ? target.files[0] : null
 	if (file) {
 		const reader = new FileReader()
@@ -19,6 +20,8 @@ const handleFileUpload = (event: Event) => {
 		}
 		reader.readAsDataURL(file)
 	}
+
+	target.value = ''
 }
 
 // 画像ボタンを押した時の処理
