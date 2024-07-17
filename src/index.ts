@@ -304,6 +304,7 @@ export const getApiPaths = (async (
 										propertyAddress: config.propertyAddress,
 										rpcUrl: config.rpcUrl,
 										memberships: memberships ?? [],
+										roles: db.roles,
 									})
 									// eslint-disable-next-line
 									allPosts =
@@ -409,6 +410,7 @@ export const getApiPaths = (async (
 								dbQueryKey: db.database.key,
 								config,
 								memberships: memberships ?? [],
+								roles: db.roles,
 							}),
 						},
 						/**
@@ -447,7 +449,12 @@ export const getApiPaths = (async (
 				({
 					paths: [db.id, 'search', /.*/],
 					method: 'GET',
-					handler: fetchPostHas(db.database.key, config, memberships ?? []),
+					handler: fetchPostHas(
+						db.database.key,
+						config,
+						memberships ?? [],
+						db.roles,
+					),
 				}) satisfies ClubsApiPath,
 		),
 	]

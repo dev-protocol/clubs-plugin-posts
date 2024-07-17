@@ -18,6 +18,7 @@ import { maskFactory } from '../fixtures/masking'
 import { headers } from '../fixtures/json'
 import { uuidToQuery } from '../fixtures/search'
 import type { OptionDocument } from '../db/redis-documents'
+import type { OptionsDatabase } from '../types.ts'
 
 const AVAILABLE_VALUE = /^[\w#-]+$/
 const normalize = (q: string) => q.replaceAll('-', ' ')
@@ -33,6 +34,7 @@ export const fetchPostHas =
 		dbQueryKey: string,
 		config: ClubsConfiguration,
 		memberships: readonly Membership[],
+		roles: OptionsDatabase['roles'],
 	): APIRoute =>
 	async ({ url }: { readonly request: Request; readonly url: URL }) => {
 		const pathquery = aperture(2, decodeURIComponent(url.pathname).split('/'))
@@ -98,6 +100,7 @@ export const fetchPostHas =
 				propertyAddress: config.propertyAddress,
 				rpcUrl: config.rpcUrl,
 				memberships,
+				roles,
 			}),
 		)
 
