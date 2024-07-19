@@ -5,7 +5,7 @@ import {
 	type Membership,
 	bytes32Hex,
 } from '@devprotocol/clubs-core'
-import { filterRequiredMemberships } from './memberships'
+import { filterRequiredMemberships, hasWritePermission } from './memberships'
 import { whenDefined } from '@devprotocol/util-ts'
 
 type MaskFactory = (opts: {
@@ -72,33 +72,29 @@ export const maskFactory: MaskFactory = async ({
 		// limited_access_status
 		const hasLimitedAccessMemberships = requiredMemberships.length > 0
 
-		const writableMemberships = roles?.write.memberships
-			.map((payload) => {
-				return memberships
-					?.filter(
-						(membership) =>
-							bytes32Hex(membership.payload ?? []) === bytes32Hex(payload),
-					)
-					.flat()
-			})
-			.flat()
-			.filter((x) => x !== undefined)
+		if (!user) {
+			return mask(post)
+		}
 
-		const hasWritableMemberships = writableMemberships
-			? writableMemberships.length > 0
-			: false
+		const hasWritableMemberships = await hasWritePermission({
+			account: user,
+			provider,
+			propertyAddress,
+			memberships,
+			roles,
+		})
 
 		// don't mask if it has write permission
 		if (hasWritableMemberships) {
 			return post
 		}
 
-		// don't mask if the post isn't has limited access memberships
+		// don't mask if the post isn't having limited access memberships
 		if (!hasLimitedAccessMemberships) {
 			return post
 		}
 
-		// mask if user don't connect to wallet
+		// mask if user doesn't connect to wallet
 		if (membershipVerifier === undefined) {
 			return mask(post)
 		}
