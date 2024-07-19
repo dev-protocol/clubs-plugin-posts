@@ -95,7 +95,7 @@ const addReaction = async ({
 
 	if (res.status === 200) {
 		const emojiReactions = reactions.value[emoji] ?? []
-		console.log('emoji reactions are: ', emojiReactions)
+		// console.log('emoji reactions are: ', emojiReactions)
 		reactions.value = {
 			...reactions.value,
 			[emoji]: [...emojiReactions, { createdBy: userAddress, id }],

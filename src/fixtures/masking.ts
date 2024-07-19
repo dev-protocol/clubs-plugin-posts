@@ -1,10 +1,11 @@
 import { JsonRpcProvider } from 'ethers'
-import type { PostOption, Posts } from '../types'
+import type { OptionsDatabase, PostOption, Posts } from '../types'
 import {
 	membershipVerifierFactory,
 	type Membership,
+	bytes32Hex,
 } from '@devprotocol/clubs-core'
-import { filterRequiredMemberships } from './memberships'
+import { filterRequiredMemberships, hasWritePermission } from './memberships'
 import { whenDefined } from '@devprotocol/util-ts'
 
 type MaskFactory = (opts: {
@@ -12,6 +13,7 @@ type MaskFactory = (opts: {
 	readonly propertyAddress: string
 	readonly rpcUrl: string
 	readonly memberships: readonly Membership[]
+	readonly roles?: OptionsDatabase['roles']
 }) => Promise<(post: Posts) => Promise<Posts>>
 
 const maskOptions = (options: readonly PostOption[]): readonly PostOption[] => {
@@ -38,11 +40,13 @@ export const maskFactory: MaskFactory = async ({
 	propertyAddress,
 	rpcUrl,
 	memberships,
+	roles,
 }: {
 	readonly user?: string
 	readonly propertyAddress: string
 	readonly rpcUrl: string
 	readonly memberships: readonly Membership[]
+	readonly roles?: OptionsDatabase['roles']
 }) => {
 	const provider = new JsonRpcProvider(rpcUrl)
 
@@ -65,13 +69,43 @@ export const maskFactory: MaskFactory = async ({
 			memberships: [...memberships],
 		})
 
-		const hasRequiredMemberships = requiredMemberships.length > 0
+		// limited_access_status
+		const hasLimitedAccessMemberships = requiredMemberships.length > 0
 
-		const verified =
-			membershipVerifier && hasRequiredMemberships
-				? (await membershipVerifier(requiredMemberships)).result
-				: !hasRequiredMemberships
+		if (!user) {
+			return mask(post)
+		}
 
-		return verified ? post : mask(post)
+		const hasWritableMemberships = await hasWritePermission({
+			account: user,
+			provider,
+			propertyAddress,
+			memberships,
+			roles,
+		})
+
+		// don't mask if it has write permission
+		if (hasWritableMemberships) {
+			return post
+		}
+
+		// don't mask if the post isn't having limited access memberships
+		if (!hasLimitedAccessMemberships) {
+			return post
+		}
+
+		// mask if user doesn't connect to wallet
+		if (membershipVerifier === undefined) {
+			return mask(post)
+		}
+
+		const membershipVerifierResult = (
+			await membershipVerifier(requiredMemberships)
+		).result
+		if (!membershipVerifierResult) {
+			return mask(post)
+		}
+
+		return post
 	}
 }

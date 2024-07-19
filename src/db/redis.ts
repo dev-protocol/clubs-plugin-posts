@@ -192,7 +192,7 @@ export const fetchSinglePost = async ({
 				postId: post.id,
 				client,
 			})
-			console.log('reactions are: ', reactions)
+			// console.log('reactions are: ', reactions)
 			const groupCreatedBy = (
 				acc: readonly {
 					readonly createdBy: string
@@ -202,7 +202,7 @@ export const fetchSinglePost = async ({
 			) => acc.concat([{ createdBy: created_by, id }])
 			const toEmoji = ({ content }: ReactionDocument) => content
 			const reduced = reduceBy(groupCreatedBy, [], toEmoji, reactions)
-			console.log('reduced are: ', reduced)
+			// console.log('reduced are: ', reduced)
 			return reduced
 		},
 	)

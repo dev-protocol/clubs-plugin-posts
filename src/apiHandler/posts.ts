@@ -125,10 +125,12 @@ export const fetchPostHandler =
 		dbQueryKey,
 		config,
 		memberships,
+		roles,
 	}: {
 		readonly dbQueryKey: string
 		readonly config: ClubsConfiguration
 		readonly memberships: readonly Membership[]
+		readonly roles: OptionsDatabase['roles']
 	}) =>
 	async ({
 		request,
@@ -173,6 +175,7 @@ export const fetchPostHandler =
 					propertyAddress: config.propertyAddress,
 					rpcUrl: config.rpcUrl,
 					memberships: memberships,
+					roles: roles,
 				}),
 			)
 			const result = await whenNotErrorAll([post, mask], ([p, maskFn]) =>
