@@ -72,40 +72,24 @@ export const maskFactory: MaskFactory = async ({
 		// limited_access_status
 		const hasLimitedAccessMemberships = requiredMemberships.length > 0
 
-		if (!user) {
-			return mask(post)
-		}
+		const verified = hasLimitedAccessMemberships
+			? user
+				? (([hasMemberships, hasWritableRole]) =>
+						hasMemberships || hasWritableRole)(
+						await Promise.all([
+							(await membershipVerifier?.(requiredMemberships))?.result,
+							hasWritePermission({
+								account: user,
+								provider,
+								propertyAddress,
+								memberships,
+								roles,
+							}),
+						]),
+					)
+				: /* when it has requiredMemberships but the user is missed, it's always false  */ false
+			: /* when it has no requiredMemberships, it's always true */ true
 
-		const hasWritableMemberships = await hasWritePermission({
-			account: user,
-			provider,
-			propertyAddress,
-			memberships,
-			roles,
-		})
-
-		// don't mask if it has write permission
-		if (hasWritableMemberships) {
-			return post
-		}
-
-		// don't mask if the post isn't having limited access memberships
-		if (!hasLimitedAccessMemberships) {
-			return post
-		}
-
-		// mask if user doesn't connect to wallet
-		if (membershipVerifier === undefined) {
-			return mask(post)
-		}
-
-		const membershipVerifierResult = (
-			await membershipVerifier(requiredMemberships)
-		).result
-		if (!membershipVerifierResult) {
-			return mask(post)
-		}
-
-		return post
+		return verified ? post : mask(post)
 	}
 }
