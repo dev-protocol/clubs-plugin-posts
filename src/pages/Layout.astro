@@ -52,7 +52,7 @@ const description =
 		: truncatedDescription
 
 const image =
-	requiredMemberships.length > 0 ? defaultImage : images[0] ?? defaultImage
+	requiredMemberships.length > 0 ? defaultImage : (images[0] ?? defaultImage)
 ---
 
 <!doctype html>
