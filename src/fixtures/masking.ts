@@ -72,6 +72,11 @@ export const maskFactory: MaskFactory = async ({
 		// limited_access_status
 		const hasLimitedAccessMemberships = requiredMemberships.length > 0
 
+		// don't mask if the post isn't having limited access memberships
+		if (!hasLimitedAccessMemberships) {
+			return post
+		}
+
 		if (!user) {
 			return mask(post)
 		}
@@ -86,11 +91,6 @@ export const maskFactory: MaskFactory = async ({
 
 		// don't mask if it has write permission
 		if (hasWritableMemberships) {
-			return post
-		}
-
-		// don't mask if the post isn't having limited access memberships
-		if (!hasLimitedAccessMemberships) {
 			return post
 		}
 
