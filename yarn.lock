@@ -38,15 +38,15 @@
   resolved "https://registry.yarnpkg.com/@antfu/utils/-/utils-0.7.8.tgz#86cb0974bcab7e64e29b57d6d9021102307257de"
   integrity sha512-rWQkqXRESdjXtc+7NRfK9lASQjpXJu1ayp7qi1d23zZorY+wBHVLHHoVcMsEnkqEBWTFqbztO7/QdJFzyEcLTg==
 
-"@astrojs/compiler@^2.9.0":
-  version "2.9.2"
-  resolved "https://registry.yarnpkg.com/@astrojs/compiler/-/compiler-2.9.2.tgz#c01dcdb14dc938758e66f9856934b83b6cd986d1"
-  integrity sha512-Vpu0Ffsj8SoV+N0DFHlxxOMKHwSC9059Xy/OlG1t6uFYSoJXxkBC2WyF6igO7x10V+8uJrhOxaXr3nA90kJXow==
-
 "@astrojs/compiler@^2.9.1":
   version "2.9.1"
   resolved "https://registry.yarnpkg.com/@astrojs/compiler/-/compiler-2.9.1.tgz#3c23198f52094c73c23717a76c5fb2719bbe74e5"
   integrity sha512-s8Ge2lWHx/s3kl4UoerjL/iPtwdtogNM/BLOaGCwQA6crMOVYpphy5wUkYlKyuh8GAeGYH/5haLAFBsgNy9AQQ==
+
+"@astrojs/compiler@^2.9.2":
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/@astrojs/compiler/-/compiler-2.10.0.tgz#ecc39e59ae4c87521a11967c3c42cc68ef8e43d9"
+  integrity sha512-V8ym+4kYCKmMeSdfDvm/SrlmUlKLkKzfWV3cKyiStEKW/D+YsXaQiBZcSCtuKXq8aQhsDw9HtCTZilhEMBX+BA==
 
 "@astrojs/internal-helpers@0.4.1":
   version "0.4.1"
@@ -1411,6 +1411,13 @@
   dependencies:
     "@types/hast" "^3.0.4"
 
+"@shikijs/core@1.12.0":
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/@shikijs/core/-/core-1.12.0.tgz#58ae6d02da7934edd9c10951a989c9cde0cf736b"
+  integrity sha512-mc1cLbm6UQ8RxLc0dZES7v5rkH+99LxQp/ZvTqV3NLyYsO/fD6JhEflP1H5b2SDq9gI0+0G36AVZWxvounfR9w==
+  dependencies:
+    "@types/hast" "^3.0.4"
+
 "@sveltejs/vite-plugin-svelte-inspector@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@sveltejs/vite-plugin-svelte-inspector/-/vite-plugin-svelte-inspector-2.1.0.tgz#116ba2b73be43c1d7d93de749f37becc7e45bb8c"
@@ -2157,12 +2164,12 @@ astral-regex@^1.0.0:
   resolved "https://registry.yarnpkg.com/astral-regex/-/astral-regex-1.0.0.tgz#6c8c3fb827dd43ee3918f27b82782ab7658a6fd9"
   integrity sha512-+Ryf6g3BKoRc7jfp7ad8tM4TtMiaWvbF/1/sQcZPkkS7ag3D5nMBCe2UfOTONtAkaG0tO0ij3C5Lwmf1EiyjHg==
 
-astro@4.12.2:
-  version "4.12.2"
-  resolved "https://registry.yarnpkg.com/astro/-/astro-4.12.2.tgz#c92bec880e05577997dd963a423f0ad54e7d6cf4"
-  integrity sha512-l6OmqlL+FiuSi9x6F+EGZitteOznq1JffOil7st7cdqeMCTEIym4oagI1a6zp6QekliKWEEZWdplGhgh1k1f7Q==
+astro@4.12.3:
+  version "4.12.3"
+  resolved "https://registry.yarnpkg.com/astro/-/astro-4.12.3.tgz#13c482a9c9d2b306f4cdf376070c40d44e714b51"
+  integrity sha512-rFcRktbZk8CsHufLOB51gYAia3RTuOyaBD8iZXRHP7Oqo6QviquNaa/5U6RoUqyF5KS8vyq/ldJ5jfboJzxuuw==
   dependencies:
-    "@astrojs/compiler" "^2.9.0"
+    "@astrojs/compiler" "^2.9.2"
     "@astrojs/internal-helpers" "0.4.1"
     "@astrojs/markdown-remark" "5.2.0"
     "@astrojs/telemetry" "3.1.0"
@@ -2211,8 +2218,8 @@ astro@4.12.2:
     preferred-pm "^4.0.0"
     prompts "^2.4.2"
     rehype "^13.0.1"
-    semver "^7.6.2"
-    shiki "^1.10.3"
+    semver "^7.6.3"
+    shiki "^1.11.0"
     string-width "^7.2.0"
     strip-ansi "^7.1.0"
     tsconfck "^3.1.1"
@@ -5865,10 +5872,10 @@ semver@^7.3.7, semver@^7.6.0:
   dependencies:
     lru-cache "^6.0.0"
 
-semver@^7.6.2:
-  version "7.6.2"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-7.6.2.tgz#1e3b34759f896e8f14d6134732ce798aeb0c6e13"
-  integrity sha512-FNAIBWCx9qcRhoHcgcJ0gvU7SN1lYU2ZXuSfl04bSC5OpvDHFyJCjdNHomPXxjQlCBU67YW64PzY7/VIEH7F2w==
+semver@^7.6.3:
+  version "7.6.3"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.6.3.tgz#980f7b5550bc175fb4dc09403085627f9eb33143"
+  integrity sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==
 
 sharp@^0.33.3:
   version "0.33.3"
@@ -5929,6 +5936,14 @@ shiki@^1.10.3:
   integrity sha512-eneCLncGuvPdTutJuLyUGS8QNPAVFO5Trvld2wgEq1e002mwctAhJKeMGWtWVXOIEzmlcLRqcgPSorR6AVzOmQ==
   dependencies:
     "@shikijs/core" "1.10.3"
+    "@types/hast" "^3.0.4"
+
+shiki@^1.11.0:
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/shiki/-/shiki-1.12.0.tgz#fd4900442405760df5c5819b5baa3892ef9612d2"
+  integrity sha512-BuAxWOm5JhRcbSOl7XCei8wGjgJJonnV0oipUupPY58iULxUGyHhW5CF+9FRMuM1pcJ5cGEJGll1LusX6FwpPA==
+  dependencies:
+    "@shikijs/core" "1.12.0"
     "@types/hast" "^3.0.4"
 
 siginfo@^2.0.0:
