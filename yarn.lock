@@ -4940,10 +4940,10 @@ nanoid@^5.0.6:
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-5.0.7.tgz#6452e8c5a816861fd9d2b898399f7e5fd6944cc6"
   integrity sha512-oLxFY2gd2IqnjcYyOXD8XGCftpGtZP2AbHbOkthDkvRywH5ayNtPVy9YlOPcHckXzbLTCHpkb7FB+yuxKV13pQ==
 
-nanostores@^0.10.0:
-  version "0.10.3"
-  resolved "https://registry.yarnpkg.com/nanostores/-/nanostores-0.10.3.tgz#960b508dd465286a9bd8747ba0596fb679004c57"
-  integrity sha512-Nii8O1XqmawqSCf9o2aWqVxhKRN01+iue9/VEd1TiJCr9VT5XxgPFbF1Edl1XN6pwJcZRsl8Ki+z01yb/T/C2g==
+nanostores@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/nanostores/-/nanostores-0.11.0.tgz#8d835ab5089270c64427b63370a456ad4034e5dd"
+  integrity sha512-fT2u3vmWmUt93G9dmUgpnbs3AAYJb6lzu7KrJ1FdC/rjFopGiboS3bfKYv6NNkuY6g6eiRakTR48wKSL/F5C+g==
 
 natural-compare-lite@^1.4.0:
   version "1.4.0"
