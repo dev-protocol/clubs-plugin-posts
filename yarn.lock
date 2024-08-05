@@ -4941,9 +4941,9 @@ nanoid@^5.0.6:
   integrity sha512-oLxFY2gd2IqnjcYyOXD8XGCftpGtZP2AbHbOkthDkvRywH5ayNtPVy9YlOPcHckXzbLTCHpkb7FB+yuxKV13pQ==
 
 nanostores@^0.11.0:
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/nanostores/-/nanostores-0.11.0.tgz#8d835ab5089270c64427b63370a456ad4034e5dd"
-  integrity sha512-fT2u3vmWmUt93G9dmUgpnbs3AAYJb6lzu7KrJ1FdC/rjFopGiboS3bfKYv6NNkuY6g6eiRakTR48wKSL/F5C+g==
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/nanostores/-/nanostores-0.11.2.tgz#4703bbab7301ebccc0c68828c509fd0994d8241c"
+  integrity sha512-6bucNxMJA5rNV554WQl+MWGng0QVMzlRgpKTHHfIbVLrhQ+yRXBychV9ECGVuuUfCMQPjfIG9bj8oJFZ9hYP/Q==
 
 natural-compare-lite@^1.4.0:
   version "1.4.0"
