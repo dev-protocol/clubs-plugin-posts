@@ -212,16 +212,6 @@
     "@jridgewell/trace-mapping" "^0.3.25"
     jsesc "^2.5.1"
 
-"@babel/generator@^7.25.4", "@babel/generator@^7.25.5":
-  version "7.25.5"
-  resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.25.5.tgz#b31cf05b3fe8c32d206b6dad03bb0aacbde73450"
-  integrity sha512-abd43wyLfbWoxC6ahM8xTkqLpGB2iWBVyuKC9/srhFunCd1SDNrV1s72bBpK4hLj8KLzHBBcOblvLQZBNw9r3w==
-  dependencies:
-    "@babel/types" "^7.25.4"
-    "@jridgewell/gen-mapping" "^0.3.5"
-    "@jridgewell/trace-mapping" "^0.3.25"
-    jsesc "^2.5.1"
-
 "@babel/helper-annotate-as-pure@^7.24.7":
   version "7.24.7"
   resolved "https://registry.yarnpkg.com/@babel/helper-annotate-as-pure/-/helper-annotate-as-pure-7.24.7.tgz#5373c7bc8366b12a033b4be1ac13a206c6656aab"
@@ -585,19 +575,6 @@
     "@babel/parser" "^7.25.3"
     "@babel/template" "^7.25.0"
     "@babel/types" "^7.25.2"
-    debug "^4.3.1"
-    globals "^11.1.0"
-
-"@babel/traverse@^7.25.4":
-  version "7.25.4"
-  resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.25.4.tgz#648678046990f2957407e3086e97044f13c3e18e"
-  integrity sha512-VJ4XsrD+nOvlXyLzmLzUs/0qjFS4sK30te5yEFlvbbUNEgKaVb2BHZUpAL+ttLPQAHNrsI3zZisbfha5Cvr8vg==
-  dependencies:
-    "@babel/code-frame" "^7.24.7"
-    "@babel/generator" "^7.25.4"
-    "@babel/parser" "^7.25.4"
-    "@babel/template" "^7.25.0"
-    "@babel/types" "^7.25.4"
     debug "^4.3.1"
     globals "^11.1.0"
 
@@ -2305,20 +2282,17 @@ astral-regex@^1.0.0:
   resolved "https://registry.yarnpkg.com/astral-regex/-/astral-regex-1.0.0.tgz#6c8c3fb827dd43ee3918f27b82782ab7658a6fd9"
   integrity sha512-+Ryf6g3BKoRc7jfp7ad8tM4TtMiaWvbF/1/sQcZPkkS7ag3D5nMBCe2UfOTONtAkaG0tO0ij3C5Lwmf1EiyjHg==
 
-astro@4.14.6:
-  version "4.14.6"
-  resolved "https://registry.yarnpkg.com/astro/-/astro-4.14.6.tgz#ff2feda4864ab103dcd5dc0b53f8104f4d4deb45"
-  integrity sha512-MIDyNhtu3L4uakHvlTprh21eQPehYOtZSuSLtd+r6xZcl3lB+mlBz/hs1W3iHEQAORyJnKArWSY/aVOBKUyflA==
+astro@4.15.1:
+  version "4.15.1"
+  resolved "https://registry.yarnpkg.com/astro/-/astro-4.15.1.tgz#ae0f4570a95a02de40f638c3b49368a8006fe898"
+  integrity sha512-XvKZ2GaDbCsMfcJess4o+4D4cCKja45GJ/9o6EJ6n96xaen8HZMRoJn3YKL9TOjIrL2NuU4mBFMG2JivPJ0foA==
   dependencies:
     "@astrojs/compiler" "^2.10.3"
     "@astrojs/internal-helpers" "0.4.1"
     "@astrojs/markdown-remark" "5.2.0"
     "@astrojs/telemetry" "3.1.0"
     "@babel/core" "^7.25.2"
-    "@babel/generator" "^7.25.5"
-    "@babel/parser" "^7.25.4"
     "@babel/plugin-transform-react-jsx" "^7.25.2"
-    "@babel/traverse" "^7.25.4"
     "@babel/types" "^7.25.4"
     "@oslojs/encoding" "^0.4.1"
     "@rollup/pluginutils" "^5.1.0"
@@ -2342,8 +2316,8 @@ astro@4.14.6:
     es-module-lexer "^1.5.4"
     esbuild "^0.21.5"
     estree-walker "^3.0.3"
-    execa "^8.0.1"
     fast-glob "^3.3.2"
+    fastq "^1.17.1"
     flattie "^1.1.1"
     github-slugger "^2.0.0"
     gray-matter "^4.0.3"
@@ -2352,6 +2326,7 @@ astro@4.14.6:
     js-yaml "^4.1.0"
     kleur "^4.1.5"
     magic-string "^0.30.11"
+    magicast "^0.3.5"
     micromatch "^4.0.8"
     mrmime "^2.0.0"
     neotraverse "^0.6.18"
@@ -2366,6 +2341,7 @@ astro@4.14.6:
     shiki "^1.14.1"
     string-width "^7.2.0"
     strip-ansi "^7.1.0"
+    tinyexec "^0.3.0"
     tsconfck "^3.1.1"
     unist-util-visit "^5.0.0"
     vfile "^6.0.3"
@@ -3481,7 +3457,7 @@ fast-levenshtein@^2.0.6, fast-levenshtein@~2.0.6:
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==
 
-fastq@^1.6.0:
+fastq@^1.17.1, fastq@^1.6.0:
   version "1.17.1"
   resolved "https://registry.yarnpkg.com/fastq/-/fastq-1.17.1.tgz#2a523f07a4e7b1e81a42b91b8bf2254107753b47"
   integrity sha512-sRVD3lWVIXWg6By68ZN7vho9a1pQcN/WBFaAAsDDFzlJjvoGx0P8z7V1t72grFJfJhu3YPZBuu25f7Kaw2jN1w==
@@ -4539,6 +4515,15 @@ magic-string@^0.30.7:
   integrity sha512-iIRwTIf0QKV3UAnYK4PU8uiEc4SRh5jX0mwpIwETPpHdhVM4f53RSwS/vXvN1JhGX+Cs7B8qIq3d6AH49O5fAQ==
   dependencies:
     "@jridgewell/sourcemap-codec" "^1.4.15"
+
+magicast@^0.3.5:
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/magicast/-/magicast-0.3.5.tgz#8301c3c7d66704a0771eb1bad74274f0ec036739"
+  integrity sha512-L0WhttDl+2BOsybvEOLK7fW3UA0OQ0IQ2d6Zl2x/a6vVRs3bAY0ECOSHHeL5jD+SbOpOCUEi0y1DgHEn9Qn1AQ==
+  dependencies:
+    "@babel/parser" "^7.25.4"
+    "@babel/types" "^7.25.4"
+    source-map-js "^1.2.0"
 
 markdown-table@^3.0.0:
   version "3.0.3"
@@ -6569,6 +6554,11 @@ tinybench@^2.8.0:
   version "2.8.0"
   resolved "https://registry.yarnpkg.com/tinybench/-/tinybench-2.8.0.tgz#30e19ae3a27508ee18273ffed9ac7018949acd7b"
   integrity sha512-1/eK7zUnIklz4JUUlL+658n58XO2hHLQfSk1Zf2LKieUjxidN16eKFEoDEfjHc3ohofSSqK3X5yO6VGb6iW8Lw==
+
+tinyexec@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/tinyexec/-/tinyexec-0.3.0.tgz#ed60cfce19c17799d4a241e06b31b0ec2bee69e6"
+  integrity sha512-tVGE0mVJPGb0chKhqmsoosjsS+qUnJVGJpZgsHYQcGoPlG3B51R3PouqTgEGH2Dc9jjFyOqOpix6ZHNMXp1FZg==
 
 tinypool@^1.0.0:
   version "1.0.0"
