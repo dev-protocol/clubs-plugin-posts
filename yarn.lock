@@ -2290,10 +2290,10 @@ astral-regex@^1.0.0:
   resolved "https://registry.yarnpkg.com/astral-regex/-/astral-regex-1.0.0.tgz#6c8c3fb827dd43ee3918f27b82782ab7658a6fd9"
   integrity sha512-+Ryf6g3BKoRc7jfp7ad8tM4TtMiaWvbF/1/sQcZPkkS7ag3D5nMBCe2UfOTONtAkaG0tO0ij3C5Lwmf1EiyjHg==
 
-astro@4.15.3:
-  version "4.15.3"
-  resolved "https://registry.yarnpkg.com/astro/-/astro-4.15.3.tgz#22d822dcdf9583dad029f7d87c449ba7b415e1f2"
-  integrity sha512-zwO8H+vnNYbrdKz0Pkh2a4B/JK06JUvI18w+FxL3B5u4jqPB/SU+LH9XVUUWdNQsyJ/DBHKAf0LDK0RmwxXQEw==
+astro@4.15.4:
+  version "4.15.4"
+  resolved "https://registry.yarnpkg.com/astro/-/astro-4.15.4.tgz#9e79e3d51431bf5b8b0bb54a346543da313ac252"
+  integrity sha512-wqy+m3qygt9DmCSqMsckxyK4ccCUFtti2d/WlLkEpAlqHgyDIg20zRTLHO2v/H4YeSlJ8sAcN0RW2FhOeYbINg==
   dependencies:
     "@astrojs/compiler" "^2.10.3"
     "@astrojs/internal-helpers" "0.4.1"
