@@ -57,7 +57,7 @@
 		"uuid": "^11.0.0"
 	},
 	"devDependencies": {
-		"@astrojs/svelte": "^5.0.0",
+		"@astrojs/svelte": "^6.0.0",
 		"@astrojs/tailwind": "^5.0.0",
 		"@astrojs/vue": "^4.0.0",
 		"@devprotocol/clubs-core": "3.22.2",
