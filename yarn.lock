@@ -1035,10 +1035,10 @@
   resolved "https://registry.yarnpkg.com/@metamask/detect-provider/-/detect-provider-2.0.0.tgz#4bc2795e5e6f7d8b84b2e845058d2f222c99917d"
   integrity sha512-sFpN+TX13E9fdBDh9lvQeZdJn4qYoRb/6QF2oZZK/Pn559IhCFacPMU1rMuqyXoFQF3JSJfii2l98B87QDPeCQ==
 
-"@nanostores/vue@^0.10.0":
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/@nanostores/vue/-/vue-0.10.0.tgz#f1638933854c640ca4e91a59fda579cdbab4b8b0"
-  integrity sha512-832RAUbzRfHPs1CdqVEwfvgB2+RD/INji4Zo8bUSEfRO2pQRMMeq479gydnohGpRaa0oNwlfKo7TGFXCghq/1g==
+"@nanostores/vue@^0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@nanostores/vue/-/vue-0.11.0.tgz#a82ca22caeaedf119785a117510d8145b440d7c9"
+  integrity sha512-4ndyLhwVFl1xhOnvWuMvYiG4K2rYvkaQWP3nJC1/RwK/dvpDgLPywwv6MnBdFydqbOGuXNaXOEwa3HsG9CujmA==
 
 "@noble/curves@1.2.0":
   version "1.2.0"
