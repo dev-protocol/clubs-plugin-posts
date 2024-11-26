@@ -4558,17 +4558,17 @@ magic-string@^0.30.10:
   dependencies:
     "@jridgewell/sourcemap-codec" "^1.5.0"
 
-magic-string@^0.30.11, magic-string@^0.30.4:
-  version "0.30.13"
-  resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.30.13.tgz#92438e3ff4946cf54f18247c981e5c161c46683c"
-  integrity sha512-8rYBO+MsWkgjDSOvLomYnzhdwEG51olQ4zL5KXnNJWV5MNmrb4rTZdrtkhxjnD/QyZUqR/Z/XDsUs/4ej2nx0g==
-  dependencies:
-    "@jridgewell/sourcemap-codec" "^1.5.0"
-
-magic-string@^0.30.12:
+magic-string@^0.30.11, magic-string@^0.30.12:
   version "0.30.14"
   resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.30.14.tgz#e9bb29870b81cfc1ec3cc656552f5a7fcbf19077"
   integrity sha512-5c99P1WKTed11ZC0HMJOj6CDIue6F8ySu+bJL+85q1zBEIY8IklrJ1eiKC2NDRh3Ct3FcvmJPyQHb9erXMTJNw==
+  dependencies:
+    "@jridgewell/sourcemap-codec" "^1.5.0"
+
+magic-string@^0.30.4:
+  version "0.30.13"
+  resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.30.13.tgz#92438e3ff4946cf54f18247c981e5c161c46683c"
+  integrity sha512-8rYBO+MsWkgjDSOvLomYnzhdwEG51olQ4zL5KXnNJWV5MNmrb4rTZdrtkhxjnD/QyZUqR/Z/XDsUs/4ej2nx0g==
   dependencies:
     "@jridgewell/sourcemap-codec" "^1.5.0"
 
@@ -6501,9 +6501,9 @@ svelte2tsx@^0.7.22:
     pascal-case "^3.1.1"
 
 svelte@^5.0.0:
-  version "5.2.8"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.2.8.tgz#1a7834f118eadef10df0eae851aad090e1d6730e"
-  integrity sha512-VU7a01XwnFi6wXVkH5QY3FYXRZWrhsWZhaE8AYU6UeYZdslE3TFgQq6+HLrbMjOLkVhdKt74NGHYbhFeErQQ6g==
+  version "5.2.9"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.2.9.tgz#1cf7872a8651d4e29437373fc79f89f16b59702d"
+  integrity sha512-LjO7R6K8FI8dA3l+4CcsbJ3djIe2TtokHGzfpDTro5g8nworMbTz9alCR95EQXGsqlzIAvqJtZ7Yy0o33lL09Q==
   dependencies:
     "@ampproject/remapping" "^2.3.0"
     "@jridgewell/sourcemap-codec" "^1.5.0"
