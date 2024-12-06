@@ -6385,9 +6385,9 @@ svelte2tsx@^0.7.22:
     pascal-case "^3.1.1"
 
 svelte@^5.0.0:
-  version "5.4.0"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.4.0.tgz#e14a0cf5901ff7680504535ce89a1be3118e9e4d"
-  integrity sha512-2I/mjD8cXDpKfdfUK+T6yo/OzugMXIm8lhyJUFM5F/gICMYnkl3C/+4cOSpia8TqpDsi6Qfm5+fdmBNMNmaf2g==
+  version "5.8.0"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.8.0.tgz#b567bcbedd407d0f8a232e27cef67e10ef18db94"
+  integrity sha512-ET/JQmx355DOJ2+KFi1u9ufU0bjASaXS7IjiyLbzBYk1FTyJBX2DKiABRns6W2qtEifB04rpvKXuF9pSNpNBeQ==
   dependencies:
     "@ampproject/remapping" "^2.3.0"
     "@jridgewell/sourcemap-codec" "^1.5.0"
