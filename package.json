@@ -73,7 +73,7 @@
 		"@types/uuid": "^10.0.0",
 		"@typescript-eslint/eslint-plugin": "5.62.0",
 		"@typescript-eslint/parser": "5.62.0",
-		"astro": "4.16.16",
+		"astro": "4.16.17",
 		"dotenv": "16.4.7",
 		"eslint": "8.57.1",
 		"eslint-config-prettier": "9.1.0",
