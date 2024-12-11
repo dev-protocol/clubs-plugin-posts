@@ -62,9 +62,12 @@ onMounted(() => {
 	initPsl()
 })
 
-watch(images, () => {
-	initPsl()
-})
+watch(
+	() => images,
+	() => {
+		initPsl()
+	},
+)
 </script>
 
 <template>
