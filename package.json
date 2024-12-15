@@ -63,7 +63,7 @@
 		"@devprotocol/clubs-core": "3.22.2",
 		"@nanostores/vue": "^0.11.0",
 		"@redis/json": "^1.0.4",
-		"@rollup/plugin-typescript": "12.1.1",
+		"@rollup/plugin-typescript": "12.1.2",
 		"@tailwindcss/typography": "^0.5.10",
 		"@types/dompurify": "^3.0.2",
 		"@types/dotenv": "8.2.3",
