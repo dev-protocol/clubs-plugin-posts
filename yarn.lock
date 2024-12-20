@@ -481,14 +481,14 @@
   resolved "https://registry.yarnpkg.com/@boringer-avatars/vue3/-/vue3-0.2.1.tgz#db9d4183540de0d0af9e4e160cfc009f6f405e87"
   integrity sha512-KzAfh31SDXToTvFL0tBNG5Ur+VzfD1PP4jmY5/GS+eIuObGTIAiUu9eiht0LjuAGI+0xCgnaEgsTrOx8H3vLOQ==
 
-"@devprotocol/clubs-core@3.22.6":
-  version "3.22.6"
-  resolved "https://registry.yarnpkg.com/@devprotocol/clubs-core/-/clubs-core-3.22.6.tgz#8dcf7cca043dc97f8948eb9e8dff19a74348b5eb"
-  integrity sha512-/lj6wOIOiM89M0/PhLHeyrd+pYDqRPFC3ZmqMK6q6ZI1V9UcW+GbPRq2XirznAx1HEy2gQE4NJiCVCqIUBaxdg==
+"@devprotocol/clubs-core@3.22.8":
+  version "3.22.8"
+  resolved "https://registry.yarnpkg.com/@devprotocol/clubs-core/-/clubs-core-3.22.8.tgz#72e73e5dafb1d01f83ffac9746a4398bd76ebb47"
+  integrity sha512-bhiyHIvztZtXxtD3EWFnS0lYmtz3u0VqwKe15SFLputOol0skZ/rYwX1njlO6OlqmMvNr6VCgfNQmn7O9IqFuw==
   dependencies:
     "@devprotocol/dev-kit" "8.7.0"
     "@devprotocol/elements" "1.5.3"
-    "@devprotocol/hashi" "2.3.4"
+    "@devprotocol/hashi" "2.4.0-beta.0"
     "@devprotocol/util-ts" "4.0.0"
     "@ethersproject/abstract-provider" "^5.7.0"
     "@metamask/detect-provider" "^2.0.0"
@@ -528,10 +528,10 @@
     "@aggre/ullr" "^3.2.0"
     lit "^3.0.0"
 
-"@devprotocol/hashi@2.3.4":
-  version "2.3.4"
-  resolved "https://registry.yarnpkg.com/@devprotocol/hashi/-/hashi-2.3.4.tgz#681ff4aebbbafed757d8854a40afc824be1601f4"
-  integrity sha512-wbyriYx+akOACxpoiVaTxJhNRjgrTPMNJmWgaHFBKHiOm01ZBun+T8ductgmR5U8DdSxmP/apQuLqf/ohjMmzg==
+"@devprotocol/hashi@2.4.0-beta.0":
+  version "2.4.0-beta.0"
+  resolved "https://registry.yarnpkg.com/@devprotocol/hashi/-/hashi-2.4.0-beta.0.tgz#d1992f6a57a025ab1658fa821f1380fb6dfb2d08"
+  integrity sha512-XSkEIoWA1Oj5UKHAv4/6dsh5YaFgSI4fx1+H5Qi7SRxhm2cQkQgQnr3OS8EJlyGJF6q8v8ohlPwz1lwTitNZqg==
   dependencies:
     "@matteusan/sentro" "0.1.25"
 
