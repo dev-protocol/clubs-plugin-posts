@@ -481,10 +481,10 @@
   resolved "https://registry.yarnpkg.com/@boringer-avatars/vue3/-/vue3-0.2.1.tgz#db9d4183540de0d0af9e4e160cfc009f6f405e87"
   integrity sha512-KzAfh31SDXToTvFL0tBNG5Ur+VzfD1PP4jmY5/GS+eIuObGTIAiUu9eiht0LjuAGI+0xCgnaEgsTrOx8H3vLOQ==
 
-"@devprotocol/clubs-core@3.22.9":
-  version "3.22.9"
-  resolved "https://registry.yarnpkg.com/@devprotocol/clubs-core/-/clubs-core-3.22.9.tgz#2801eaf0ceefba9c843b03cf30c2f22ef91aafce"
-  integrity sha512-Y3mRTH36pVzcmmfEz6ccXVdHyKp8+7v55nnawuWEKIU0FWE3J5s4PAFyLyHuJxW9UjccTfH4Nx/yeoY3rX4COg==
+"@devprotocol/clubs-core@3.22.10":
+  version "3.22.10"
+  resolved "https://registry.yarnpkg.com/@devprotocol/clubs-core/-/clubs-core-3.22.10.tgz#12220acb574287a7f0e59ef77d2948d05066028c"
+  integrity sha512-Q/GKVQRdsx461QeWC5XI9ZQGzoyiVJaIezE+jAys58T81ip/krmIIW+W3Q2iM3sp7wvQmi0qkVRIJpATyqjveA==
   dependencies:
     "@devprotocol/dev-kit" "8.7.0"
     "@devprotocol/elements" "1.5.3"
@@ -500,6 +500,7 @@
     js-base64 "^3.7.2"
     lit "^3.0.0"
     marked "^10.0.0"
+    mp4box "^0.5.3"
     p-queue "^8.0.1"
     ramda "^0.30.0"
     rxjs "^7.8.1"
@@ -4999,6 +5000,11 @@ mkdirp@^0.5.1:
   integrity sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==
   dependencies:
     minimist "^1.2.6"
+
+mp4box@^0.5.3:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/mp4box/-/mp4box-0.5.3.tgz#6b90d3be8fc76f2608acddecc8d0c569ba655ab1"
+  integrity sha512-RIvyFZdPDIg3+mL6vUdPBSyQRrEfKO3ryAeJ4xJJV7HBHQUH3KfLlZRzfSpBHCd/HqR63HfbrWQI/CwXDvYENQ==
 
 mrmime@^2.0.0:
   version "2.0.0"
