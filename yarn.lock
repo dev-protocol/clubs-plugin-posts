@@ -481,10 +481,10 @@
   resolved "https://registry.yarnpkg.com/@boringer-avatars/vue3/-/vue3-0.2.1.tgz#db9d4183540de0d0af9e4e160cfc009f6f405e87"
   integrity sha512-KzAfh31SDXToTvFL0tBNG5Ur+VzfD1PP4jmY5/GS+eIuObGTIAiUu9eiht0LjuAGI+0xCgnaEgsTrOx8H3vLOQ==
 
-"@devprotocol/clubs-core@3.22.14":
-  version "3.22.14"
-  resolved "https://registry.yarnpkg.com/@devprotocol/clubs-core/-/clubs-core-3.22.14.tgz#994bec48f1717fa9915fe39dd101c90a1ad9f444"
-  integrity sha512-pk2dHNURmDoW3EThu446XJhwpggJw+Rj2NDJgXw6GCtDVv1iJKepupw1mCn4bdjgPlTjnlXeLSZuwZgnQ09pBg==
+"@devprotocol/clubs-core@3.22.15":
+  version "3.22.15"
+  resolved "https://registry.yarnpkg.com/@devprotocol/clubs-core/-/clubs-core-3.22.15.tgz#e0c562869501683dc67acf1c56b725e654335031"
+  integrity sha512-D6SnwZ1GDnzrWpFgwfev69nTPE03ftaZgVLTrutpaoKqsvgD834QwxvfJlZSdvd2aaxJTMkHhcg9xCT+/7f35g==
   dependencies:
     "@devprotocol/dev-kit" "8.7.0"
     "@devprotocol/elements" "1.5.3"
