@@ -57,9 +57,9 @@
 		"uuid": "^11.0.0"
 	},
 	"devDependencies": {
-		"@astrojs/svelte": "^6.0.0",
+		"@astrojs/svelte": "^7.0.0",
 		"@astrojs/tailwind": "^5.0.0",
-		"@astrojs/vue": "^4.0.0",
+		"@astrojs/vue": "^5.0.0",
 		"@devprotocol/clubs-core": "3.22.15",
 		"@nanostores/vue": "^0.11.0",
 		"@redis/json": "^1.0.4",
@@ -73,7 +73,7 @@
 		"@types/uuid": "^10.0.0",
 		"@typescript-eslint/eslint-plugin": "5.62.0",
 		"@typescript-eslint/parser": "5.62.0",
-		"astro": "4.16.18",
+		"astro": "5.1.7",
 		"dotenv": "16.4.7",
 		"eslint": "8.57.1",
 		"eslint-config-prettier": "10.0.1",
