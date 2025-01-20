@@ -112,6 +112,7 @@ export const getPagePaths = (async (
 		emojiAllowList,
 		rpcUrl: config.rpcUrl,
 		avatarImgSrc,
+		base: config.url,
 	}
 	return dbs
 		? [

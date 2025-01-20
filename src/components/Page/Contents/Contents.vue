@@ -18,6 +18,7 @@ type Props = {
 	title: string
 	hasEditableRole: boolean
 	profiles: { [address: string]: ClubsProfile | undefined }
+	base: string
 }
 
 const props = defineProps<Props>()
@@ -39,7 +40,7 @@ const renderer = {
 			? `<iframe class="youtube aspect-video mx-auto w-full max-w-2xl rounded" src="https://www.youtube.com/embed/${v}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`
 			: `<a href="${href}">${text}</a>`
 	},
-} as Renderer
+} as unknown as Renderer
 
 marked.use({ renderer })
 </script>
@@ -54,6 +55,7 @@ marked.use({ renderer })
 		:contents="props.contents"
 		:profiles="props.profiles"
 		:hasEditableRole="props.hasEditableRole"
+		:base="props.base"
 		@post-deleted="$emit('postDeleted', props.postId)"
 	/>
 

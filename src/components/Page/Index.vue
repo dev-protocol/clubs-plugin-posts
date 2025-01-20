@@ -42,6 +42,7 @@ type Props = {
 	emojiAllowList?: string[]
 	postId?: string
 	rpcUrl: string
+	base: string
 }
 
 const props = defineProps<Props>()
@@ -148,8 +149,7 @@ const fetchPosts = async ({ hash, sig }: { hash?: string; sig?: string }) => {
 	const query =
 		hash && sig ? new URLSearchParams({ hash, sig }) : new URLSearchParams()
 	const url = new URL(
-		`/api/devprotocol:clubs:plugin:posts/${props.feedId}/message${props.postId ? `/${props.postId}` : ''}?${query}`,
-		window.location.origin,
+		`${props.base}/api/devprotocol:clubs:plugin:posts/${props.feedId}/message${props.postId ? `/${props.postId}` : ''}?${query}`,
 	)
 
 	fetch(url.toString())
@@ -281,6 +281,7 @@ const onPostDeleted = (id: string) => {
 				:address="walletAddress"
 				:memberships="[...props.memberships]"
 				:profiles="profiles"
+				:base="props.base"
 				@post:success="handlePostSuccess"
 			>
 				<template v-slot:after-content-form>
@@ -346,11 +347,12 @@ const onPostDeleted = (id: string) => {
 				:memberships="
 					filterRequiredMemberships({
 						post: post as Posts,
-						memberships: [...props.memberships] ?? [],
+						memberships: [...props.memberships],
 					})
 				"
 				:title="post.title"
 				:profiles="profiles"
+				:base="props.base"
 				@post-deleted="onPostDeleted"
 			>
 				<template v-slot:after-post-content>
@@ -367,10 +369,11 @@ const onPostDeleted = (id: string) => {
 				:reactions="post.reactions"
 				:post-id="post.id"
 				:emoji-allow-list="props.emojiAllowList ?? emojiAllowList"
+				:base="props.base"
 			/>
 			<Line v-if="!post?.masked" class="my-2" />
 			<Comment
-				v-if="!post?.masked"
+				v-if="!post?.masked && walletAddress"
 				:feedId="props.feedId"
 				:postId="post.id"
 				:comments="post.comments"
@@ -378,6 +381,7 @@ const onPostDeleted = (id: string) => {
 				:postOwnerAddress="post.created_by"
 				:walletAddress="walletAddress"
 				:profiles="profiles"
+				:base="props.base"
 			/>
 
 			<EncodedPostData :post="post" />

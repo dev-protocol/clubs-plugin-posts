@@ -22,6 +22,7 @@ type Props = {
 	address: string
 	memberships?: Membership[]
 	profiles: { [address: string]: ClubsProfile | undefined }
+	base: string
 }
 
 interface Emits {
@@ -245,6 +246,7 @@ const handleDeleteImageAll = () => {
 				:images="uploadImages"
 				:post="postItem ?? { title: '', content: '', options: [] }"
 				:selectedLimitedAccess="selectedLimitedAccess"
+				:base="props.base"
 				@post:success="handlePostSuccess"
 			/>
 			<!-- /Postボタン -->

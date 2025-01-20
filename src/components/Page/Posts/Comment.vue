@@ -29,6 +29,7 @@ type Props = {
 	postOwnerAddress: string
 	walletAddress: string
 	profiles: { [address: string]: ClubsProfile | undefined }
+	base: string
 }
 const props = defineProps<Props>()
 const newComment = ref<string>('')
@@ -99,7 +100,7 @@ const postComment = async () => {
 	let response: Response
 	try {
 		response = await fetch(
-			`/api/devprotocol:clubs:plugin:posts/${props.feedId}/comment`,
+			`${props.base}/api/devprotocol:clubs:plugin:posts/${props.feedId}/comment`,
 			requestInfo,
 		)
 
@@ -180,7 +181,7 @@ const deleteComment = async (commentId: string) => {
 	let response: Response
 	try {
 		response = await fetch(
-			`/api/devprotocol:clubs:plugin:posts/${props.feedId}/comment/delete`,
+			`${props.base}/api/devprotocol:clubs:plugin:posts/${props.feedId}/comment/delete`,
 			requestInfo,
 		)
 

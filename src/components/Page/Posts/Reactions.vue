@@ -11,6 +11,7 @@ type Props = {
 	postId: string
 	reactions: Reactions
 	emojiAllowList: string[]
+	base: string
 }
 const props = defineProps<Props>()
 
@@ -87,7 +88,7 @@ const addReaction = async ({
 	}
 
 	const res = await fetch(
-		`/api/devprotocol:clubs:plugin:posts/${props.feedId}/reactions`,
+		`${props.base}/api/devprotocol:clubs:plugin:posts/${props.feedId}/reactions`,
 		requestInfo,
 	)
 
@@ -132,7 +133,7 @@ const removeReaction = async ({
 	}
 
 	const res = await fetch(
-		`/api/devprotocol:clubs:plugin:posts/${props.feedId}/reactions`,
+		`${props.base}/api/devprotocol:clubs:plugin:posts/${props.feedId}/reactions`,
 		requestInfo,
 	)
 

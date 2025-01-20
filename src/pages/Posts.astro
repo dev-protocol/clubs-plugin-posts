@@ -13,6 +13,7 @@ interface Props extends ClubsPropsPages {
 	adminRolePoints: number
 	emojiAllowList?: string[]
 	rpcUrl: string
+	base: string
 }
 
 const {
@@ -24,6 +25,7 @@ const {
 	emojiAllowList,
 	rpcUrl,
 	clubs,
+	base,
 } = Astro.props
 
 const url = Astro.url.pathname
@@ -50,6 +52,7 @@ const SlotsPostsFeedAfterPostContent = clubs.slots.filter(
 	emojiAllowList={emojiAllowList}
 	postId={postId}
 	rpcUrl={rpcUrl}
+	base={base}
 >
 	{
 		SlotsPostsEditAfterContentForm.map((Slot) => (

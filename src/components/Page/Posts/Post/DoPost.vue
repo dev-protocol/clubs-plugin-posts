@@ -19,6 +19,7 @@ type Props = {
 	feedId: string
 	images: string[]
 	post: PostPrimitives
+	base: string
 }
 
 interface Emits {
@@ -76,7 +77,7 @@ const onClickPost = async () => {
 
 	// fetchで /message.jsonをpostしてasync/awaitでレスポンスを取得する
 	const response = await fetch(
-		`/api/devprotocol:clubs:plugin:posts/${props.feedId}/message`,
+		`${props.base}/api/devprotocol:clubs:plugin:posts/${props.feedId}/message`,
 		{
 			method: 'POST',
 			headers: {

@@ -1,7 +1,7 @@
 ---
 import type { OptionsDatabase } from '../types'
 import type { ClubsPropsAdminPages } from '@devprotocol/clubs-core'
-import Feed from '../components/Admin/Feed.vue'
+import Feed_ from '../components/Admin/Feed.vue'
 
 type Props = ClubsPropsAdminPages & {
 	feeds: OptionsDatabase[]
@@ -9,4 +9,4 @@ type Props = ClubsPropsAdminPages & {
 }
 ---
 
-<Feed client:load {...Astro.props} />
+<Feed_ client:load {...Astro.props} />

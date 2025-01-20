@@ -21,9 +21,10 @@ type Props = {
 	contents: string
 	hasEditableRole: boolean
 	profiles: { [address: string]: ClubsProfile | undefined }
+	base: string
 }
 
-const { date, address, feedId, title, postId, contents, profiles } =
+const { date, address, feedId, title, postId, contents, profiles, base } =
 	defineProps<Props>()
 const connection = ref<typeof Connection>()
 const signer = ref<UndefinedOr<Signer>>()
@@ -72,7 +73,7 @@ const deletePost = async () => {
 	let sig = await getSignature(connectedAddress, signer)
 
 	const response = await fetch(
-		`/api/devprotocol:clubs:plugin:posts/${feedId}/message/delete`,
+		`${base}/api/devprotocol:clubs:plugin:posts/${feedId}/message/delete`,
 		{
 			method: 'POST',
 			headers: {
