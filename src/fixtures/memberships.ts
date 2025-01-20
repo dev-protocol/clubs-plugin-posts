@@ -68,7 +68,7 @@ export const hasWritePermission = async ({
 					verifier(requireMemberships),
 				)
 			: { result: false }
-	// eslint-disable-next-line functional/no-expression-statement
+
 	console.log({ verify })
 
 	return verify instanceof Error ? false : verify.result

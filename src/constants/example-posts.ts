@@ -1,5 +1,4 @@
-/* eslint-disable functional/no-expression-statement */
-/* eslint-disable functional/no-loop-statement */
+/* eslint-disable functional/no-loop-statements */
 /* eslint-disable functional/no-let */
 import { getDefaultProvider, toUtf8Bytes } from 'ethers'
 import type { Posts } from '../types'
@@ -56,8 +55,11 @@ export const examplePosts: readonly Posts[] = [
 			})),
 		],
 		reactions: {
-			'👍': ['0x1', '0x2'],
-			'🦜': ['0x3'],
+			'👍': [
+				{ createdBy: '0x1', id: '1' },
+				{ createdBy: '0x2', id: '1' },
+			],
+			'🦜': [{ createdBy: '0x3', id: '1' }],
 		},
 		masked: true,
 	},
@@ -105,7 +107,10 @@ export const examplePosts: readonly Posts[] = [
 			})),
 		],
 		reactions: {
-			'👍': ['0x1', '0x2'],
+			'👍': [
+				{ createdBy: '0x1', id: '2' },
+				{ createdBy: '0x2', id: '2' },
+			],
 		},
 	},
 	{
@@ -143,7 +148,7 @@ export const examplePosts: readonly Posts[] = [
 			})),
 		],
 		reactions: {
-			'🦜': ['0x3'],
+			'🦜': [{ createdBy: '0x3', id: '3' }],
 		},
 	},
 	{
@@ -178,8 +183,11 @@ export const examplePosts: readonly Posts[] = [
 			})),
 		],
 		reactions: {
-			'👍': ['0x1', '0x2'],
-			'🦜': ['0x3'],
+			'👍': [
+				{ createdBy: '0x1', id: '4' },
+				{ createdBy: '0x2', id: '4' },
+			],
+			'🦜': [{ createdBy: '0x3', id: '4' }],
 		},
 	},
 	{

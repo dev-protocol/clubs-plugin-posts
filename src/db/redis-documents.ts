@@ -1,4 +1,3 @@
-/* eslint-disable functional/no-expression-statement */
 import { encode } from '@devprotocol/clubs-core'
 import { type RediSearchSchema } from 'redis'
 import type { Comment, PostOption, Posts } from '../types'
@@ -335,7 +334,7 @@ export const deletePost = async ({
 		// eslint-disable-next-line functional/no-let
 		let comments
 
-		// eslint-disable-next-line functional/no-loop-statement
+		// eslint-disable-next-line functional/no-loop-statements
 		do {
 			comments = await fetchComments({ scope, postId, client, page })
 			const deleteCommentPromises = comments.map((comment) =>
@@ -561,7 +560,6 @@ export const fetchComments = async ({
 	readonly client: RedisDefaultClient
 	readonly page?: number
 }) => {
-	// eslint-disable-next-line no-param-reassign
 	page = page || 1
 	const limit = 10
 

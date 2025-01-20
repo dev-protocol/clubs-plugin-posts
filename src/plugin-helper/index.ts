@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
-/* eslint-disable functional/no-expression-statement */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable functional/no-loop-statements */
 /* eslint-disable functional/no-let */
 /* eslint-disable functional/no-return-void */
-/* eslint-disable functional/no-loop-statement */
 import { always, tryCatch } from 'ramda'
 import { Event, type PostPrimitives, type Posts } from '../types'
 import { whenDefined, type UndefinedOr } from '@devprotocol/util-ts'
@@ -45,7 +44,6 @@ export const handleRegisterOnSetupHandler = (
 		: onSetupHandlers
 }
 
-// eslint-disable-next-line functional/no-return-void
 export const onUpdate = (handler: OnUpdateHandler) =>
 	typeof document !== 'undefined' &&
 	document.dispatchEvent(
@@ -74,7 +72,6 @@ const callHandlers = async (
 	_set: ReadonlySet<OnUpdateHandler | OnSetupHandler>,
 	_post: PostPrimitives,
 ): Promise<PostPrimitives> => {
-	// eslint-disable-next-line functional/no-let
 	let post = _post
 	for await (const handler of _set) {
 		post = await tryCatch(handler, always(post))(post)
@@ -130,7 +127,6 @@ const {
 	ClickToolbar,
 } = Event
 
-// eslint-disable-next-line functional/no-return-void
 export const dispatchPostCreated = (post: Posts) =>
 	typeof document !== 'undefined' &&
 	document.dispatchEvent(

@@ -1,4 +1,3 @@
-/* eslint-disable functional/no-expression-statement */
 import { type UndefinedOr } from '@devprotocol/util-ts'
 import { type Signer } from 'ethers'
 import { encode, decode } from '@devprotocol/clubs-core'

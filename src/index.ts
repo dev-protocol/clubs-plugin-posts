@@ -216,7 +216,6 @@ export const getApiPaths = (async (
 			handler: async () => {
 				const client = await getDefaultClient()
 				const res = await createIndex(client)
-				// eslint-disable-next-line functional/no-expression-statement
 				await client.quit()
 				return new Response(JSON.stringify(res))
 			},
@@ -282,18 +281,16 @@ export const getApiPaths = (async (
 								let reader
 
 								try {
-									// eslint-disable-next-line functional/no-expression-statement
 									reader = whenDefinedAll([hash, sig], ([h, s]) =>
 										verifyMessage(h, s),
 									)
 								} catch (error) {
-									// eslint-disable-next-line functional/no-expression-statement
 									console.log(error)
 								}
 
 								// eslint-disable-next-line functional/no-let
 								let allPosts
-								// eslint-disable-next-line
+
 								try {
 									const _allPosts = await whenDefinedAll(
 										[db.database.key],
@@ -307,7 +304,7 @@ export const getApiPaths = (async (
 										memberships: memberships ?? [],
 										roles: db.roles,
 									})
-									// eslint-disable-next-line
+
 									allPosts =
 										(await whenDefinedAll(
 											[mask, _allPosts],

@@ -1,4 +1,3 @@
-/* eslint-disable functional/no-expression-statement */
 import { decode, encode } from '@devprotocol/clubs-core'
 import { whenDefined } from '@devprotocol/util-ts'
 import { createClient } from 'redis'

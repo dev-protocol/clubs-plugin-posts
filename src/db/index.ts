@@ -34,16 +34,14 @@ export const getAllPosts = async (
 		readonly key: string
 	},
 	page?: number,
-): ReturnType<GetAllPosts> => {
-	// eslint-disable-next-line no-case-declarations
+): Promise<ReturnType<GetAllPosts>> => {
 	const client = await getDefaultClient()
-	// eslint-disable-next-line no-case-declarations
+
 	const result = await getPaginatedPosts({
 		scope: opts.key,
 		client,
 		page: page ?? 0,
 	})
-	// eslint-disable-next-line functional/no-expression-statement
 	await client.quit()
 	return result
 }
@@ -52,7 +50,7 @@ export const setSinglePost = async (opts: {
 	readonly key: string
 	readonly url: string
 	readonly post: Posts
-}): ReturnType<SetSinglePost> => {
+}): Promise<ReturnType<SetSinglePost>> => {
 	const client = await getDefaultClient()
 	const result = await setPost({
 		scope: opts.key,
@@ -60,7 +58,6 @@ export const setSinglePost = async (opts: {
 		post: opts.post,
 		client,
 	})
-	// eslint-disable-next-line functional/no-expression-statement
 	await client.quit()
 	return result
 }
@@ -70,7 +67,7 @@ export const setSingleComment = async (opts: {
 	readonly url: string
 	readonly postId: string
 	readonly comment: Comment
-}): ReturnType<SetSingleComment> => {
+}): Promise<ReturnType<SetSingleComment>> => {
 	const client = await getDefaultClient()
 	const result = await setComment({
 		scope: opts.key,
@@ -79,7 +76,6 @@ export const setSingleComment = async (opts: {
 		comment: opts.comment,
 		client,
 	})
-	// eslint-disable-next-line functional/no-expression-statement
 	await client.quit()
 	return result
 }

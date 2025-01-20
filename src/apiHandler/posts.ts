@@ -305,7 +305,6 @@ export const deletePostHandler =
 			authenticated,
 		})
 
-		// eslint-disable-next-line functional/no-expression-statement
 		await client.quit()
 
 		return success
