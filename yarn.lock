@@ -635,7 +635,7 @@ __metadata:
     "@types/node": "npm:22.13.1"
     "@types/ramda": "npm:0.30.2"
     "@types/uuid": "npm:^10.0.0"
-    astro: "npm:5.2.5"
+    astro: "npm:5.2.6"
     bignumber.js: "npm:9.1.2"
     dayjs: "npm:^1.11.8"
     dompurify: "npm:^3.0.5"
@@ -3187,9 +3187,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astro@npm:5.2.5":
-  version: 5.2.5
-  resolution: "astro@npm:5.2.5"
+"astro@npm:5.2.6":
+  version: 5.2.6
+  resolution: "astro@npm:5.2.6"
   dependencies:
     "@astrojs/compiler": "npm:^2.10.3"
     "@astrojs/internal-helpers": "npm:0.5.1"
@@ -3256,7 +3256,7 @@ __metadata:
       optional: true
   bin:
     astro: astro.js
-  checksum: 10c0/181b77188c03bdfa62b7a2ced3bb0b6d93ac6794d8b9e02e340bcec2c40d4ad126010268d2614a9f439e644b791d570a264d02bbca325a3648af087452c2f67b
+  checksum: 10c0/23cc70f2358bef3fe597f4bd653531a5f59de2256aa17d4d0bf06b5768e8dea9253baa0f37bad558f06232afeb6178cdcab287930ebbb7a502406e9b9416a34a
   languageName: node
   linkType: hard
 
