@@ -7013,9 +7013,9 @@ __metadata:
   linkType: hard
 
 "nanostores@npm:^0.11.0":
-  version: 0.11.3
-  resolution: "nanostores@npm:0.11.3"
-  checksum: 10c0/a21490e59cd493945de9536d4674edac6355a6041bde15e447cf5b0b683aabcb030b16fe89b6e11d9dff092c9fe6dde2384b58f7dc4281bf399e2ac50c385dc3
+  version: 0.11.4
+  resolution: "nanostores@npm:0.11.4"
+  checksum: 10c0/45ce577ccd96938b756c238e5783b0de3369381905f164e7bd003794d34a3c1eb7bddb049699a48a35bb03d9745bcb3cd6ad549b5e81493b2de22ae2bdccf14c
   languageName: node
   linkType: hard
 
