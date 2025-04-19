@@ -62,7 +62,7 @@
 		"@astrojs/vue": "^5.0.0",
 		"@devprotocol/clubs-core": "3.26.6",
 		"@eslint/js": "^9.18.0",
-		"@nanostores/vue": "^0.11.0",
+		"@nanostores/vue": "^1.0.0",
 		"@redis/json": "^1.0.4",
 		"@rollup/plugin-typescript": "12.1.2",
 		"@tailwindcss/typography": "^0.5.10",
