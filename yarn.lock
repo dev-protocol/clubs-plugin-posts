@@ -787,7 +787,7 @@ __metadata:
     "@devprotocol/dev-kit": "npm:8.7.0"
     "@devprotocol/util-ts": "npm:4.0.0"
     "@eslint/js": "npm:^9.18.0"
-    "@nanostores/vue": "npm:^0.11.0"
+    "@nanostores/vue": "npm:^1.0.0"
     "@redis/json": "npm:^1.0.4"
     "@rollup/plugin-typescript": "npm:12.1.2"
     "@tailwindcss/typography": "npm:^0.5.10"
@@ -1807,20 +1807,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nanostores/vue@npm:^0.11.0":
-  version: 0.11.0
-  resolution: "@nanostores/vue@npm:0.11.0"
+"@nanostores/vue@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@nanostores/vue@npm:1.0.0"
   peerDependencies:
-    "@nanostores/logger": ">=0.4.0"
+    "@nanostores/logger": ^0.4.0 || ^1.0.0
     "@vue/devtools-api": ">=7.6.2"
-    nanostores: ">=0.11.3"
+    nanostores: ^0.11.3 || ^1.0.0
     vue: ">=3.3.1"
   peerDependenciesMeta:
     "@nanostores/logger":
       optional: true
     "@vue/devtools-api":
       optional: true
-  checksum: 10c0/e4b92767e66827dae307ecb22bc8c393489cc8889da5de800289d89446513741d5d4504fc235bef8347093d58951b7f72c8a84ddeeda0545a366c019590d3dd5
+  checksum: 10c0/3dbfb944243b828ce40fcd4f63243b0cbe6fef47b26ddb5f467d6d6f9fa8ab16bf351d0b85672344b9b158cd8097eb28bb4c4493d4946abb70c6e04f8e14562a
   languageName: node
   linkType: hard
 
