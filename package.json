@@ -48,7 +48,7 @@
 		"dayjs": "^1.11.8",
 		"dompurify": "^3.0.5",
 		"ethers": "^6.6.4",
-		"marked": "15.0.9",
+		"marked": "15.0.10",
 		"nanoid": "^5.0.6",
 		"photoswipe": "5.4.4",
 		"ramda": "0.30.1",
