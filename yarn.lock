@@ -788,7 +788,7 @@ __metadata:
     "@devprotocol/util-ts": "npm:4.0.0"
     "@eslint/js": "npm:^9.18.0"
     "@nanostores/vue": "npm:^1.0.0"
-    "@redis/json": "npm:^1.0.4"
+    "@redis/json": "npm:^5.0.0"
     "@rollup/plugin-typescript": "npm:12.1.2"
     "@tailwindcss/typography": "npm:^0.5.10"
     "@types/dompurify": "npm:^3.0.2"
@@ -2083,12 +2083,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redis/json@npm:1.0.7, @redis/json@npm:^1.0.4":
+"@redis/json@npm:1.0.7":
   version: 1.0.7
   resolution: "@redis/json@npm:1.0.7"
   peerDependencies:
     "@redis/client": ^1.0.0
   checksum: 10c0/cef473711d66f7568a16edbd728acca7d237cfeaa15e0326b5b628dfab4afc0c76c7354e7f8efad6ecc64a1cb774e4aa060ee46497b633e18ba0a2f0aace1cc4
+  languageName: node
+  linkType: hard
+
+"@redis/json@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "@redis/json@npm:5.0.0"
+  peerDependencies:
+    "@redis/client": ^5.0.0
+  checksum: 10c0/f2626a43f270e0a62ef1792f3ddfde610236146a50661e0cb87313cfc32847b70ff2daea232a4f2c02c0341e40130cc52a8149d0404f5e79859e6567cab65bdb
   languageName: node
   linkType: hard
 
