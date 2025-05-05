@@ -2090,12 +2090,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redis/json@npm:5.0.0, @redis/json@npm:^5.0.0":
+"@redis/json@npm:5.0.0":
   version: 5.0.0
   resolution: "@redis/json@npm:5.0.0"
   peerDependencies:
     "@redis/client": ^5.0.0
   checksum: 10c0/f2626a43f270e0a62ef1792f3ddfde610236146a50661e0cb87313cfc32847b70ff2daea232a4f2c02c0341e40130cc52a8149d0404f5e79859e6567cab65bdb
+  languageName: node
+  linkType: hard
+
+"@redis/json@npm:^5.0.0":
+  version: 5.0.1
+  resolution: "@redis/json@npm:5.0.1"
+  peerDependencies:
+    "@redis/client": ^5.0.1
+  checksum: 10c0/71461d543f14e466bf54e96546708a4d337feea11f098d3cdf47698b12fe0cd7ba43a9644d87ea5e1289ab0fd142884fe02077573421fa28e96b4eab36b37434
   languageName: node
   linkType: hard
 
