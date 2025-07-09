@@ -1831,8 +1831,8 @@ __metadata:
   linkType: hard
 
 "@nanostores/vue@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@nanostores/vue@npm:1.0.0"
+  version: 1.0.1
+  resolution: "@nanostores/vue@npm:1.0.1"
   peerDependencies:
     "@nanostores/logger": ^0.4.0 || ^1.0.0
     "@vue/devtools-api": ">=7.6.2"
@@ -1843,7 +1843,7 @@ __metadata:
       optional: true
     "@vue/devtools-api":
       optional: true
-  checksum: 10c0/3dbfb944243b828ce40fcd4f63243b0cbe6fef47b26ddb5f467d6d6f9fa8ab16bf351d0b85672344b9b158cd8097eb28bb4c4493d4946abb70c6e04f8e14562a
+  checksum: 10c0/93a564073a0b1a5d4dd447fabda72a647fae096d0ef35a6c8a0feee0db1cc866c68ee7cc06cea0bcf615290f092bec6c656f1fa1f321e814f5695738b733ad9c
   languageName: node
   linkType: hard
 
