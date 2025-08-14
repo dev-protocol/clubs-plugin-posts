@@ -60,7 +60,7 @@
 		"@astrojs/svelte": "^7.0.0",
 		"@astrojs/tailwind": "^6.0.0",
 		"@astrojs/vue": "^5.0.0",
-		"@devprotocol/clubs-core": "3.26.7",
+		"@devprotocol/clubs-core": "3.27.0",
 		"@eslint/js": "^9.18.0",
 		"@nanostores/vue": "^1.0.0",
 		"@redis/json": "^5.0.0",
