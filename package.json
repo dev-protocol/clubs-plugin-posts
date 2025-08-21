@@ -97,7 +97,7 @@
 		"typescript": "5.9.2",
 		"typescript-eslint": "^8.20.0",
 		"vitest": "^3.0.0",
-		"vue": "3.5.18"
+		"vue": "3.5.19"
 	},
 	"peerDependencies": {
 		"@devprotocol/clubs-core": "^2.1.0 || ^3.0.0"
