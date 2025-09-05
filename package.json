@@ -54,7 +54,7 @@
 		"ramda": "0.31.3",
 		"redis": "^5.0.0",
 		"sass": "1.92.0",
-		"uuid": "^11.0.0"
+		"uuid": "^12.0.0"
 	},
 	"devDependencies": {
 		"@astrojs/svelte": "^7.0.0",
