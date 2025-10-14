@@ -21,14 +21,20 @@ export const filterRequiredMemberships = ({
 	const requiredMemberships =
 		(post.options?.find(({ key }) => key === 'require-one-of')
 			?.value as UndefinedOr<readonly (string | Uint8Array)[]>) ?? []
-	return requiredMemberships
-		.map(
-			(key) =>
-				memberships?.find(
-					(mem) => bytes32Hex(mem.payload ?? []) === bytes32Hex(key),
-				) ?? [],
-		)
-		.flat()
+	const requireAnyOffered =
+		(post.options?.find(({ key }) => key === 'require-any-offered')
+			?.value as UndefinedOr<boolean>) ?? false
+
+	return requireAnyOffered
+		? memberships
+		: requiredMemberships
+				.map(
+					(key) =>
+						memberships?.find(
+							(mem) => bytes32Hex(mem.payload ?? []) === bytes32Hex(key),
+						) ?? [],
+				)
+				.flat()
 }
 
 export const hasWritePermission = async ({

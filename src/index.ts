@@ -88,9 +88,11 @@ export const getPagePaths = (async (
 	const [membershipsPlugin] = getPluginConfigById(
 		'devprotocol:clubs:simple-memberships',
 	)
-	const memberships = membershipsPlugin?.options?.find(
-		({ key }) => key === 'memberships',
-	)?.value
+	const memberships = [
+		...(config.offerings ?? []),
+		...((membershipsPlugin?.options?.find(({ key }) => key === 'memberships')
+			?.value as UndefinedOr<readonly Membership[]>) ?? []),
+	]
 
 	const dbs = options.find(
 		({ key }: Readonly<{ readonly key: string }>) => key === 'feeds',
@@ -159,11 +161,7 @@ export const getAdminPaths = (async (
 			?.value as readonly OptionsDatabase[]) ?? []
 
 	return [
-		{
-			paths: ['posts'],
-			component: ListFeed,
-			props: { options },
-		},
+		{ paths: ['posts'], component: ListFeed, props: { options } },
 		{
 			paths: ['posts', 'new'],
 			component: Feed,
@@ -201,9 +199,11 @@ export const getApiPaths = (async (
 	const [membershipsPlugin] = getPluginConfigById(
 		'devprotocol:clubs:simple-memberships',
 	)
-	const memberships = membershipsPlugin?.options?.find(
-		({ key }) => key === 'memberships',
-	)?.value as UndefinedOr<readonly Membership[]>
+	const memberships = [
+		...(config.offerings ?? []),
+		...((membershipsPlugin?.options?.find(({ key }) => key === 'memberships')
+			?.value as UndefinedOr<readonly Membership[]>) ?? []),
+	]
 
 	if (!dbs) {
 		return []
@@ -224,9 +224,7 @@ export const getApiPaths = (async (
 			paths: ['options', 'feeds'],
 			method: 'GET',
 			handler: async () => {
-				return new Response(JSON.stringify(dbs), {
-					headers,
-				})
+				return new Response(JSON.stringify(dbs), { headers })
 			},
 		},
 		...dbs
@@ -314,28 +312,18 @@ export const getApiPaths = (async (
 													: Promise.all(posts.map(maskFn)),
 										)) ?? _allPosts
 								} catch (error) {
-									return new Response(
-										JSON.stringify({
-											error: error,
-										}),
-										{
-											status: 500,
-										},
-									)
+									return new Response(JSON.stringify({ error: error }), {
+										status: 500,
+									})
 								}
 
 								/**
 								 * If there is an error, return the error
 								 */
 								if (allPosts instanceof Error) {
-									return new Response(
-										JSON.stringify({
-											error: allPosts,
-										}),
-										{
-											status: 500,
-										},
-									)
+									return new Response(JSON.stringify({ error: allPosts }), {
+										status: 500,
+									})
 								}
 
 								/**
@@ -343,12 +331,8 @@ export const getApiPaths = (async (
 								 */
 								if (!allPosts) {
 									return new Response(
-										JSON.stringify({
-											error: 'Some data is missing',
-										}),
-										{
-											status: 400,
-										},
+										JSON.stringify({ error: 'Some data is missing' }),
+										{ status: 400 },
 									)
 								}
 
@@ -388,13 +372,8 @@ export const getApiPaths = (async (
 									.reduce((acc, profile) => ({ ...acc, ...profile }), {})
 
 								return new Response(
-									JSON.stringify({
-										contents: encode(allPosts),
-										profiles,
-									}),
-									{
-										status: 200,
-									},
+									JSON.stringify({ contents: encode(allPosts), profiles }),
+									{ status: 200 },
 								)
 							},
 						},

@@ -1,4 +1,4 @@
-import { SchemaFieldTypes, type RediSearchSchema } from 'redis'
+import { type RediSearchSchema } from 'redis'
 
 export enum Index {
 	Post = 'idx::devprotocol:clubs:plugin:posts::post',
@@ -16,70 +16,70 @@ export enum Prefix {
 
 export const _raw = {
 	'$._raw': {
-		type: SchemaFieldTypes.TEXT,
+		type: 'TEXT',
 		AS: '_raw',
 	},
 } satisfies RediSearchSchema
 
 export const _scope = {
 	'$._scope': {
-		type: SchemaFieldTypes.TAG,
+		type: 'TAG',
 		AS: '_scope',
 	},
 } satisfies RediSearchSchema
 
 export const _post_id = {
 	'$._post_id': {
-		type: SchemaFieldTypes.TAG,
+		type: 'TAG',
 		AS: '_post_id',
 	},
 } satisfies RediSearchSchema
 
 export const _parent_type = {
 	'$._parent_type': {
-		type: SchemaFieldTypes.TEXT,
+		type: 'TEXT',
 		AS: '_parent_type',
 	},
 } satisfies RediSearchSchema
 
 export const _parent_id = {
 	'$._parent_id': {
-		type: SchemaFieldTypes.TAG,
+		type: 'TAG',
 		AS: '_parent_id',
 	},
 } satisfies RediSearchSchema
 
 export const id = {
 	'$.id': {
-		type: SchemaFieldTypes.TAG,
+		type: 'TAG',
 		AS: 'id',
 	},
 } satisfies RediSearchSchema
 
 export const title = {
 	'$.title': {
-		type: SchemaFieldTypes.TEXT,
+		type: 'TEXT',
 		AS: 'title',
 	},
 } satisfies RediSearchSchema
 
 export const content = {
 	'$.content': {
-		type: SchemaFieldTypes.TEXT,
+		type: 'TEXT',
 		AS: 'content',
 	},
 } satisfies RediSearchSchema
 
 export const created_by = {
 	'$.created_by': {
-		type: SchemaFieldTypes.TEXT,
+		type: 'TEXT',
 		AS: 'created_by',
 	},
 } satisfies RediSearchSchema
 
 export const created_at = {
 	'$.created_at': {
-		type: SchemaFieldTypes.NUMERIC,
+		type: 'NUMERIC',
 		SORTABLE: true,
 		AS: 'created_at',
 	},
@@ -87,7 +87,7 @@ export const created_at = {
 
 export const updated_at = {
 	'$.updated_at': {
-		type: SchemaFieldTypes.NUMERIC,
+		type: 'NUMERIC',
 		SORTABLE: true,
 		AS: 'updated_at',
 	},
@@ -95,14 +95,14 @@ export const updated_at = {
 
 export const key = {
 	'$.key': {
-		type: SchemaFieldTypes.TEXT,
+		type: 'TEXT',
 		AS: 'key',
 	},
 } satisfies RediSearchSchema
 
 export const value = {
 	'$.value': {
-		type: SchemaFieldTypes.TEXT,
+		type: 'TEXT',
 		AS: 'value',
 	},
 } satisfies RediSearchSchema

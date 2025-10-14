@@ -8,7 +8,11 @@ import type { Membership, PostPrimitives, Posts } from '../../../types'
 import Profile from '../../Common/Profile.vue'
 import { update as callUpdate } from '../../../plugin-helper'
 import { Strings } from './i18n'
-import { i18nFactory, type ClubsProfile } from '@devprotocol/clubs-core'
+import {
+	bytes32Hex,
+	i18nFactory,
+	type ClubsProfile,
+} from '@devprotocol/clubs-core'
 
 const i18nBase = i18nFactory(Strings)
 let i18n = ref<ReturnType<typeof i18nBase>>(i18nBase(['en']))
@@ -36,6 +40,8 @@ const props = defineProps<Props>()
 const postItem = ref<PostPrimitives>()
 const title = ref('')
 const contents = ref('')
+
+const requireAnyOffered = ref<boolean>(false)
 
 // limited access selected
 const selectedLimitedAccess = ref<Membership[]>([])
@@ -85,18 +91,36 @@ watch(
 			title: _title,
 			content: _contents,
 			options: [
-				{
-					key: 'require-one-of',
-					value: _selectedLimitedAccess
-						.filter(({ payload }) => payload !== undefined)
-						.map(({ payload }) => payload as Uint8Array),
-				},
+				...(requireAnyOffered.value
+					? [{ key: 'require-any-offered', value: true }]
+					: []),
+				...(_selectedLimitedAccess
+					? [
+							{
+								key: 'require-one-of',
+								value: _selectedLimitedAccess
+									.filter(({ payload }) => payload !== undefined)
+									.map(({ payload }) => payload as Uint8Array),
+							},
+						]
+					: []),
 			],
 		}
 		const newPost = await callUpdate(post)
 		postItem.value = newPost
 	},
 )
+
+watch(requireAnyOffered, (_requireAnyOffered) => {
+	if (!_requireAnyOffered) return
+	selectedLimitedAccess.value = []
+})
+
+watch(selectedLimitedAccess, (_selectedLimitedAccess) => {
+	if (_selectedLimitedAccess.length > 0 && requireAnyOffered.value) {
+		requireAnyOffered.value = false
+	}
+})
 
 // Post Success
 const handlePostSuccess = (data: Posts) => {
@@ -176,6 +200,12 @@ const handleDeleteImageAll = () => {
 			<!-- 選択済みのLimited accessを表示 -->
 			<div class="ml-3 flex items-center gap-3">
 				<span
+					v-if="requireAnyOffered"
+					class="inline-flex items-center rounded-full bg-blue-100 px-3 py-0.5 text-xs font-medium text-blue-800"
+				>
+					{{ i18n('AnyOffered') }}
+				</span>
+				<span
 					v-for="selectedLimitedAccessType in selectedLimitedAccess"
 					class="inline-flex items-center rounded-full bg-yellow-100 px-3 py-0.5 text-xs font-medium text-yellow-800"
 				>
@@ -187,6 +217,18 @@ const handleDeleteImageAll = () => {
 				v-if="openLimitedAccessModal"
 				class="absolute left-0 top-14 z-20 flex flex-col gap-3 rounded-md bg-white p-3 shadow-xl"
 			>
+				<li>
+					<label
+						class="flex items-center gap-3 text-sm font-medium text-gray-900"
+					>
+						<input
+							type="checkbox"
+							class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-blue-500"
+							v-model="requireAnyOffered"
+						/>
+						<span>{{ i18n('RequireAnyOffered') }}</span>
+					</label>
+				</li>
 				<li v-for="limitedAccessType in limitedAccessTypes">
 					<label
 						:for="limitedAccessType.id"
@@ -198,7 +240,9 @@ const handleDeleteImageAll = () => {
 							class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-blue-500"
 							:checked="
 								selectedLimitedAccess.some(
-									(val) => val.id === limitedAccessType.id,
+									(val) =>
+										bytes32Hex(val.payload) ===
+										bytes32Hex(limitedAccessType.payload),
 								)
 							"
 							@change="onUpdateLimitedAccess(limitedAccessType)"

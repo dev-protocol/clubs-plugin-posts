@@ -10,4 +10,12 @@ export const Strings = {
 		en: 'Unlock this post by becoming a member',
 		ja: 'メンバーになってこの投稿をアンロックする',
 	},
+	RequireAnyOffered: {
+		en: 'Require any offered membership',
+		ja: '提供されているメンバーシップのいずれかを必要とする',
+	},
+	AnyOffered: {
+		en: 'Any offered membership',
+		ja: 'いずれかのメンバーシップが必要',
+	},
 } satisfies ClubsI18nParts

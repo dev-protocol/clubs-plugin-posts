@@ -12,13 +12,11 @@ onMounted(() => {
 	i18n = i18nBase(navigator.languages)
 })
 
-type Props = {
-	memberships?: readonly Membership[]
-}
+type Props = { memberships?: readonly Membership[]; any?: boolean }
 
 const props = defineProps<Props>()
 
-const { memberships } = props
+const { memberships, any } = props
 </script>
 
 <template>
@@ -31,6 +29,13 @@ const { memberships } = props
 			class="flex flex-col flex-wrap justify-center gap-2 sm:flex-row sm:gap-4"
 		>
 			<div
+				v-if="any"
+				class="flex flex-row gap-4 rounded-xl bg-black p-3 text-white sm:flex-col sm:gap-2 sm:p-4"
+			>
+				{{ i18n('AnyOffered') }}
+			</div>
+			<div
+				v-else
 				v-for="membership in memberships"
 				class="flex flex-row gap-4 rounded-xl bg-black p-3 text-white sm:flex-col sm:gap-2 sm:p-4"
 			>

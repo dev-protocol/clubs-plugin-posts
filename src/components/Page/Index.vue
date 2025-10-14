@@ -350,6 +350,9 @@ const onPostDeleted = (id: string) => {
 						memberships: [...props.memberships],
 					})
 				"
+				:requireAnyOffered="
+					post.options.some((x) => x.key === 'require-any-offered') ?? false
+				"
 				:title="post.title"
 				:profiles="profiles"
 				:base="props.base"
