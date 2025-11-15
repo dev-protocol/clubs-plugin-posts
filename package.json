@@ -74,7 +74,7 @@
 		"@types/node": "24.10.1",
 		"@types/ramda": "0.31.1",
 		"@types/uuid": "^11.0.0",
-		"astro": "5.15.7",
+		"astro": "5.15.8",
 		"dotenv": "17.2.3",
 		"eslint": "^9.18.0",
 		"eslint-config-prettier": "^10.0.1",
