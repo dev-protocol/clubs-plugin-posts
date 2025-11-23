@@ -102,5 +102,5 @@
 	"peerDependencies": {
 		"@devprotocol/clubs-core": "^2.1.0 || ^3.0.0"
 	},
-	"packageManager": "yarn@4.11.0"
+	"packageManager": "yarn@4.12.0"
 }
