@@ -71,7 +71,7 @@
 		"@types/eslint-config-prettier": "^6.11.3",
 		"@types/eslint__js": "^9.0.0",
 		"@types/marked": "^6.0.0",
-		"@types/node": "24.10.4",
+		"@types/node": "24.10.6",
 		"@types/ramda": "0.31.1",
 		"@types/uuid": "^11.0.0",
 		"astro": "5.16.8",
