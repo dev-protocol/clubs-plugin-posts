@@ -142,17 +142,17 @@ __metadata:
   linkType: hard
 
 "@astrojs/svelte@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "@astrojs/svelte@npm:8.0.0"
+  version: 8.0.1
+  resolution: "@astrojs/svelte@npm:8.0.1"
   dependencies:
     "@sveltejs/vite-plugin-svelte": "npm:^6.2.4"
     svelte2tsx: "npm:^0.7.51"
     vite: "npm:^7.3.1"
   peerDependencies:
-    astro: ^6.0.0-alpha.0
+    astro: ^6.0.0
     svelte: ^5.43.6
     typescript: ^5.3.3
-  checksum: 10c0/9818e6a2f375bcb84a008400188499b33de6ae3165cdbac5e51d87243c04e2e33dc4b664f5bff6108b25e8f001277d49dbb1fd907a123dbd6aa7d132609f6384
+  checksum: 10c0/f3bb219b72ff2af7d0297516ed59ce5d1514b15343349d238b1277fdd0e36c7de56431832a8e89e3b377f651fff521242f4eaddae7fe863b7dcae8405c4ebcd6
   languageName: node
   linkType: hard
 
@@ -172,8 +172,8 @@ __metadata:
   linkType: hard
 
 "@astrojs/vue@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "@astrojs/vue@npm:6.0.0"
+  version: 6.0.1
+  resolution: "@astrojs/vue@npm:6.0.1"
   dependencies:
     "@vitejs/plugin-vue": "npm:^6.0.4"
     "@vitejs/plugin-vue-jsx": "npm:^5.1.4"
@@ -181,9 +181,9 @@ __metadata:
     vite: "npm:^7.3.1"
     vite-plugin-vue-devtools: "npm:^8.0.6"
   peerDependencies:
-    astro: ^6.0.0-alpha.0
+    astro: ^6.0.0
     vue: ^3.5.24
-  checksum: 10c0/c8cee9152d16953bf69574f56f0f4eb0b27d646d2a246ecba7ec86496d57ff426ffe267eb7a319fbef6d0e3ed2bceb4124985ed1f678cf406be7eaed561fb8d3
+  checksum: 10c0/1b86dc11223edd44149303275b4391767d11262ed1fb07d1bbd804f92ed2ef8c3c9c65a93e753761da6835d7e566ed2342fc80bc638313444d02e445201cbf17
   languageName: node
   linkType: hard
 
@@ -1144,7 +1144,7 @@ __metadata:
     "@types/node": "npm:24.12.0"
     "@types/ramda": "npm:0.31.1"
     "@types/uuid": "npm:^11.0.0"
-    astro: "npm:6.0.4"
+    astro: "npm:6.0.5"
     bignumber.js: "npm:10.0.2"
     dayjs: "npm:^1.11.8"
     dompurify: "npm:^3.0.5"
@@ -4442,9 +4442,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astro@npm:6.0.4":
-  version: 6.0.4
-  resolution: "astro@npm:6.0.4"
+"astro@npm:6.0.5":
+  version: 6.0.5
+  resolution: "astro@npm:6.0.5"
   dependencies:
     "@astrojs/compiler": "npm:^3.0.0"
     "@astrojs/internal-helpers": "npm:0.8.0"
@@ -4507,7 +4507,7 @@ __metadata:
       optional: true
   bin:
     astro: bin/astro.mjs
-  checksum: 10c0/7b61d11870316e1530de9778d6afdd99ab9b80858f83411d6c5fa9b8e7f68d5ba67251c6af730886e84f9e597cf16a7a1c3d29d05952b30ad697adc4663419be
+  checksum: 10c0/defe7f299e9fdc51d61d75df17c8f0a9ff653252f89ab9b8d66f49d546148052bac2da790275c7a56a5577e40b059b67202dcd836e804100164a4e4394d67425
   languageName: node
   linkType: hard
 
