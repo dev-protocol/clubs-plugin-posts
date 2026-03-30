@@ -1156,7 +1156,7 @@ __metadata:
     "@types/node": "npm:24.12.0"
     "@types/ramda": "npm:0.31.1"
     "@types/uuid": "npm:^11.0.0"
-    astro: "npm:6.1.1"
+    astro: "npm:6.1.2"
     bignumber.js: "npm:10.0.2"
     dayjs: "npm:^1.11.8"
     dompurify: "npm:^3.0.5"
@@ -4511,9 +4511,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astro@npm:6.1.1":
-  version: 6.1.1
-  resolution: "astro@npm:6.1.1"
+"astro@npm:6.1.2":
+  version: 6.1.2
+  resolution: "astro@npm:6.1.2"
   dependencies:
     "@astrojs/compiler": "npm:^3.0.1"
     "@astrojs/internal-helpers": "npm:0.8.0"
@@ -4576,7 +4576,7 @@ __metadata:
       optional: true
   bin:
     astro: bin/astro.mjs
-  checksum: 10c0/7fe171f816face6fae1505486e443db73bb6c8932787c7c61cd6a7ccad30b01db63f457eb603daf0bb989a41a99bf3d4a9bcc4345f2cac5a4c94b0575eca6196
+  checksum: 10c0/7e27cb1a0c50d10a9945e2dc8c2223500e5e49ee8bcf7d52779bc754f4f44f70faf0ae6629487fb00819edf8c0b3183bf9e325afb66e77828f3e4da9700dcd74
   languageName: node
   linkType: hard
 
