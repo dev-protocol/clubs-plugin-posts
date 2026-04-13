@@ -141,17 +141,18 @@ __metadata:
   linkType: hard
 
 "@astrojs/svelte@npm:^8.0.0":
-  version: 8.0.4
-  resolution: "@astrojs/svelte@npm:8.0.4"
+  version: 8.0.5
+  resolution: "@astrojs/svelte@npm:8.0.5"
   dependencies:
     "@sveltejs/vite-plugin-svelte": "npm:^6.2.4"
     svelte2tsx: "npm:^0.7.52"
     vite: "npm:^7.3.1"
+    vitefu: "npm:^1.1.2"
   peerDependencies:
     astro: ^6.0.0
     svelte: ^5.43.6
     typescript: ^5.3.3
-  checksum: 10c0/ec3ff5337db0f6ba257508101aa0450410c4987e30b08ada9cba85fe5a4eaba3be62ddefe25bfbef84cc9962004696c36aca4405e3138b0a40e89312499a8eb3
+  checksum: 10c0/1835e97364eae43ffdee95a8587e0a7e4f3febe104d75f0af7b1cc9024fc9b788981463fe85283b01d1823a0382f9de227b911ed444129b398dbf5780a3f73aa
   languageName: node
   linkType: hard
 
@@ -1154,7 +1155,7 @@ __metadata:
     "@types/node": "npm:24.12.2"
     "@types/ramda": "npm:0.31.1"
     "@types/uuid": "npm:^11.0.0"
-    astro: "npm:6.1.5"
+    astro: "npm:6.1.6"
     bignumber.js: "npm:10.0.2"
     dayjs: "npm:^1.11.8"
     dompurify: "npm:^3.0.5"
@@ -4516,9 +4517,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astro@npm:6.1.5":
-  version: 6.1.5
-  resolution: "astro@npm:6.1.5"
+"astro@npm:6.1.6":
+  version: 6.1.6
+  resolution: "astro@npm:6.1.6"
   dependencies:
     "@astrojs/compiler": "npm:^3.0.1"
     "@astrojs/internal-helpers": "npm:0.8.0"
@@ -4580,7 +4581,7 @@ __metadata:
       optional: true
   bin:
     astro: bin/astro.mjs
-  checksum: 10c0/f853234dcf65ed2c8546a781974197f3059c7855189f0aa226a2f78ae808368753c2bb26ca9de5801b5e95af751b057d9d725f0b0aef5eeb1f44b73f80c9bd06
+  checksum: 10c0/4db747ce47fe236a5c7c702ab12ece224c0b38a83422c3872e24fbf7a7d0ba2dbc263a0cd5fc35ba13b59945b27e40aaca2d2fa84b8003c18f715a3110f453ff
   languageName: node
   linkType: hard
 
