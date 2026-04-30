@@ -95,10 +95,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@astrojs/compiler@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "@astrojs/compiler@npm:3.0.1"
-  checksum: 10c0/f2ec194a6c0b18044cf77b9bc3ff48f972d3c017dbdd9f8d4512fe7b0c1abcd2996cb4b8378831f0432f7a4289248235a082b95f90a1d0c7ca7e6a5c24fe6779
+"@astrojs/compiler@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@astrojs/compiler@npm:4.0.0"
+  checksum: 10c0/b82c245f88db7fe741128b2c057304866f42e87f296b2bf5962aa84e4bef1aa5c323a4fec8621db4f6ef7195cd0f90d9059c481f7d2708bbf983b481299dc5c0
   languageName: node
   linkType: hard
 
@@ -150,18 +150,18 @@ __metadata:
   linkType: hard
 
 "@astrojs/svelte@npm:^8.0.0":
-  version: 8.0.5
-  resolution: "@astrojs/svelte@npm:8.0.5"
+  version: 8.1.0
+  resolution: "@astrojs/svelte@npm:8.1.0"
   dependencies:
     "@sveltejs/vite-plugin-svelte": "npm:^6.2.4"
     svelte2tsx: "npm:^0.7.52"
-    vite: "npm:^7.3.1"
+    vite: "npm:^7.3.2"
     vitefu: "npm:^1.1.2"
   peerDependencies:
     astro: ^6.0.0
     svelte: ^5.43.6
     typescript: ^5.3.3
-  checksum: 10c0/1835e97364eae43ffdee95a8587e0a7e4f3febe104d75f0af7b1cc9024fc9b788981463fe85283b01d1823a0382f9de227b911ed444129b398dbf5780a3f73aa
+  checksum: 10c0/18792879f39527bb329cd34e6f39f174bf1de52143fa6e182ccb854a81f57af4a113afa41fd374720024d82224b4ece91926040f711a7dd1f1f969a0d7c4167b
   languageName: node
   linkType: hard
 
@@ -1163,7 +1163,7 @@ __metadata:
     "@types/node": "npm:24.12.2"
     "@types/ramda": "npm:0.31.1"
     "@types/uuid": "npm:^11.0.0"
-    astro: "npm:6.1.9"
+    astro: "npm:6.2.0"
     bignumber.js: "npm:11.0.0"
     dayjs: "npm:^1.11.8"
     dompurify: "npm:^3.0.5"
@@ -4528,11 +4528,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astro@npm:6.1.9":
-  version: 6.1.9
-  resolution: "astro@npm:6.1.9"
+"astro@npm:6.2.0":
+  version: 6.2.0
+  resolution: "astro@npm:6.2.0"
   dependencies:
-    "@astrojs/compiler": "npm:^3.0.1"
+    "@astrojs/compiler": "npm:^4.0.0"
     "@astrojs/internal-helpers": "npm:0.9.0"
     "@astrojs/markdown-remark": "npm:7.1.1"
     "@astrojs/telemetry": "npm:3.3.1"
@@ -4592,7 +4592,7 @@ __metadata:
       optional: true
   bin:
     astro: bin/astro.mjs
-  checksum: 10c0/bacb7dab6a0b0c5727a7f3247b8527e7043756bbfda5103e9efb60cef697be4c8d26185d4d3a5ab8cb8415ff4a8b5ab4cff0b2eab43f0cc9aac20389ba667dda
+  checksum: 10c0/dbc976d457876864daa7a0f0c11d45e513ed549d03bc73c4372e220f5898b229c1ee7ea1c935077f775bf53dbe57f25f8061cc62730a7c7593537fc434a5e36c
   languageName: node
   linkType: hard
 
