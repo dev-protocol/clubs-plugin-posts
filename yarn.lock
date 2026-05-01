@@ -8489,20 +8489,20 @@ __metadata:
   linkType: hard
 
 "nanoid@npm:^3.3.11, nanoid@npm:^3.3.8":
-  version: 3.3.11
-  resolution: "nanoid@npm:3.3.11"
+  version: 3.3.12
+  resolution: "nanoid@npm:3.3.12"
   bin:
     nanoid: bin/nanoid.cjs
-  checksum: 10c0/40e7f70b3d15f725ca072dfc4f74e81fcf1fbb02e491cf58ac0c79093adc9b0a73b152bcde57df4b79cd097e13023d7504acb38404a4da7bc1cd8e887b82fe0b
+  checksum: 10c0/ba142b7b39e11e80c16dd74b0365d407880c87c1cf7e1480956981ae940ee36060fa5b6f092cd1e315184dd19244c657bd017d03327bd3c62247d691c5e8edfb
   languageName: node
   linkType: hard
 
 "nanoid@npm:^5.0.6":
-  version: 5.1.9
-  resolution: "nanoid@npm:5.1.9"
+  version: 5.1.11
+  resolution: "nanoid@npm:5.1.11"
   bin:
     nanoid: bin/nanoid.js
-  checksum: 10c0/02cb4e48d30469eee3959795e2af6c113342e7f492906e43bd1e3c264d2dcee6c8236b0e441d4a9895b58c4ddb1c7c02170f63a2ca854a229cc4c7a544699cc1
+  checksum: 10c0/91580d18c29263ac0e871734f0d86e7f906f523f974d3c30fc65354ccf387ccffd606c2a6c28acc2977a3950146347e790ce9e3f514133a48995af5ccdb308ce
   languageName: node
   linkType: hard
 
