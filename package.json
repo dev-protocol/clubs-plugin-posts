@@ -57,8 +57,8 @@
 		"uuid": "^14.0.0"
 	},
 	"devDependencies": {
-		"@astrojs/svelte": "^8.0.0",
-		"@astrojs/vue": "^6.0.0",
+		"@astrojs/svelte": "^9.0.0",
+		"@astrojs/vue": "^7.0.0",
 		"@devprotocol/clubs-core": "3.28.0",
 		"@eslint/js": "^9.18.0",
 		"@nanostores/vue": "^1.0.0",
@@ -74,7 +74,7 @@
 		"@types/node": "24.13.2",
 		"@types/ramda": "0.32.0",
 		"@types/uuid": "^11.0.0",
-		"astro": "6.1.9",
+		"astro": "7.0.2",
 		"dotenv": "17.4.2",
 		"eslint": "^9.18.0",
 		"eslint-config-prettier": "^10.0.1",
